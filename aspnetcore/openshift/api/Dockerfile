@@ -2,13 +2,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 # Copy csproj and restore as distinct layers
-#COPY aspnetcore/src/api/api.csproj ./
 COPY ["aspnetcore/src/Api/Api.csproj", "./"]
-#RUN dotnet restore
 RUN dotnet restore
 # Copy everything else and build
-#COPY aspnetcore/src/api/ ./
-COPY aspnetcore/src/api/ ./
+COPY aspnetcore/src/Api/ ./
 RUN dotnet publish -c Release -o out
 
 # Runtime image
