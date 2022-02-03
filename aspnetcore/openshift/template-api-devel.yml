@@ -1,0 +1,99 @@
+# This file is part of the research.fi api
+#
+# Copyright 2022 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-api-devel
+    template: publicapi-api-devel
+  name: publicapi-api-devel
+objects:
+  # Service (devel)
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: publicapi-api-service-devel
+      labels:
+        app: publicapi-api-devel
+      annotations:
+        description: Public api service for devel branch
+    spec:
+      ports:
+        - name: publicapi-api-port-devel
+          port: 8080
+          targetPort: 8080
+      selector:
+        depcfg: publicapi-api-depcfg-devel
+
+  # ImageStream (development)
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: publicapi-api-devel
+      labels:
+        app: publicapi-api-devel
+
+  # BuildConfig using Docker build strategy
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: publicapi-api-build-devel
+      labels:
+        app: publicapi-api-devel
+    spec:
+      source:
+        git:
+          uri: https://github.com/CSCfi/research-fi-publicapi.git
+          ref: devel
+        contextDir: .
+      strategy:
+        dockerStrategy:
+          dockerfilePath: aspnetcore/src/Api/Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: publicapi-api-devel:latest
+      successfulBuildsHistoryLimit: 4
+      failedBuildsHistoryLimit: 4
+
+  # Deployment config (development)
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: publicapi-api-deployment-devel
+      labels:
+        app: publicapi-api-devel
+    spec:
+      selector:
+        app: publicapi-api-devel
+        depcfg: publicapi-api-depcfg-devel
+      template:
+        metadata:
+          labels:
+            app: publicapi-api-devel
+            depcfg: publicapi-api-depcfg-devel
+        spec:
+          containers:
+            - name: publicapi-api-container-devel
+              image: publicapi/publicapi-api-devel
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+      replicas: 1
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - publicapi-api-container-devel
+            from:
+              kind: ImageStreamTag
+              name: publicapi-api-devel:latest
+      strategy:
+        type: Rolling
