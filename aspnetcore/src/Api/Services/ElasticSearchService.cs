@@ -16,10 +16,9 @@ namespace Api.Services
         public IReadOnlyCollection<T> Search<T>(string searchText) where T : class
         {
             var searchResult = _elasticClient.Search<T>(t => t
-            .Index("publication")
-            .Query(q =>
-                q.MultiMatch(query =>
-                    query
+                .Index("publication")
+                .Query(q =>q
+                    .MultiMatch(query => query
                         .Type(TextQueryType.PhrasePrefix)
                         .Fields("publicationName")
                         .Query(searchText))));

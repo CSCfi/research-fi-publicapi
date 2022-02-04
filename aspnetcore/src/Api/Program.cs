@@ -1,20 +1,18 @@
+using Api.ConfigurationExtensions;
 using Api.Services;
-using Nest;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddScoped<ISearchService, DummySearchService>();
 builder.Services.AddScoped<ISearchService, ElasticSearchService>();
-var connectionSettings = new ConnectionSettings(new Uri("http://localhost:9200"));
-var elasticClient = new ElasticClient(connectionSettings);
-builder.Services.AddSingleton<IElasticClient>(elasticClient);
+
+// Configure and add ElasticSearch
+builder.Services.AddElasticSearch(builder.Configuration);
 
 var app = builder.Build();
 
