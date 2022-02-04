@@ -2,6 +2,6 @@
 {
     public interface ISearchService
     {
-        IEnumerable<T> Search<T>() where T : new();
+        IReadOnlyCollection<T> Search<T>(string searchText) where T : class;
     }
 }

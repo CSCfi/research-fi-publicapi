@@ -19,9 +19,9 @@ namespace Api.Controllers
         }
 
         [HttpGet(Name = "GetPublication")]
-        public IEnumerable<Publication> Get()
+        public IEnumerable<Publication> Get(string searchText)
         {
-            return _searchService.Search<Publication>();
+            return _searchService.Search<Publication>(searchText);
         }
     }
 }
