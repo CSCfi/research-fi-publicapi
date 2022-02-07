@@ -8,6 +8,10 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\src\Api</DockerfileContext>
 		<DockerfileFile>..\..\openshift\api\Dockerfile</DockerfileFile>
+		<!-- Enable xml commment file generation for swagger to use. -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- Do not warn about objects missing xml comments. -->
+		<nowarn>$(NoWarn);1591</nowarn>
 	</PropertyGroup>
 
 	<ItemGroup>
