@@ -27,7 +27,7 @@ namespace Api.Models
         /// <summary>
         /// Julkaisun muoto
         /// </summary>
-        public string? publicationTypeCode2 { get; set; }
+        //public string? publicationTypeCode2 { get; set; }
 
         /// <summary>
         /// Emojulkaisu
@@ -42,7 +42,7 @@ namespace Api.Models
         /// <summary>
         /// Yleisö
         /// </summary>
-        public string? targetAudienceCode { get; set; }
+        //public string? targetAudienceCode { get; set; }
 
         /// <summary>
         /// OKM:n julkaisutyyppiluokitus
@@ -57,7 +57,7 @@ namespace Api.Models
         /// <summary>
         /// Konferenssi
         /// </summary>
-        public string? conferenceName { get; set; }
+        //public string? conferenceName { get; set; }
 
         /// <summary>
         /// ISSN
@@ -82,22 +82,22 @@ namespace Api.Models
         /// <summary>
         /// Sivut
         /// </summary>
-        public string? pageNumberText { get; set; }
+        //public string? pageNumberText { get; set; }
 
         /// <summary>
         /// Artikkelinumero
         /// </summary>
-        public string? articleNumberText { get; set; }
+        //public string? articleNumberText { get; set; }
 
         /// <summary>
         /// Emojulkaisun nimi
         /// </summary>
-        public string? parentPublicationName { get; set; }
+        //public string? parentPublicationName { get; set; }
 
         /// <summary>
         /// Emojulkaisun toimittajat
         /// </summary>
-        public string? parentPublicationPublisher { get; set; }
+        //public string? parentPublicationPublisher { get; set; }
 
         /// <summary>
         /// ISBN
@@ -117,17 +117,17 @@ namespace Api.Models
         /// <summary>
         /// Kustannuspaikka
         /// </summary>
-        public string? publisherLocation { get; set; }
+        //public string? publisherLocation { get; set; }
 
         /// <summary>
         /// Julkaisufoorumi
         /// </summary>
-        public string? jufoCode { get; set; }
+        //public string? jufoCode { get; set; }
 
         /// <summary>
         /// Julkaisufoorumitaso
         /// </summary>
-        public string? jufoClassCode { get; set; }
+        //public string? jufoClassCode { get; set; }
 
         /// <summary>
         /// Linkit
@@ -157,7 +157,7 @@ namespace Api.Models
         /// <summary>
         /// Avainsanat
         /// </summary>
-        public string? keywords { get; set; }
+        //public string? keywords { get; set; }
 
         /// <summary>
         /// Avoin saatavuus
@@ -167,7 +167,7 @@ namespace Api.Models
         /// <summary>
         /// Julkaisun kansainvälisyys
         /// </summary>
-        public bool? internationalPublication { get; set; }
+        //public bool? internationalPublication { get; set; }
 
         /// <summary>
         /// Julkaisumaa
@@ -177,7 +177,7 @@ namespace Api.Models
         /// <summary>
         /// Kieli
         /// </summary>
-        public string? languageCode { get; set; }
+        //public string? languageCode { get; set; }
 
         /// <summary>
         /// Kansainvälinen yhteisjulkaisu
