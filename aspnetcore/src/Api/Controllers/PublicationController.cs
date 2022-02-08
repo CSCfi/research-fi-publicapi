@@ -1,3 +1,4 @@
+using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,15 @@ namespace Api.Controllers
             _searchService = searchService;
         }
 
+        /// <summary>
+        /// Hae julkaisuja
+        /// </summary>
+        /// <param name="publicationName">Julkaisun nimi</param>
+        /// <returns></returns>
         [HttpGet(Name = "GetPublication")]
-        public IEnumerable<Publication> Get(string searchText)
+        public IEnumerable<Publication> Get(string publicationName)
         {
-            return _searchService.Search<Publication>(searchText);
+            return _searchService.Search<Publication>(publicationName);
         }
     }
 }
