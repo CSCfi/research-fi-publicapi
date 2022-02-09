@@ -1,30 +1,26 @@
 ﻿using Nest;
 
-
-
 namespace Api.Services
 {
-    public class ElasticSearchService : ISearchService
+    public class ElasticSearchService<T> : ISearchService<T> where T : class
     {
         private readonly IElasticClient _elasticClient;
+        private readonly IQueryGenerator<T> _queryGenerator;
 
-        public ElasticSearchService(IElasticClient elasticClient)
+        public ElasticSearchService(
+            IElasticClient elasticClient,
+            IQueryGenerator<T> queryGenerator)
         {
             _elasticClient = elasticClient;
+            _queryGenerator = queryGenerator;
         }
 
-        public IReadOnlyCollection<T> Search<T>(string searchText) where T : class
+        public IReadOnlyCollection<T> Search(string searchText)
         {
-            var searchResult = _elasticClient.Search<T>(t => t
-                .Index("publication")
-                .Query(q =>q
-                    .MultiMatch(query => query
-                        .Type(TextQueryType.PhrasePrefix)
-                        .Fields("publicationName")
-                        .Query(searchText))));
-            return searchResult.Documents;
-                    
-        }
+            var query = _queryGenerator.GenerateQuery(searchText);
 
+            var searchResult = _elasticClient.Search(query);
+            return searchResult.Documents;
+        }
     }
 }

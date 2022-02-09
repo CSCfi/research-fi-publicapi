@@ -1,4 +1,5 @@
 using Api.ConfigurationExtensions;
+using Api.Models;
 using Api.Services;
 using System.Reflection;
 
@@ -13,7 +14,9 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
-builder.Services.AddScoped<ISearchService, ElasticSearchService>();
+builder.Services.AddScoped(typeof(ISearchService<>), typeof(ElasticSearchService<>));
+builder.Services.AddScoped<IQueryGenerator<Publication>, PublicationQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<FundingCall>, FundingCallQueryGenerator>();
 
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);

@@ -9,11 +9,11 @@ namespace Api.Controllers
     public class PublicationController : ControllerBase
     {
         private readonly ILogger<PublicationController> _logger;
-        private readonly ISearchService _searchService;
+        private readonly ISearchService<Publication> _searchService;
 
         public PublicationController(
             ILogger<PublicationController> logger,
-            ISearchService searchService)
+            ISearchService<Publication> searchService)
         {
             _logger = logger;
             _searchService = searchService;
@@ -27,7 +27,7 @@ namespace Api.Controllers
         [HttpGet(Name = "GetPublication")]
         public IEnumerable<Publication> Get(string publicationName)
         {
-            return _searchService.Search<Publication>(publicationName);
+            return _searchService.Search(publicationName);
         }
     }
 }
