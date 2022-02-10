@@ -2,22 +2,22 @@
 
 namespace Api.Services
 {
-    public class ElasticSearchService<T> : ISearchService<T> where T : class
+    public class ElasticSearchService<TIn,TOut> : ISearchService<TIn,TOut> where TOut : class
     {
         private readonly IElasticClient _elasticClient;
-        private readonly IQueryGenerator<T> _queryGenerator;
+        private readonly IQueryGenerator<TIn, TOut> _queryGenerator;
 
         public ElasticSearchService(
             IElasticClient elasticClient,
-            IQueryGenerator<T> queryGenerator)
+            IQueryGenerator<TIn, TOut> queryGenerator)
         {
             _elasticClient = elasticClient;
             _queryGenerator = queryGenerator;
         }
 
-        public IReadOnlyCollection<T> Search(string searchText)
+        public IReadOnlyCollection<TOut> Search(TIn parameters)
         {
-            var query = _queryGenerator.GenerateQuery(searchText);
+            var query = _queryGenerator.GenerateQuery(parameters);
 
             var searchResult = _elasticClient.Search(query);
             return searchResult.Documents;

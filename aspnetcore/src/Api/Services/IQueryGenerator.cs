@@ -2,8 +2,8 @@
 
 namespace Api.Services
 {
-    public interface IQueryGenerator<T> where T : class
+    public interface IQueryGenerator<TIn, TOut> where TOut : class
     {
-        Func<SearchDescriptor<T>, ISearchRequest> GenerateQuery(string searchText);
+        Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuery(TIn searchParameters);
     }
 }

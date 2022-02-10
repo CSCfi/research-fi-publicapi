@@ -3,9 +3,9 @@ using Nest;
 
 namespace Api.Services
 {
-    public class PublicationQueryGenerator : IQueryGenerator<Publication>
+    public class PublicationQueryGenerator : IQueryGenerator<PublicationSearchParameters, Publication>
     {
-        public Func<SearchDescriptor<Publication>, ISearchRequest> GenerateQuery(string searchText)
+        public Func<SearchDescriptor<Publication>, ISearchRequest> GenerateQuery(PublicationSearchParameters parameters)
         {
             return t => t
                 .Index("publication")
@@ -13,7 +13,7 @@ namespace Api.Services
                     .MultiMatch(query => query
                         .Type(TextQueryType.PhrasePrefix)
                         .Fields("publicationName")
-                        .Query(searchText)));
+                        .Query(parameters.PublicationName)));
         }
 
     }

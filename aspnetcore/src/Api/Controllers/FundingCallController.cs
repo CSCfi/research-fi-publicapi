@@ -10,11 +10,11 @@ namespace Api.Controllers
     {
 
         private readonly ILogger<FundingCallController> _logger;
-        private readonly ISearchService<FundingCall> _searchService;
+        private readonly ISearchService<FundingCallSearchParameters,FundingCall> _searchService;
 
         public FundingCallController(
             ILogger<FundingCallController> logger,
-            ISearchService<FundingCall> searchService)
+            ISearchService<FundingCallSearchParameters,FundingCall> searchService)
         {
             _logger = logger;
             _searchService = searchService;
@@ -23,12 +23,12 @@ namespace Api.Controllers
         /// <summary>
         /// Hae rahoitushakuja
         /// </summary>
-        /// <param name="searchText"></param>
+        /// <param name="searchParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetFundingCall")]
-        public IEnumerable<FundingCall> Get(string searchText)
+        public IEnumerable<FundingCall> Get([FromQuery]FundingCallSearchParameters searchParameters)
         {
-            return _searchService.Search(searchText);
+            return _searchService.Search(searchParameters);
         }
     }
 }

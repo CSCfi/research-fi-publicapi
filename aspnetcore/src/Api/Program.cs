@@ -15,9 +15,9 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
-builder.Services.AddScoped(typeof(ISearchService<>), typeof(ElasticSearchService<>));
-builder.Services.AddScoped<IQueryGenerator<Publication>, PublicationQueryGenerator>();
-builder.Services.AddScoped<IQueryGenerator<FundingCall>, FundingCallQueryGenerator>();
+builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
+builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Publication>, PublicationQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingCall>, FundingCallQueryGenerator>();
 
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);

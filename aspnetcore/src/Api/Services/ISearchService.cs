@@ -1,7 +1,7 @@
 ﻿namespace Api.Services
 {
-    public interface ISearchService<T> where T : class
+    public interface ISearchService<TIn, TOut> where TOut : class
     {
-        IReadOnlyCollection<T> Search(string searchText);
+        IReadOnlyCollection<TOut> Search(TIn searchParameters);
     }
 }

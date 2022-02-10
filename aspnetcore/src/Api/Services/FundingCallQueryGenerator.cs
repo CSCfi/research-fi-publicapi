@@ -3,19 +3,19 @@ using Nest;
 
 namespace Api.Services
 {
-    public class FundingCallQueryGenerator : IQueryGenerator<FundingCall>
+    public class FundingCallQueryGenerator : IQueryGenerator<FundingCallSearchParameters, FundingCall>
     {
         private readonly string _indexName = "funding-call";
 
-        public Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQuery(string searchText)
+        public Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQuery(FundingCallSearchParameters parameters)
         {
             return t => t
                 .Index(_indexName)
                 .Query(q => q
                     .MultiMatch(query => query
                         .Type(TextQueryType.PhrasePrefix)
-                        .Fields("nameFi")
-                        .Query(searchText)));
+                        .Fields("nameFi, nameSv, nameEn")
+                        .Query(parameters.Name)));
         }
 
     }

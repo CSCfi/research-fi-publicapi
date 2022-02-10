@@ -9,11 +9,11 @@ namespace Api.Controllers
     public class PublicationController : ControllerBase
     {
         private readonly ILogger<PublicationController> _logger;
-        private readonly ISearchService<Publication> _searchService;
+        private readonly ISearchService<PublicationSearchParameters, Publication> _searchService;
 
         public PublicationController(
             ILogger<PublicationController> logger,
-            ISearchService<Publication> searchService)
+            ISearchService<PublicationSearchParameters, Publication> searchService)
         {
             _logger = logger;
             _searchService = searchService;
@@ -22,12 +22,12 @@ namespace Api.Controllers
         /// <summary>
         /// Hae julkaisuja
         /// </summary>
-        /// <param name="publicationName">Julkaisun nimi</param>
+        /// <param name="searchParameters">Julkaisun nimi</param>
         /// <returns></returns>
         [HttpGet(Name = "GetPublication")]
-        public IEnumerable<Publication> Get(string publicationName)
+        public IEnumerable<Publication> Get([FromQuery] PublicationSearchParameters searchParameters)
         {
-            return _searchService.Search(publicationName);
+            return _searchService.Search(searchParameters);
         }
     }
 }
