@@ -1,4 +1,4 @@
-﻿using Api.Models;
+﻿using Api.Models.FundingCall;
 using Nest;
 
 namespace Api.Services
