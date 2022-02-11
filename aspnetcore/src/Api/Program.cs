@@ -1,4 +1,6 @@
 using Api.ConfigurationExtensions;
+using Api.Models;
+using Api.Models.FundingCall;
 using Api.Services;
 using System.Reflection;
 
@@ -13,7 +15,9 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
-builder.Services.AddScoped<ISearchService, ElasticSearchService>();
+builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
+builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Publication>, PublicationQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingCall>, FundingCallQueryGenerator>();
 
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);
@@ -32,3 +36,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Needed for test project access to the configuration.
+public partial class Program { }
