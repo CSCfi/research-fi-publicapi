@@ -36,3 +36,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Needed for test project access to the configuration.
+public partial class Program { }
