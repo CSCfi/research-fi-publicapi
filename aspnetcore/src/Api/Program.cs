@@ -22,6 +22,8 @@ builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingC
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);
 
+builder.Services.AddAuth(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
