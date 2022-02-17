@@ -1,13 +1,7 @@
 using Api.Models.FundingCall;
 using FluentAssertions;
-using FluentAssertions.Collections;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Nest;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
