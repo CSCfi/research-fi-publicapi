@@ -7,7 +7,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    [Authorize(Policy = ApiPolicies.PublicationSearch)]
     public class PublicationController : ControllerBase
     {
         private readonly ILogger<PublicationController> _logger;

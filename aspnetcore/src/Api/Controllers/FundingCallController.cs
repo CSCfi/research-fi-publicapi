@@ -7,7 +7,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    [Authorize(Policy = ApiPolicies.FundingCallSearch)]
     public class FundingCallController : ControllerBase
     {
 

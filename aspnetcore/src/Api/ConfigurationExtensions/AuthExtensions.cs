@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 namespace Api.ConfigurationExtensions
 {
@@ -23,11 +24,24 @@ namespace Api.ConfigurationExtensions
                         ValidateIssuerSigningKey = true,
                         ClockSkew = TimeSpan.Zero
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            return Task.CompletedTask;
+                        },
+                        OnForbidden = context =>
+                        {
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddAuthorization(options =>
             {
-
+                // Configure Policies
+                options.AddPolicy(ApiPolicies.FundingCallSearch, policy => 
+                    policy.RequireClaim(ClaimTypes.Role, "fundingcallreadclient"));
             });
         }
     }
