@@ -1,11 +1,13 @@
 ﻿using Api.Models;
 using Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = ApiPolicies.FundingDecisionSearch)]
     public class FundingDecisionController : ControllerBase
     {
         private readonly ILogger<FundingDecisionController> _logger;

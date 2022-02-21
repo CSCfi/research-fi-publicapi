@@ -1,11 +1,13 @@
 ﻿using Api.Models.FundingCall;
 using Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = ApiPolicies.FundingCallSearch)]
     public class FundingCallController : ControllerBase
     {
 
