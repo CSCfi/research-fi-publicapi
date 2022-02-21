@@ -1,4 +1,5 @@
 using Api.ConfigurationExtensions;
+using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Models;
 using Api.Models.FundingCall;
@@ -41,7 +42,7 @@ builder.Services.AddSwaggerGen(options =>
             },
             new List<string>()
         }
-    });;
+    });
 });
 
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
@@ -56,6 +57,9 @@ builder.Services.AddAuth(builder.Configuration);
 
 // Configure db & entity framework
 builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlServer("name=dbconnectionstring"));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFundingCallRepository, FundingCallRepository>();
 
 var app = builder.Build();
 

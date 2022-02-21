@@ -1,4 +1,4 @@
-﻿using Api.DatabaseContext;
+﻿using Api.DataAccess;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
 using Api.Services;
@@ -15,16 +15,16 @@ namespace Api.Controllers
 
         private readonly ILogger<FundingCallController> _logger;
         private readonly ISearchService<FundingCallSearchParameters,FundingCall> _searchService;
-        private readonly ApiDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
         public FundingCallController(
             ILogger<FundingCallController> logger,
             ISearchService<FundingCallSearchParameters,FundingCall> searchService,
-            ApiDbContext dbContext)
+            IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _searchService = searchService;
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -38,18 +38,24 @@ namespace Api.Controllers
             return _searchService.Search(searchParameters);
         }
 
+        /// <summary>
+        /// Lisää uusi rahoitushaku
+        /// </summary>
+        /// <param name="fundingCall"></param>
+        /// <returns></returns>
         [HttpPost(Name = "PostFundingCall")]
         public async Task Post(FundingCall fundingCall)
         {
-            await _dbContext
-                .Set<DimCallProgramme>()
+            // TODO: only NameFi mapped to entity. Not using final models yet.
+            await _unitOfWork
+                .FundingCalls
                 .AddAsync(new DimCallProgramme
                 {
-                    NameFi = "test fi",
+                    NameFi = fundingCall.NameFi,
                     SourceId = "api",
                     DimRegisteredDataSourceId = -1
                 });
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
         }
     }
 }
