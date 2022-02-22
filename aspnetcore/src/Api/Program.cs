@@ -1,7 +1,10 @@
 using Api.ConfigurationExtensions;
+using Api.DataAccess;
+using Api.DatabaseContext;
 using Api.Models;
 using Api.Models.FundingCall;
 using Api.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -39,7 +42,7 @@ builder.Services.AddSwaggerGen(options =>
             },
             new List<string>()
         }
-    });;
+    });
 });
 
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
@@ -49,7 +52,14 @@ builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingC
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);
 
+// Configure authentication and authorization.
 builder.Services.AddAuth(builder.Configuration);
+
+// Configure db & entity framework
+builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlServer("name=dbconnectionstring"));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFundingCallRepository, FundingCallRepository>();
 
 var app = builder.Build();
 

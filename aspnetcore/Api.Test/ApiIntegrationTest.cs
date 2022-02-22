@@ -1,10 +1,14 @@
+using Api.DatabaseContext;
+using Api.Models.Entities;
 using Api.Models.FundingCall;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,12 +18,14 @@ namespace Api.Test
     public class ApiIntegrationTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
         private readonly TestWebApplicationFactory<Program> _factory;
+        private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
 
         public ApiIntegrationTest(TestWebApplicationFactory<Program> factory)
         {
             _factory = factory;
-
+            var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             _client = _factory.CreateClient();
         }
 
@@ -28,7 +34,7 @@ namespace Api.Test
         /// </summary>
         [Theory]
         [MemberData(nameof(FundingCallResultTestCases))]
-        public async void FundingCall_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
+        public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
         {
             // Arrange
             var apiUrl = $"FundingCall?{urlParams}";
@@ -51,7 +57,7 @@ namespace Api.Test
         /// </summary>
         [Theory]
         [MemberData(nameof(FundingCallNoResultsTestCases))]
-        public async void FundingCall_ShouldReturnEmpty(string urlParams)
+        public async void GET_ShouldReturnEmpty(string urlParams)
         {
             // Arrange
             var apiUrl = $"FundingCall?{urlParams}";
@@ -66,6 +72,30 @@ namespace Api.Test
             fundingCalls
                 .Should()
                 .BeEmpty();
+        }
+
+        [Fact]
+        public async void POST_ShouldAddFundingCallToDb()
+        {
+            // Arrange
+            var apiUrl = $"FundingCall";
+            var fundingCallToAdd = new FundingCall
+            {
+                NameFi = $"test funding call {Guid.NewGuid()}"
+            };
+            var content = JsonContent.Create(fundingCallToAdd);
+
+            // Act
+            var response = await _client.PostAsync(apiUrl, content);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var addedFundingCall = _dbContext
+                .Set<DimCallProgramme>()
+                .SingleOrDefault(x => x.NameFi == fundingCallToAdd.NameFi);
+
+            addedFundingCall.Should().NotBeNull();
+            
         }
 
         /// <summary>
