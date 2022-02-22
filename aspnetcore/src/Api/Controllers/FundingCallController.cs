@@ -9,7 +9,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Policy = ApiPolicies.FundingCallSearch)]
+    [Authorize(Policy = ApiPolicies.FundingCall.Search)]
     public class FundingCallController : ControllerBase
     {
 
@@ -44,6 +44,7 @@ namespace Api.Controllers
         /// <param name="fundingCall"></param>
         /// <returns></returns>
         [HttpPost(Name = "PostFundingCall")]
+        [Authorize(Policy = ApiPolicies.FundingCall.Add)]
         public async Task Post(FundingCall fundingCall)
         {
             // TODO: only NameFi mapped to entity. Not using final models yet.

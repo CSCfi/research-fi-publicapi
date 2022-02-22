@@ -24,7 +24,8 @@ namespace Api.Test
             var claims = new[] 
             { 
                 new Claim(ClaimTypes.Name, "Test user"),
-                new Claim(ClaimTypes.Role, "fundingcallreadclient")
+                new Claim(ClaimTypes.Role, "fundingcallreadclient"),
+                new Claim(ClaimTypes.Role, "fundingcallwriteclient")
             };
             var identity = new ClaimsIdentity(claims, "Test");
             var principal = new ClaimsPrincipal(identity);
