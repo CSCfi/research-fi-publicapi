@@ -8,7 +8,11 @@ namespace Api.Services
     /// </summary>
     public class FundingCallQueryGenerator : IQueryGenerator<FundingCallSearchParameters, FundingCall>
     {
-        private readonly string _indexName = "funding-call";
+        private readonly string _indexName;
+        public FundingCallQueryGenerator(IConfiguration configuration)
+        {
+            _indexName = configuration["IndexNames:FundingCall"] ?? throw new InvalidOperationException("FundingCall index config missing.");
+        }
 
         public Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQuery(FundingCallSearchParameters parameters)
         {
