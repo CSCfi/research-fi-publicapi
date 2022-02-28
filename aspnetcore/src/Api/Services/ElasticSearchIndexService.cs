@@ -63,13 +63,6 @@ namespace Api.Services
                 _logger.LogInformation("Indexed {batchSize} documents to {indexName}.", batchToIndex.Count, indexName);
             }
 
-            await _elasticClient.Cluster
-                    .HealthAsync(selector: s => s
-                        .WaitForStatus(Elasticsearch.Net.WaitForStatus.Yellow)
-                        .WaitForActiveShards("1")
-                        .Index(indexName)
-                        );
-
             _logger.LogInformation("Indexing to {indexName} complete.", indexName);
 
         }
