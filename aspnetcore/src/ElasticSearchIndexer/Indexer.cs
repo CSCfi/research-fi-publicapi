@@ -29,7 +29,7 @@ namespace ElasticSearchIndexer
         public async Task Start()
         {
 
-            var indexName = "testindex";
+            var indexName = "api-dev-funding-call";
 
             _logger.LogInformation("Getting entities from the database.");
 

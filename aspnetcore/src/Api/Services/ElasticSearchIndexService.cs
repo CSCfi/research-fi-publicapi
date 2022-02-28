@@ -6,21 +6,28 @@ namespace Api.Services
     public class ElasticSearchIndexService : IElasticSearchIndexService
     {
         private readonly IElasticClient _elasticClient;
+        private readonly ILogger<ElasticSearchIndexService> _logger;
 
-        public ElasticSearchIndexService(IElasticClient elasticClient)
+        public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
         {
             _elasticClient = elasticClient;
+            _logger = logger;
         }
 
-        public async Task IndexAsync<T>(string indexName, IReadOnlyCollection<T> entities) where T : class
+        public async Task IndexAsync<T>(string indexName, List<T> entities) where T : class
         {
+            // TODO: use the alias pattern (with _v1, _v2) to reduce downtime.
             if ((await _elasticClient.Indices.ExistsAsync(indexName)).Exists)
             {
+                _logger.LogInformation("Index {indexName} exists already.", indexName);
+
                 var deleteResponse = await _elasticClient.Indices.DeleteAsync(indexName);
                 if(!deleteResponse.IsValid)
                 {
                     throw new InvalidOperationException($"Deleting index {indexName} failed.", deleteResponse.OriginalException);
                 }
+
+                _logger.LogInformation("Index {indexName} deleted.", indexName);
             }
 
             var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x =>
@@ -33,13 +40,27 @@ namespace Api.Services
                 throw new InvalidOperationException($"Creating index {indexName} failed.", createResponse.OriginalException);
             }
 
-            var bulkResponse = await _elasticClient.BulkAsync(b => b
-                .Index(indexName)
-                .IndexMany(entities));
+            _logger.LogInformation("Index {indexName} created.", indexName);
 
-            if (!bulkResponse.IsValid)
+            var documentBatches = new List<List<T>>();
+            const int batchSize = 5;
+
+            for (var docIndex = 0; docIndex < entities.Count; docIndex += batchSize)
             {
-                throw new InvalidOperationException($"Indexing entities to {indexName} failed.", bulkResponse.OriginalException);
+                documentBatches.Add(entities.GetRange(docIndex, Math.Min(batchSize, entities.Count - docIndex)));
+            }
+
+            foreach (var batchToIndex in documentBatches)
+            {
+                var indexBatchResponse = await _elasticClient.BulkAsync(b => b
+                    .Index(indexName)
+                    .IndexMany(batchToIndex));
+
+                if (!indexBatchResponse.IsValid)
+                {
+                    throw new InvalidOperationException($"Indexing entities to {indexName} failed.", indexBatchResponse.OriginalException);
+                }
+                _logger.LogInformation("Indexed {batchSize} documents to {indexName}.", batchToIndex.Count, indexName);
             }
 
             await _elasticClient.Cluster
@@ -48,6 +69,8 @@ namespace Api.Services
                         .WaitForActiveShards("1")
                         .Index(indexName)
                         );
+
+            _logger.LogInformation("Indexing to {indexName} complete.", indexName);
 
         }
 
