@@ -8,6 +8,7 @@
 		<UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
 		<DockerfileContext>..\..\src\indexer</DockerfileContext>
 		<DockerfileFile>..\..\openshift\indexer\Dockerfile</DockerfileFile>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
