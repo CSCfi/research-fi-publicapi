@@ -8,8 +8,8 @@ RUN dotnet restore ElasticSearchIndexer/ElasticSearchIndexer.csproj
 #RUN dotnet restore api/Api.csproj
 # Copy everything else and build
 COPY . .
-WORKDIR "/app/ElasticSearchIndexer"
-RUN dotnet publish "ElasticSearchIndexer.csproj" -c Release -o out
+#WORKDIR "/app/ElasticSearchIndexer"
+RUN dotnet publish "ElasticSearchIndexer/ElasticSearchIndexer.csproj" -c Release -o out
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
