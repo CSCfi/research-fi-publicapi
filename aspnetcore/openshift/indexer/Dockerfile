@@ -3,10 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "./"]
-RUN dotnet restore
+COPY ["aspnetcore/src/Api/Api.csproj", "./"]
+RUN dotnet restore ElasticSearchIndexer.csproj
 # Copy everything else and build
-COPY aspnetcore/src/ElasticSearchIndexer/ ./
-RUN dotnet publish -c Release -o out
+COPY . .
+RUN dotnet publish "ElasticSearchIndexer.csproj" -c Release -o out
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
