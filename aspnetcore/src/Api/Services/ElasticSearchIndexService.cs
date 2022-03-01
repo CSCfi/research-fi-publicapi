@@ -7,6 +7,8 @@ namespace Api.Services
     {
         private readonly IElasticClient _elasticClient;
         private readonly ILogger<ElasticSearchIndexService> _logger;
+        
+        private const int batchSize = 1000;
 
         public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
         {
@@ -43,7 +45,7 @@ namespace Api.Services
             _logger.LogInformation("Index {indexName} created.", indexName);
 
             var documentBatches = new List<List<T>>();
-            const int batchSize = 5;
+            
 
             for (var docIndex = 0; docIndex < entities.Count; docIndex += batchSize)
             {
