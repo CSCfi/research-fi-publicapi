@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY *.sln .
+COPY ["aspnetcore/PublicApi.sln", "./"]
 COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "ElasticSearchIndexer/"]
 COPY ["aspnetcore/src/Api/Api.csproj", "Api/"]
 RUN dotnet restore
