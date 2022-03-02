@@ -17,7 +17,7 @@ COPY ["aspnetcore/src/ElasticSearchIndexer/.", "src/ElasticSearchIndexer/"]
 COPY ["aspnetcore/Api.Test/.", "./Api.Test/"]
 WORKDIR /app
 
-RUN dotnet publish -c Release -o out
+RUN dotnet publish "src/ElasticSearchIndexer/ElasticSearchIndexer.csproj" -c Release -o out
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
