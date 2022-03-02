@@ -12,8 +12,8 @@ RUN dotnet restore
 #RUN dotnet restore api/Api.csproj
 # Copy everything else and build
 
-COPY Api/. ./src/Api
-COPY ElasticSearchIndexer/. ./src/ElasticSearchIndexer
+COPY ["aspnetcore/src/Api/.", "src/Api/"]
+COPY ["aspnetcore/src/ElasticSearchIndexer/.", "src/ElasticSearchIndexer/"]
 WORKDIR /app
 
 RUN dotnet publish -c Release -o out
