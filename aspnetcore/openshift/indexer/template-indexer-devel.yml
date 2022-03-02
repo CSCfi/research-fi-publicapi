@@ -13,7 +13,7 @@ metadata:
   name: publicapi-indexer-devel
 objects:
   # Job (devel)
-  - apiVersion: v1
+  - apiVersion: batch/v1
     kind: Job
     metadata:
       name: publicapi-indexer-job-devel
@@ -22,14 +22,24 @@ objects:
       annotations:
         description: ElasticSearch indexer for Public devel branch
     spec:
-      # ports:
-      #   - name: publicapi-api-port-devel
-      #     port: 8080
-      #     targetPort: 8080
-      selector:
-        depcfg: publicapi-indexer-depcfg-devel
-      parallelism: 1
-      completions: 1
+      template:
+        spec:
+          containers:
+            - name: publicapi-indexer-container-devel
+              image: publicapi-indexer-devel
+              imagePullPolicy: Always
+              env:
+                - name: "ELASTICSEARCH__URL"
+                  valueFrom:
+                    secretKeyRef:
+                        name: publicapi-api-secret-devel-elasticsearch
+                        key: "ELASTICSEARCH__URL"
+                - name: "dbconnectionstring"
+                  valueFrom:
+                    secretKeyRef:
+                        name: publicapi-api-secret-devel-db
+                        key: dbconnectionstring
+          restartPolicy: Never
 
   # ImageStream (development)
   - apiVersion: v1
@@ -38,6 +48,9 @@ objects:
       name: publicapi-indexer-devel
       labels:
         app: publicapi-indexer-devel
+    spec:
+        lookupPolicy:
+            local: true
 
   # BuildConfig using Docker build strategy
   - apiVersion: v1
@@ -61,42 +74,3 @@ objects:
           name: publicapi-indexer-devel:latest
       successfulBuildsHistoryLimit: 4
       failedBuildsHistoryLimit: 4
-
-  # Deployment config (development)
-  - apiVersion: v1
-    kind: DeploymentConfig
-    metadata:
-      name: publicapi-indexer-deployment-devel
-      labels:
-        app: publicapi-indexer-devel
-    spec:
-      selector:
-        app: publicapi-indexer-devel
-        depcfg: publicapi-indexer-depcfg-devel
-      template:
-        metadata:
-          labels:
-            app: publicapi-indexer-devel
-            depcfg: publicapi-indexer-depcfg-devel
-        spec:
-          containers:
-            - name: publicapi-indexer-container-devel
-              image: publicapi/publicapi-indexer-devel
-              imagePullPolicy: Always
-              # ports:
-              #   - containerPort: 8080
-              #     protocol: TCP
-              restartPolicy: Never
-      replicas: 1
-      triggers:
-        - type: ConfigChange
-        - type: ImageChange
-          imageChangeParams:
-            automatic: true
-            containerNames:
-              - publicapi-indexer-container-devel
-            from:
-              kind: ImageStreamTag
-              name: publicapi-indexer-devel:latest
-      strategy:
-        type: Rolling
