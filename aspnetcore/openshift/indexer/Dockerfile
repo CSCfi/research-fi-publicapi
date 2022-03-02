@@ -4,15 +4,15 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY ["aspnetcore/PublicApi.sln", "./"]
-COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "ElasticSearchIndexer/"]
-COPY ["aspnetcore/src/Api/Api.csproj", "Api/"]
+COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "src/ElasticSearchIndexer/"]
+COPY ["aspnetcore/src/Api/Api.csproj", "src/Api/"]
 RUN dotnet restore
 #RUN dotnet restore ElasticSearchIndexer/ElasticSearchIndexer.csproj
 #RUN dotnet restore api/Api.csproj
 # Copy everything else and build
 
-COPY Api/. ./Api
-COPY ElasticSearchIndexer/. ./ElasticSearchIndexer
+COPY Api/. ./src/Api
+COPY ElasticSearchIndexer/. ./src/ElasticSearchIndexer
 WORKDIR /app
 
 RUN dotnet publish -c Release -o out
