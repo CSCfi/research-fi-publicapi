@@ -8,7 +8,7 @@ namespace Api.Test.Maps
 {
     public class FundingCallEntityToApiModelTest
     {
-        private FundingCallEntityToApiModel _mapper;
+        private readonly FundingCallEntityToApiModel _mapper;
 
         public FundingCallEntityToApiModelTest()
         {
@@ -16,10 +16,21 @@ namespace Api.Test.Maps
         }
 
         [Fact]
-        public void Map_Should_Map()
+        public void Should_Map_DimCallProgramme_To_FundingCall()
         {
             // Arrange
-            var entity = new DimCallProgramme
+            var entity = GetEntity();
+
+            // Act
+            var model = _mapper.Map(entity);
+
+            // Assert
+            model.Should().BeEquivalentTo(GetModel());
+        }
+
+        private static DimCallProgramme GetEntity()
+        {
+            return new DimCallProgramme
             {
                 NameFi = "nameFi",
                 NameSv = "nameSv",
@@ -94,12 +105,11 @@ namespace Api.Test.Maps
                 ContactInformation = "contact info"
 
             };
+        }
 
-            // Act
-            var model = _mapper.Map(entity);
-
-            // Assert
-            model.Should().BeEquivalentTo(new FundingCall
+        private static FundingCall GetModel()
+        {
+            return new FundingCall
             {
                 NameFi = "nameFi",
                 NameSv = "nameSv",
@@ -137,7 +147,7 @@ namespace Api.Test.Maps
                         FoundationUrl = "http://foundationurl"
                     }
                 }
-            });
+            };
         }
     }
 }
