@@ -15,13 +15,13 @@ using Xunit;
 
 namespace Api.Test
 {
-    public class ApiIntegrationTest : IClassFixture<TestWebApplicationFactory<Program>>
+    public class ApiSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
         private readonly TestWebApplicationFactory<Program> _factory;
         private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
 
-        public ApiIntegrationTest(TestWebApplicationFactory<Program> factory)
+        public ApiSystemTest(TestWebApplicationFactory<Program> factory)
         {
             _factory = factory;
             var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();

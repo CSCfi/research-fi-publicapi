@@ -95,10 +95,12 @@ namespace Api.Models.FundingCall
         [Text(Name = "applicationURL_en")]
         public string? ApplicationURLEn { get; set; }
 
-        [Text(Name = "foundation")]
+        [Nested]
+        [PropertyName("foundation")]
         public Foundation[]? Foundation { get; set; }
 
-        [Text(Name = "categories")]
+        [Nested]
+        [PropertyName("categories")]
         public Category[]? Categories { get; set; }
 
         /// <summary>

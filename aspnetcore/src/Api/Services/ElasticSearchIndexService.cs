@@ -18,35 +18,64 @@ namespace Api.Services
 
         public async Task IndexAsync<T>(string indexName, List<T> entities) where T : class
         {
-            // TODO: use the alias pattern (with _v1, _v2) to reduce downtime.
-            if ((await _elasticClient.Indices.ExistsAsync(indexName)).Exists)
+            var (indexToCreate, indexToDelete) = await GetIndexNames(indexName);
+
+            // Create new index with _vx prefix.
+            await CreateIndex<T>(indexToCreate);
+
+            // Add entities to the new index.
+            await IndexEntities(indexToCreate, entities);
+
+            // Wait for new index to be operational.
+            await _elasticClient.Cluster
+                .HealthAsync(selector: s => s
+                    .WaitForStatus(Elasticsearch.Net.WaitForStatus.Yellow)
+                    .WaitForActiveShards("1")
+                    .Index(indexToCreate));
+
+            // Add new alias from index_new to index
+            await _elasticClient.Indices.BulkAliasAsync(r => r
+                // Remove alias "index_old => index"
+                .Remove(remove => remove.Alias(indexName).Index("*"))
+                // Add alias "index_new => index"
+                .Add(add => add.Alias(indexName).Index(indexToCreate)));
+
+            // Delete the old index if it exists.
+            await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
+    
+            _logger.LogInformation("Indexing to {indexName} complete.", indexName);
+
+        }
+
+        private async Task<(string indexToCreate, string indexToDelete)> GetIndexNames(string indexName)
+        {
+            var indexNameV1 = $"{indexName}_v1";
+            var indexNameV2 = $"{indexName}_v2";
+
+            var v1IndexExists = (await _elasticClient.Indices.ExistsAsync(indexNameV1)).Exists;
+
+            string indexToDelete;
+            string indexToCreate;
+
+            if (!v1IndexExists)
             {
-                _logger.LogInformation("Index {indexName} exists already.", indexName);
-
-                var deleteResponse = await _elasticClient.Indices.DeleteAsync(indexName);
-                if(!deleteResponse.IsValid)
-                {
-                    throw new InvalidOperationException($"Deleting index {indexName} failed.", deleteResponse.OriginalException);
-                }
-
-                _logger.LogInformation("Index {indexName} deleted.", indexName);
+                indexToDelete = indexNameV2;
+                indexToCreate = indexNameV1;
+            }
+            else
+            {
+                indexToDelete = indexNameV1;
+                indexToCreate = indexNameV2;
             }
 
-            var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x =>
-                x.Map<T>(x => x.AutoMap(maxRecursion: 1)));
+            return (indexToCreate, indexToDelete);
+        }
 
-            var valid = createResponse.IsValid;
-
-            if (!createResponse.IsValid)
-            {
-                throw new InvalidOperationException($"Creating index {indexName} failed.", createResponse.OriginalException);
-            }
-
-            _logger.LogInformation("Index {indexName} created.", indexName);
+        private async Task IndexEntities<T>(string indexName, List<T> entities) where T : class
+        {
+            // Split entities into batches to avoid one big request.
 
             var documentBatches = new List<List<T>>();
-            
-
             for (var docIndex = 0; docIndex < entities.Count; docIndex += batchSize)
             {
                 documentBatches.Add(entities.GetRange(docIndex, Math.Min(batchSize, entities.Count - docIndex)));
@@ -64,9 +93,29 @@ namespace Api.Services
                 }
                 _logger.LogInformation("Indexed {batchSize} documents to {indexName}.", batchToIndex.Count, indexName);
             }
+        }
 
-            _logger.LogInformation("Indexing to {indexName} complete.", indexName);
+        /// <summary>
+        /// Creates index with the given name.
+        /// If the index exists already, it will be deleted first.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="indexName"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private async Task CreateIndex<T>(string indexName) where T : class
+        {
+            await _elasticClient.Indices.DeleteAsync(indexName, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
 
+
+            var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x => x.Map<T>(x => x.AutoMap(maxRecursion: 1)));
+
+            if (!createResponse.IsValid)
+            {
+                throw new InvalidOperationException($"Creating index {indexName} failed.", createResponse.OriginalException);
+            }
+
+            _logger.LogInformation("Index {indexName} created.", indexName);
         }
 
     }

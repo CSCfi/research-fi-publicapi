@@ -8,13 +8,11 @@ COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "src/El
 COPY ["aspnetcore/src/Api/Api.csproj", "src/Api/"]
 COPY ["aspnetcore/Api.Test/Api.Test.csproj", "./Api.Test/"]
 RUN dotnet restore
-#RUN dotnet restore ElasticSearchIndexer/ElasticSearchIndexer.csproj
-#RUN dotnet restore api/Api.csproj
-# Copy everything else and build
 
+# Copy everything else and build
 COPY ["aspnetcore/src/Api/.", "src/Api/"]
 COPY ["aspnetcore/src/ElasticSearchIndexer/.", "src/ElasticSearchIndexer/"]
-COPY ["aspnetcore/Api.Test/.", "./Api.Test/"]
+COPY ["aspnetcore/src/Api.Test/.", "src/Api.Test/"]
 WORKDIR /app
 
 RUN dotnet publish "src/ElasticSearchIndexer/ElasticSearchIndexer.csproj" -c Release -o out

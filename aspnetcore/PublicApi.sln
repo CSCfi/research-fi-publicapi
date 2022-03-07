@@ -5,9 +5,23 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "src\Api\Api.csproj", "{292C0230-B2F9-4688-A139-2FB80B59A773}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Test", "Api.Test\Api.Test.csproj", "{B68C05CA-4425-4A4E-B77D-ABF186C280FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Test", "src\Api.Test\Api.Test.csproj", "{B68C05CA-4425-4A4E-B77D-ABF186C280FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchIndexer", "src\ElasticSearchIndexer\ElasticSearchIndexer.csproj", "{AA119832-3664-4B90-9996-05C8B0C8614D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchIndexer", "src\ElasticSearchIndexer\ElasticSearchIndexer.csproj", "{AA119832-3664-4B90-9996-05C8B0C8614D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openshift", "openshift", "{938F9047-A17A-4D91-95DE-DF09E7349593}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{CCDDA0B3-DAA4-4143-81B2-50DAA10A77E5}"
+	ProjectSection(SolutionItems) = preProject
+		openshift\api\Dockerfile = openshift\api\Dockerfile
+		openshift\api\template-api-devel.yml = openshift\api\template-api-devel.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexer", "indexer", "{1528738C-FE3C-4BF1-A1E3-F94B387A7ADF}"
+	ProjectSection(SolutionItems) = preProject
+		openshift\indexer\Dockerfile = openshift\indexer\Dockerfile
+		openshift\indexer\template-indexer-devel.yml = openshift\indexer\template-indexer-devel.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +44,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CCDDA0B3-DAA4-4143-81B2-50DAA10A77E5} = {938F9047-A17A-4D91-95DE-DF09E7349593}
+		{1528738C-FE3C-4BF1-A1E3-F94B387A7ADF} = {938F9047-A17A-4D91-95DE-DF09E7349593}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FD24884-1B60-47DA-9633-6CA7CFC6FAC1}

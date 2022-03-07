@@ -1,4 +1,5 @@
 ﻿using Api.ConfigurationExtensions;
+using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Maps;
 using Api.Models.Entities;
@@ -42,6 +43,8 @@ namespace ElasticSearchIndexer
                         services.AddDbContext<ApiDbContext>(options => options.UseSqlServer("name=dbconnectionstring"));
 
                         services.AddScoped<IMapper<DimCallProgramme, FundingCall>, FundingCallEntityToApiModel>();
+
+                        services.AddScoped<IFundingCallRepository, FundingCallRepository>();
                     })
             .ConfigureHostConfiguration(configurationBuilder => configurationBuilder
                 // Most of the configuration comes from environment variables.
