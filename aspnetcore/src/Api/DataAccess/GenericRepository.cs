@@ -5,12 +5,10 @@ namespace Api.DataAccess
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly ApiDbContext context;
-        internal DbSet<T> dbSet;
+        protected readonly DbSet<T> dbSet;
 
         public GenericRepository(ApiDbContext context)
         {
-            this.context = context;
             dbSet = context.Set<T>();
         }
 
@@ -21,9 +19,15 @@ namespace Api.DataAccess
             return true;
         }
 
+
         public async Task<T> GetAsync(Guid id)
         {
             return await dbSet.FindAsync(id);
+        }
+
+        public IAsyncEnumerable<T> GetAllAsync()
+        {
+            return dbSet.AsAsyncEnumerable();
         }
     }
 }
