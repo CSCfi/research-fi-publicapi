@@ -32,12 +32,12 @@ objects:
                 - name: "ELASTICSEARCH__URL"
                   valueFrom:
                     secretKeyRef:
-                        name: publicapi-api-secret-devel-elasticsearch
+                        name: publicapi-api-secret-devel
                         key: "ELASTICSEARCH__URL"
                 - name: "dbconnectionstring"
                   valueFrom:
                     secretKeyRef:
-                        name: publicapi-api-secret-devel-db
+                        name: publicapi-api-secret-devel
                         key: dbconnectionstring
           restartPolicy: Never
 
