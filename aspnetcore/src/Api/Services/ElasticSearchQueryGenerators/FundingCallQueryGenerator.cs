@@ -1,7 +1,7 @@
 ﻿using Api.Models.FundingCall;
 using Nest;
 
-namespace Api.Services
+namespace Api.Services.ElasticSearchQueryGenerators
 {
     /// <summary>
     /// Service responsible for generating a search query for FundingCalls from ElasticSearch.
@@ -19,7 +19,7 @@ namespace Api.Services
             var subQueries = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
 
             // When searching with Name, search from Fi,Sv,En names.
-            if(!string.IsNullOrWhiteSpace(parameters.Name))
+            if (!string.IsNullOrWhiteSpace(parameters.Name))
             {
                 subQueries.Add(t => t.MultiMatch(query => query
                     .Type(TextQueryType.PhrasePrefix)
@@ -49,7 +49,7 @@ namespace Api.Services
                 .Query(queryDescriptor => queryDescriptor
                     .Bool(boolDescriptor => boolDescriptor
                         .Must(subQueries)));
-                
+
         }
 
     }

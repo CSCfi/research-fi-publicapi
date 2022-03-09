@@ -1,7 +1,7 @@
 ﻿using Api.Models;
 using Nest;
 
-namespace Api.Services
+namespace Api.Services.ElasticSearchQueryGenerators
 {
     public class PublicationQueryGenerator : IQueryGenerator<PublicationSearchParameters, Publication>
     {

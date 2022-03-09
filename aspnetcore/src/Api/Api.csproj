@@ -35,6 +35,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\FundingDecision\" />
+	  <Folder Include="Services\ElasticSearchQueryGenerators\" />
 	</ItemGroup>
 
 </Project>

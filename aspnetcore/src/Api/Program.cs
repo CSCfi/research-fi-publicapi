@@ -4,6 +4,7 @@ using Api.DatabaseContext;
 using Api.Models;
 using Api.Models.FundingCall;
 using Api.Services;
+using Api.Services.ElasticSearchQueryGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
