@@ -6,7 +6,7 @@ WORKDIR /app
 COPY ["aspnetcore/PublicApi.sln", "./"]
 COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "src/ElasticSearchIndexer/"]
 COPY ["aspnetcore/src/Api/Api.csproj", "src/Api/"]
-COPY ["aspnetcore/Api.Test/Api.Test.csproj", "./Api.Test/"]
+COPY ["aspnetcore/Api.Test/Api.Test.csproj", "src/Api.Test/"]
 RUN dotnet restore
 
 # Copy everything else and build
