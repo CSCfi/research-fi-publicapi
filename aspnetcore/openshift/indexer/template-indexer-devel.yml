@@ -34,6 +34,16 @@ objects:
                     secretKeyRef:
                         name: publicapi-api-secret-devel
                         key: "ELASTICSEARCH__URL"
+                - name: "ELASTICSEARCH__USERNAME"
+                  valueFrom:
+                    secretKeyRef:
+                        name: publicapi-api-secret-devel
+                        key: "ELASTICSEARCH__USERNAME"
+                - name: "ELASTICSEARCH__PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                        name: publicapi-api-secret-devel
+                        key: "ELASTICSEARCH__PASSWORD"
                 - name: "dbconnectionstring"
                   valueFrom:
                     secretKeyRef:
