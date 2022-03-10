@@ -1,5 +1,6 @@
 using Api.ConfigurationExtensions;
 using Api.DataAccess;
+using Api.DataAccess.Repositories;
 using Api.DatabaseContext;
 using Api.Models;
 using Api.Models.FundingCall;
