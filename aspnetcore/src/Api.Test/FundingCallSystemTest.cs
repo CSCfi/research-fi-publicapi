@@ -15,13 +15,13 @@ using Xunit;
 
 namespace Api.Test
 {
-    public class ApiSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+    public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
         private readonly TestWebApplicationFactory<Program> _factory;
         private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
 
-        public ApiSystemTest(TestWebApplicationFactory<Program> factory)
+        public FundingCallSystemTest(TestWebApplicationFactory<Program> factory)
         {
             _factory = factory;
             var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
@@ -74,6 +74,9 @@ namespace Api.Test
                 .BeEmpty();
         }
 
+        /// <summary>
+        /// Test for running funding call query against a real db and elasticsearch instance.
+        /// </summary>
         [Fact]
         public async void POST_ShouldAddFundingCallToDb()
         {
