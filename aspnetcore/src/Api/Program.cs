@@ -61,7 +61,7 @@ builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlServer("name=dbconnectionstring"));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IFundingCallRepository, FundingCallRepository>();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 
