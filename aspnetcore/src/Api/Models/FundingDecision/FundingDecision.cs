@@ -13,5 +13,15 @@ namespace Api.Models.FundingDecision
         [Text(Name = "projectNameEn")]
         public string? NameEn { get; set; }
 
+        [Text(Name = "projectDescriptionFi")]
+        public string? DescriptionFi { get; set; }
+
+        [Text(Name = "projectDescriptionSv")]
+        public string? DescriptionSv { get; set; }
+
+        [Text(Name = "projectDescriptionEn")]
+        public string? DescriptionEn { get; set; }
+
+
     }
 }
