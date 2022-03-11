@@ -2,6 +2,6 @@
 {
     public class FundingDecisionSearchParameters
     {
-        public string? Name { get; internal set; }
+        public string? Name { get; set; }
     }
 }
