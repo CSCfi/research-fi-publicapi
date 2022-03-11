@@ -1,6 +1,7 @@
 using Api.DatabaseContext;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
+using Api.Test.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,6 +21,7 @@ namespace Api.Test
         private readonly TestWebApplicationFactory<Program> _factory;
         private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
+        private readonly string _apiBaseUrl = "FundingCall";
 
         public FundingCallSystemTest(TestWebApplicationFactory<Program> factory)
         {
@@ -37,14 +39,14 @@ namespace Api.Test
         public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
         {
             // Arrange
-            var apiUrl = $"FundingCall?{urlParams}";
+            var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
             // Act
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var fundingCalls = await GetResponseObject<IEnumerable<FundingCall>>(response);
+            var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
                 .Should()
@@ -60,14 +62,14 @@ namespace Api.Test
         public async void GET_ShouldReturnEmpty(string urlParams)
         {
             // Arrange
-            var apiUrl = $"FundingCall?{urlParams}";
+            var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
             // Act
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
             response.EnsureSuccessStatusCode();
-            var fundingCalls = await GetResponseObject<IEnumerable<FundingCall>>(response);
+            var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
                 .Should()
@@ -81,7 +83,7 @@ namespace Api.Test
         public async void POST_ShouldAddFundingCallToDb()
         {
             // Arrange
-            var apiUrl = $"FundingCall";
+            var apiUrl = $"{_apiBaseUrl}";
             var fundingCallToAdd = new FundingCall
             {
                 NameFi = $"test funding call {Guid.NewGuid()}"
@@ -148,27 +150,5 @@ namespace Api.Test
             }
         }
 
-        private static async Task<T> GetResponseObject<T>(HttpResponseMessage response)
-        {
-            var json = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new InvalidOperationException("Can not parse empty json.");
-            }
-
-
-            var deserializedContents = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-
-            if (deserializedContents == null)
-            {
-                throw new InvalidOperationException($"Failed to parse json: '{json}'.");
-            }
-
-            return deserializedContents;
-        }
     }
 }
