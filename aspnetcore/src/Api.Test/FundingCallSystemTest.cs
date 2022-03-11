@@ -10,8 +10,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Api.Test
@@ -45,7 +43,6 @@ namespace Api.Test
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
@@ -68,7 +65,6 @@ namespace Api.Test
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
