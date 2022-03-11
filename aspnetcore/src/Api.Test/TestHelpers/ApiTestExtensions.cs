@@ -9,22 +9,31 @@ namespace Api.Test.TestHelpers
     {
         public static async Task<T> GetResponseObject<T>(this HttpResponseMessage response)
         {
-            var json = await response.Content.ReadAsStringAsync();
+            var responseContentString = await response.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrWhiteSpace(json))
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Request failed. Response is '{responseContentString}'.", ex);
+            }
+
+            if (string.IsNullOrWhiteSpace(responseContentString))
             {
                 throw new InvalidOperationException("Can not parse empty json.");
             }
 
 
-            var deserializedContents = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
+            var deserializedContents = JsonSerializer.Deserialize<T>(responseContentString, new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
             if (deserializedContents == null)
             {
-                throw new InvalidOperationException($"Failed to parse json: '{json}'.");
+                throw new InvalidOperationException($"Failed to parse json: '{responseContentString}'.");
             }
 
             return deserializedContents;
