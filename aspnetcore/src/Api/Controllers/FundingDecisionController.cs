@@ -7,7 +7,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Policy = ApiPolicies.FundingDecisionSearch)]
+    [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
     public class FundingDecisionController : ControllerBase
     {
         private readonly ILogger<FundingDecisionController> _logger;
