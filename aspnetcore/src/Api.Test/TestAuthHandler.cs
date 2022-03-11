@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -21,12 +23,17 @@ namespace Api.Test
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var claims = new[] 
+            // Add claims for the test user here.
+            var claims = new List<Claim> 
             { 
                 new Claim(ClaimTypes.Name, "Test user"),
-                new Claim(ClaimTypes.Role, "fundingcallreadclient"),
-                new Claim(ClaimTypes.Role, "fundingcallwriteclient")
             };
+
+            // Add every policy for the test user.
+            var everyPolicyRoleName = ApiPolicies.PolicyRoleMap.Select(x => x.Value);
+            var roleClaims = everyPolicyRoleName.Select(roleName => new Claim(ClaimTypes.Role, roleName));
+            claims.AddRange(roleClaims);
+
             var identity = new ClaimsIdentity(claims, "Test");
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, "Test");
