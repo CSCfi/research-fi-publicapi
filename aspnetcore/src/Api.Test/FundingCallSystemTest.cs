@@ -111,19 +111,19 @@ namespace Api.Test
             var testCasesWhichExpectSomethingReturned = new Dictionary<string, Expression<Func<FundingCall, bool>>>
             {
                 // should find only calls with the given name
-                ["name=apurahahaku"] = fc =>
-                                fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase),
+                ["name=apurahahaku"] = fc => fc != null &&
+                                fc.NameFi != null && fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
+                                fc.NameSv != null && fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
+                                fc.NameEn != null && fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase),
                 // should find only calls with the given foundation name
                 ["foundationName=säätiö"] = fc =>
                                 fc.Foundation.Any(f =>
-                                    f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase) ||
-                                    f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase) ||
-                                    f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)),
+                                    (f.FoundationNameFi != null && f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
+                                    (f.FoundationNameSv != null && f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
+                                    (f.FoundationNameEn != null && f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase))),
                 // should find calls with the given foundation business id
-                ["foundationBusinessId=0809036-2"] = fc => fc.Foundation.Any(f =>
-                                    f.FoundationBusinessId == "0809036-2")
+                ["foundationBusinessId=02509"] = fc => fc.Foundation.Any(f =>
+                                    f.FoundationBusinessId == "02509")
             };
 
             foreach (var testCase in testCasesWhichExpectSomethingReturned)

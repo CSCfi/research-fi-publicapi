@@ -3,18 +3,21 @@ using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
 {
-    public class PublicationQueryGenerator : IQueryGenerator<PublicationSearchParameters, Publication>
+    public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchParameters, Publication>
     {
-        public Func<SearchDescriptor<Publication>, ISearchRequest> GenerateQuery(PublicationSearchParameters parameters)
+        public PublicationQueryGenerator(IConfiguration configuration) : base(configuration)
+        {
+        }
+
+        protected override Func<SearchDescriptor<Publication>, ISearchRequest> GenerateQueryForIndex(PublicationSearchParameters searchParameters, string indexName)
         {
             return t => t
-                .Index("publication")
+                .Index(indexName)
                 .Query(q => q
                     .MultiMatch(query => query
                         .Type(TextQueryType.PhrasePrefix)
                         .Fields("publicationName")
-                        .Query(parameters.PublicationName)));
+                        .Query(searchParameters.PublicationName)));
         }
-
     }
 }

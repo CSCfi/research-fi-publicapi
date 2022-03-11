@@ -6,15 +6,13 @@ namespace Api.Services.ElasticSearchQueryGenerators
     /// <summary>
     /// Service responsible for generating a search query for FundingCalls from ElasticSearch.
     /// </summary>
-    public class FundingCallQueryGenerator : IQueryGenerator<FundingCallSearchParameters, FundingCall>
+    public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchParameters, FundingCall>
     {
-        private readonly string _indexName;
-        public FundingCallQueryGenerator(IConfiguration configuration)
+        public FundingCallQueryGenerator(IConfiguration configuration) : base(configuration)
         {
-            _indexName = configuration["IndexNames:FundingCall"] ?? throw new InvalidOperationException("FundingCall index config missing.");
         }
 
-        public Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQuery(FundingCallSearchParameters parameters)
+        protected override Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQueryForIndex(FundingCallSearchParameters parameters, string indexName)
         {
             var subQueries = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
 
@@ -30,27 +28,31 @@ namespace Api.Services.ElasticSearchQueryGenerators
             // When searching with FoundationName, search from Fi,Sv,En names.
             if (!string.IsNullOrWhiteSpace(parameters.FoundationName))
             {
-                subQueries.Add(t => t.MultiMatch(query => query
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields("foundation.nameFi, foundation.nameSv, foundation.nameEn")
-                    .Query(parameters.FoundationName)));
+                subQueries.Add(t => t.Nested(query => query
+                    .Path("foundation")
+                    .Query(q => q.MultiMatch(query => query
+                        .Type(TextQueryType.PhrasePrefix)
+                        .Fields("foundation.nameFi, foundation.nameSv, foundation.nameEn")
+                        .Query(parameters.FoundationName)
+                    ))));
             }
 
             // Searching with business id requires exact match.
             if (!string.IsNullOrWhiteSpace(parameters.FoundationBusinessId))
             {
-                subQueries.Add(t => t.Term(t => t
-                    .Field("foundation.businessId.keyword")
-                    .Value(parameters.FoundationBusinessId)));
+                subQueries.Add(t => t.Nested(query => query
+                    .Path("foundation")
+                    .Query(q => q.Term(term => term
+                        .Field("foundation.businessId")
+                        .Value(parameters.FoundationBusinessId)
+                    ))));
             }
 
             return searchDescriptor => searchDescriptor
-                .Index(_indexName)
+                .Index(indexName)
                 .Query(queryDescriptor => queryDescriptor
                     .Bool(boolDescriptor => boolDescriptor
                         .Must(subQueries)));
-
         }
-
     }
 }
