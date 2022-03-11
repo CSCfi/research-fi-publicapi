@@ -40,10 +40,11 @@ namespace Api.ConfigurationExtensions
             services.AddAuthorization(options =>
             {
                 // Configure Policies
-                options.AddPolicy(ApiPolicies.FundingCall.Search, policy => 
-                    policy.RequireClaim(ClaimTypes.Role, "fundingcallreadclient"));
-                options.AddPolicy(ApiPolicies.FundingCall.Add, policy =>
-                    policy.RequireClaim(ClaimTypes.Role, "fundingcallwriteclient"));
+                foreach (var policyAndRole in ApiPolicies.PolicyRoleMap)
+                {
+                    options.AddPolicy(policyAndRole.Key, policy => policy.RequireClaim(ClaimTypes.Role, policyAndRole.Value));
+                }
+
             });
         }
     }
