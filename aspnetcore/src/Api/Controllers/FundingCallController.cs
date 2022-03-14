@@ -45,6 +45,7 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpPost(Name = "PostFundingCall")]
         [Authorize(Policy = ApiPolicies.FundingCall.Add)]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task Post(FundingCall fundingCall)
         {
             // TODO: only NameFi mapped to entity. Not using final models yet.

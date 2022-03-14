@@ -1,4 +1,5 @@
-﻿using Api.DatabaseContext;
+﻿using Api.DataAccess.Repositories;
+using Api.DatabaseContext;
 
 namespace Api.DataAccess
 {

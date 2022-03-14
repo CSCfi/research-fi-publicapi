@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using Api.Services.ElasticSearchQueryGenerators;
+using Nest;
 
 namespace Api.Services
 {

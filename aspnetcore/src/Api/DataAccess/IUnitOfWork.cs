@@ -1,4 +1,6 @@
-﻿namespace Api.DataAccess
+﻿using Api.DataAccess.Repositories;
+
+namespace Api.DataAccess
 {
     public interface IUnitOfWork
     {

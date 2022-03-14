@@ -1,6 +1,7 @@
 using Api.DatabaseContext;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
+using Api.Test.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,19 +10,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Api.Test
 {
-    public class ApiSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+    public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
         private readonly TestWebApplicationFactory<Program> _factory;
         private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
+        private readonly string _apiBaseUrl = "FundingCall";
 
-        public ApiSystemTest(TestWebApplicationFactory<Program> factory)
+        public FundingCallSystemTest(TestWebApplicationFactory<Program> factory)
         {
             _factory = factory;
             var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
@@ -37,14 +37,13 @@ namespace Api.Test
         public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
         {
             // Arrange
-            var apiUrl = $"FundingCall?{urlParams}";
+            var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
             // Act
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            var fundingCalls = await GetResponseObject<IEnumerable<FundingCall>>(response);
+            var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
                 .Should()
@@ -60,25 +59,27 @@ namespace Api.Test
         public async void GET_ShouldReturnEmpty(string urlParams)
         {
             // Arrange
-            var apiUrl = $"FundingCall?{urlParams}";
+            var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
             // Act
             var response = await _client.GetAsync(apiUrl);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            var fundingCalls = await GetResponseObject<IEnumerable<FundingCall>>(response);
+            var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
 
             fundingCalls
                 .Should()
                 .BeEmpty();
         }
 
+        /// <summary>
+        /// Test for running funding call query against a real db and elasticsearch instance.
+        /// </summary>
         [Fact]
         public async void POST_ShouldAddFundingCallToDb()
         {
             // Arrange
-            var apiUrl = $"FundingCall";
+            var apiUrl = $"{_apiBaseUrl}";
             var fundingCallToAdd = new FundingCall
             {
                 NameFi = $"test funding call {Guid.NewGuid()}"
@@ -108,19 +109,19 @@ namespace Api.Test
             var testCasesWhichExpectSomethingReturned = new Dictionary<string, Expression<Func<FundingCall, bool>>>
             {
                 // should find only calls with the given name
-                ["name=apurahahaku"] = fc =>
-                                fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase),
+                ["name=apurahahaku"] = fc => fc != null &&
+                                fc.NameFi != null && fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
+                                fc.NameSv != null && fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
+                                fc.NameEn != null && fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase),
                 // should find only calls with the given foundation name
                 ["foundationName=säätiö"] = fc =>
                                 fc.Foundation.Any(f =>
-                                    f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase) ||
-                                    f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase) ||
-                                    f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)),
+                                    (f.FoundationNameFi != null && f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
+                                    (f.FoundationNameSv != null && f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
+                                    (f.FoundationNameEn != null && f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase))),
                 // should find calls with the given foundation business id
-                ["foundationBusinessId=0809036-2"] = fc => fc.Foundation.Any(f =>
-                                    f.FoundationBusinessId == "0809036-2")
+                ["foundationBusinessId=02509"] = fc => fc.Foundation.Any(f =>
+                                    f.FoundationBusinessId == "02509")
             };
 
             foreach (var testCase in testCasesWhichExpectSomethingReturned)
@@ -145,27 +146,5 @@ namespace Api.Test
             }
         }
 
-        private static async Task<T> GetResponseObject<T>(HttpResponseMessage response)
-        {
-            var json = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new InvalidOperationException("Can not parse empty json.");
-            }
-
-
-            var deserializedContents = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-
-            if (deserializedContents == null)
-            {
-                throw new InvalidOperationException($"Failed to parse json: '{json}'.");
-            }
-
-            return deserializedContents;
-        }
     }
 }

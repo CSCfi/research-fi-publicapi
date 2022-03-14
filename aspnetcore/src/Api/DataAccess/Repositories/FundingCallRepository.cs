@@ -2,7 +2,7 @@
 using Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.DataAccess
+namespace Api.DataAccess.Repositories
 {
     public class FundingCallRepository : GenericRepository<DimCallProgramme>, IFundingCallRepository
     {

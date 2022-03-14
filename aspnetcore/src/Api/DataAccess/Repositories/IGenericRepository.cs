@@ -1,4 +1,4 @@
-﻿namespace Api.DataAccess
+﻿namespace Api.DataAccess.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {

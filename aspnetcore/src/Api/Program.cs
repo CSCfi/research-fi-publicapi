@@ -3,7 +3,9 @@ using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Models;
 using Api.Models.FundingCall;
+using Api.Models.FundingDecision;
 using Api.Services;
+using Api.Services.ElasticSearchQueryGenerators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -48,6 +50,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
 builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Publication>, PublicationQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingCall>, FundingCallQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<FundingDecisionSearchParameters, FundingDecision>, FundingDecisionQueryGenerator>();
 
 // Configure and add ElasticSearch
 builder.Services.AddElasticSearch(builder.Configuration);
@@ -59,7 +62,7 @@ builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddDbContext<ApiDbContext>(options => options.UseSqlServer("name=dbconnectionstring"));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IFundingCallRepository, FundingCallRepository>();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 

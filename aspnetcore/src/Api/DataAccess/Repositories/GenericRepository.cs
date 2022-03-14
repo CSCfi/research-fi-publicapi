@@ -1,7 +1,7 @@
 ﻿using Api.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.DataAccess
+namespace Api.DataAccess.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

@@ -1,6 +1,6 @@
 ﻿using Api.Models.Entities;
 
-namespace Api.DataAccess
+namespace Api.DataAccess.Repositories
 {
     public interface IFundingCallRepository : IGenericRepository<DimCallProgramme>
     {
