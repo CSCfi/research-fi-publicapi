@@ -75,7 +75,7 @@ namespace Api.Test
         /// <summary>
         /// Test for running funding call query against a real db and elasticsearch instance.
         /// </summary>
-        [Fact]
+        [Fact(Skip = "Run manually when needed.")]
         public async void POST_ShouldAddFundingCallToDb()
         {
             // Arrange
@@ -96,7 +96,7 @@ namespace Api.Test
                 .SingleOrDefault(x => x.NameFi == fundingCallToAdd.NameFi);
 
             addedFundingCall.Should().NotBeNull();
-            
+
         }
 
         /// <summary>
@@ -110,18 +110,21 @@ namespace Api.Test
             {
                 // should find only calls with the given name
                 ["name=apurahahaku"] = fc => fc != null &&
-                                fc.NameFi != null && fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameSv != null && fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase) ||
-                                fc.NameEn != null && fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase),
+                                ((fc.NameFi != null && fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase)) ||
+                                (fc.NameSv != null && fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase)) ||
+                                (fc.NameEn != null && fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase))),
                 // should find only calls with the given foundation name
-                ["foundationName=säätiö"] = fc =>
+                ["foundationName=säätiö"] = fc => fc.Foundation != null &&
                                 fc.Foundation.Any(f =>
                                     (f.FoundationNameFi != null && f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
                                     (f.FoundationNameSv != null && f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
                                     (f.FoundationNameEn != null && f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase))),
                 // should find calls with the given foundation business id
-                ["foundationBusinessId=02509"] = fc => fc.Foundation.Any(f =>
-                                    f.FoundationBusinessId == "02509")
+                ["foundationBusinessId=02509"] = fc => fc.Foundation != null &&
+                                fc.Foundation.Any(f =>
+                                    f.FoundationBusinessId == "02509"),
+                ["categoryCode=18698"] = fc => fc.Categories != null &&
+                                fc.Categories.Any(c => c.CategoryCodeValue == "18698")
             };
 
             foreach (var testCase in testCasesWhichExpectSomethingReturned)
