@@ -18,6 +18,7 @@ namespace Api.DataAccess.Repositories
                 .Include(x => x.DimWebLinks).AsSplitQuery()
                 .Include(x => x.DimDateIdOpenNavigation).AsSplitQuery()
                 .Include(x => x.DimDateIdDueNavigation).AsSplitQuery()
+                .Where(callProgramme => callProgramme.Id != -1)
                 .AsAsyncEnumerable();
         }
     }
