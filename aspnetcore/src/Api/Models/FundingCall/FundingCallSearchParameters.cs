@@ -5,5 +5,7 @@
         public string? Name { get; set; }
         public string? FoundationName { get; set; }
         public string? FoundationBusinessId { get; set; }
+        public string? CategoryCode { get; set; }
+
     }
 }

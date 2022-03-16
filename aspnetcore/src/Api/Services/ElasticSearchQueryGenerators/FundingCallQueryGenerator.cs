@@ -48,6 +48,17 @@ namespace Api.Services.ElasticSearchQueryGenerators
                     ))));
             }
 
+            // Searching with category code requires exact match.
+            if (!string.IsNullOrWhiteSpace(parameters.CategoryCode))
+            {
+                subQueries.Add(t => t.Nested(query => query
+                    .Path("categories")
+                    .Query(q => q.Term(term => term
+                        .Field("categories.codeValue")
+                        .Value(parameters.CategoryCode)
+                    ))));
+            }
+
             return searchDescriptor => searchDescriptor
                 .Index(indexName)
                 .Query(queryDescriptor => queryDescriptor
