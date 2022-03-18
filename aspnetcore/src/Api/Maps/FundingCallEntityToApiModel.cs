@@ -24,6 +24,7 @@ namespace Api.Maps
                 ApplicationURLFi = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "fi"),
                 ApplicationURLSv = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "sv"),
                 ApplicationURLEn = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "en"),
+                ContinuosApplication = dbEntity.ContinuosApplicationPeriod == true,
                 Foundation = GetFoundations(dbEntity.DimOrganizations),
                 Categories = GetCategories(dbEntity.DimReferencedata)
             };

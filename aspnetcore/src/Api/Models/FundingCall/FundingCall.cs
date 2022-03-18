@@ -58,12 +58,11 @@ namespace Api.Models.FundingCall
         [Text(Name = "applicationTermsEn")]
         public string? ApplicationTermsEn { get; set; }
 
-        // TODO: not in index
-        ///// <summary>
-        ///// Jatkuva haku
-        ///// </summary>
-        //[Text(Name = "continuousApplication")]
-        //public string? ContinuousApplication { get; set; }
+        /// <summary>
+        /// Jatkuva haku
+        /// </summary>
+        [Boolean(Name = "continuousApplicationPeriod")]
+        public bool ContinuosApplication { get; set; }
 
         /// <summary>
         /// Haku alkaa
@@ -95,10 +94,16 @@ namespace Api.Models.FundingCall
         [Text(Name = "applicationURL_en")]
         public string? ApplicationURLEn { get; set; }
 
+        /// <summary>
+        /// Rahoittajat
+        /// </summary>
         [Nested]
         [PropertyName("foundation")]
         public Foundation[]? Foundation { get; set; }
 
+        /// <summary>
+        /// Hakualat
+        /// </summary>
         [Nested]
         [PropertyName("categories")]
         public Category[]? Categories { get; set; }
@@ -108,9 +113,5 @@ namespace Api.Models.FundingCall
         /// </summary>
         [Text(Name = "contactInformation")]
         public string? ContactInformation { get; set; }
-
-
-
-
     }
 }
