@@ -109,30 +109,44 @@ namespace Api.Test
             var testCasesWhichExpectSomethingReturned = new Dictionary<string, Expression<Func<FundingCall, bool>>>
             {
                 // should find only calls with the given name
-                ["name=apurahahaku"] = fc => fc != null &&
-                                ((fc.NameFi != null && fc.NameFi.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase)) ||
-                                (fc.NameSv != null && fc.NameSv.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase)) ||
-                                (fc.NameEn != null && fc.NameEn.Contains("apurahahaku", StringComparison.InvariantCultureIgnoreCase))),
+                [Name("apurahahaku")] = fc => 
+                    NamesShouldMatch(fc, "apurahahaku"),
+                
                 // should find only calls with the given foundation name
-                ["foundationName=säätiö"] = fc => fc.Foundation != null &&
-                                fc.Foundation.Any(f =>
-                                    (f.FoundationNameFi != null && f.FoundationNameFi.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
-                                    (f.FoundationNameSv != null && f.FoundationNameSv.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase)) ||
-                                    (f.FoundationNameEn != null && f.FoundationNameEn.Contains("säätiö", StringComparison.InvariantCultureIgnoreCase))),
+                [FoundationName("säätiö")] = fc =>
+                    FoundationNamesShouldMatch(fc, "säätiö"),
+                
                 // should find calls with the given foundation business id
-                ["foundationBusinessId=02509"] = fc => fc.Foundation != null &&
-                                fc.Foundation.Any(f =>
-                                    f.FoundationBusinessId == "02509"),
-                ["categoryCode=18698"] = fc => fc.Categories != null &&
-                                fc.Categories.Any(c => c.CategoryCodeValue == "18698")
+                [FoundationBusinessId("02509")] = fc =>
+                    FoundationBusinessIdShouldEqual(fc, "02509"),
+
+                // should find calls with the given category code
+                [Category("18698")] = fc =>
+                    CategoriesShouldContain(fc, "18698"),
+
+                // should find calls which are open later than the given date 
+                [DateFrom("2019-02-01")] = fc =>
+                    DatesShouldBeBetween(fc, new DateTime(2019, 2, 1), DateTime.MaxValue),
+
+                // should find calls which are closed before than the given date 
+                [DateTo("2014-02-01")] = fc =>
+                    DatesShouldBeBetween(fc, DateTime.MinValue, new DateTime(2014, 2, 1)),
+
+                // should find calls open between given dates
+                [DateFrom("2013-02-01") + "&" + DateTo("2013-03-01")] = fc =>
+                    DatesShouldBeBetween(fc, new DateTime(2013, 2, 1), new DateTime(2013, 3, 1)),
+
+                // should find calls with the given name which are open on given dates
+                [Name("tiekartalla") + "&" + DateFrom("2019-02-01") + "&" + DateTo("2020-02-01")] = fc =>
+                    NamesShouldMatch(fc, "tiekartalla") &&
+                    DatesShouldBeBetween(fc, new DateTime(2019, 2, 1), new DateTime(2020, 2, 1))
+
             };
 
             foreach (var testCase in testCasesWhichExpectSomethingReturned)
             {
                 yield return new object[] { testCase.Key, testCase.Value };
             }
-
-
         }
 
         public static IEnumerable<object[]> FundingCallNoResultsTestCases()
@@ -140,13 +154,81 @@ namespace Api.Test
             var testCasesWhichShouldNotFindAnything = new List<string>
             {
                 // should not find calls with partial match of the business id
-                "foundationBusinessId=0809"
+                "foundationBusinessId=0809",
+                // should not find calls with open dates starting in the future.
+                Name("apurahahaku") + "&" + DateFrom("2040-01-01"),
+                // should not find calls with the given name on the given date range
+                Name("tiekartalla") + "&" + DateFrom("2019-06-01") + "&" + DateTo("2022-12-31")
             };
 
             foreach (var testCase in testCasesWhichShouldNotFindAnything)
             {
                 yield return new object[] { testCase };
             }
+        }
+
+        private static string Name(string name)
+        {
+            return $"name={name}";
+        }
+
+        private static string FoundationName(string name)
+        {
+            return $"foundationName={name}";
+        }
+
+        private static string FoundationBusinessId(string id)
+        {
+            return $"foundationBusinessId={id}";
+        }
+
+        private static string DateFrom(string date)
+        {
+            return $"dateFrom={date}";
+        }
+
+        private static string DateTo(string date)
+        {
+            return $"dateTo={date}";
+        }
+
+        private static string Category(string categoryCode)
+        {
+            return $"categoryCode={categoryCode}";
+        }
+
+        private static bool NamesShouldMatch(FundingCall fc, string text)
+        {
+            return fc != null &&
+                ((fc.NameFi != null && fc.NameFi.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                (fc.NameSv != null && fc.NameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                (fc.NameEn != null && fc.NameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase)));
+        }
+
+        private static bool FoundationNamesShouldMatch(FundingCall fc, string text)
+        {
+            return fc.Foundation != null &&
+                fc.Foundation.Any(f =>
+                    (f.FoundationNameFi != null && f.FoundationNameFi.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                    (f.FoundationNameSv != null && f.FoundationNameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                    (f.FoundationNameEn != null && f.FoundationNameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase)));
+        }
+
+        private static bool FoundationBusinessIdShouldEqual(FundingCall fc, string text)
+        {
+            return fc.Foundation != null && fc.Foundation.Any(f => f.FoundationBusinessId == text);
+        }
+
+        private static bool CategoriesShouldContain(FundingCall fc, string code)
+        {
+            return fc.Categories != null &&
+                                fc.Categories.Any(c => c.CategoryCodeValue == code);
+        }
+
+        private static bool DatesShouldBeBetween(FundingCall fc, DateTime start, DateTime end)
+        {
+            return (fc.CallProgrammeOpenDate == null || fc.CallProgrammeOpenDate <= end) &&
+                    (fc.CallProgrammeDueDate == null || fc.CallProgrammeDueDate >= start);
         }
 
     }
