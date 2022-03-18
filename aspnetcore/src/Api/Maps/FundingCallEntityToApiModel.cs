@@ -19,9 +19,8 @@ namespace Api.Maps
                 ApplicationTermsSv = dbEntity.ApplicationTermsSv,
                 ApplicationTermsEn = dbEntity.ApplicationTermsEn,
                 ContactInformation = dbEntity.ContactInformation,
-                CallProgrammeOpenDate = Convert(dbEntity.DimDateIdOpenNavigation),
-                // TODO: need to check for default datetime?
-                CallProgrammeDueDate = Convert(dbEntity.DimDateIdDueNavigation),
+                CallProgrammeOpenDate = GetDate(dbEntity.DimDateIdOpenNavigation),
+                CallProgrammeDueDate = GetDate(dbEntity.DimDateIdDueNavigation),
                 ApplicationURLFi = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "fi"),
                 ApplicationURLSv = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "sv"),
                 ApplicationURLEn = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "en"),
@@ -31,14 +30,19 @@ namespace Api.Maps
 
             return call;
         }
-        private static DateTime? Convert(DimDate? dimDate)
+        private static DateTime? GetDate(DimDate? dimDate)
         {
-            if (dimDate == null)
+            
+            var dateMissing = dimDate == null ||
+                            // DimDates with Id == -1 are considered to be missing, they are 1900-01-01 in the data.
+                            dimDate?.Id == -1; 
+
+            if (dateMissing)
             {
                 return null;
             }
 
-            return new DateTime(dimDate.Year, dimDate.Month, dimDate.Day);
+            return new DateTime(dimDate!.Year, dimDate.Month, dimDate.Day);
         }
 
         private static string? GetUrl(ICollection<DimWebLink> webLinks, string linkType, string? language = null)
