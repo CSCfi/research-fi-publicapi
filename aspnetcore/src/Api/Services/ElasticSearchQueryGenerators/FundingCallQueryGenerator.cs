@@ -15,6 +15,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
         protected override Func<SearchDescriptor<FundingCall>, ISearchRequest> GenerateQueryForIndex(FundingCallSearchParameters parameters, string indexName)
         {
             var subQueries = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
+            var filters = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
 
             // When searching with Name, search from Fi,Sv,En names.
             if (!string.IsNullOrWhiteSpace(parameters.Name))
@@ -59,11 +60,37 @@ namespace Api.Services.ElasticSearchQueryGenerators
                     ))));
             }
 
+            // Add date filters for OpenDate & DueDate
+            filters.Add(x => x
+                .Bool(b => b
+                    .Should(s =>
+                        (
+                        s.DateRange(r => r
+                            .Field("callProgrammeOpenDate")
+                            .LessThanOrEquals(parameters.DateTo ?? DateTime.MinValue))
+                        ||
+                        !s.Exists(b => b.Field("callProgrammeOpenDate"))
+                        )
+
+                        &&
+                        (
+                        s.DateRange(r => r
+                            .Field("callProgrammeDueDate")
+                            .GreaterThanOrEquals(parameters.DateFrom ?? DateTime.MinValue))
+                        ||
+                        !s.Exists(b => b.Field("callProgrammeDueDate"))
+                        )
+
+                    )));
+
             return searchDescriptor => searchDescriptor
                 .Index(indexName)
                 .Query(queryDescriptor => queryDescriptor
                     .Bool(boolDescriptor => boolDescriptor
-                        .Must(subQueries)));
+                        .Must(subQueries)
+                        .Filter(filters)
+                        )
+                );
         }
     }
 }
