@@ -68,13 +68,13 @@ namespace Api.Models.FundingCall
         /// <summary>
         /// Haku alkaa
         /// </summary>
-        [Text(Name = "callProgrammeOpenDate")]
+        [Date(Name = "callProgrammeOpenDate")]
         public DateTime? CallProgrammeOpenDate { get; set; }
 
         /// <summary>
         /// Haku päättyy
         /// </summary>
-        [Text(Name = "callProgrammeDueDate")]
+        [Date(Name = "callProgrammeDueDate")]
         public DateTime? CallProgrammeDueDate { get; set; }
 
         /// <summary>
