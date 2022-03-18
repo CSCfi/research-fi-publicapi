@@ -33,8 +33,8 @@ namespace Api.Test.Maps
         {
             // Arrange
             var entity = GetEntity();
-            entity!.DimDateIdOpenNavigation.Id = -1;
-            entity!.DimDateIdDueNavigation.Id = -1;
+            entity.DimDateIdOpenNavigation.Id = -1;
+            entity.DimDateIdDueNavigation.Id = -1;
 
             // Act
             var model = _mapper.Map(entity);
