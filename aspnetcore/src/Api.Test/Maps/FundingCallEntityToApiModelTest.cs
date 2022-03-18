@@ -28,6 +28,22 @@ namespace Api.Test.Maps
             model.Should().BeEquivalentTo(GetModel());
         }
 
+        [Fact]
+        public void Should_Map_MissingDates_AsNull()
+        {
+            // Arrange
+            var entity = GetEntity();
+            entity!.DimDateIdOpenNavigation.Id = -1;
+            entity!.DimDateIdDueNavigation.Id = -1;
+
+            // Act
+            var model = _mapper.Map(entity);
+
+            // Assert
+            model.CallProgrammeOpenDate.Should().BeNull();
+            model.CallProgrammeDueDate.Should().BeNull();
+        }
+
         private static DimCallProgramme GetEntity()
         {
             return new DimCallProgramme
