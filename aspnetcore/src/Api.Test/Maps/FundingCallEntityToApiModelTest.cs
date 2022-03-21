@@ -118,7 +118,8 @@ namespace Api.Test.Maps
                         CodeValue = "category code"
                     }
                 },
-                ContactInformation = "contact info"
+                ContactInformation = "contact info",
+                ContinuosApplicationPeriod = true
 
             };
         }
@@ -142,6 +143,7 @@ namespace Api.Test.Maps
                 ContactInformation = "contact info",
                 CallProgrammeOpenDate = new System.DateTime(2020, 1, 1),
                 CallProgrammeDueDate = new System.DateTime(2021, 1, 1),
+                ContinuosApplication = true,
                 Categories = new[]
                 {
                     new Category
