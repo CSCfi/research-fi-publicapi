@@ -33,8 +33,4 @@
 		<InternalsVisibleTo Include="Api.Test" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Models\FundingDecision\" />
-	</ItemGroup>
-
 </Project>
