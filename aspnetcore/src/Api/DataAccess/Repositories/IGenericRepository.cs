@@ -4,7 +4,7 @@
     {
         Task<bool> AddAsync(T entity);
         Task<T> GetAsync(Guid id);
-        IAsyncEnumerable<T> GetAllAsync();
+        IQueryable<T> GetAll();
 
     }
 }
