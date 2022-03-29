@@ -17,24 +17,14 @@ namespace ElasticSearchIndexer
     {
         private readonly ILogger<Indexer> _logger;
         private readonly IElasticSearchIndexService _indexService;
-        //private readonly IMapper<DimCallProgramme, FundingCall> _fundingCallMapper;
-        //private readonly IFundingCallRepository _fundingCallRepository;
-        //private readonly IMapper<DimFundingDecision, FundingDecision> _fundingDecisionMapper;
-        //private readonly IFundingDecisionRepository _fundingDecisionRepository;
         private readonly IConfiguration _configuration;
         private readonly Stopwatch _stopWatch = new();
         private readonly IIndexRepository<FundingCall> _fundingCallRepository;
         private readonly IIndexRepository<FundingDecision> _fundingDecisionRepository;
-        //private readonly IGenericRepository<DimFundingDecision> _fundingDecisionRepository;
 
         public Indexer(
             ILogger<Indexer> logger,
             IElasticSearchIndexService indexService,
-            //IMapper<DimCallProgramme, FundingCall> fundingCallMapper,
-            //IFundingCallRepository fundingCallRepository,
-            //IMapper<DimFundingDecision, FundingDecision> fundingDecisionMapper,
-            //IFundingDecisionRepository fundingDecisionRepository,
-            //IGenericRepository<DimFundingDecision> fundingDecisionRepository,
             IIndexRepository<FundingCall> fundingCallRepository,
             IIndexRepository<FundingDecision> fundingDecisionRepository,
             IConfiguration configuration
@@ -42,10 +32,7 @@ namespace ElasticSearchIndexer
         {
             _logger = logger;
             _indexService = indexService;
-            //_fundingCallMapper = fundingCallMapper;
             _fundingCallRepository = fundingCallRepository;
-            //_fundingDecisionMapper = fundingDecisionMapper;
-            //_fundingDecisionRepository = fundingDecisionRepository;
             _fundingDecisionRepository = fundingDecisionRepository;
             _configuration = configuration;
         }
@@ -54,11 +41,6 @@ namespace ElasticSearchIndexer
         {
             _stopWatch.Start();
             _logger.LogInformation("Starting indexing.. {stopWatch}", _stopWatch.Elapsed);
-
-            //await IndexEntities("api-dev-funding-call", _fundingCallRepository, _fundingCallMapper);
-            //await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository, _fundingDecisionMapper);
-
-            //var x = await _fundingDecisionRepository.GetAllAsync().ToListAsync();
 
             await IndexEntities("api-dev-funding-call", _fundingCallRepository);
             await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository);
@@ -75,6 +57,7 @@ namespace ElasticSearchIndexer
             _logger.LogInformation("Getting '{entityType}' entities from the database. {stopWatch}", typeof(TIndexModel).Name, _stopWatch.Elapsed);
 
             var indexModels = await repository.GetAllAsync().ToListAsync();
+            _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, typeof(TIndexModel).Name, _stopWatch.Elapsed);
 
             var elasticLog = $"Using ElasticSearch '{_configuration["ELASTICSEARCH:URL"]}'";
             elasticLog += _configuration["ELASTICSEARCH:USERNAME"] != null || _configuration["ELASTICSEARCH:PASSWORD"] != null
