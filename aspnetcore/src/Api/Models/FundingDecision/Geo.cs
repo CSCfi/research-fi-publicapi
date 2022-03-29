@@ -2,6 +2,7 @@
 {
     public class Geo
     {
+        public int Id { get; set; }
         public string? CountryId { get; set; }
         public string? RegionId { get; set; }
         public string? MunicipalityId { get; set; }
@@ -10,8 +11,8 @@
         public string? CountryEn { get; set; }
         public string? RegionFi { get; set; }
         public string? RegionSv { get; set; }
-        public string? MuncipalityFi { get; set; }
-        public string? MuncipalitySv { get; set; }
+        public string? MunicipalityFi { get; set; }
+        public string? MunicipalitySv { get; set; }
         public string? CountryCode { get; set; }
 
     }

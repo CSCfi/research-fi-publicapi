@@ -2,6 +2,7 @@
 {
     public class CallProgramme
     {
+        public int Id { get; set; }
         public string? SourceId { get; set; }
 
         public string? NameUnd { get; set; }

@@ -10,30 +10,27 @@ namespace Api.Models.FundingDecision
         [Nested]
         public FunderOrganization? Funder { get; set; }
 
-        public string? ProjectId { get; set; }
+        public int Id { get; set; }
 
         public string? FunderProjectNumber { get; set; }
 
-        public string? ProjectAcronym { get; set; }
+        public string? Acronym { get; set; }
 
-        public string? ProjectNameUnd { get; set; }
+        public string? NameUnd { get; set; }
 
-        public string? ProjectNameFi { get; set; }
+        public string? NameFi { get; set; }
 
-        public string? ProjectNameSv { get; set; }
+        public string? NameSv { get; set; }
 
-        public string? ProjectNameEn { get; set; }
+        public string? NameEn { get; set; }
 
-        public string? ProjectDescriptionFi { get; set; }
+        public string? DescriptionFi { get; set; }
 
-        public string? ProjectDescriptionEn { get; set; }
+        public string? DescriptionEn { get; set; }
 
-        public bool? InternationalCollaboration { get; set; }
+        public bool HasInternationalCollaboration { get; set; }
 
-        public bool? BusinessCollaboration { get; set; }
-
-        [Nested]
-        public Sector? FunderSector { get; set; }
+        public bool HasBusinessCollaboration { get; set; }
 
         [Nested]
         public FundingType? Type { get; set; }
@@ -44,14 +41,14 @@ namespace Api.Models.FundingDecision
         [Nested]
         public Topic? Topic { get; set; }
 
-        [Date]
-        public DateTime? ApprovalDate { get; set; }
+        [Nested]
+        public Date? ApprovalDate { get; set; }
 
-        [Date]
-        public DateTime? FundingStartDate { get; set; }
+        [Nested]
+        public Date? FundingStartDate { get; set; }
 
-        [Date]
-        public DateTime? FundingEndDate { get; set; }
+        [Nested]
+        public Date? FundingEndDate { get; set; }
 
         [Nested]
         public ContactPerson? ContactPerson { get; set; }
@@ -70,8 +67,11 @@ namespace Api.Models.FundingDecision
         [Nested]
         public FieldOfScience[]? FieldsOfScience { get; set; }
 
-        [Nested]
-        public Publication[]? Publications { get; set; }
+        //[Nested]
+        //public Publication[]? Publications { get; set; }
+
+        //[Nested]
+        //public Contribution[]? Contributions { get; set; }
 
         [Nested]
         public Infrastructure[]? Infrastructures { get; set; }
@@ -82,5 +82,11 @@ namespace Api.Models.FundingDecision
         // TODO: funding group person?
 
 
+    }
+
+    public class Contribution
+    {
+        public DateTime? Created { get; set; }
+        public Publication? Publication { get; set; }
     }
 }
