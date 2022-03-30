@@ -1,4 +1,6 @@
 ﻿using Api.DataAccess.Repositories;
+using Api.Models.FundingCall;
+using Api.Models.FundingDecision;
 
 namespace Api.ConfigurationExtensions
 {
@@ -8,6 +10,8 @@ namespace Api.ConfigurationExtensions
         {
             services.AddScoped<IFundingCallRepository, FundingCallRepository>();
             services.AddScoped<IFundingDecisionRepository, FundingDecisionRepository>();
+            services.AddScoped<IIndexRepository<FundingDecision>, FundingDecisionIndexRepository>();
+            services.AddScoped<IIndexRepository<FundingCall>, FundingCallIndexRepository>();
         }
     }
 }
