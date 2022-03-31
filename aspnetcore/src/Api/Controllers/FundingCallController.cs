@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize(Policy = ApiPolicies.FundingCall.Search)]
+    [ApiVersion(ApiVersion)]
+    [Route("v{version:apiVersion}/[controller]")]
     public class FundingCallController : ControllerBase
     {
+        private const string ApiVersion = "1.0";
 
         private readonly ILogger<FundingCallController> _logger;
         private readonly ISearchService<FundingCallSearchParameters,FundingCall> _searchService;
@@ -33,6 +34,8 @@ namespace Api.Controllers
         /// <param name="searchParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetFundingCall")]
+        [MapToApiVersion(ApiVersion)]
+        [Authorize(Policy = ApiPolicies.FundingCall.Search)]
         public IEnumerable<FundingCall> Get([FromQuery]FundingCallSearchParameters searchParameters)
         {
             return _searchService.Search(searchParameters);
@@ -44,6 +47,7 @@ namespace Api.Controllers
         /// <param name="fundingCall"></param>
         /// <returns></returns>
         [HttpPost(Name = "PostFundingCall")]
+        [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingCall.Add)]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task Post(FundingCall fundingCall)

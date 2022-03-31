@@ -19,7 +19,7 @@ namespace Api.Test
         private readonly TestWebApplicationFactory<Program> _factory;
         private readonly ApiDbContext _dbContext;
         private readonly HttpClient _client;
-        private readonly string _apiBaseUrl = "FundingCall";
+        private readonly string _apiBaseUrl = "v1/FundingCall";
 
         public FundingCallSystemTest(TestWebApplicationFactory<Program> factory)
         {
