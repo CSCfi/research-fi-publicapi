@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
+    [ApiVersion(ApiVersion)]
+    [Route("v{version:apiVersion}/[controller]")]
+    
     public class FundingDecisionController : ControllerBase
     {
+        private const string ApiVersion = "1.0";
         private readonly ILogger<FundingDecisionController> _logger;
         private readonly ISearchService<FundingDecisionSearchParameters, FundingDecision> _searchService;
 
@@ -27,6 +29,8 @@ namespace Api.Controllers
         /// <param name="searchParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetFundingDecision")]
+        [MapToApiVersion(ApiVersion)]
+        [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
         public IEnumerable<FundingDecision> Get([FromQuery] FundingDecisionSearchParameters searchParameters)
         {
             return _searchService.Search(searchParameters);
