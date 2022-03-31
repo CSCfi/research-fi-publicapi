@@ -9,6 +9,7 @@ using Api.Models.FundingDecision;
 using Api.Services;
 using Api.Services.ElasticSearchQueryGenerators;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
