@@ -18,7 +18,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
             {
                 subQueries.Add(t => t.MultiMatch(query => query
                     .Type(TextQueryType.PhrasePrefix)
-                    .Fields("projectNameFi, projectNameSv, projectNameEn")
+                    .Fields("nameFi, nameSv, nameEn")
                     .Query(searchParameters.Name)));
             }
 

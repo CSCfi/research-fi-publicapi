@@ -1,5 +1,6 @@
 ﻿using Api.DatabaseContext;
 using Api.Models.Entities;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.DataAccess.Repositories
@@ -12,7 +13,15 @@ namespace Api.DataAccess.Repositories
 
         public new IAsyncEnumerable<DimFundingDecision> GetAllAsync()
         {
-            return dbSet.AsAsyncEnumerable();
+            return dbSet
+                .AsNoTracking()
+                .Include(fd => fd.DimTypeOfFunding)
+                .Where(fd =>
+                    fd.DimTypeOfFunding.TypeId != "62" &&
+                    fd.DimTypeOfFunding.TypeId != "66" &&
+                    fd.DimTypeOfFunding.TypeId != "69")
+                .Where(fd => fd.Id != -1)
+                .AsAsyncEnumerable();
         }
     }
 }

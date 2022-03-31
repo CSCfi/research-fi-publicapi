@@ -25,9 +25,9 @@ namespace Api.DataAccess.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public IAsyncEnumerable<T> GetAllAsync()
+        public IQueryable<T> GetAll()
         {
-            return dbSet.AsAsyncEnumerable();
+            return dbSet;
         }
     }
 }
