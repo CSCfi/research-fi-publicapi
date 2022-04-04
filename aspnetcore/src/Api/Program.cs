@@ -46,16 +46,27 @@ builder.Services.AddRepositories();
 builder.Services.AddAutoMapper(typeof(Api.ApiPolicies));
 builder.Services.AddScoped<IMapper<DimCallProgramme, FundingCall>, FundingCallEntityToApiModel>();
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.ResponseHeaders.Add(CorrelationIdMiddleware.CorrelationIdHeaderName);
+    options.RequestBodyLogLimit = 4096;
+    options.ResponseBodyLogLimit = 4096;
+});
+
 var app = builder.Build();
-// Generate correlation ids for requests.
-app.UseMiddleware<CorrelationIdMiddleware>();
-// Error handler
-app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+
+app.UseHttpLogging();
 
 app.UseSwaggerAndSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Generate correlation ids for requests.
+app.UseMiddleware<CorrelationIdMiddleware>();
+
+// Error handler to prevent exceptions details showing up for end users.
+app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
 app.MapControllers();
 
