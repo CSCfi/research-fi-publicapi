@@ -14,7 +14,7 @@ namespace Api.Middleware
             _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Api.Middleware
                     ? id
                     : "N/A";
 
-                _logger.LogError(exception, "Global error handler caught an exception.");
+                _logger.LogError(exception, "Global error handler caught an exception. CorrelationId: '{correlationID}'.", correlationId);
 
                 var error = JsonSerializer.Serialize(new
                 {
