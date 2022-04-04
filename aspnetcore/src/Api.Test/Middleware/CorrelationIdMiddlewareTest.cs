@@ -1,14 +1,9 @@
 ﻿using Api.Middleware;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,7 +20,9 @@ namespace Api.Test.Middleware
             {
                 await Task.CompletedTask;
             };
-            _middleware = new CorrelationIdMiddleware(_requestDelegate);
+
+            var loggerMock = new Mock<ILogger<CorrelationIdMiddleware>>();
+            _middleware = new CorrelationIdMiddleware(_requestDelegate, loggerMock.Object);
 
         }
 
