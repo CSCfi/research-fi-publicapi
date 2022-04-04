@@ -1,8 +1,5 @@
 ﻿using Api.ConfigurationExtensions;
 using Api.DatabaseContext;
-using Api.Maps;
-using Api.Models.Entities;
-using Api.Models.FundingCall;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -42,11 +39,12 @@ namespace ElasticSearchIndexer
                         // Configure db & entity framework.
                         services.AddDbContext<ApiDbContext>(options => 
                         { 
-                            options.UseSqlServer("name=dbconnectionstring");
+                            options.UseSqlServer("name=dbconnectionstring", opt =>
+                            {
+                                opt.CommandTimeout(60);
+                            });
                             options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
                         });
-
-                        services.AddScoped<IMapper<DimCallProgramme, FundingCall>, FundingCallEntityToApiModel>();
 
                         services.AddRepositories();
 

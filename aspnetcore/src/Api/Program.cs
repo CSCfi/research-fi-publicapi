@@ -2,6 +2,7 @@ using Api.ConfigurationExtensions;
 using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Maps;
+using Api.Middleware;
 using Api.Models;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
@@ -16,14 +17,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+// Configure and add Swagger with api versioning.
 builder.Services.AddSwaggerAndApiVersioning();
 
+// Register ElasticSearch query generators.
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
 builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Api.Models.Publication>, PublicationQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingCall>, FundingCallQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingDecisionSearchParameters, FundingDecision>, FundingDecisionQueryGenerator>();
 
-// Configure and add ElasticSearch
+// Configure and add ElasticSearch.
 builder.Services.AddElasticSearch(builder.Configuration);
 
 // Configure authentication and authorization.
@@ -39,15 +42,31 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddRepositories();
 
+// Register Automapper and maps
 builder.Services.AddAutoMapper(typeof(Api.ApiPolicies));
 builder.Services.AddScoped<IMapper<DimCallProgramme, FundingCall>, FundingCallEntityToApiModel>();
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.ResponseHeaders.Add(CorrelationIdMiddleware.CorrelationIdHeaderName);
+    options.RequestBodyLogLimit = 4096;
+    options.ResponseBodyLogLimit = 4096;
+});
+
 var app = builder.Build();
+
+app.UseHttpLogging();
 
 app.UseSwaggerAndSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Generate correlation ids for requests.
+app.UseMiddleware<CorrelationIdMiddleware>();
+
+// Error handler to prevent exceptions details showing up for end users.
+app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
 app.MapControllers();
 
