@@ -1,11 +1,7 @@
 ﻿using Api.DataAccess.Repositories;
-using Api.Maps;
-using Api.Models.Entities;
 using Api.Models.FundingCall;
 using Api.Models.FundingDecision;
 using Api.Services;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
