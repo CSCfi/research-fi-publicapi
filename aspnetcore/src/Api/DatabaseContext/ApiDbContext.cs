@@ -401,7 +401,7 @@ namespace Api.DatabaseContext
 
                 entity.Property(e => e.ContactInformation).HasColumnName("contact_information");
 
-                entity.Property(e => e.ContinuosApplicationPeriod).HasColumnName("continuos_application _period");
+                entity.Property(e => e.ContinuosApplicationPeriod).HasColumnName("continuos_application_period");
 
                 entity.Property(e => e.Created)
                     .HasColumnType("datetime")
