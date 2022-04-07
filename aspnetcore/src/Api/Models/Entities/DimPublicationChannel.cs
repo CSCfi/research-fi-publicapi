@@ -16,7 +16,6 @@ namespace Api.Models.Entities
         public string? JufoCode { get; set; }
         public string? ChannelNameAnylang { get; set; }
         public string? PublisherNameText { get; set; }
-        public string? OpenAccess { get; set; }
 
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }

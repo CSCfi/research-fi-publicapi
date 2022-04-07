@@ -23,7 +23,7 @@ builder.Services.AddSwaggerAndApiVersioning();
 // Register ElasticSearch query generators.
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
 builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Api.Models.Publication>, PublicationQueryGenerator>();
-builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, FundingCall>, FundingCallQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, Api.Models.FundingCall.FundingCall>, FundingCallQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingDecisionSearchParameters, FundingDecision>, FundingDecisionQueryGenerator>();
 
 // Configure and add ElasticSearch.
@@ -44,7 +44,7 @@ builder.Services.AddRepositories();
 
 // Register Automapper and maps
 builder.Services.AddAutoMapper(typeof(Api.ApiPolicies));
-builder.Services.AddScoped<IMapper<DimCallProgramme, FundingCall>, FundingCallEntityToApiModel>();
+builder.Services.AddScoped<IMapper<DimCallProgramme, Api.Models.FundingCall.FundingCall>, FundingCallEntityToApiModel>();
 
 builder.Services.AddHttpLogging(options =>
 {

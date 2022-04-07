@@ -11,7 +11,6 @@ namespace Api.Models.Entities
             BrParticipatesInFundingGroups = new HashSet<BrParticipatesInFundingGroup>();
             BrWordClusterDimFundingDecisions = new HashSet<BrWordClusterDimFundingDecision>();
             DimPids = new HashSet<DimPid>();
-            DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
             FactFieldValues = new HashSet<FactFieldValue>();
             InverseDimFundingDecisionIdParentDecisionNavigation = new HashSet<DimFundingDecision>();
@@ -33,6 +32,7 @@ namespace Api.Models.Entities
         public int DimGeoId { get; set; }
         public int DimTypeOfFundingId { get; set; }
         public int? DimOrganizationIdFunder { get; set; }
+        public string? DimPidPidContent { get; set; }
         public int DimFundingDecisionIdParentDecision { get; set; }
         public string? FunderProjectNumber { get; set; }
         public string? Acronym { get; set; }
@@ -68,7 +68,6 @@ namespace Api.Models.Entities
         public virtual ICollection<BrParticipatesInFundingGroup> BrParticipatesInFundingGroups { get; set; }
         public virtual ICollection<BrWordClusterDimFundingDecision> BrWordClusterDimFundingDecisions { get; set; }
         public virtual ICollection<DimPid> DimPids { get; set; }
-        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
         public virtual ICollection<DimFundingDecision> InverseDimFundingDecisionIdParentDecisionNavigation { get; set; }

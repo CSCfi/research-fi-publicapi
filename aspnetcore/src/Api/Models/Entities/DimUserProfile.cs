@@ -8,7 +8,6 @@ namespace Api.Models.Entities
         public DimUserProfile()
         {
             DimFieldDisplaySettings = new HashSet<DimFieldDisplaySetting>();
-            DimUserChoices = new HashSet<DimUserChoice>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
 
@@ -22,7 +21,6 @@ namespace Api.Models.Entities
 
         public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
         public virtual ICollection<DimFieldDisplaySetting> DimFieldDisplaySettings { get; set; }
-        public virtual ICollection<DimUserChoice> DimUserChoices { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace Api.Models.Entities
         public DimResearchActivity()
         {
             DimPids = new HashSet<DimPid>();
+            DimResearchActivityDimKeywords = new HashSet<DimResearchActivityDimKeyword>();
             FactContributions = new HashSet<FactContribution>();
             FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldOfSciences = new HashSet<DimFieldOfScience>();
-            DimKeywords = new HashSet<DimKeyword>();
         }
 
         public int Id { get; set; }
@@ -45,10 +45,10 @@ namespace Api.Models.Entities
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimDate DimStartDateNavigation { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimResearchActivityDimKeyword> DimResearchActivityDimKeywords { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 
         public virtual ICollection<DimFieldOfScience> DimFieldOfSciences { get; set; }
-        public virtual ICollection<DimKeyword> DimKeywords { get; set; }
     }
 }

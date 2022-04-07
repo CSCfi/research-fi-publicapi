@@ -1,6 +1,5 @@
 using Api.DatabaseContext;
 using Api.Models.Entities;
-using Api.Models.FundingCall;
 using Api.Test.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +10,7 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Xunit;
+using FundingCall = Api.Models.FundingCall.FundingCall;
 
 namespace Api.Test
 {

@@ -27,7 +27,7 @@ namespace Api.Maps
             CreateProjection<DimGeo, Geo>();
             CreateProjection<DimFundingDecision, CallProgramme>();
             CreateProjection<DimFieldOfScience, FieldOfScience>();
-            CreateProjection<DimPublication, Publication>();
+            CreateProjection<DimPublication, Models.FundingDecision.Publication>();
 
             CreateMap<int?, bool>().ConvertUsing(src => src == 1);
         }

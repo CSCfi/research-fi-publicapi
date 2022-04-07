@@ -4,11 +4,11 @@ using Api.Models.FundingCall;
 namespace Api.Maps
 {
     // TODO: convert to AutoMapper profile
-    public class FundingCallEntityToApiModel : IMapper<DimCallProgramme, FundingCall>
+    public class FundingCallEntityToApiModel : IMapper<DimCallProgramme, Models.FundingCall.FundingCall>
     {
-        public FundingCall Map(DimCallProgramme dbEntity)
+        public Models.FundingCall.FundingCall Map(DimCallProgramme dbEntity)
         {
-            var call = new FundingCall
+            var call = new Models.FundingCall.FundingCall
             {
                 NameFi = dbEntity.NameFi,
                 NameSv = dbEntity.NameSv,
@@ -22,10 +22,10 @@ namespace Api.Maps
                 ContactInformation = dbEntity.ContactInformation,
                 CallProgrammeOpenDate = GetDate(dbEntity.DimDateIdOpenNavigation),
                 CallProgrammeDueDate = GetDate(dbEntity.DimDateIdDueNavigation),
-                ApplicationURLFi = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "fi"),
-                ApplicationURLSv = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "sv"),
-                ApplicationURLEn = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "en"),
-                ContinuosApplication = dbEntity.ContinuosApplicationPeriod == true,
+                //ApplicationURLFi = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "fi"),
+                //ApplicationURLSv = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "sv"),
+                //ApplicationURLEn = GetUrl(dbEntity.DimWebLinks, "ApplicationUrl", "en"),
+                ContinuosApplication = dbEntity.ContinuousApplicationPeriod == true,
                 Foundation = GetFoundations(dbEntity.DimOrganizations),
                 Categories = GetCategories(dbEntity.DimReferencedata)
             };
@@ -72,7 +72,7 @@ namespace Api.Maps
                 FoundationNameSv = o.NameSv,
                 FoundationNameEn = o.NameEn,
                 FoundationBusinessId = o.OrganizationId,
-                FoundationUrl = GetUrl(o.DimWebLinks, "FoundationURL"),
+                //FoundationUrl = GetUrl(o.DimWebLinks, "FoundationURL"),
             }).ToArray();
         }
 

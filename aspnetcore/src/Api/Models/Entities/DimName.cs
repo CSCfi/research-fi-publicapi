@@ -16,15 +16,13 @@ namespace Api.Models.Entities
         public int Id { get; set; }
         public string? LastName { get; set; }
         public string? FirstNames { get; set; }
-        /// <summary>
-        /// Only to be used, when first name + last name not known (i.e. Metax).
-        /// </summary>
-        public string? FullName { get; set; }
         public string SourceId { get; set; } = null!;
         public string? SourceDescription { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
         public int DimKnownPersonIdConfirmedIdentity { get; set; }
+        public string? SourceProjectId { get; set; }
+        public string? FullName { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
 
         public virtual DimKnownPerson DimKnownPersonIdConfirmedIdentityNavigation { get; set; } = null!;

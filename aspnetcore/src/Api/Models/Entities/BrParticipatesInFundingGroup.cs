@@ -10,6 +10,8 @@ namespace Api.Models.Entities
         public int DimOrganizationId { get; set; }
         public string? RoleInFundingGroup { get; set; }
         public decimal? ShareOfFundingInEur { get; set; }
+        public string? SourceId { get; set; }
+        public bool? EndOfParticipation { get; set; }
 
         public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
         public virtual DimName DimName { get; set; } = null!;

@@ -50,11 +50,9 @@ namespace Api.Models.Entities
         public DateTime? Modified { get; set; }
         public int OrcidPersonDataSource { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
-        public int DimReferencedataid { get; set; }
 
         public virtual DimReferencedatum ArticleTypeCodeNavigation { get; set; } = null!;
         public virtual DimOrcidPublication? DimParentOrcidPublication { get; set; }
-        public virtual DimReferencedatum DimReferencedata { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimKnownPerson OrcidPersonDataSourceNavigation { get; set; } = null!;
         public virtual DimReferencedatum ParentPublicationTypeCodeNavigation { get; set; } = null!;

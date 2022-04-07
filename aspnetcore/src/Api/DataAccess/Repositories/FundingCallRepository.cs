@@ -15,7 +15,7 @@ namespace Api.DataAccess.Repositories
             return dbSet
                 .Include(x => x.DimOrganizations).AsSplitQuery()
                 .Include(x => x.DimReferencedata).AsSplitQuery()
-                .Include(x => x.DimWebLinks).AsSplitQuery()
+                //.Include(x => x.DimWebLinks).AsSplitQuery()
                 .Include(x => x.DimDateIdOpenNavigation).AsSplitQuery()
                 .Include(x => x.DimDateIdDueNavigation).AsSplitQuery()
                 .Where(callProgramme => callProgramme.Id != -1)

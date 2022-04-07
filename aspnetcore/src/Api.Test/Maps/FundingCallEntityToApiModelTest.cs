@@ -57,27 +57,27 @@ namespace Api.Test.Maps
                 DescriptionFi = "descFi",
                 DescriptionSv = "descSv",
                 DescriptionEn = "descEn",
-                DimWebLinks = new[]
-                {
-                    new DimWebLink
-                    {
-                        LinkType = "ApplicationUrl",
-                        LanguageVariant = "fi",
-                        Url = "http://urlFi"
-                    },
-                    new DimWebLink
-                    {
-                        LinkType = "ApplicationUrl",
-                        LanguageVariant = "sv",
-                        Url = "http://urlSv"
-                    },
-                    new DimWebLink
-                    {
-                        LinkType = "ApplicationUrl",
-                        LanguageVariant = "en",
-                        Url = "http://urlEn"
-                    }
-                },
+                //DimWebLinks = new[]
+                //{
+                //    new DimWebLink
+                //    {
+                //        LinkType = "ApplicationUrl",
+                //        LanguageVariant = "fi",
+                //        Url = "http://urlFi"
+                //    },
+                //    new DimWebLink
+                //    {
+                //        LinkType = "ApplicationUrl",
+                //        LanguageVariant = "sv",
+                //        Url = "http://urlSv"
+                //    },
+                //    new DimWebLink
+                //    {
+                //        LinkType = "ApplicationUrl",
+                //        LanguageVariant = "en",
+                //        Url = "http://urlEn"
+                //    }
+                //},
                 DimDateIdOpenNavigation = new DimDate
                 {
                     Year = 2020,
@@ -98,14 +98,14 @@ namespace Api.Test.Maps
                         NameSv = "foundation name sv",
                         NameEn = "foundation name en",
                         OrganizationId = "foundation business id",
-                        DimWebLinks = new []
-                        {
-                            new DimWebLink
-                            {
-                                LinkType = "FoundationURL",
-                                Url = "http://foundationurl",
-                            }
-                        }
+                        //DimWebLinks = new []
+                        //{
+                        //    new DimWebLink
+                        //    {
+                        //        LinkType = "FoundationURL",
+                        //        Url = "http://foundationurl",
+                        //    }
+                        //}
                     }
                 },
                 DimReferencedata = new[]
@@ -119,14 +119,14 @@ namespace Api.Test.Maps
                     }
                 },
                 ContactInformation = "contact info",
-                ContinuosApplicationPeriod = true
+                ContinuousApplicationPeriod = true
 
             };
         }
 
-        private static FundingCall GetModel()
+        private static Models.FundingCall.FundingCall GetModel()
         {
-            return new FundingCall
+            return new Models.FundingCall.FundingCall
             {
                 NameFi = "nameFi",
                 NameSv = "nameSv",
@@ -137,9 +137,9 @@ namespace Api.Test.Maps
                 DescriptionFi = "descFi",
                 DescriptionSv = "descSv",
                 DescriptionEn = "descEn",
-                ApplicationURLFi = "http://urlFi",
-                ApplicationURLSv = "http://urlSv",
-                ApplicationURLEn = "http://urlEn",
+                //ApplicationURLFi = "http://urlFi",
+                //ApplicationURLSv = "http://urlSv",
+                //ApplicationURLEn = "http://urlEn",
                 ContactInformation = "contact info",
                 CallProgrammeOpenDate = new System.DateTime(2020, 1, 1),
                 CallProgrammeDueDate = new System.DateTime(2021, 1, 1),
@@ -162,7 +162,7 @@ namespace Api.Test.Maps
                         FoundationNameSv = "foundation name sv",
                         FoundationNameEn = "foundation name en",
                         FoundationBusinessId = "foundation business id",
-                        FoundationUrl = "http://foundationurl"
+                        //FoundationUrl = "http://foundationurl"
                     }
                 }
             };

@@ -6,7 +6,7 @@ namespace Api.Models.Entities
     public partial class DimNewsItem
     {
         public int Id { get; set; }
-        public int DimNewsFeedId { get; set; }
+        public int DimNewsFeedid { get; set; }
         public string? NewsHeadline { get; set; }
         public string? NewsContent { get; set; }
         public string? Url { get; set; }

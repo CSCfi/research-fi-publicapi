@@ -8,6 +8,7 @@ namespace Api.Models.Entities
         public DimFieldDisplaySetting()
         {
             FactFieldValues = new HashSet<FactFieldValue>();
+            DimRegisteredDataSources = new HashSet<DimRegisteredDataSource>();
         }
 
         public int Id { get; set; }
@@ -21,5 +22,7 @@ namespace Api.Models.Entities
 
         public virtual DimUserProfile DimUserProfile { get; set; } = null!;
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
+
+        public virtual ICollection<DimRegisteredDataSource> DimRegisteredDataSources { get; set; }
     }
 }

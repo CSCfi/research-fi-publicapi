@@ -15,12 +15,12 @@ namespace Api.Controllers
         private const string ApiVersion = "1.0";
 
         private readonly ILogger<FundingCallController> _logger;
-        private readonly ISearchService<FundingCallSearchParameters,FundingCall> _searchService;
+        private readonly ISearchService<FundingCallSearchParameters, Models.FundingCall.FundingCall> _searchService;
         private readonly IUnitOfWork _unitOfWork;
 
         public FundingCallController(
             ILogger<FundingCallController> logger,
-            ISearchService<FundingCallSearchParameters,FundingCall> searchService,
+            ISearchService<FundingCallSearchParameters, Models.FundingCall.FundingCall> searchService,
             IUnitOfWork unitOfWork)
         {
             _logger = logger;
@@ -36,7 +36,7 @@ namespace Api.Controllers
         [HttpGet(Name = "GetFundingCall")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingCall.Search)]
-        public IEnumerable<FundingCall> Get([FromQuery]FundingCallSearchParameters searchParameters)
+        public IEnumerable<Models.FundingCall.FundingCall> Get([FromQuery]FundingCallSearchParameters searchParameters)
         {
             return _searchService.Search(searchParameters);
         }
@@ -50,7 +50,7 @@ namespace Api.Controllers
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingCall.Add)]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task Post(FundingCall fundingCall)
+        public async Task Post(Models.FundingCall.FundingCall fundingCall)
         {
             // TODO: only NameFi mapped to entity. Not using final models yet.
             await _unitOfWork

@@ -18,16 +18,16 @@ namespace Api.Models.Entities
             DimResearcherToResearchCommunities = new HashSet<DimResearcherToResearchCommunity>();
             DimTelephoneNumbers = new HashSet<DimTelephoneNumber>();
             DimUserProfiles = new HashSet<DimUserProfile>();
-            DimWebLinks = new HashSet<DimWebLink>();
             DimFieldOfSciences = new HashSet<DimFieldOfScience>();
         }
 
         public int Id { get; set; }
         public string SourceId { get; set; } = null!;
         public string? SourceDescription { get; set; }
-        public string? SourceProjectId { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
+        public string? SourceProjectId { get; set; }
+        public int? DimRegisteredDataSourceId { get; set; }
 
         public virtual ICollection<DimAffiliation> DimAffiliations { get; set; }
         public virtual ICollection<DimCompetence> DimCompetences { get; set; }
@@ -40,7 +40,6 @@ namespace Api.Models.Entities
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunities { get; set; }
         public virtual ICollection<DimTelephoneNumber> DimTelephoneNumbers { get; set; }
         public virtual ICollection<DimUserProfile> DimUserProfiles { get; set; }
-        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
 
         public virtual ICollection<DimFieldOfScience> DimFieldOfSciences { get; set; }
     }
