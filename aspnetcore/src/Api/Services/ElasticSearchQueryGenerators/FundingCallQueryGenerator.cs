@@ -67,7 +67,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
                         (
                         s.DateRange(r => r
                             .Field("callProgrammeOpenDate")
-                            .LessThanOrEquals(parameters.DateTo ?? DateTime.MinValue))
+                            .LessThanOrEquals(parameters.DateTo ?? DateTime.MaxValue))
                         ||
                         !s.Exists(b => b.Field("callProgrammeOpenDate"))
                         )

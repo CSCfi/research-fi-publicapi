@@ -109,13 +109,17 @@ namespace Api.Test
             var testCasesWhichExpectSomethingReturned = new Dictionary<string, Expression<Func<FundingCall, bool>>>
             {
                 // should find only calls with the given name
-                [Name("apurahahaku")] = fc => 
+                [Name("apurahahaku")] = fc =>
                     NamesShouldMatch(fc, "apurahahaku"),
-                
+
+                // should find only calls with the given name
+                [Name("apurahojen")] = fc =>
+                    NamesShouldMatch(fc, "apurahojen"),
+
                 // should find only calls with the given foundation name
                 [FoundationName("säätiö")] = fc =>
                     FoundationNamesShouldMatch(fc, "säätiö"),
-                
+
                 // should find calls with the given foundation business id
                 [FoundationBusinessId("02509")] = fc =>
                     FoundationBusinessIdShouldEqual(fc, "02509"),
