@@ -1,0 +1,54 @@
+﻿using Api.Models.Entities;
+using Api.Models.FundingCall;
+using AutoMapper;
+using FundingCall = Api.Models.FundingCall.FundingCall;
+
+namespace Api.Maps
+{
+    public class FundingCallProfile : Profile
+    {
+        public FundingCallProfile()
+        {
+            CreateProjection<DimCallProgramme, FundingCall>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DescriptionFi))
+                .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DescriptionSv))
+                .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DescriptionEn))
+                .ForMember(dst => dst.ApplicationTermsFi, opt => opt.MapFrom(src => src.ApplicationTermsFi))
+                .ForMember(dst => dst.ApplicationTermsSv, opt => opt.MapFrom(src => src.ApplicationTermsSv))
+                .ForMember(dst => dst.ApplicationTermsEn, opt => opt.MapFrom(src => src.ApplicationTermsEn))
+                .ForMember(dst => dst.CallProgrammeOpenDate, opt => opt.MapFrom(src => src.DimDateIdOpenNavigation))
+                .ForMember(dst => dst.CallProgrammeDueDate, opt => opt.MapFrom(src => src.DimDateIdDueNavigation))
+                .ForMember(dst => dst.ContactInformation, opt => opt.MapFrom(src => src.ContactInformation))
+                .ForMember(dst => dst.Categories, opt => opt.MapFrom(src => src.DimReferencedata))
+                .ForMember(dst => dst.Foundation, opt => opt.MapFrom(src => src.DimOrganizations))
+                .ForMember(dst => dst.ContinuosApplication, opt => opt.MapFrom(src => src.ContinuousApplicationPeriod))
+                // TODO: missing foreign key on dim_web_link
+                .ForMember(dst => dst.ApplicationURLFi, opt => opt.Ignore())
+                // TODO: missing foreign key on dim_web_link
+                .ForMember(dst => dst.ApplicationURLSv, opt => opt.Ignore())
+                // TODO: missing foreign key on dim_web_link
+                .ForMember(dst => dst.ApplicationURLEn, opt => opt.Ignore());
+
+            CreateProjection<DimReferencedatum, Category>()
+                .ForMember(dst => dst.CategoryCodeValue, opt => opt.MapFrom(src => src.CodeValue))
+                .ForMember(dst => dst.CategoryNameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.CategoryNameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.CategoryNameEn, opt => opt.MapFrom(src => src.NameEn));
+
+            CreateProjection<DimOrganization, Foundation>()
+                .ForMember(dst => dst.FoundationNameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.FoundationNameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.FoundationNameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.FoundationBusinessId, opt => opt.MapFrom(src => src.OrganizationId))
+                // TODO: missing foreign key on dim_web_link
+                .ForMember(dst => dst.FoundationUrl, opt => opt.Ignore());
+
+            CreateProjection<DimDate, DateTime?>()
+                .ConvertUsing(x => new DateTime(x.Year, x.Month, x.Day));
+
+        }
+    }
+}

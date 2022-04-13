@@ -1,18 +1,28 @@
 ﻿using Api.Maps;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
+using AutoMapper;
 using FluentAssertions;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
+using FundingCall = Api.Models.FundingCall.FundingCall;
 
 namespace Api.Test.Maps
 {
-    public class FundingCallEntityToApiModelTest
+    public class FundingCallProfileTest
     {
-        private readonly FundingCallEntityToApiModel _mapper;
+        private readonly IMapper _mapper;
 
-        public FundingCallEntityToApiModelTest()
+        public FundingCallProfileTest()
         {
-            _mapper = new FundingCallEntityToApiModel();
+            _mapper = new MapperConfiguration(cfg => cfg.AddProfile<FundingCallProfile>()).CreateMapper();
+        }
+
+        [Fact]
+        public void Configuration_ShouldBeValid()
+        {
+            _mapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         [Fact]
@@ -22,26 +32,22 @@ namespace Api.Test.Maps
             var entity = GetEntity();
 
             // Act
-            var model = _mapper.Map(entity);
+            var model = Act_Map(entity);
 
             // Assert
             model.Should().BeEquivalentTo(GetModel());
         }
 
-        [Fact]
-        public void Should_Map_MissingDates_AsNull()
+        private FundingCall Act_Map(DimCallProgramme dbEntity)
         {
-            // Arrange
-            var entity = GetEntity();
-            entity.DimDateIdOpenNavigation.Id = -1;
-            entity.DimDateIdDueNavigation.Id = -1;
+            var entityQueryable = new List<DimCallProgramme>
+            {
+                dbEntity
+            }.AsQueryable();
 
-            // Act
-            var model = _mapper.Map(entity);
+            var modelCollection = _mapper.ProjectTo<FundingCall>(entityQueryable);
 
-            // Assert
-            model.CallProgrammeOpenDate.Should().BeNull();
-            model.CallProgrammeDueDate.Should().BeNull();
+            return modelCollection.Single();
         }
 
         private static DimCallProgramme GetEntity()
@@ -80,12 +86,14 @@ namespace Api.Test.Maps
                 //},
                 DimDateIdOpenNavigation = new DimDate
                 {
+                    Id = 4,
                     Year = 2020,
                     Month = 1,
                     Day = 1
                 },
                 DimDateIdDueNavigation = new DimDate
                 {
+                    Id = 5,
                     Year = 2021,
                     Month = 1,
                     Day = 1
@@ -124,9 +132,9 @@ namespace Api.Test.Maps
             };
         }
 
-        private static Models.FundingCall.FundingCall GetModel()
+        private static FundingCall GetModel()
         {
-            return new Models.FundingCall.FundingCall
+            return new FundingCall
             {
                 NameFi = "nameFi",
                 NameSv = "nameSv",
@@ -137,9 +145,9 @@ namespace Api.Test.Maps
                 DescriptionFi = "descFi",
                 DescriptionSv = "descSv",
                 DescriptionEn = "descEn",
-                //ApplicationURLFi = "http://urlFi",
-                //ApplicationURLSv = "http://urlSv",
-                //ApplicationURLEn = "http://urlEn",
+                ApplicationURLFi = "http://urlFi",
+                ApplicationURLSv = "http://urlSv",
+                ApplicationURLEn = "http://urlEn",
                 ContactInformation = "contact info",
                 CallProgrammeOpenDate = new System.DateTime(2020, 1, 1),
                 CallProgrammeDueDate = new System.DateTime(2021, 1, 1),
@@ -162,7 +170,7 @@ namespace Api.Test.Maps
                         FoundationNameSv = "foundation name sv",
                         FoundationNameEn = "foundation name en",
                         FoundationBusinessId = "foundation business id",
-                        //FoundationUrl = "http://foundationurl"
+                        FoundationUrl = "http://foundationurl"
                     }
                 }
             };

@@ -52,7 +52,6 @@ namespace ElasticSearchIndexer
                         services.AddRepositories();
 
                         services.AddAutoMapper(typeof(Api.ApiPolicies).Assembly);
-                        services.AddScoped<IMapper<DimCallProgramme, Api.Models.FundingCall.FundingCall>, FundingCallEntityToApiModel>();
                     })
             .ConfigureHostConfiguration(configurationBuilder => configurationBuilder
                 // Most of the configuration comes from environment variables.

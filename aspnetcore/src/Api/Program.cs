@@ -44,7 +44,6 @@ builder.Services.AddRepositories();
 
 // Register Automapper and maps
 builder.Services.AddAutoMapper(typeof(Api.ApiPolicies));
-builder.Services.AddScoped<IMapper<DimCallProgramme, Api.Models.FundingCall.FundingCall>, FundingCallEntityToApiModel>();
 
 builder.Services.AddHttpLogging(options =>
 {
