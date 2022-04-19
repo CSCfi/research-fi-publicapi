@@ -12,6 +12,7 @@ namespace Api.ConfigurationExtensions
             services.AddScoped<IFundingDecisionRepository, FundingDecisionRepository>();
             services.AddScoped<IIndexRepository<FundingDecision>, FundingDecisionIndexRepository>();
             services.AddScoped<IIndexRepository<FundingCall>, FundingCallIndexRepository>();
+            services.AddScoped<IIndexRepository<Models.Infrastructure.Infrastructure>, InfrastructureIndexRepository>();
         }
     }
 }
