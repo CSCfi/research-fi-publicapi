@@ -18,11 +18,11 @@ namespace Api.Test
             _repository = scope.ServiceProvider.GetRequiredService<IIndexRepository<FundingCall>>();
         }
 
-        [Fact]
+        [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something()
         {
             var entities = await _repository.GetAllAsync()
-                .Where(x => x.NameFi == "FIRI 2019: Suomen tiekartalla olevat infrastruktuurit, kv-jäsenyydet 2019")
+                .Where(x => x.NameFi == "some name")
                 .ToListAsync();
 
             // Assert

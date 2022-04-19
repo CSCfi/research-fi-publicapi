@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Api.Test
 {
-    public class FundingDecisionRepositorySystemTest: IClassFixture<TestWebApplicationFactory<Program>>
+    public class FundingDecisionRepositorySystemTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
         private readonly IGenericRepository<DimFundingDecision> _repository;
 
@@ -19,7 +19,7 @@ namespace Api.Test
             _repository = scope.ServiceProvider.GetRequiredService<IFundingDecisionRepository>();
         }
 
-        [Fact]
+        [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something()
         {
             var entities = _repository.GetAll()
