@@ -1,9 +1,7 @@
 ﻿using Api.Models.Infrastructure;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 
 namespace Api.Controllers
 {
