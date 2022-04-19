@@ -17,12 +17,14 @@ namespace ElasticSearchIndexer
         private readonly Stopwatch _stopWatch = new();
         private readonly IIndexRepository<FundingCall> _fundingCallRepository;
         private readonly IIndexRepository<FundingDecision> _fundingDecisionRepository;
+        private readonly IIndexRepository<Api.Models.Infrastructure.Infrastructure> _infrastructureRepository;
 
         public Indexer(
             ILogger<Indexer> logger,
             IElasticSearchIndexService indexService,
             IIndexRepository<FundingCall> fundingCallRepository,
             IIndexRepository<FundingDecision> fundingDecisionRepository,
+            IIndexRepository<Api.Models.Infrastructure.Infrastructure> infrastructureRepository,
             IConfiguration configuration
             )
         {
@@ -30,6 +32,7 @@ namespace ElasticSearchIndexer
             _indexService = indexService;
             _fundingCallRepository = fundingCallRepository;
             _fundingDecisionRepository = fundingDecisionRepository;
+            _infrastructureRepository = infrastructureRepository;
             _configuration = configuration;
         }
 
@@ -38,8 +41,15 @@ namespace ElasticSearchIndexer
             _stopWatch.Start();
             _logger.LogInformation("Starting indexing.. {stopWatch}", _stopWatch.Elapsed);
 
+            var elasticLog = $"Using ElasticSearch '{_configuration["ELASTICSEARCH:URL"]}'";
+            elasticLog += _configuration["ELASTICSEARCH:USERNAME"] != null || _configuration["ELASTICSEARCH:PASSWORD"] != null
+                ? " with basic authentication."
+                : ".";
+            _logger.LogInformation(elasticLog);
+
             await IndexEntities("api-dev-funding-call", _fundingCallRepository);
             await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository);
+            await IndexEntities("api-dev-infrastructure", _infrastructureRepository);
 
             _logger.LogInformation("All indexing done. {stopWatch}", _stopWatch.Elapsed);
             _stopWatch.Stop();
@@ -55,11 +65,6 @@ namespace ElasticSearchIndexer
             var indexModels = await repository.GetAllAsync().ToListAsync();
             _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, typeof(TIndexModel).Name, _stopWatch.Elapsed);
 
-            var elasticLog = $"Using ElasticSearch '{_configuration["ELASTICSEARCH:URL"]}'";
-            elasticLog += _configuration["ELASTICSEARCH:USERNAME"] != null || _configuration["ELASTICSEARCH:PASSWORD"] != null
-                ? " with basic authentication."
-                : ".";
-            _logger.LogInformation(elasticLog);
             _logger.LogInformation("Indexing '{indexName}'..", indexName);
 
             await _indexService.IndexAsync(indexName, indexModels);
