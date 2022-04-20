@@ -20,8 +20,40 @@ namespace Api.ConfigurationExtensions
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                // Needed because our models have non-unique names in different namespaces,
+                // causing error "SchemaId already used for different type".
+                options.CustomSchemaIds(type => GetShortTypeName(type));
+            });
             services.ConfigureOptions<SwaggerConfiguration>();
+        }
+
+        /// <summary>
+        /// Converts type's full name to contain only parent namespace and the type name in the Swagger schema. 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <example>
+        /// Api.Models.FundingDecision.FunderOrganization
+        ///          ->
+        ///      FundingDecision.FunderOrganization
+        /// </example>
+        /// <returns></returns>
+        private static string GetShortTypeName(Type type)
+        {
+            // "Api.Models.FundingDecision.FunderOrganization"
+            var fullTypeName = type.ToString();
+
+            // [ "Api", "Models", "FundingDecision", "FunderOrganization" ]
+            var typeNameSplitted = fullTypeName.Split('.');
+
+            // [ "FundingDecision", "FunderOrganization" ]
+            var typeNameAndDirectParent = typeNameSplitted[2..];
+
+            // "FundingDecision.FunderOrganization"
+            var shortTypeName = string.Join('.', typeNameAndDirectParent);
+
+            return shortTypeName;
         }
 
         public static void UseSwaggerAndSwaggerUI(this WebApplication app)
