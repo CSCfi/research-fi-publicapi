@@ -8,28 +8,76 @@ namespace Api.Maps
     {
         public FundingDecisionProfile()
         {
-            CreateProjection<DimFundingDecision, FundingDecision>(MemberList.None)
-                .ForMember(dst => dst.Id, conf => conf.MapFrom(src => src.Id))
-                .ForMember(dst => dst.CallProgramme, conf => conf.MapFrom(src => src.DimCallProgramme))
-                .ForMember(dst => dst.ApprovalDate, conf => conf.MapFrom(src => src.DimDateIdApprovalNavigation))
-                .ForMember(dst => dst.FundingStartDate, conf => conf.MapFrom(src => src.DimDateIdStartNavigation))
-                .ForMember(dst => dst.FundingEndDate, conf => conf.MapFrom(src => src.DimDateIdEndNavigation))
-                .ForMember(dst => dst.ContactPerson, conf => conf.MapFrom(src => src.DimNameIdContactPersonNavigation))
-                .ForMember(dst => dst.Geo, conf => conf.MapFrom(src => src.DimGeo.Id != -1 ? src.DimGeo : null))
-                .ForMember(dst => dst.CallProgrammes, conf => conf.MapFrom(src => src.DimFundingDecisionFroms))
-                .ForMember(dst => dst.FrameworkProgramme, conf => conf.MapFrom(src => src.DimFundingDecisionIdParentDecisionNavigation));
+            CreateProjection<DimFundingDecision, FundingDecision>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.Acronym, opt => opt.MapFrom(src => src.Acronym))
+                .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DescriptionFi))
+                .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DescriptionSv))
+                .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DescriptionEn))
+                .ForMember(dst => dst.FundingStartYear, opt => opt.MapFrom(src => src.DimDateIdStartNavigation))
+                .ForMember(dst => dst.FundingEndYear, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))             
+                .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
+                .ForMember(dst => dst.OrganizationConsortiums, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
+                .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
+                .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
+                .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.DimCallProgramme))
+                .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
+                .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.DimFieldOfSciences))
+                .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")));
 
-            CreateProjection<DimOrganization, FunderOrganization>(MemberList.None);
-            CreateProjection<DimSector, Sector>();
-            CreateProjection<DimCallProgramme, CallProgramme>();
-            CreateProjection<DimDate, Date?>();
-            CreateProjection<DimName, ContactPerson>();
-            CreateProjection<DimGeo, Geo>();
-            CreateProjection<DimFundingDecision, CallProgramme>();
-            CreateProjection<DimFieldOfScience, FieldOfScience>();
-            CreateProjection<DimPublication, Models.FundingDecision.Publication>();
+            CreateProjection<DimDate, int?>()
+                .ConvertUsing(x => x != null ? x.Year :null);
 
-            CreateMap<int?, bool>().ConvertUsing(src => src == 1);
+            CreateProjection<BrParticipatesInFundingGroup, FundingGroupPerson>()
+                .ForMember(dst => dst.LastName, opt => opt.MapFrom(src => src.DimName.LastName))
+                .ForMember(dst => dst.FirstNames, opt => opt.MapFrom(src => src.DimName.FirstNames))
+                .ForMember(dst => dst.OrcId, opt => opt.MapFrom(src => src.DimName.DimKnownPersonIdConfirmedIdentityNavigation))
+                .ForMember(dst => dst.RoleInFundingGroup, opt => opt.MapFrom(src => src.RoleInFundingGroup));
+
+            CreateProjection<DimKnownPerson, string?>()
+                .ConvertUsing(x => x.DimPids.Where(p => p.PidType == "Orcid")
+                                            .Select(p => p.PidContent)
+                                            .SingleOrDefault());
+
+            CreateProjection<BrFundingConsortiumParticipation, OrganizationConsortium>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
+                .ForMember(dst => dst.BusinessId, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "BusinessID")))
+                .ForMember(dst => dst.RoleInConsotrium, opt => opt.MapFrom(src => src.RoleInConsortium))
+                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur));
+
+            CreateProjection<DimPid, string?>()
+                .ConvertUsing(pid => pid.PidContent);
+
+            CreateProjection<DimOrganization, Funder>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
+
+            CreateProjection<DimTypeOfFunding, FundingType>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.TypeId, opt => opt.MapFrom(src => src.TypeId));
+           
+            CreateProjection<DimCallProgramme, CallProgramme>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.CallProgrameId, opt => opt.MapFrom(src => src.SourceId));
+
+            CreateProjection<DimFieldOfScience, FieldOfScience>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.FieldId, opt => opt.MapFrom(src => src.FieldId));
+
+            CreateProjection<DimKeyword, string>()
+                .ConvertUsing(keyword => keyword.Keyword);
+
         }
     }
 }

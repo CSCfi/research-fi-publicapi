@@ -1,5 +1,6 @@
 ﻿using Api.DataAccess.Repositories;
 using Api.Models.Entities;
+using Api.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,33 +12,62 @@ namespace Api.Test
 {
     public class FundingDecisionRepositorySystemTest : IClassFixture<TestWebApplicationFactory<Program>>
     {
-        private readonly IGenericRepository<DimFundingDecision> _repository;
+        private readonly IIndexRepository<FundingDecision> _repository;
 
         public FundingDecisionRepositorySystemTest(TestWebApplicationFactory<Program> factory)
         {
             var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<IFundingDecisionRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<IIndexRepository<FundingDecision>>();
         }
 
-        [Fact(Skip = "Currently used only for manual debugging.")]
+        [Fact]
         public async Task Repo_ShouldReturn_Something()
         {
-            var entities = _repository.GetAll()
-                //.Where(x => x.NameEn != null && x.NameEn.Contains("raha", StringComparison.CurrentCultureIgnoreCase))
-                //.Where(x => x.DimWebLinks != null && x.DimWebLinks.Any(l => l.LinkType == "ApplicationURL"))
-                //.Where(x => x.DimDateIdDueNavigation != null)
-                //.Where(x => x.DimDateIdOpen == -1)
-                .ToList();
+            var entities = await _repository.GetAllAsync()
+                .Where(x => x.NameFi == "Mitokondriometabolia hermoston terveyden ja sairauden säätelijänä")
+                .ToListAsync();
 
             // Assert
-            entities.SingleOrDefault(e => e.Id == -1).Should().BeNull();
-            entities.Should().NotContain(e => e.DimTypeOfFunding == null);
-            entities.Should().NotContain(e => e.DimTypeOfFunding != null && e.DimTypeOfFunding.TypeId == "62");
-            entities.Should().NotContain(e => e.DimTypeOfFunding != null && e.DimTypeOfFunding.TypeId == "66");
-            entities.Should().NotContain(e => e.DimTypeOfFunding != null && e.DimTypeOfFunding.TypeId == "69");
+            entities.Should().NotBeEmpty();
+            var e = entities.First();
+            e.FundingGroupPerson.Should().NotBeNullOrEmpty();
+            var p = e.FundingGroupPerson.First();
+            p.OrcId.Should().NotBeNullOrEmpty();
+            p.RoleInFundingGroup.Should().NotBeNullOrEmpty();
 
-            entities
-                .Should().HaveCount(36699);
+        }
+
+        [Fact]
+        public async Task Repo_ShouldReturn_Something2()
+        {
+            var entities = await _repository.GetAllAsync()
+                .Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
+                .ToListAsync();
+
+            // Assert
+            // löytyy 4 entiteettiä
+            entities.Should().NotBeEmpty();
+            var e = entities.First();
+            e.FundingGroupPerson.Should().NotBeNullOrEmpty();
+            e.OrganizationConsortiums.Should().NotBeNullOrEmpty();
+            var p = e.FundingGroupPerson.First();
+            p.OrcId.Should().NotBeNullOrEmpty();
+            p.RoleInFundingGroup.Should().NotBeNullOrEmpty();
+            
+
+        }
+
+        [Fact]
+        public async Task Repo_ShouldReturn_Something3()
+        {
+            var entities = await _repository.GetAllAsync()
+                //.Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
+                .ToListAsync();
+
+            // Assert
+            // löytyy 4 entiteettiä
+            var e = entities.Where(x => x.OrganizationConsortiums.Any()).FirstOrDefault();
+            e.Should().NotBeNull();
 
         }
 

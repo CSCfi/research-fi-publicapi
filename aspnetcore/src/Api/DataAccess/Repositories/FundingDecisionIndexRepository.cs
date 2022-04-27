@@ -23,10 +23,12 @@ namespace Api.DataAccess.Repositories
             return _context
                 .Set<DimFundingDecision>()
                 .AsNoTracking()
-                .Where(fd =>
-                    fd.DimTypeOfFunding.TypeId != "62" &&   // Tutkijatohtorin tutkimuskulut
-                    fd.DimTypeOfFunding.TypeId != "66" &&   // Akatemiatutkijan tutkimuskulut
-                    fd.DimTypeOfFunding.TypeId != "69")     // Akatemiaprofessorin tutkimuskulut
+                .AsSplitQuery()
+                // TODO: check if these are needed
+                //.Where(fd =>
+                //    fd.DimTypeOfFunding.TypeId != "62" &&   // Tutkijatohtorin tutkimuskulut
+                //    fd.DimTypeOfFunding.TypeId != "66" &&   // Akatemiatutkijan tutkimuskulut
+                //    fd.DimTypeOfFunding.TypeId != "69")     // Akatemiaprofessorin tutkimuskulut
                 .Where(fd => fd.Id != -1)
                 .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider)
                 .AsAsyncEnumerable();
