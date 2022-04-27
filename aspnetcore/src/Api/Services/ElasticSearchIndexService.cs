@@ -74,7 +74,6 @@ namespace Api.Services
         private async Task IndexEntities<T>(string indexName, List<T> entities) where T : class
         {
             // Split entities into batches to avoid one big request.
-
             var documentBatches = new List<List<T>>();
             for (var docIndex = 0; docIndex < entities.Count; docIndex += batchSize)
             {
@@ -89,7 +88,9 @@ namespace Api.Services
 
                 if (!indexBatchResponse.IsValid)
                 {
-                    throw new InvalidOperationException($"Indexing entities to {indexName} failed.", indexBatchResponse.OriginalException);
+                    var errorMessage = $"Indexing entities to {indexName} failed.";
+                    _logger.LogError(indexBatchResponse.OriginalException, errorMessage);
+                    throw new InvalidOperationException(errorMessage, indexBatchResponse.OriginalException);
                 }
                 _logger.LogInformation("Indexed {batchSize} documents to {indexName}.", batchToIndex.Count, indexName);
             }
