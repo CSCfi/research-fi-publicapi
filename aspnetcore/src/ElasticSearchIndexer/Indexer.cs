@@ -60,15 +60,23 @@ namespace ElasticSearchIndexer
             IIndexRepository<TIndexModel> repository
         ) where TIndexModel : class
         {
-            _logger.LogInformation("Getting '{entityType}' entities from the database. {stopWatch}", typeof(TIndexModel).Name, _stopWatch.Elapsed);
+            try
+            {
 
-            var indexModels = await repository.GetAllAsync().ToListAsync();
-            _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, typeof(TIndexModel).Name, _stopWatch.Elapsed);
+                _logger.LogInformation("Getting '{entityType}' entities from the database. {stopWatch}", typeof(TIndexModel).Name, _stopWatch.Elapsed);
 
-            _logger.LogInformation("Indexing '{indexName}'..", indexName);
+                var indexModels = await repository.GetAllAsync().ToListAsync();
+                _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, typeof(TIndexModel).Name, _stopWatch.Elapsed);
 
-            await _indexService.IndexAsync(indexName, indexModels);
-            _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, _stopWatch.Elapsed);
+                _logger.LogInformation("Indexing '{indexName}'..", indexName);
+
+                await _indexService.IndexAsync(indexName, indexModels);
+                _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, _stopWatch.Elapsed);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while indexing '{indexName}' {stopWatch},", indexName, _stopWatch.Elapsed);
+            }
         }
     }
 }
