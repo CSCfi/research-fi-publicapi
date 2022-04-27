@@ -28,9 +28,9 @@ namespace Api.Controllers
         /// <param name="searchParameters">Julkaisun nimi</param>
         /// <returns></returns>
         [HttpGet(Name = "GetPublication")]
-        public IEnumerable<Publication> Get([FromQuery] PublicationSearchParameters searchParameters)
+        public async Task<IEnumerable<Publication>> Get([FromQuery] PublicationSearchParameters searchParameters)
         {
-            return _searchService.Search(searchParameters);
+            return await _searchService.Search(searchParameters);
         }
     }
 }

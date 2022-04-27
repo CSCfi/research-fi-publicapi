@@ -16,11 +16,11 @@ namespace Api.Services
             _queryGenerator = queryGenerator;
         }
 
-        public IReadOnlyCollection<TOut> Search(TIn parameters)
+        public async Task<IReadOnlyCollection<TOut>> Search(TIn parameters)
         {
             var query = _queryGenerator.GenerateQuery(parameters);
 
-            var searchResult = _elasticClient.Search(query);
+            var searchResult = await _elasticClient.SearchAsync(query);
             return searchResult.Documents;
         }
     }
