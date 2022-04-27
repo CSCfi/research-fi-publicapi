@@ -20,7 +20,7 @@ namespace Api.Test
             _repository = scope.ServiceProvider.GetRequiredService<IIndexRepository<FundingDecision>>();
         }
 
-        [Fact]
+        [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something()
         {
             var entities = await _repository.GetAllAsync()
@@ -37,7 +37,7 @@ namespace Api.Test
 
         }
 
-        [Fact]
+        [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something2()
         {
             var entities = await _repository.GetAllAsync()
@@ -45,7 +45,7 @@ namespace Api.Test
                 .ToListAsync();
 
             // Assert
-            // löytyy 4 entiteettiä
+            // 4 entities found
             entities.Should().NotBeEmpty();
             var e = entities.First();
             e.FundingGroupPerson.Should().NotBeNullOrEmpty();
@@ -57,15 +57,14 @@ namespace Api.Test
 
         }
 
-        [Fact]
+        [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something3()
         {
             var entities = await _repository.GetAllAsync()
-                //.Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
+                .Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
                 .ToListAsync();
 
             // Assert
-            // löytyy 4 entiteettiä
             var e = entities.Where(x => x.OrganizationConsortiums.Any()).FirstOrDefault();
             e.Should().NotBeNull();
 
