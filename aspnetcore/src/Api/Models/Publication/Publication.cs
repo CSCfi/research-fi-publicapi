@@ -1,4 +1,5 @@
-namespace Api.Models
+
+namespace Api.Models.Publication
 {
     public class Publication
     {

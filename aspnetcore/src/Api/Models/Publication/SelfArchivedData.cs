@@ -1,4 +1,6 @@
-﻿namespace Api.Models
+﻿using Api.Models.Publication;
+
+namespace Api.Models
 {
     public class SelfArchivedData
     {

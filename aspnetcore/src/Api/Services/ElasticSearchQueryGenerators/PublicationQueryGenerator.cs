@@ -1,4 +1,4 @@
-﻿using Api.Models;
+﻿using Api.Models.Publication;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
