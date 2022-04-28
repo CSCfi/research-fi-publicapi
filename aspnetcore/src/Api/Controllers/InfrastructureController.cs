@@ -31,9 +31,9 @@ namespace Api.Controllers
         [HttpGet(Name = "GetInfratructure")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.Infrastructure.Search)]
-        public IEnumerable<Models.Infrastructure.Infrastructure> Get([FromQuery] InfrastructureSearchParameters searchParameters)
+        public async Task<IEnumerable<Infrastructure>> Get([FromQuery] InfrastructureSearchParameters searchParameters)
         {
-            return _searchService.Search(searchParameters);
+            return await _searchService.Search(searchParameters);
         }
     }
 }

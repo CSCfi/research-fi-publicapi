@@ -31,9 +31,9 @@ namespace Api.Controllers
         [HttpGet(Name = "GetFundingDecision")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
-        public IEnumerable<FundingDecision> Get([FromQuery] FundingDecisionSearchParameters searchParameters)
+        public async Task<IEnumerable<FundingDecision>> Get([FromQuery] FundingDecisionSearchParameters searchParameters)
         {
-            return _searchService.Search(searchParameters);
+            return await _searchService.Search(searchParameters);
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ISearchService<TIn, TOut> where TOut : class
     {
-        IReadOnlyCollection<TOut> Search(TIn searchParameters);
+        Task<IReadOnlyCollection<TOut>> Search(TIn searchParameters);
     }
 }
