@@ -20,6 +20,11 @@
             public const string Search = "InfrastructureSearch";
         }
 
+        public static class Organization
+        {
+            public const string Search = "OrganizationSearch";
+        };
+
         /// <summary>
         /// Maps policies with their required roles.
         /// </summary>
@@ -28,7 +33,8 @@
             [FundingCall.Search] = "fundingcallreadclient",
             [FundingCall.Add] = "fundingcallwriteclient",
             [FundingDecision.Search] = "fundingdecisionreadclient",
-            [Infrastructure.Search] = "infrastructurereadclient"
+            [Infrastructure.Search] = "infrastructurereadclient",
+            [Organization.Search] = "organizationreadclient"
         };
     }
 }

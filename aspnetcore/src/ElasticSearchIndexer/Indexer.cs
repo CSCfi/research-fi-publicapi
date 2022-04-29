@@ -18,6 +18,7 @@ namespace ElasticSearchIndexer
         private readonly IIndexRepository<FundingCall> _fundingCallRepository;
         private readonly IIndexRepository<FundingDecision> _fundingDecisionRepository;
         private readonly IIndexRepository<Api.Models.Infrastructure.Infrastructure> _infrastructureRepository;
+        private readonly IIndexRepository<Api.Models.Organization.Organization> _organizationRepository;
 
         public Indexer(
             ILogger<Indexer> logger,
@@ -25,6 +26,7 @@ namespace ElasticSearchIndexer
             IIndexRepository<FundingCall> fundingCallRepository,
             IIndexRepository<FundingDecision> fundingDecisionRepository,
             IIndexRepository<Api.Models.Infrastructure.Infrastructure> infrastructureRepository,
+            IIndexRepository<Api.Models.Organization.Organization> organizationRepository,
             IConfiguration configuration
             )
         {
@@ -33,6 +35,7 @@ namespace ElasticSearchIndexer
             _fundingCallRepository = fundingCallRepository;
             _fundingDecisionRepository = fundingDecisionRepository;
             _infrastructureRepository = infrastructureRepository;
+            _organizationRepository = organizationRepository;
             _configuration = configuration;
         }
 
@@ -50,6 +53,7 @@ namespace ElasticSearchIndexer
             await IndexEntities("api-dev-funding-call", _fundingCallRepository);
             await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository);
             await IndexEntities("api-dev-infrastructure", _infrastructureRepository);
+            await IndexEntities("api-dev-organization", _organizationRepository);
 
             _logger.LogInformation("All indexing done. {stopWatch}", _stopWatch.Elapsed);
             _stopWatch.Stop();

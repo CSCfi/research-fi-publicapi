@@ -5,6 +5,7 @@ using Api.Middleware;
 using Api.Models.FundingCall;
 using Api.Models.FundingDecision;
 using Api.Models.Infrastructure;
+using Api.Models.Organization;
 using Api.Models.Publication;
 using Api.Services;
 using Api.Services.ElasticSearchQueryGenerators;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Api.Mode
 builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, Api.Models.FundingCall.FundingCall>, FundingCallQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingDecisionSearchParameters, FundingDecision>, FundingDecisionQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<InfrastructureSearchParameters, Api.Models.Infrastructure.Infrastructure>, InfrastructureQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<OrganizationSearchParameters, Api.Models.Organization.Organization>, OrganizationQueryGenerator>();
 
 // Configure and add ElasticSearch.
 builder.Services.AddElasticSearch(builder.Configuration);
