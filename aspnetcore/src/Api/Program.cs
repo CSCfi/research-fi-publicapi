@@ -2,10 +2,11 @@ using Api.ConfigurationExtensions;
 using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Middleware;
-using Api.Models;
 using Api.Models.FundingCall;
 using Api.Models.FundingDecision;
 using Api.Models.Infrastructure;
+using Api.Models.Organization;
+using Api.Models.Publication;
 using Api.Services;
 using Api.Services.ElasticSearchQueryGenerators;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,11 @@ builder.Services.AddSwaggerAndApiVersioning();
 
 // Register ElasticSearch query generators.
 builder.Services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
-builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Api.Models.Publication>, PublicationQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<PublicationSearchParameters, Api.Models.Publication.Publication>, PublicationQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingCallSearchParameters, Api.Models.FundingCall.FundingCall>, FundingCallQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<FundingDecisionSearchParameters, FundingDecision>, FundingDecisionQueryGenerator>();
 builder.Services.AddScoped<IQueryGenerator<InfrastructureSearchParameters, Api.Models.Infrastructure.Infrastructure>, InfrastructureQueryGenerator>();
+builder.Services.AddScoped<IQueryGenerator<OrganizationSearchParameters, Api.Models.Organization.Organization>, OrganizationQueryGenerator>();
 
 // Configure and add ElasticSearch.
 builder.Services.AddElasticSearch(builder.Configuration);

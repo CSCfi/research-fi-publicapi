@@ -1,12 +1,12 @@
 ﻿using Nest;
 
-namespace Api.Models
+namespace Api.Models.Publication
 {
     public class Organization
     {
         public string? organizationId { get; set; }
-        
-        [Text(Name= "OrganizationNameFi")]
+
+        [Text(Name = "OrganizationNameFi")]
         public string? OrganizationNameFi { get; set; }
 
         [Text(Name = "OrganizationNameEn")]

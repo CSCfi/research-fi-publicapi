@@ -1,6 +1,4 @@
 ﻿using Api.DataAccess.Repositories;
-using Api.Models.FundingCall;
-using Api.Models.FundingDecision;
 
 namespace Api.ConfigurationExtensions
 {
@@ -10,9 +8,16 @@ namespace Api.ConfigurationExtensions
         {
             services.AddScoped<IFundingCallRepository, FundingCallRepository>();
             services.AddScoped<IFundingDecisionRepository, FundingDecisionRepository>();
-            services.AddScoped<IIndexRepository<FundingDecision>, FundingDecisionIndexRepository>();
-            services.AddScoped<IIndexRepository<FundingCall>, FundingCallIndexRepository>();
-            services.AddScoped<IIndexRepository<Models.Infrastructure.Infrastructure>, InfrastructureIndexRepository>();
+
+            // Register every IIndexRepository<T> to IoC container.
+            services.Scan(scan => scan
+                .FromAssemblyOf<Program>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IIndexRepository<>)))
+                .UsingRegistrationStrategy(Scrutor.RegistrationStrategy.Throw)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                );
+
         }
     }
 }
