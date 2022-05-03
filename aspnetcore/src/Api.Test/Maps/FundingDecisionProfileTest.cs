@@ -198,7 +198,8 @@ namespace Api.Test.Maps
                         BusinessId = "business id",
                         RoleInConsortium = "partner",
                         ShareOfFundingInEur = 202,
-                        Pic = "org pic"
+                        Pic = "org pic",
+                        IsFinnishOrganization = true
                     }
                 },
                 Funder = new()

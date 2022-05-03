@@ -48,7 +48,8 @@ namespace Api.Maps
                 .ForMember(dst => dst.BusinessId, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "BusinessID")))
                 .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
                 .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
-                .ForMember(dst => dst.Pic, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "PIC")));
+                .ForMember(dst => dst.Pic, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "PIC")))
+                .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
             // Used by
             //  OrganizationConsortium.BusinessID

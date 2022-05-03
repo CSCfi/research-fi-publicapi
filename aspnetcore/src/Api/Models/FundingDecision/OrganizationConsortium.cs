@@ -19,7 +19,7 @@ namespace Api.Models.FundingDecision
 
         [Number(NumberType.Float)]
         public decimal? ShareOfFundingInEur { get; set; }
-        //public bool? IsFinnishOrganization { get; set; }
+        public bool? IsFinnishOrganization { get; set; }
 
     }
 }
