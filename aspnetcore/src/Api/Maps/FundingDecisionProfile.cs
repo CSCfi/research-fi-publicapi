@@ -19,7 +19,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.FundingStartYear, opt => opt.MapFrom(src => src.DimDateIdStartNavigation))
                 .ForMember(dst => dst.FundingEndYear, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))             
                 .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
-                .ForMember(dst => dst.OrganizationConsortiums, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
+                .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
                 .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
                 .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
                 .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.DimCallProgramme))
@@ -46,9 +46,13 @@ namespace Api.Maps
                 .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
                 .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
                 .ForMember(dst => dst.BusinessId, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "BusinessID")))
-                .ForMember(dst => dst.RoleInConsotrium, opt => opt.MapFrom(src => src.RoleInConsortium))
-                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur));
+                .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
+                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
+                .ForMember(dst => dst.Pic, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "PIC")));
 
+            // Used by
+            //  OrganizationConsortium.BusinessID
+            //  OrganizationConsortium.PIC
             CreateProjection<DimPid, string?>()
                 .ConvertUsing(pid => pid.PidContent);
 

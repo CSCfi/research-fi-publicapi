@@ -101,7 +101,11 @@ namespace Api.Test.Maps
                                 {
                                     PidType = "BusinessID",
                                     PidContent = "business id",
-
+                                },
+                                new DimPid
+                                {
+                                    PidType = "PIC",
+                                    PidContent = "org pic",
                                 }
                             },
                         },
@@ -130,7 +134,7 @@ namespace Api.Test.Maps
                     NameEn = "call programme en",
                 },
                 FunderProjectNumber = "funder project number",
-                DimFieldOfSciences = new []
+                DimFieldOfSciences = new[]
                 {
                     new DimFieldOfScience
                     {
@@ -140,7 +144,7 @@ namespace Api.Test.Maps
                         NameEn = "field en",
                     }
                 },
-                DimKeywords = new []
+                DimKeywords = new[]
                 {
                     new DimKeyword
                     {
@@ -184,7 +188,7 @@ namespace Api.Test.Maps
                         RoleInFundingGroup = "leader"
                     }
                 },
-                OrganizationConsortiums = new[]
+                OrganizationConsortia = new[]
                 {
                     new OrganizationConsortium
                     {
@@ -192,8 +196,9 @@ namespace Api.Test.Maps
                         NameSv = "namesv",
                         NameEn = "nameen",
                         BusinessId = "business id",
-                        RoleInConsotrium = "partner",
-                        ShareOfFundingInEur = 202
+                        RoleInConsortium = "partner",
+                        ShareOfFundingInEur = 202,
+                        Pic = "org pic"
                     }
                 },
                 Funder = new()

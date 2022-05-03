@@ -30,7 +30,7 @@ namespace Api.Models.FundingDecision
 
         
         [Nested]
-        public OrganizationConsortium[]? OrganizationConsortiums { get; set; }
+        public OrganizationConsortium[]? OrganizationConsortia { get; set; }
         
         [Nested]
         public Funder? Funder { get; set; }

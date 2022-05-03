@@ -12,10 +12,10 @@ namespace Api.Models.FundingDecision
         public string? NameSv { get; set; }
         public string? NameEn { get; set; }
         public string? BusinessId { get; set; }
-        //public string? Pic { get; set; }
+        public string? Pic { get; set; }
 
        // public string? CountryCode { get; set; }
-        public string? RoleInConsotrium { get; set; }
+        public string? RoleInConsortium { get; set; }
 
         [Number(NumberType.Float)]
         public decimal? ShareOfFundingInEur { get; set; }
