@@ -32,6 +32,9 @@ namespace Api.Models.FundingDecision
         [Nested]
         public OrganizationConsortium[]? OrganizationConsortia { get; set; }
         
+        [Number(NumberType.Float)]
+        public decimal? AmountInEur { get; set; }
+
         [Nested]
         public Funder? Funder { get; set; }
 
@@ -47,8 +50,7 @@ namespace Api.Models.FundingDecision
         public FieldOfScience[]? FieldsOfScience { get; set; }
 
         public string[]? Keywords { get; set; }
-        //[Number(NumberType.Float)]
-        //public decimal? AmountInEur { get; set; }
+
         //public bool HasInternationalCollaboration { get; set; }
 
         //public bool HasBusinessCollaboration { get; set; }

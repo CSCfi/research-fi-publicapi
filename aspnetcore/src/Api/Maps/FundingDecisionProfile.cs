@@ -25,7 +25,8 @@ namespace Api.Maps
                 .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.DimCallProgramme))
                 .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
                 .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.DimFieldOfSciences))
-                .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")));
+                .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
+                .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur));
 
             CreateProjection<DimDate, int?>()
                 .ConvertUsing(x => x != null ? x.Year :null);

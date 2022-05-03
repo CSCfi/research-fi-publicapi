@@ -161,7 +161,8 @@ namespace Api.Test.Maps
                         Keyword = "keyword 3",
                         Scheme = "some other scheme"
                     }
-                }
+                },
+                AmountInEur = 123.456m
             };
         }
 
@@ -237,7 +238,8 @@ namespace Api.Test.Maps
                 {
                     "keyword 1",
                     "keyword 2"
-                }
+                },
+                AmountInEur = 123.456m
             };
         }
     }
