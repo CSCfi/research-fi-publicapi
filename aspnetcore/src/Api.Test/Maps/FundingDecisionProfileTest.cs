@@ -132,7 +132,20 @@ namespace Api.Test.Maps
                 {
                     NameFi = "funder fi",
                     NameSv = "funder sv",
-                    NameEn = "funder en"
+                    NameEn = "funder en",
+                    DimPids = new[]
+                    {
+                        new DimPid
+                        {
+                            PidType = "BusinessID",
+                            PidContent = "123"
+                        },
+                        new DimPid
+                        {
+                            PidType = "PIC",
+                            PidContent = "456"
+                        }
+                    }
                 },
                 DimTypeOfFunding = new()
                 {
@@ -258,7 +271,12 @@ namespace Api.Test.Maps
                 {
                     NameFi = "funder fi",
                     NameSv = "funder sv",
-                    NameEn = "funder en"
+                    NameEn = "funder en",
+                    Ids = new[]
+                    {
+                        new Id { Type = "BusinessID", Content = "123"},
+                        new Id { Type = "PIC", Content = "456"},
+                    }
                 },
                 TypeOfFunding = new()
                 {

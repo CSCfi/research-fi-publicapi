@@ -63,7 +63,8 @@ namespace Api.Maps
             CreateProjection<DimOrganization, Funder>()
                 .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
                 .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+                .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimPids));
 
             CreateProjection<DimTypeOfFunding, FundingType>()
                 .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
@@ -95,6 +96,10 @@ namespace Api.Maps
 
             CreateProjection<BrWordsDefineACluster, string>()
                 .ConvertUsing(x => x.DimMinedWords.Word);
+
+            CreateProjection<DimPid, Id>()
+                .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType))
+                .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent));
 
         }
     }

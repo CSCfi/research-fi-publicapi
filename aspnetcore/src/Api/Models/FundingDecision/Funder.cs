@@ -5,6 +5,8 @@
         public string? NameFi { get; set; }
         public string? NameSv { get; set; }
         public string? NameEn { get; set; }
+
+        public Id[]? Ids { get; set; }
         //public int? Id { get; set; }
         //public string? LocalOrganizationUnitId { get; set; }
         //public string? LocalOrganizationSector { get; set; }
