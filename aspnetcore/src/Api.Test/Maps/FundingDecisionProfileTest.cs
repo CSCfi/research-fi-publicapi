@@ -177,7 +177,33 @@ namespace Api.Test.Maps
                         Scheme = "some other scheme"
                     }
                 },
-                AmountInEur = 123.456m
+                AmountInEur = 123.456m,
+                BrWordClusterDimFundingDecisions = new[]
+                {
+                    new BrWordClusterDimFundingDecision
+                    {
+                        DimWordCluster = new ()
+                        {
+                            BrWordsDefineAClusters = new[]
+                            {
+                                new BrWordsDefineACluster
+                                {
+                                    DimMinedWords = new ()
+                                    {
+                                        Word = "topic 1"
+                                    }
+                                },
+                                new BrWordsDefineACluster
+                                {
+                                    DimMinedWords = new ()
+                                    {
+                                        Word = "topic 2"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             };
         }
 
@@ -265,7 +291,12 @@ namespace Api.Test.Maps
                     "keyword 2"
                 },
                 AmountInEur = 123.456m,
-                Topic = null
+                Topic = null,
+                IdentifiedTopics = new[]
+                {
+                    "topic 1",
+                    "topic 2"
+                }
             };
         }
 

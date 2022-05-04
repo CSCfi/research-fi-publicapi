@@ -26,6 +26,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
                 .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.DimFieldOfSciences))
                 .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
+                .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null));
 
@@ -91,6 +92,9 @@ namespace Api.Maps
                 .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
                 .ForMember(dst => dst.EuCallId, opt => opt.MapFrom(src => src.EuCallId))
                 .ForMember(dst => dst.TopicId, opt => opt.MapFrom(src => src.Abbreviation));
+
+            CreateProjection<BrWordsDefineACluster, string>()
+                .ConvertUsing(x => x.DimMinedWords.Word);
 
         }
     }

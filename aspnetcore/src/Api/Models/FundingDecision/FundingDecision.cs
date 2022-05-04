@@ -50,6 +50,7 @@ namespace Api.Models.FundingDecision
         public FieldOfScience[]? FieldsOfScience { get; set; }
 
         public string[]? Keywords { get; set; }
+        public string[]? IdentifiedTopics { get; set; }
 
         //public bool HasInternationalCollaboration { get; set; }
 
