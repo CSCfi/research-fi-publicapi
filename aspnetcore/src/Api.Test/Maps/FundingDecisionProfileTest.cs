@@ -38,6 +38,21 @@ namespace Api.Test.Maps
             destination.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void ShouldMapMembers_EU()
+        {
+            // Arrange
+            var source = GetEuSource();
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            var expected = GetEuDestination();
+
+            destination.Should().BeEquivalentTo(expected);
+        }
+
         private FundingDecision Act_Map(DimFundingDecision dbEntity)
         {
             var entityQueryable = new List<DimFundingDecision>
@@ -166,6 +181,16 @@ namespace Api.Test.Maps
             };
         }
 
+        private static DimFundingDecision GetEuSource()
+        {
+            var fundingDecision = GetSource();
+            fundingDecision.SourceDescription = "eu_funding";
+            fundingDecision.DimCallProgramme.Abbreviation = "topic id";
+            fundingDecision.DimCallProgramme.EuCallId = "eu call id";
+
+            return fundingDecision;
+        }
+
         private static FundingDecision GetDestination()
         {
             return new FundingDecision
@@ -218,7 +243,7 @@ namespace Api.Test.Maps
                 },
                 CallProgramme = new()
                 {
-                    CallProgrameId = "call programme id",
+                    CallProgrammeId = "call programme id",
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
                     NameEn = "call programme en",
@@ -239,8 +264,24 @@ namespace Api.Test.Maps
                     "keyword 1",
                     "keyword 2"
                 },
-                AmountInEur = 123.456m
+                AmountInEur = 123.456m,
+                Topic = null
             };
+        }
+
+        private static FundingDecision GetEuDestination()
+        {
+            var fundingDecision = GetDestination();
+            fundingDecision.CallProgramme = null;
+            fundingDecision.Topic = new()
+            {
+                NameFi = "call programme fi",
+                NameSv = "call programme sv",
+                NameEn = "call programme en",
+                TopicId = "topic id",
+                EuCallId = "eu call id"
+            };
+            return fundingDecision;
         }
     }
 }

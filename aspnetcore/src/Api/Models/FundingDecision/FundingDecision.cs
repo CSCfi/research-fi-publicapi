@@ -57,8 +57,8 @@ namespace Api.Models.FundingDecision
 
 
 
-        //[Nested]
-        //public Topic? Topic { get; set; }
+        [Nested]
+        public Topic? Topic { get; set; }
 
         //[Nested]
         //public Date? ApprovalDate { get; set; }
