@@ -4,6 +4,7 @@ using Api.Models.FundingDecision;
 using Api.Test.TestHelpers;
 using AutoMapper;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -129,6 +130,26 @@ namespace Api.Test.Maps
             // Assert
             destination.FieldsOfScience.Should().HaveCount(2);
             destination.FieldsOfScience.Should().OnlyContain(fieldOfScience => fieldOfScience.NameFi == "first" || fieldOfScience.NameFi == "second");
+        }
+
+        [Fact]
+        public void ShouldMapMembers_WithoutUndefinedDates()
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimDateIdStartNavigation = new DimDate { Id = -1 };
+            source.DimDateIdEndNavigation = new DimDate { Id = -1 };
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                destination.FundingStartYear.Should().BeNull();
+                destination.FundingEndYear.Should().BeNull();
+                destination.FundingEndDate.Should().BeNull();
+            }
         }
 
         private FundingDecision Act_Map(DimFundingDecision dbEntity)

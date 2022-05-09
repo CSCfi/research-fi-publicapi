@@ -51,7 +51,7 @@ namespace Api.Maps
                             : null));
 
             CreateProjection<DimDate, int?>()
-                .ConvertUsing(x => x != null ? x.Year : null);
+                .ConvertUsing(x => x != null && x.Id != -1 ? x.Year : null);
 
             CreateProjection<DimDate, DateTime?>()
                 .ConvertUsing(dimDate => dimDate.Id == -1 ? null : new DateTime(dimDate.Year, dimDate.Month, dimDate.Day));
