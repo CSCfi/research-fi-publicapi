@@ -18,6 +18,9 @@ namespace Api.Models.FundingDecision
         public int? FundingStartYear { get; set; }
         public int? FundingEndYear { get; set; }
 
+        [Date]
+        public DateTime? FundingEndDate { get; set; }
+
         public FundingGroupPerson[]? FundingGroupPerson { get; set; }
 
         

@@ -18,6 +18,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DescriptionEn))
                 .ForMember(dst => dst.FundingStartYear, opt => opt.MapFrom(src => src.DimDateIdStartNavigation))
                 .ForMember(dst => dst.FundingEndYear, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))
+                .ForMember(dst => dst.FundingEndDate, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))
                 .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
                 .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
                 .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
@@ -29,7 +30,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
-                // TODO: ugly, probably have to convert to direct sql query.
+                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query.
                 // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
                 // Have to keep eye on the generated sql query and performance.
                 // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
@@ -51,6 +52,9 @@ namespace Api.Maps
 
             CreateProjection<DimDate, int?>()
                 .ConvertUsing(x => x != null ? x.Year : null);
+
+            CreateProjection<DimDate, DateTime?>()
+                .ConvertUsing(dimDate => dimDate.Id == -1 ? null : new DateTime(dimDate.Year, dimDate.Month, dimDate.Day));
 
             CreateProjection<BrParticipatesInFundingGroup, FundingGroupPerson>()
                 .ForMember(dst => dst.LastName, opt => opt.MapFrom(src => src.DimName.LastName))

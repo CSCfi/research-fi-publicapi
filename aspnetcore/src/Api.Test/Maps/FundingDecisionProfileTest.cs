@@ -155,7 +155,7 @@ namespace Api.Test.Maps
                 DescriptionSv = "desc sv",
                 DescriptionEn = "desc en",
                 DimDateIdStartNavigation = new DimDate { Year = 1987 },
-                DimDateIdEndNavigation = new DimDate { Year = 1988 },
+                DimDateIdEndNavigation = new DimDate { Year = 1988, Month = 2, Day = 20 },
                 BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
                 {
                     new ()
@@ -331,6 +331,7 @@ namespace Api.Test.Maps
                 DescriptionEn = "desc en",
                 FundingStartYear = 1987,
                 FundingEndYear = 1988,
+                FundingEndDate = new System.DateTime(1988, 2, 20),
                 FundingGroupPerson = new[]
                 {
                     new FundingGroupPerson
