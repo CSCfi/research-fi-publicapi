@@ -10,7 +10,7 @@
         public string? NameSv { get; set; }
         public string? NameEn { get; set; }
 
-        public string? CallProgrameId { get; set; }
+        public string? CallProgrammeId { get; set; }
 
     }
 }

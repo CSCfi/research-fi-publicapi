@@ -4,14 +4,6 @@ namespace Api.Models.FundingDecision
 {
     public class FundingDecision
     {
-
-
-        //public int Id { get; set; }
-
-
-
-        //public string? NameUnd { get; set; }
-
         public string? NameFi { get; set; }
 
         public string? NameSv { get; set; }
@@ -26,12 +18,18 @@ namespace Api.Models.FundingDecision
         public int? FundingStartYear { get; set; }
         public int? FundingEndYear { get; set; }
 
+        [Date]
+        public DateTime? FundingEndDate { get; set; }
+
         public FundingGroupPerson[]? FundingGroupPerson { get; set; }
 
         
         [Nested]
-        public OrganizationConsortium[]? OrganizationConsortiums { get; set; }
+        public OrganizationConsortium[]? OrganizationConsortia { get; set; }
         
+        [Number(NumberType.Float)]
+        public decimal? AmountInEur { get; set; }
+
         [Nested]
         public Funder? Funder { get; set; }
 
@@ -47,16 +45,19 @@ namespace Api.Models.FundingDecision
         public FieldOfScience[]? FieldsOfScience { get; set; }
 
         public string[]? Keywords { get; set; }
-        //[Number(NumberType.Float)]
-        //public decimal? AmountInEur { get; set; }
+        public string[]? IdentifiedTopics { get; set; }
+
+        [Nested]
+        public Topic? Topic { get; set; }
+ 
+        [Nested]
+        public FrameworkProgramme? FrameworkProgramme { get; set; }
         //public bool HasInternationalCollaboration { get; set; }
 
         //public bool HasBusinessCollaboration { get; set; }
 
 
 
-        //[Nested]
-        //public Topic? Topic { get; set; }
 
         //[Nested]
         //public Date? ApprovalDate { get; set; }
@@ -70,8 +71,6 @@ namespace Api.Models.FundingDecision
         //[Nested]
         //public CallProgramme[]? CallProgrammes { get; set; }
 
-        //[Nested]
-        //public CallProgramme? FrameworkProgramme { get; set; }
 
         ////[Nested]
         ////public Publication[]? Publications { get; set; }

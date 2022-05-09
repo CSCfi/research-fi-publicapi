@@ -1,8 +1,10 @@
 ﻿using Api.Maps;
 using Api.Models.Entities;
 using Api.Models.FundingDecision;
+using Api.Test.TestHelpers;
 using AutoMapper;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -38,6 +40,118 @@ namespace Api.Test.Maps
             destination.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void ShouldMapMembers_EU()
+        {
+            // Arrange
+            var source = GetEuSource();
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            var expected = GetEuDestination();
+
+            destination.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(FrameworkProgrameTestCases))]
+        public void ShouldMapMembers_FrameworkProgramme(string expectedFrameworkProgrammeName, DimCallProgramme callProgramme)
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimCallProgramme = callProgramme;
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            destination.FrameworkProgramme.Should().NotBeNull();
+            destination.FrameworkProgramme.NameFi.Should().Be(expectedFrameworkProgrammeName);
+        }
+
+        public static IEnumerable<object[]> FrameworkProgrameTestCases()
+        {
+            var testCases = new Dictionary<string, DimCallProgramme>
+            {
+                ["framework 1"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1"}),
+                ["framework 2"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" })),
+                ["framework 3"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }))),
+                ["framework 4"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" })))),
+                ["framework 5"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" }
+                    .With(new DimCallProgramme { NameFi = "framework 5" }))))),
+                ["framework 6"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" }
+                    .With(new DimCallProgramme { NameFi = "framework 5" }
+                    .With(new DimCallProgramme { NameFi = "framework 6" })))))),
+            };
+
+            foreach (var testCase in testCases)
+            {
+                yield return new object[] { testCase.Key, testCase.Value };
+            }
+
+
+        }
+
+        [Fact]
+        public void ShouldMapMembers_WithoutUndefinedFieldOfSciences()
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimFieldOfSciences = new[]
+            {
+                new DimFieldOfScience() { Id = -1, NameFi = "undefined"},
+                new DimFieldOfScience() { Id = 1, NameFi = "first"},
+                new DimFieldOfScience() { Id = 2, NameFi = "second"},
+            };
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            destination.FieldsOfScience.Should().HaveCount(2);
+            destination.FieldsOfScience.Should().OnlyContain(fieldOfScience => fieldOfScience.NameFi == "first" || fieldOfScience.NameFi == "second");
+        }
+
+        [Fact]
+        public void ShouldMapMembers_WithoutUndefinedDates()
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimDateIdStartNavigation = new DimDate { Id = -1 };
+            source.DimDateIdEndNavigation = new DimDate { Id = -1 };
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                destination.FundingStartYear.Should().BeNull();
+                destination.FundingEndYear.Should().BeNull();
+                destination.FundingEndDate.Should().BeNull();
+            }
+        }
+
         private FundingDecision Act_Map(DimFundingDecision dbEntity)
         {
             var entityQueryable = new List<DimFundingDecision>
@@ -62,7 +176,7 @@ namespace Api.Test.Maps
                 DescriptionSv = "desc sv",
                 DescriptionEn = "desc en",
                 DimDateIdStartNavigation = new DimDate { Year = 1987 },
-                DimDateIdEndNavigation = new DimDate { Year = 1988 },
+                DimDateIdEndNavigation = new DimDate { Year = 1988, Month = 2, Day = 20 },
                 BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
                 {
                     new ()
@@ -101,7 +215,11 @@ namespace Api.Test.Maps
                                 {
                                     PidType = "BusinessID",
                                     PidContent = "business id",
-
+                                },
+                                new DimPid
+                                {
+                                    PidType = "PIC",
+                                    PidContent = "org pic",
                                 }
                             },
                         },
@@ -113,7 +231,20 @@ namespace Api.Test.Maps
                 {
                     NameFi = "funder fi",
                     NameSv = "funder sv",
-                    NameEn = "funder en"
+                    NameEn = "funder en",
+                    DimPids = new[]
+                    {
+                        new DimPid
+                        {
+                            PidType = "BusinessID",
+                            PidContent = "123"
+                        },
+                        new DimPid
+                        {
+                            PidType = "PIC",
+                            PidContent = "456"
+                        }
+                    }
                 },
                 DimTypeOfFunding = new()
                 {
@@ -128,9 +259,19 @@ namespace Api.Test.Maps
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
                     NameEn = "call programme en",
+                    DimCallProgrammeId2s = new []
+                    {
+                        new DimCallProgramme
+                        {
+                            NameFi = "framework fi",
+                            NameSv = "framework sv",
+                            NameEn = "framework en",
+                            DimCallProgrammeId2s = System.Array.Empty<DimCallProgramme>()
+                        }
+                    }
                 },
                 FunderProjectNumber = "funder project number",
-                DimFieldOfSciences = new []
+                DimFieldOfSciences = new[]
                 {
                     new DimFieldOfScience
                     {
@@ -140,7 +281,7 @@ namespace Api.Test.Maps
                         NameEn = "field en",
                     }
                 },
-                DimKeywords = new []
+                DimKeywords = new[]
                 {
                     new DimKeyword
                     {
@@ -157,8 +298,45 @@ namespace Api.Test.Maps
                         Keyword = "keyword 3",
                         Scheme = "some other scheme"
                     }
+                },
+                AmountInEur = 123.456m,
+                BrWordClusterDimFundingDecisions = new[]
+                {
+                    new BrWordClusterDimFundingDecision
+                    {
+                        DimWordCluster = new ()
+                        {
+                            BrWordsDefineAClusters = new[]
+                            {
+                                new BrWordsDefineACluster
+                                {
+                                    DimMinedWords = new ()
+                                    {
+                                        Word = "topic 1"
+                                    }
+                                },
+                                new BrWordsDefineACluster
+                                {
+                                    DimMinedWords = new ()
+                                    {
+                                        Word = "topic 2"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             };
+        }
+
+        private static DimFundingDecision GetEuSource()
+        {
+            var fundingDecision = GetSource();
+            fundingDecision.SourceDescription = "eu_funding";
+            fundingDecision.DimCallProgramme.Abbreviation = "topic id";
+            fundingDecision.DimCallProgramme.EuCallId = "eu call id";
+
+            return fundingDecision;
         }
 
         private static FundingDecision GetDestination()
@@ -174,6 +352,7 @@ namespace Api.Test.Maps
                 DescriptionEn = "desc en",
                 FundingStartYear = 1987,
                 FundingEndYear = 1988,
+                FundingEndDate = new System.DateTime(1988, 2, 20),
                 FundingGroupPerson = new[]
                 {
                     new FundingGroupPerson
@@ -184,7 +363,7 @@ namespace Api.Test.Maps
                         RoleInFundingGroup = "leader"
                     }
                 },
-                OrganizationConsortiums = new[]
+                OrganizationConsortia = new[]
                 {
                     new OrganizationConsortium
                     {
@@ -192,15 +371,22 @@ namespace Api.Test.Maps
                         NameSv = "namesv",
                         NameEn = "nameen",
                         BusinessId = "business id",
-                        RoleInConsotrium = "partner",
-                        ShareOfFundingInEur = 202
+                        RoleInConsortium = "partner",
+                        ShareOfFundingInEur = 202,
+                        Pic = "org pic",
+                        IsFinnishOrganization = true
                     }
                 },
                 Funder = new()
                 {
                     NameFi = "funder fi",
                     NameSv = "funder sv",
-                    NameEn = "funder en"
+                    NameEn = "funder en",
+                    Ids = new[]
+                    {
+                        new Id { Type = "BusinessID", Content = "123"},
+                        new Id { Type = "PIC", Content = "456"},
+                    }
                 },
                 TypeOfFunding = new()
                 {
@@ -211,10 +397,10 @@ namespace Api.Test.Maps
                 },
                 CallProgramme = new()
                 {
-                    CallProgrameId = "call programme id",
+                    CallProgrammeId = "call programme id",
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
-                    NameEn = "call programme en",
+                    NameEn = "call programme en"
                 },
                 FunderProjectNumber = "funder project number",
                 FieldsOfScience = new[]
@@ -231,8 +417,38 @@ namespace Api.Test.Maps
                 {
                     "keyword 1",
                     "keyword 2"
+                },
+                AmountInEur = 123.456m,
+                Topic = null,
+                IdentifiedTopics = new[]
+                {
+                    "topic 1",
+                    "topic 2"
+                },
+                FrameworkProgramme = new()
+                {
+                    NameFi = "framework fi",
+                    NameSv = "framework sv",
+                    NameEn = "framework en"
                 }
             };
         }
+
+        private static FundingDecision GetEuDestination()
+        {
+            var fundingDecision = GetDestination();
+            fundingDecision.CallProgramme = null;
+            fundingDecision.Topic = new()
+            {
+                NameFi = "call programme fi",
+                NameSv = "call programme sv",
+                NameEn = "call programme en",
+                TopicId = "topic id",
+                EuCallId = "eu call id"
+            };
+            return fundingDecision;
+        }
+
+
     }
 }
