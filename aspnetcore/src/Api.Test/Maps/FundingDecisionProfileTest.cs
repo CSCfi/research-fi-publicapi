@@ -111,6 +111,26 @@ namespace Api.Test.Maps
 
         }
 
+        [Fact]
+        public void ShouldMapMembers_WithoutUndefinedFieldOfSciences()
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimFieldOfSciences = new[]
+            {
+                new DimFieldOfScience() { Id = -1, NameFi = "undefined"},
+                new DimFieldOfScience() { Id = 1, NameFi = "first"},
+                new DimFieldOfScience() { Id = 2, NameFi = "second"},
+            };
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            destination.FieldsOfScience.Should().HaveCount(2);
+            destination.FieldsOfScience.Should().OnlyContain(fieldOfScience => fieldOfScience.NameFi == "first" || fieldOfScience.NameFi == "second");
+        }
+
         private FundingDecision Act_Map(DimFundingDecision dbEntity)
         {
             var entityQueryable = new List<DimFundingDecision>
