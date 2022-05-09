@@ -1,6 +1,7 @@
 ﻿using Api.Maps;
 using Api.Models.Entities;
 using Api.Models.FundingDecision;
+using Api.Test.TestHelpers;
 using AutoMapper;
 using FluentAssertions;
 using System.Collections.Generic;
@@ -51,6 +52,63 @@ namespace Api.Test.Maps
             var expected = GetEuDestination();
 
             destination.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(FrameworkProgrameTestCases))]
+        public void ShouldMapMembers_FrameworkProgramme(string expectedFrameworkProgrammeName, DimCallProgramme callProgramme)
+        {
+            // Arrange
+            var source = GetSource();
+            source.DimCallProgramme = callProgramme;
+
+            // Act
+            var destination = Act_Map(source);
+
+            // Assert
+            destination.FrameworkProgramme.Should().NotBeNull();
+            destination.FrameworkProgramme.NameFi.Should().Be(expectedFrameworkProgrammeName);
+        }
+
+        public static IEnumerable<object[]> FrameworkProgrameTestCases()
+        {
+            var testCases = new Dictionary<string, DimCallProgramme>
+            {
+                ["framework 1"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1"}),
+                ["framework 2"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" })),
+                ["framework 3"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }))),
+                ["framework 4"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" })))),
+                ["framework 5"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" }
+                    .With(new DimCallProgramme { NameFi = "framework 5" }))))),
+                ["framework 6"] = new DimCallProgramme()
+                    .With(new DimCallProgramme { NameFi = "framework 1" }
+                    .With(new DimCallProgramme { NameFi = "framework 2" }
+                    .With(new DimCallProgramme { NameFi = "framework 3" }
+                    .With(new DimCallProgramme { NameFi = "framework 4" }
+                    .With(new DimCallProgramme { NameFi = "framework 5" }
+                    .With(new DimCallProgramme { NameFi = "framework 6" })))))),
+            };
+
+            foreach (var testCase in testCases)
+            {
+                yield return new object[] { testCase.Key, testCase.Value };
+            }
+
+
         }
 
         private FundingDecision Act_Map(DimFundingDecision dbEntity)
@@ -160,6 +218,16 @@ namespace Api.Test.Maps
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
                     NameEn = "call programme en",
+                    DimCallProgrammeId2s = new []
+                    {
+                        new DimCallProgramme
+                        {
+                            NameFi = "framework fi",
+                            NameSv = "framework sv",
+                            NameEn = "framework en",
+                            DimCallProgrammeId2s = System.Array.Empty<DimCallProgramme>()
+                        }
+                    }
                 },
                 FunderProjectNumber = "funder project number",
                 DimFieldOfSciences = new[]
@@ -290,7 +358,7 @@ namespace Api.Test.Maps
                     CallProgrammeId = "call programme id",
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
-                    NameEn = "call programme en",
+                    NameEn = "call programme en"
                 },
                 FunderProjectNumber = "funder project number",
                 FieldsOfScience = new[]
@@ -314,6 +382,12 @@ namespace Api.Test.Maps
                 {
                     "topic 1",
                     "topic 2"
+                },
+                FrameworkProgramme = new()
+                {
+                    NameFi = "framework fi",
+                    NameSv = "framework sv",
+                    NameEn = "framework en"
                 }
             };
         }
@@ -332,5 +406,7 @@ namespace Api.Test.Maps
             };
             return fundingDecision;
         }
+
+
     }
 }

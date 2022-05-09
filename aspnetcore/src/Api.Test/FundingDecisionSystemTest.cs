@@ -79,10 +79,10 @@ namespace Api.Test
             var testCasesWhichExpectSomethingReturned = new Dictionary<string, Expression<Func<FundingDecision, bool>>>
             {
                 // should find only calls with the given name
-                ["name=Architectures"] = fd => fd != null &&
-                                ((fd.NameFi != null && fd.NameFi.Contains("Architectures", StringComparison.InvariantCultureIgnoreCase)) ||
-                                (fd.NameSv != null && fd.NameSv.Contains("Architectures", StringComparison.InvariantCultureIgnoreCase)) ||
-                                (fd.NameEn != null && fd.NameEn.Contains("Architectures", StringComparison.InvariantCultureIgnoreCase))),
+                [Name("Architectures")] = fd => NamesShouldMatch(fd, "Architectures"),
+                [Name("Plasmasphere Ionosphere Thermosphere Integrated Research Environment")] = fd => 
+                    NamesShouldMatch(fd, "Plasmasphere Ionosphere Thermosphere Integrated Research Environment") &&
+                    fd.FrameworkProgramme != null && fd.FrameworkProgramme.NameEn == "Horizon 2020 Framework Programme",
             };
 
             foreach (var testCase in testCasesWhichExpectSomethingReturned)
@@ -105,6 +105,19 @@ namespace Api.Test
             {
                 yield return new object[] { testCase };
             }
+        }
+
+        private static string Name(string name)
+        {
+            return $"name={name}";
+        }
+
+        private static bool NamesShouldMatch(FundingDecision fd, string text)
+        {
+            return fd != null &&
+                ((fd.NameFi != null && fd.NameFi.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                (fd.NameSv != null && fd.NameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase)) ||
+                (fd.NameEn != null && fd.NameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase)));
         }
 
     }

@@ -4,14 +4,6 @@ namespace Api.Models.FundingDecision
 {
     public class FundingDecision
     {
-
-
-        //public int Id { get; set; }
-
-
-
-        //public string? NameUnd { get; set; }
-
         public string? NameFi { get; set; }
 
         public string? NameSv { get; set; }
@@ -52,14 +44,17 @@ namespace Api.Models.FundingDecision
         public string[]? Keywords { get; set; }
         public string[]? IdentifiedTopics { get; set; }
 
+        [Nested]
+        public Topic? Topic { get; set; }
+ 
+        [Nested]
+        public FrameworkProgramme? FrameworkProgramme { get; set; }
         //public bool HasInternationalCollaboration { get; set; }
 
         //public bool HasBusinessCollaboration { get; set; }
 
 
 
-        [Nested]
-        public Topic? Topic { get; set; }
 
         //[Nested]
         //public Date? ApprovalDate { get; set; }
@@ -73,8 +68,6 @@ namespace Api.Models.FundingDecision
         //[Nested]
         //public CallProgramme[]? CallProgrammes { get; set; }
 
-        //[Nested]
-        //public CallProgramme? FrameworkProgramme { get; set; }
 
         ////[Nested]
         ////public Publication[]? Publications { get; set; }

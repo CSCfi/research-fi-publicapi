@@ -28,7 +28,26 @@ namespace Api.Maps
                 .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
-                .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null));
+                .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
+                // TODO: ugly, probably have to convert to direct sql query.
+                // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
+                // Have to keep eye on the generated sql query and performance.
+                // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
+                .ForMember(dst => dst.FrameworkProgramme, opt =>
+                    opt.MapFrom(src =>
+                        src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                                    ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                                        ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
+                                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
+                                                : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
+                                            : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
+                                        : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
+                                    : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
+                                : src.DimCallProgramme.DimCallProgrammeId2s.Single()
+                            : null));
 
             CreateProjection<DimDate, int?>()
                 .ConvertUsing(x => x != null ? x.Year : null);
@@ -101,6 +120,10 @@ namespace Api.Maps
                 .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType))
                 .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent));
 
+            CreateProjection<DimCallProgramme, FrameworkProgramme>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
         }
     }
 }
