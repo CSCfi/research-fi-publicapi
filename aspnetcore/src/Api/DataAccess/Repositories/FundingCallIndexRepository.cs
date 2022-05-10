@@ -21,10 +21,7 @@ namespace Api.DataAccess.Repositories
         {
             return _context.DimCallProgrammes
                 .AsNoTracking()
-                .Include(x => x.DimOrganizations).AsSplitQuery()
-                .Include(x => x.DimReferencedata).AsSplitQuery()
-                .Include(x => x.DimDateIdOpenNavigation).AsSplitQuery()
-                .Include(x => x.DimDateIdDueNavigation).AsSplitQuery()
+                .AsSplitQuery()
                 .Where(callProgramme => callProgramme.Id != -1)
                 .ProjectTo<FundingCall>(_mapper.ConfigurationProvider)
                 .AsAsyncEnumerable();

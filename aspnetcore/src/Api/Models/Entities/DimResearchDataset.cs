@@ -9,7 +9,9 @@ namespace Api.Models.Entities
         {
             BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new HashSet<BrDatasetDatasetRelationship>();
             BrDatasetDatasetRelationshipDimResearchDatasets = new HashSet<BrDatasetDatasetRelationship>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
+            FactFieldValues = new HashSet<FactFieldValue>();
         }
 
         public int Id { get; set; }
@@ -44,6 +46,8 @@ namespace Api.Models.Entities
         public virtual DimResearchDataCatalog? DimResearchDataCatalog { get; set; }
         public virtual ICollection<BrDatasetDatasetRelationship> BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations { get; set; }
         public virtual ICollection<BrDatasetDatasetRelationship> BrDatasetDatasetRelationshipDimResearchDatasets { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
+        public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
 }

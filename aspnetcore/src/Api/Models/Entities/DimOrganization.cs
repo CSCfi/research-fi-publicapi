@@ -13,8 +13,10 @@ namespace Api.Models.Entities
             DimExternalServices = new HashSet<DimExternalService>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimPids = new HashSet<DimPid>();
+            DimPurposes = new HashSet<DimPurpose>();
             DimRegisteredDataSources = new HashSet<DimRegisteredDataSource>();
             DimResearchActivities = new HashSet<DimResearchActivity>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
             FactUpkeeps = new HashSet<FactUpkeep>();
             InverseDimOrganizationBroaderNavigation = new HashSet<DimOrganization>();
@@ -63,8 +65,10 @@ namespace Api.Models.Entities
         public virtual ICollection<DimExternalService> DimExternalServices { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimPurpose> DimPurposes { get; set; }
         public virtual ICollection<DimRegisteredDataSource> DimRegisteredDataSources { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactUpkeep> FactUpkeeps { get; set; }
         public virtual ICollection<DimOrganization> InverseDimOrganizationBroaderNavigation { get; set; }

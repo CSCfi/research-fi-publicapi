@@ -7,6 +7,7 @@ namespace Api.Models.Entities
     {
         public DimFieldOfScience()
         {
+            FactFieldValues = new HashSet<FactFieldValue>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimInfrastructures = new HashSet<DimInfrastructure>();
             DimKnownPeople = new HashSet<DimKnownPerson>();
@@ -23,6 +24,8 @@ namespace Api.Models.Entities
         public string? SourceDescription { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
+
+        public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimInfrastructure> DimInfrastructures { get; set; }

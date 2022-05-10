@@ -63,27 +63,27 @@ namespace Api.Test.Maps
                 DescriptionFi = "descFi",
                 DescriptionSv = "descSv",
                 DescriptionEn = "descEn",
-                //DimWebLinks = new[]
-                //{
-                //    new DimWebLink
-                //    {
-                //        LinkType = "ApplicationUrl",
-                //        LanguageVariant = "fi",
-                //        Url = "http://urlFi"
-                //    },
-                //    new DimWebLink
-                //    {
-                //        LinkType = "ApplicationUrl",
-                //        LanguageVariant = "sv",
-                //        Url = "http://urlSv"
-                //    },
-                //    new DimWebLink
-                //    {
-                //        LinkType = "ApplicationUrl",
-                //        LanguageVariant = "en",
-                //        Url = "http://urlEn"
-                //    }
-                //},
+                DimWebLinks = new[]
+                {
+                    new DimWebLink
+                    {
+                        LinkType = "ApplicationURL",
+                        LanguageVariant = "fi",
+                        Url = "http://urlFi"
+                    },
+                    new DimWebLink
+                    {
+                        LinkType = "ApplicationURL",
+                        LanguageVariant = "sv",
+                        Url = "http://urlSv"
+                    },
+                    new DimWebLink
+                    {
+                        LinkType = "ApplicationURL",
+                        LanguageVariant = "en",
+                        Url = "http://urlEn"
+                    }
+                },
                 DimDateIdOpenNavigation = new DimDate
                 {
                     Id = 4,
@@ -106,14 +106,14 @@ namespace Api.Test.Maps
                         NameSv = "foundation name sv",
                         NameEn = "foundation name en",
                         OrganizationId = "foundation business id",
-                        //DimWebLinks = new []
-                        //{
-                        //    new DimWebLink
-                        //    {
-                        //        LinkType = "FoundationURL",
-                        //        Url = "http://foundationurl",
-                        //    }
-                        //}
+                        DimWebLinks = new []
+                        {
+                            new DimWebLink
+                            {
+                                LinkType = "FoundationURL",
+                                Url = "http://foundationurl",
+                            }
+                        }
                     }
                 },
                 DimReferencedata = new[]

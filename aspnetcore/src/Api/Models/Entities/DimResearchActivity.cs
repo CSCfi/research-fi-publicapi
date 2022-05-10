@@ -9,6 +9,7 @@ namespace Api.Models.Entities
         {
             DimPids = new HashSet<DimPid>();
             DimResearchActivityDimKeywords = new HashSet<DimResearchActivityDimKeyword>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
             FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldOfSciences = new HashSet<DimFieldOfScience>();
@@ -46,6 +47,7 @@ namespace Api.Models.Entities
         public virtual DimDate DimStartDateNavigation { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimResearchActivityDimKeyword> DimResearchActivityDimKeywords { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 

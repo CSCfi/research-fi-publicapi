@@ -9,6 +9,7 @@ namespace Api.Models.Entities
         {
             DimPids = new HashSet<DimPid>();
             DimResearchDatasets = new HashSet<DimResearchDataset>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
         }
 
@@ -26,6 +27,7 @@ namespace Api.Models.Entities
 
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimResearchDataset> DimResearchDatasets { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
     }
 }

@@ -25,12 +25,9 @@ namespace Api.Maps
                 .ForMember(dst => dst.Categories, opt => opt.MapFrom(src => src.DimReferencedata))
                 .ForMember(dst => dst.Foundation, opt => opt.MapFrom(src => src.DimOrganizations))
                 .ForMember(dst => dst.ContinuosApplication, opt => opt.MapFrom(src => src.ContinuousApplicationPeriod))
-                // TODO: missing foreign key on dim_web_link
-                .ForMember(dst => dst.ApplicationURLFi, opt => opt.Ignore())
-                // TODO: missing foreign key on dim_web_link
-                .ForMember(dst => dst.ApplicationURLSv, opt => opt.Ignore())
-                // TODO: missing foreign key on dim_web_link
-                .ForMember(dst => dst.ApplicationURLEn, opt => opt.Ignore());
+                .ForMember(dst => dst.ApplicationURLFi, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "fi")))
+                .ForMember(dst => dst.ApplicationURLSv, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "sv")))
+                .ForMember(dst => dst.ApplicationURLEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")));
 
             CreateProjection<DimReferencedatum, Category>()
                 .ForMember(dst => dst.CategoryCodeValue, opt => opt.MapFrom(src => src.CodeValue))
@@ -43,11 +40,13 @@ namespace Api.Maps
                 .ForMember(dst => dst.FoundationNameSv, opt => opt.MapFrom(src => src.NameSv))
                 .ForMember(dst => dst.FoundationNameEn, opt => opt.MapFrom(src => src.NameEn))
                 .ForMember(dst => dst.FoundationBusinessId, opt => opt.MapFrom(src => src.OrganizationId))
-                // TODO: missing foreign key on dim_web_link
-                .ForMember(dst => dst.FoundationUrl, opt => opt.Ignore());
+                .ForMember(dst => dst.FoundationUrl, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "FoundationURL")));
 
             CreateProjection<DimDate, DateTime?>()
-                .ConvertUsing(x => new DateTime(x.Year, x.Month, x.Day));
+                .ConvertUsing(x => x.Id != -1 ? new DateTime(x.Year, x.Month, x.Day) : null);
+
+            CreateProjection<DimWebLink, string?>()
+                .ConvertUsing(x => x != null ? x.Url : null);
 
         }
     }

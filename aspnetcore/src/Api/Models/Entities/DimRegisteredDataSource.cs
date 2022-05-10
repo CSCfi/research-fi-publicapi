@@ -25,6 +25,7 @@ namespace Api.Models.Entities
             DimResearcherDescriptions = new HashSet<DimResearcherDescription>();
             DimResearcherToResearchCommunities = new HashSet<DimResearcherToResearchCommunity>();
             DimTelephoneNumbers = new HashSet<DimTelephoneNumber>();
+            FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldDisplaySettings = new HashSet<DimFieldDisplaySetting>();
         }
 
@@ -55,6 +56,7 @@ namespace Api.Models.Entities
         public virtual ICollection<DimResearcherDescription> DimResearcherDescriptions { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunities { get; set; }
         public virtual ICollection<DimTelephoneNumber> DimTelephoneNumbers { get; set; }
+        public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 
         public virtual ICollection<DimFieldDisplaySetting> DimFieldDisplaySettings { get; set; }
     }

@@ -8,6 +8,7 @@ namespace Api.Models.Entities
         public DimCallProgramme()
         {
             DimFundingDecisions = new HashSet<DimFundingDecision>();
+            DimWebLinks = new HashSet<DimWebLink>();
             DimCallProgrammeId2s = new HashSet<DimCallProgramme>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
             DimOrganizations = new HashSet<DimOrganization>();
@@ -44,6 +45,7 @@ namespace Api.Models.Entities
         public virtual DimDate DimDateIdOpenNavigation { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammeId2s { get; set; }
         public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; }
