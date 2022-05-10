@@ -49,7 +49,7 @@ namespace Api.Test
             entities.Should().NotBeEmpty();
             var e = entities.First();
             e.FundingGroupPerson.Should().NotBeNullOrEmpty();
-            e.OrganizationConsortiums.Should().NotBeNullOrEmpty();
+            e.OrganizationConsortia.Should().NotBeNullOrEmpty();
             var p = e.FundingGroupPerson.First();
             p.OrcId.Should().NotBeNullOrEmpty();
             p.RoleInFundingGroup.Should().NotBeNullOrEmpty();
@@ -65,7 +65,7 @@ namespace Api.Test
                 .ToListAsync();
 
             // Assert
-            var e = entities.Where(x => x.OrganizationConsortiums.Any()).FirstOrDefault();
+            var e = entities.Where(x => x.OrganizationConsortia.Any()).FirstOrDefault();
             e.Should().NotBeNull();
 
         }
