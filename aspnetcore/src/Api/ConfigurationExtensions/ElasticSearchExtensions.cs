@@ -1,4 +1,6 @@
-﻿using Nest;
+﻿using Api.Services;
+using Api.Services.ElasticSearchQueryGenerators;
+using Nest;
 
 namespace Api.ConfigurationExtensions
 {
@@ -6,6 +8,18 @@ namespace Api.ConfigurationExtensions
     {
         public static void AddElasticSearch(this IServiceCollection services, IConfiguration configuration)
         {
+            // Register the main search service
+            services.AddScoped(typeof(ISearchService<,>), typeof(ElasticSearchService<,>));
+
+            // Register query generator for each model
+            services.Scan(scan => scan
+                .FromAssemblyOf<Program>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryGenerator<,>)))
+                .UsingRegistrationStrategy(Scrutor.RegistrationStrategy.Throw)
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                );
+
             // Get settings for the ElasticSearch client
             var connectionSettings = GetConnectionSettings(configuration);
 
