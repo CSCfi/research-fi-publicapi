@@ -1,6 +1,4 @@
 ﻿using Api.DataAccess.Repositories;
-using Api.Models.FundingCall;
-using Api.Models.FundingDecision;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,18 +13,20 @@ namespace ElasticSearchIndexer
         private readonly IElasticSearchIndexService _indexService;
         private readonly IConfiguration _configuration;
         private readonly Stopwatch _stopWatch = new();
-        private readonly IIndexRepository<FundingCall> _fundingCallRepository;
-        private readonly IIndexRepository<FundingDecision> _fundingDecisionRepository;
+        private readonly IIndexRepository<Api.Models.FundingCall.FundingCall> _fundingCallRepository;
+        private readonly IIndexRepository<Api.Models.FundingDecision.FundingDecision> _fundingDecisionRepository;
         private readonly IIndexRepository<Api.Models.Infrastructure.Infrastructure> _infrastructureRepository;
         private readonly IIndexRepository<Api.Models.Organization.Organization> _organizationRepository;
+        private readonly IIndexRepository<Api.Models.ResearchDataset.ResearchDataset> _researchDatasetRepository;
 
         public Indexer(
             ILogger<Indexer> logger,
             IElasticSearchIndexService indexService,
-            IIndexRepository<FundingCall> fundingCallRepository,
-            IIndexRepository<FundingDecision> fundingDecisionRepository,
+            IIndexRepository<Api.Models.FundingCall.FundingCall> fundingCallRepository,
+            IIndexRepository<Api.Models.FundingDecision.FundingDecision> fundingDecisionRepository,
             IIndexRepository<Api.Models.Infrastructure.Infrastructure> infrastructureRepository,
             IIndexRepository<Api.Models.Organization.Organization> organizationRepository,
+            IIndexRepository<Api.Models.ResearchDataset.ResearchDataset> researchDatasetRepository,
             IConfiguration configuration
             )
         {
@@ -36,6 +36,7 @@ namespace ElasticSearchIndexer
             _fundingDecisionRepository = fundingDecisionRepository;
             _infrastructureRepository = infrastructureRepository;
             _organizationRepository = organizationRepository;
+            _researchDatasetRepository = researchDatasetRepository;
             _configuration = configuration;
         }
 
@@ -54,6 +55,7 @@ namespace ElasticSearchIndexer
             await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository);
             await IndexEntities("api-dev-infrastructure", _infrastructureRepository);
             await IndexEntities("api-dev-organization", _organizationRepository);
+            await IndexEntities("api-dev-researchdataset", _researchDatasetRepository);
 
             _logger.LogInformation("All indexing done. {stopWatch}", _stopWatch.Elapsed);
             _stopWatch.Stop();

@@ -25,6 +25,11 @@
             public const string Search = "OrganizationSearch";
         };
 
+        public static class ResearchDataset
+        {
+            public const string Search = "ResearchDatasetSearch";
+        };
+
         /// <summary>
         /// Maps policies with their required roles.
         /// </summary>
@@ -34,7 +39,8 @@
             [FundingCall.Add] = "fundingcallwriteclient",
             [FundingDecision.Search] = "fundingdecisionreadclient",
             [Infrastructure.Search] = "infrastructurereadclient",
-            [Organization.Search] = "organizationreadclient"
+            [Organization.Search] = "organizationreadclient",
+            [ResearchDataset.Search] = "researchdatasetreadclient"
         };
     }
 }
