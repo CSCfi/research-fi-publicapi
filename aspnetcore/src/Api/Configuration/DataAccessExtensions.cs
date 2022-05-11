@@ -1,6 +1,6 @@
 ﻿using Api.DataAccess.Repositories;
 
-namespace Api.ConfigurationExtensions
+namespace Api.Configuration
 {
     public static class DataAccessExtensions
     {

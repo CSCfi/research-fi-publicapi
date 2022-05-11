@@ -1,8 +1,5 @@
-﻿using Api.ConfigurationExtensions;
+﻿using Api.Configuration;
 using Api.DatabaseContext;
-using Api.Maps;
-using Api.Models.Entities;
-using Api.Models.FundingCall;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

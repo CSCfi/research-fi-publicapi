@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
-namespace Api.ConfigurationExtensions
+namespace Api.Configuration
 {
     public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
     {

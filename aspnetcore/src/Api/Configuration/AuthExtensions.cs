@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
-namespace Api.ConfigurationExtensions
+namespace Api.Configuration
 {
     public static class AuthExtensions
     {

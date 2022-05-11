@@ -1,4 +1,4 @@
-using Api.ConfigurationExtensions;
+using Api.Configuration;
 using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Middleware;

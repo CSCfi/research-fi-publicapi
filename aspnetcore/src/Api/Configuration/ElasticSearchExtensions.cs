@@ -2,7 +2,7 @@
 using Api.Services.ElasticSearchQueryGenerators;
 using Nest;
 
-namespace Api.ConfigurationExtensions
+namespace Api.Configuration
 {
     public static class ElasticSearchExtensions
     {
@@ -25,7 +25,7 @@ namespace Api.ConfigurationExtensions
 
             // Instantiate the client with the settings
             var elasticClient = new ElasticClient(connectionSettings);
-            
+
             // Register the client as singleton
             services.AddSingleton<IElasticClient>(elasticClient);
         }
