@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.DataAccess.Repositories
 {
-    public class FundingDecisionIndexRepository : IIndexRepository<FundingDecision>
+    public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecision>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace Api.DataAccess.Repositories
             _mapper = mapper;
         }
 
-        public IAsyncEnumerable<FundingDecision> GetAllAsync()
+        public override IQueryable<FundingDecision> GetAll()
         {
             return _context
                 .Set<DimFundingDecision>()
@@ -30,8 +30,7 @@ namespace Api.DataAccess.Repositories
                 //    fd.DimTypeOfFunding.TypeId != "66" &&   // Akatemiatutkijan tutkimuskulut
                 //    fd.DimTypeOfFunding.TypeId != "69")     // Akatemiaprofessorin tutkimuskulut
                 .Where(fd => fd.Id != -1)
-                .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider)
-                .AsAsyncEnumerable();
+                .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider);
         }
     }
 }

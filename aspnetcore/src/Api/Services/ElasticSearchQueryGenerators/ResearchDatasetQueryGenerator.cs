@@ -1,11 +1,12 @@
-﻿using Api.Models.ResearchDataset;
+﻿using Api.Configuration;
+using Api.Models.ResearchDataset;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
 {
     public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetSearchParameters, ResearchDataset>
     {
-        public ResearchDatasetQueryGenerator(IConfiguration configuration) : base(configuration)
+        public ResearchDatasetQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 

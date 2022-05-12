@@ -30,6 +30,9 @@ namespace ElasticSearchIndexer
                         // Register the "Main" service.
                         services.AddTransient<Indexer>();
 
+                        // Register settings.
+                        services.AddSettings(hostContext.Configuration);
+
                         // Add ElasticSearch.
                         services.AddElasticSearch(hostContext.Configuration);
 

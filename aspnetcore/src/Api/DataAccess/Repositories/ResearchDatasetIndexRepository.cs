@@ -2,11 +2,10 @@
 using Api.Models.ResearchDataset;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.DataAccess.Repositories
 {
-    public class ResearchDatasetIndexRepository : IIndexRepository<ResearchDataset>
+    public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDataset>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
@@ -17,12 +16,11 @@ namespace Api.DataAccess.Repositories
             _mapper = mapper;
         }
 
-        public IAsyncEnumerable<ResearchDataset> GetAllAsync()
+        public override IQueryable<ResearchDataset> GetAll()
         {
             return _context.DimResearchDatasets
                 .Where(dataset => dataset.Id != -1)
-                .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider)
-                .AsAsyncEnumerable();
+                .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
         }
     }
 }

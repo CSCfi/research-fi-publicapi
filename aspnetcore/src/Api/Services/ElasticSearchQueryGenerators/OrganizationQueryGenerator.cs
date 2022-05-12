@@ -1,4 +1,5 @@
-﻿using Api.Models.Organization;
+﻿using Api.Configuration;
+using Api.Models.Organization;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
@@ -8,7 +9,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
     /// </summary>
     public class OrganizationQueryGenerator : QueryGeneratorBase<OrganizationSearchParameters, Organization>
     {
-        public OrganizationQueryGenerator(IConfiguration configuration) : base(configuration)
+        public OrganizationQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 

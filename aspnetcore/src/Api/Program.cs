@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Register settings.
+builder.Services.AddSettings(builder.Configuration);
+
 // Add services to the container.
 builder.Services.AddControllers();
 

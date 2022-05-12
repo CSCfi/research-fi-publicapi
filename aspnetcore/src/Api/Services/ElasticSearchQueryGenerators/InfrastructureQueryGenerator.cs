@@ -1,4 +1,5 @@
-﻿using Api.Models.Infrastructure;
+﻿using Api.Configuration;
+using Api.Models.Infrastructure;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
@@ -8,7 +9,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
     /// </summary>
     public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSearchParameters, Infrastructure>
     {
-        public InfrastructureQueryGenerator(IConfiguration configuration) : base(configuration)
+        public InfrastructureQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 

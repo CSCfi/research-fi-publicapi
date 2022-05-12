@@ -23,9 +23,9 @@ namespace Api.Test
         [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something()
         {
-            var entities = await _repository.GetAllAsync()
+            var entities = _repository.GetAll()
                 .Where(x => x.NameFi == "Mitokondriometabolia hermoston terveyden ja sairauden säätelijänä")
-                .ToListAsync();
+                .ToList();
 
             // Assert
             entities.Should().NotBeEmpty();
@@ -40,9 +40,9 @@ namespace Api.Test
         [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something2()
         {
-            var entities = await _repository.GetAllAsync()
+            var entities = _repository.GetAll()
                 .Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
-                .ToListAsync();
+                .ToList();
 
             // Assert
             // 4 entities found
@@ -60,9 +60,9 @@ namespace Api.Test
         [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something3()
         {
-            var entities = await _repository.GetAllAsync()
+            var entities = _repository.GetAll()
                 .Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
-                .ToListAsync();
+                .ToList();
 
             // Assert
             var e = entities.Where(x => x.OrganizationConsortia.Any()).FirstOrDefault();

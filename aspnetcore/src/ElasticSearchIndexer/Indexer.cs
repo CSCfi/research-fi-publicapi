@@ -1,4 +1,5 @@
-﻿using Api.DataAccess.Repositories;
+﻿using Api.Configuration;
+using Api.DataAccess.Repositories;
 using Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,32 +13,23 @@ namespace ElasticSearchIndexer
         private readonly ILogger<Indexer> _logger;
         private readonly IElasticSearchIndexService _indexService;
         private readonly IConfiguration _configuration;
+        private readonly IndexNameSettings _indexNameSettings;
+        private readonly IEnumerable<IIndexRepository> _indexRepositories;
         private readonly Stopwatch _stopWatch = new();
-        private readonly IIndexRepository<Api.Models.FundingCall.FundingCall> _fundingCallRepository;
-        private readonly IIndexRepository<Api.Models.FundingDecision.FundingDecision> _fundingDecisionRepository;
-        private readonly IIndexRepository<Api.Models.Infrastructure.Infrastructure> _infrastructureRepository;
-        private readonly IIndexRepository<Api.Models.Organization.Organization> _organizationRepository;
-        private readonly IIndexRepository<Api.Models.ResearchDataset.ResearchDataset> _researchDatasetRepository;
 
         public Indexer(
             ILogger<Indexer> logger,
             IElasticSearchIndexService indexService,
-            IIndexRepository<Api.Models.FundingCall.FundingCall> fundingCallRepository,
-            IIndexRepository<Api.Models.FundingDecision.FundingDecision> fundingDecisionRepository,
-            IIndexRepository<Api.Models.Infrastructure.Infrastructure> infrastructureRepository,
-            IIndexRepository<Api.Models.Organization.Organization> organizationRepository,
-            IIndexRepository<Api.Models.ResearchDataset.ResearchDataset> researchDatasetRepository,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IndexNameSettings indexNameSettings,
+            IEnumerable<IIndexRepository> indexRepositories
             )
         {
             _logger = logger;
             _indexService = indexService;
-            _fundingCallRepository = fundingCallRepository;
-            _fundingDecisionRepository = fundingDecisionRepository;
-            _infrastructureRepository = infrastructureRepository;
-            _organizationRepository = organizationRepository;
-            _researchDatasetRepository = researchDatasetRepository;
             _configuration = configuration;
+            _indexNameSettings = indexNameSettings;
+            _indexRepositories = indexRepositories;
         }
 
         public async Task Start()
@@ -51,32 +43,38 @@ namespace ElasticSearchIndexer
                 : ".";
             _logger.LogInformation(elasticLog);
 
-            await IndexEntities("api-dev-funding-call", _fundingCallRepository);
-            await IndexEntities("api-dev-funding-decision", _fundingDecisionRepository);
-            await IndexEntities("api-dev-infrastructure", _infrastructureRepository);
-            await IndexEntities("api-dev-organization", _organizationRepository);
-            await IndexEntities("api-dev-researchdataset", _researchDatasetRepository);
+            var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
+
+            foreach (var indexNameAndType in configuredTypesAndIndexNames)
+            {
+                var indexName = indexNameAndType.Key;
+                var modelType = indexNameAndType.Value;
+                var repositoryForType = _indexRepositories.Single(repo => repo.ModelType == modelType);
+
+                await IndexEntities(indexName, repositoryForType, modelType);
+            }
 
             _logger.LogInformation("All indexing done. {stopWatch}", _stopWatch.Elapsed);
             _stopWatch.Stop();
         }
 
-        private async Task IndexEntities<TIndexModel>(
+        private async Task IndexEntities(
             string indexName,
-            IIndexRepository<TIndexModel> repository
-        ) where TIndexModel : class
+            IIndexRepository repository,
+            Type type
+        )
         {
             try
             {
 
-                _logger.LogInformation("Getting '{entityType}' entities from the database. {stopWatch}", typeof(TIndexModel).Name, _stopWatch.Elapsed);
+                _logger.LogInformation("Getting '{entityType}' entities from the database. {stopWatch}", type.Name, _stopWatch.Elapsed);
 
                 var indexModels = await repository.GetAllAsync().ToListAsync();
-                _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, typeof(TIndexModel).Name, _stopWatch.Elapsed);
+                _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, type.Name, _stopWatch.Elapsed);
 
                 _logger.LogInformation("Indexing '{indexName}'..", indexName);
 
-                await _indexService.IndexAsync(indexName, indexModels);
+                await _indexService.IndexAsync(indexName, indexModels, type);
                 _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, _stopWatch.Elapsed);
             }
             catch (Exception ex)
