@@ -11,7 +11,8 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="indexName"></param>
         /// <param name="entities"></param>
+        /// <param name="modelType"></param>
         /// <returns></returns>
-        Task IndexAsync<T>(string indexName, List<T> entities) where T : class;
+        Task IndexAsync(string indexName, List<object> entities, Type modelType);
     }
 }

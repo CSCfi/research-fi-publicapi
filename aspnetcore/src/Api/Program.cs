@@ -1,4 +1,4 @@
-using Api.ConfigurationExtensions;
+using Api.Configuration;
 using Api.DataAccess;
 using Api.DatabaseContext;
 using Api.Middleware;
@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Register settings.
+builder.Services.AddSettings(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();

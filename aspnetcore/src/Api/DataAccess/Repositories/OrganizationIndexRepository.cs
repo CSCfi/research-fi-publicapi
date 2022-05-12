@@ -2,11 +2,10 @@
 using Api.Models.Organization;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.DataAccess.Repositories
 {
-    public class OrganizationIndexRepository : IIndexRepository<Organization>
+    public class OrganizationIndexRepository : IndexRepositoryBase<Organization>
     {
         private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
@@ -17,12 +16,11 @@ namespace Api.DataAccess.Repositories
             _mapper = mapper;
         }
 
-        public IAsyncEnumerable<Organization> GetAllAsync()
+        public override IQueryable<Organization> GetAll()
         {
             return _context.DimOrganizations
                 .Where(organization => organization.Id != -1)
-                .ProjectTo<Organization>(_mapper.ConfigurationProvider)
-                .AsAsyncEnumerable();
+                .ProjectTo<Organization>(_mapper.ConfigurationProvider);
         }
     }
 }

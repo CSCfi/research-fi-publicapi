@@ -1,11 +1,12 @@
-﻿using Api.Models.FundingDecision;
+﻿using Api.Configuration;
+using Api.Models.FundingDecision;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
 {
     public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionSearchParameters, FundingDecision>
     {
-        public FundingDecisionQueryGenerator(IConfiguration configuration) : base(configuration)
+        public FundingDecisionQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 

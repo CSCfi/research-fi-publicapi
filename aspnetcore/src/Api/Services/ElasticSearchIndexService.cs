@@ -1,5 +1,4 @@
-﻿using Api.Models.Entities;
-using Nest;
+﻿using Nest;
 
 namespace Api.Services
 {
@@ -16,12 +15,12 @@ namespace Api.Services
             _logger = logger;
         }
 
-        public async Task IndexAsync<T>(string indexName, List<T> entities) where T : class
+        public async Task IndexAsync(string indexName, List<object> entities, Type modelType)
         {
             var (indexToCreate, indexToDelete) = await GetIndexNames(indexName);
 
             // Create new index with _vx prefix.
-            await CreateIndex<T>(indexToCreate);
+            await CreateIndex(indexToCreate, modelType);
 
             // Add entities to the new index.
             await IndexEntities(indexToCreate, entities);
@@ -100,16 +99,16 @@ namespace Api.Services
         /// Creates index with the given name.
         /// If the index exists already, it will be deleted first.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="indexName"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        private async Task CreateIndex<T>(string indexName) where T : class
+        private async Task CreateIndex(string indexName, Type type)
         {
             await _elasticClient.Indices.DeleteAsync(indexName, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
 
 
-            var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x => x.Map<T>(x => x.AutoMap(maxRecursion: 1)));
+            var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x => x.Map(x => x.AutoMap(type, maxRecursion: 1)));
 
             if (!createResponse.IsValid)
             {

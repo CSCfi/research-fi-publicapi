@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
-namespace Api.ConfigurationExtensions
+namespace Api.Configuration
 {
     public static class SwaggerExtensions
     {

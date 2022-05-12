@@ -42,7 +42,7 @@ namespace Api.Test.Services
             _mockedIndices.Clear();
 
             // Act
-            await _service.IndexAsync(indexName, entities);
+            await _service.IndexAsync(indexName, entities, typeof(TestModel));
 
             // Assert
             var expectedIndexName = $"{indexName}_v1";
@@ -60,7 +60,7 @@ namespace Api.Test.Services
             _mockedIndices.Add($"/{indexName}_v1");
 
             // Act
-            await _service.IndexAsync(indexName, entities);
+            await _service.IndexAsync(indexName, entities, typeof(TestModel));
 
             // Assert
             var expectedIndexName = $"{indexName}_v2";
@@ -78,7 +78,7 @@ namespace Api.Test.Services
             _mockedIndices.Add($"/{indexName}_v2");
 
             // Act
-            await _service.IndexAsync(indexName, entities);
+            await _service.IndexAsync(indexName, entities, typeof(TestModel));
 
             // Assert
             var expectedIndexName = $"{indexName}_v1";
@@ -87,9 +87,9 @@ namespace Api.Test.Services
             _elasticApiCalls.AssertBulkAliasCalled(expectedAliasName, expectedIndexName, "*");
         }
 
-        private static List<TestModel> GetEntities()
+        private static List<object> GetEntities()
         {
-            return new List<TestModel>
+            return new List<object>
             {
                 new TestModel{ Id = "model 1"}
             };

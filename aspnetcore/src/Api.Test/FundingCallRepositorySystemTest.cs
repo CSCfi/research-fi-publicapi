@@ -21,9 +21,9 @@ namespace Api.Test
         [Fact(Skip = "Currently used only for manual debugging.")]
         public async Task Repo_ShouldReturn_Something()
         {
-            var entities = await _repository.GetAllAsync()
+            var entities = _repository.GetAll()
                 .Where(x => x.NameFi == "some name")
-                .ToListAsync();
+                .ToList();
 
             // Assert
             entities.Should().NotBeEmpty();

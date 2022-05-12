@@ -1,4 +1,5 @@
-﻿using Api.Models.FundingCall;
+﻿using Api.Configuration;
+using Api.Models.FundingCall;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
@@ -8,7 +9,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
     /// </summary>
     public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchParameters, FundingCall>
     {
-        public FundingCallQueryGenerator(IConfiguration configuration) : base(configuration)
+        public FundingCallQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 

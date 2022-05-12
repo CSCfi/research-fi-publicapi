@@ -1,11 +1,12 @@
-﻿using Api.Models.Publication;
+﻿using Api.Configuration;
+using Api.Models.Publication;
 using Nest;
 
 namespace Api.Services.ElasticSearchQueryGenerators
 {
     public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchParameters, Publication>
     {
-        public PublicationQueryGenerator(IConfiguration configuration) : base(configuration)
+        public PublicationQueryGenerator(IndexNameSettings configuration) : base(configuration)
         {
         }
 
