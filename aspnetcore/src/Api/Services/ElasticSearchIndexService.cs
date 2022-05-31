@@ -17,6 +17,11 @@ namespace Api.Services
 
         public async Task IndexAsync(string indexName, List<object> entities, Type modelType)
         {
+            if (string.IsNullOrWhiteSpace(indexName))
+            {
+                throw new ArgumentException("IndexName is null or empty.", nameof(indexName));
+            }
+
             var (indexToCreate, indexToDelete) = await GetIndexNames(indexName);
 
             // Create new index with _vx prefix.
