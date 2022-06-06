@@ -49,6 +49,21 @@ objects:
                     secretKeyRef:
                         name: publicapi-api-secret-devel
                         key: dbconnectionstring
+                - name: "dbconnectionstring"
+                  valueFrom:
+                    secretKeyRef:
+                        name: publicapi-api-secret-pilot
+                        key: dbconnectionstring
+                - name: "IndexNames__Api.Models.FundingCall.FundingCall"
+                  valueFrom:
+                    configMapKeyRef:
+                        name: publicapi-api-config-pilot
+                        key: "IndexNames__Api.Models.FundingCall.FundingCall"
+                - name: "IndexNames__Api.Models.FundingDecision.FundingDecision"
+                  valueFrom:
+                    configMapKeyRef:
+                        name: publicapi-api-config-pilot
+                        key: "IndexNames__Api.Models.FundingDecision.FundingDecision"
           restartPolicy: Never
 
   # ImageStream (development)
