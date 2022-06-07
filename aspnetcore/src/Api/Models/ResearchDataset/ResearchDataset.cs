@@ -10,6 +10,7 @@
 
         public string? DescriptionEn { get; set; }
 
+        // TODO: just the year?
         public DateTime? DatasetCreated { get; set; }
 
         //TODO: tekijät
@@ -20,7 +21,7 @@
 
         public string? AccessType { get; set; }
 
-        public List<License>? Licences { get; set; }
+        public License? License { get; set; }
 
         public List<Keyword>? Keywords { get; set; }
 
@@ -32,7 +33,7 @@
 
         public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
 
-        // TODO: paikallinen tunniste
+        public string? LocalIdentifier { get; set; }
 
         public string? FairDataUrl { get; set; }
 
