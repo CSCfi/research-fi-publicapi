@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexer", "indexer", "{1528
 	ProjectSection(SolutionItems) = preProject
 		openshift\indexer\Dockerfile = openshift\indexer\Dockerfile
 		openshift\indexer\template-indexer-devel.yml = openshift\indexer\template-indexer-devel.yml
+		openshift\indexer\template-indexer-manualjob-devel.yml = openshift\indexer\template-indexer-manualjob-devel.yml
 		openshift\indexer\template-indexer-pilot.yml = openshift\indexer\template-indexer-pilot.yml
 	EndProjectSection
 EndProject
