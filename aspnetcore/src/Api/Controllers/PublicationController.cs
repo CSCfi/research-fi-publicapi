@@ -8,7 +8,6 @@ namespace Api.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize(Policy = ApiPolicies.PublicationSearch)]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class PublicationController : ControllerBase
     {
         private readonly ILogger<PublicationController> _logger;
