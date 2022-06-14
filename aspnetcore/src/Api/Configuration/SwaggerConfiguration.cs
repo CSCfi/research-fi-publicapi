@@ -10,13 +10,16 @@ namespace Api.Configuration
     {
         private readonly IApiVersionDescriptionProvider _provider;
         private readonly IConfiguration _configuration;
+        private readonly OpenApiSettings _openApiSettings;
 
         public SwaggerConfiguration(
             IApiVersionDescriptionProvider apiVersionProvider,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            OpenApiSettings openApiSettings)
         {
             _provider = apiVersionProvider;
             _configuration = configuration;
+            _openApiSettings = openApiSettings;
         }
 
         public void Configure(string name, SwaggerGenOptions options)
@@ -68,8 +71,16 @@ namespace Api.Configuration
             {
                 var openApiInfo = new OpenApiInfo
                 {
-                    Title = "API",
+                    Title = _openApiSettings.Title,
                     Version = apiVersionDescription.ApiVersion.ToString(),
+                    Description = _openApiSettings.Description,
+                    Contact = new OpenApiContact
+                    {
+                        Name = _openApiSettings.ContactName,
+                        Email = _openApiSettings.ContactEmail,
+                        Url = _openApiSettings.ContactUrl
+                    },
+                    TermsOfService = _openApiSettings.TermsOfService
                 };
 
                 if (apiVersionDescription.IsDeprecated)
