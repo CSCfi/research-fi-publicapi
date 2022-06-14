@@ -8,12 +8,12 @@
         public string? CategoryCode { get; set; }
 
         /// <summary>
-        /// Haku alkaa aikaisintaan
+        /// Haku alkaa aikaisintaan. Päivämäärä muodossa vvvv-kk-pp
         /// </summary>
         public DateTime? DateFrom { get; set; }
 
         /// <summary>
-        /// Haku päättyy viimeistään
+        /// Haku päättyy viimeistään. Päivämäärä muodossa vvvv-kk-pp
         /// </summary>
         public DateTime? DateTo { get; set; }
 

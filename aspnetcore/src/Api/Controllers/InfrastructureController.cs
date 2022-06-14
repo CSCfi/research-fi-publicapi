@@ -8,6 +8,7 @@ namespace Api.Controllers
     [ApiController]
     [ApiVersion(ApiVersion)]
     [Route("v{version:apiVersion}/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class InfrastructureController : ControllerBase
     {
         private const string ApiVersion = "1.0";
