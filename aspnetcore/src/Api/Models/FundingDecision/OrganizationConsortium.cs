@@ -7,14 +7,14 @@ namespace Api.Models.FundingDecision
         //[Nested]
         //public Sector? Sector { get; set; }
 
-        //public string? Id { get; set; }
         public string? NameFi { get; set; }
         public string? NameSv { get; set; }
         public string? NameEn { get; set; }
-        public string? BusinessId { get; set; }
-        public string? Pic { get; set; }
 
-       // public string? CountryCode { get; set; }
+        [Nested]
+        public List<Id>? Ids { get; set; }
+
+        // public string? CountryCode { get; set; }
         public string? RoleInConsortium { get; set; }
 
         [Number(NumberType.Float)]

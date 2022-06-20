@@ -15,12 +15,17 @@ namespace Api.Models.FundingDecision
         public string? DescriptionSv { get; set; }
 
         public string? DescriptionEn { get; set; }
+        
+        [Number(NumberType.Integer)]
         public int? FundingStartYear { get; set; }
+        
+        [Number(NumberType.Integer)]
         public int? FundingEndYear { get; set; }
 
         [Date]
         public DateTime? FundingEndDate { get; set; }
 
+        [Nested]
         public FundingGroupPerson[]? FundingGroupPerson { get; set; }
 
         
