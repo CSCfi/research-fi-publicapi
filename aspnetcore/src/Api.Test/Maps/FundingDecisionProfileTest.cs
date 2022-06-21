@@ -370,10 +370,21 @@ namespace Api.Test.Maps
                         NameFi = "namefi",
                         NameSv = "namesv",
                         NameEn = "nameen",
-                        BusinessId = "business id",
                         RoleInConsortium = "partner",
                         ShareOfFundingInEur = 202,
-                        Pic = "org pic",
+                        Ids = new List<Id>
+                        {
+                            new Id
+                            {
+                                Content = "business id",
+                                Type = "BusinessID"
+                            },
+                            new Id
+                            {
+                                Content = "org pic",
+                                Type = "PIC"
+                            }
+                        },
                         IsFinnishOrganization = true
                     }
                 },
