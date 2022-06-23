@@ -32,7 +32,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
-                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query.
+                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query or to move logic inside Repository's InMemoryOperations.
                 // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
                 // Have to keep eye on the generated sql query and performance.
                 // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.

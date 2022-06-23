@@ -73,7 +73,7 @@ namespace ElasticSearchIndexer
                 _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, type.Name, _stopWatch.Elapsed);
                 var finalized = repository.PerformInMemoryOperations(indexModels);
 
-                _logger.LogInformation("Indexing '{indexName}'.. {stopWatch}", indexName, _stopWatch);
+                _logger.LogInformation("Indexing '{indexName}'.. {stopWatch}", indexName, _stopWatch.Elapsed);
 
                 await _indexService.IndexAsync(indexName, finalized, type);
                 _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, _stopWatch.Elapsed);
