@@ -21,6 +21,8 @@ namespace Api.Maps
                 .ForMember(dst => dst.FundingEndDate, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))
                 .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
                 .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
+                // For akatemia decisions, map consortia from different table to here temporarily. They are moved under OrganizationConsortia later in memory.
+                .ForMember(dst => dst.OrganizationConsortia2, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups.Where(x => x.DimOrganization != null)))
                 .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
                 .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
                 .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
@@ -73,6 +75,15 @@ namespace Api.Maps
                 .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
                 .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
                 .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
+                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
+                .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
+
+            CreateProjection<BrParticipatesInFundingGroup, OrganizationConsortium>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
+                .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
+                .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInFundingGroup))
                 .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
                 .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 

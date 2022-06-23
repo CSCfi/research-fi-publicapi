@@ -31,7 +31,15 @@ namespace Api.Models.FundingDecision
         
         [Nested]
         public OrganizationConsortium[]? OrganizationConsortia { get; set; }
-        
+
+        /// <summary>
+        /// OrganizationConsortia from Suomen Akatemia decisions are mapped here temporarily.
+        /// They are moved to 
+        /// </summary>
+        [Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public OrganizationConsortium[]? OrganizationConsortia2 { get; set; }
+
         [Number(NumberType.Float)]
         public decimal? AmountInEur { get; set; }
 
