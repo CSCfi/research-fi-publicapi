@@ -85,13 +85,13 @@ namespace ElasticSearchIndexer
                 _logger.LogInformation("Getting '{entityType}' entities from the database.", type.Name);
 
                 var indexModels = await repository.GetAllAsync().ToListAsync();
-                _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, type.Name, _stopWatch.Elapsed);
+                _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, type.Name, stopWatch.Elapsed);
                 var finalized = repository.PerformInMemoryOperations(indexModels);
 
                 _logger.LogInformation("Indexing '{indexName}' to ElasticSearch..", indexName);
 
                 await _indexService.IndexAsync(indexName, finalized, type);
-                _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, _stopWatch.Elapsed);
+                _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, stopWatch.Elapsed);
                 return (indexName, true, stopWatch.Elapsed);
             }
             catch (Exception ex)
