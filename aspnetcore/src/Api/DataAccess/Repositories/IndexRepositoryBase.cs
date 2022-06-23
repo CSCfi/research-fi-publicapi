@@ -18,5 +18,16 @@ namespace Api.DataAccess.Repositories
         IQueryable<T> IIndexRepository<T>.GetAll() => GetAll();
 
         IAsyncEnumerable<object> IIndexRepository.GetAllAsync() => GetAll().AsAsyncEnumerable();
+
+        /// <summary>
+        /// If the data type needs special data manipulations after data has been fetched,
+        /// this can be overriden in derived classes.
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        public virtual List<object> PerformInMemoryOperations(List<object> objects)
+        {
+            return objects;
+        }
     }
 }

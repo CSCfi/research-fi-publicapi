@@ -11,7 +11,7 @@
         /// </summary>
         /// <returns></returns>
         IQueryable<T> GetAll();
-    }
+   }
 
     /// <summary>
     /// Responsible for fetching entities from database and mapping them to api models which are indexed to ElasticSearch.
@@ -29,5 +29,12 @@
         /// </summary>
         /// <returns></returns>
         IAsyncEnumerable<object> GetAllAsync();
+
+        /// <summary>
+        /// Perform data manipulations which are hard to do in the db query phase.
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        List<object> PerformInMemoryOperations(List<object> objects);
     }
 }

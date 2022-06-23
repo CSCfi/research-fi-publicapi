@@ -37,7 +37,7 @@ namespace Api.Test.Maps
 
             // Assert
             var expected = GetDestination();
-            destination.Should().BeEquivalentTo(expected);
+            destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Api.Test.Maps
             // Assert
             var expected = GetEuDestination();
 
-            destination.Should().BeEquivalentTo(expected);
+            destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
         }
 
         [Theory]
@@ -197,7 +197,11 @@ namespace Api.Test.Maps
                                 }
                             }
                         },
-                        RoleInFundingGroup = "leader"
+                        RoleInFundingGroup = "leader",
+                        DimOrganization = new DimOrganization()
+                        {
+                            NameFi = "sdf"
+                        }
                     }
                 },
                 BrFundingConsortiumParticipations = new[]

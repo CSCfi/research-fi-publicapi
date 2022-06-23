@@ -21,6 +21,8 @@ namespace Api.Maps
                 .ForMember(dst => dst.FundingEndDate, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))
                 .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
                 .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
+                // For akatemia decisions, map consortia from different table to here temporarily. They are moved under OrganizationConsortia later in memory.
+                .ForMember(dst => dst.OrganizationConsortia2, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups.Where(x => x.DimOrganization != null)))
                 .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
                 .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
                 .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
@@ -30,7 +32,7 @@ namespace Api.Maps
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
-                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query.
+                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query or to move logic inside Repository's InMemoryOperations.
                 // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
                 // Have to keep eye on the generated sql query and performance.
                 // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
@@ -73,6 +75,15 @@ namespace Api.Maps
                 .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
                 .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
                 .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
+                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
+                .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
+
+            CreateProjection<BrParticipatesInFundingGroup, OrganizationConsortium>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
+                .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
+                .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInFundingGroup))
                 .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
                 .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
