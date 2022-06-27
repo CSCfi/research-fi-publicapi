@@ -33,10 +33,10 @@ namespace Api.Models.FundingDecision
         public OrganizationConsortium[]? OrganizationConsortia { get; set; }
 
         /// <summary>
-        /// OrganizationConsortia from Suomen Akatemia decisions are mapped here temporarily.
+        /// OrganizationConsortia from Suomen Akatemia decisions are mapped here temporarily during db query.
         /// They are moved to 
         /// </summary>
-        [Ignore]
+        [Nest.Ignore]
         [System.Text.Json.Serialization.JsonIgnore]
         public OrganizationConsortium[]? OrganizationConsortia2 { get; set; }
 
@@ -52,6 +52,54 @@ namespace Api.Models.FundingDecision
         [Nested]
         public CallProgramme? CallProgramme { get; set; }
 
+        /// <summary>
+        /// Contains the "deepest" call programme parent, also known as FrameworkProgramme
+        /// </summary>
+        [Nested]
+        public FrameworkProgramme? FrameworkProgramme { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent1 { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent's parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent2 { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent's parent's parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent3 { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent's parent's parent's parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent4 { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent's parent's parent's parent's parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent5 { get; set; }
+
+        /// <summary>
+        /// "Temporary" property for getting parent's parent's parent's parent's parent's parent of decision's CallProgramme.
+        /// </summary>
+        [Nest.Ignore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public FrameworkProgramme? CallProgrammeParent6 { get; set; }
+
         public string? FunderProjectNumber { get; set; }
         
         [Nested]
@@ -62,9 +110,7 @@ namespace Api.Models.FundingDecision
 
         [Nested]
         public Topic? Topic { get; set; }
- 
-        [Nested]
-        public FrameworkProgramme? FrameworkProgramme { get; set; }
+
         //public bool HasInternationalCollaboration { get; set; }
 
         //public bool HasBusinessCollaboration { get; set; }

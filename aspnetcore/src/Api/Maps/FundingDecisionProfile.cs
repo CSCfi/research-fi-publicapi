@@ -32,25 +32,16 @@ namespace Api.Maps
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
-                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query or to move logic inside Repository's InMemoryOperations.
-                // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
-                // Have to keep eye on the generated sql query and performance.
-                // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
-                .ForMember(dst => dst.FrameworkProgramme, opt =>
-                    opt.MapFrom(src =>
-                        src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                    ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                        ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                                : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                            : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                        : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                    : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                : src.DimCallProgramme.DimCallProgrammeId2s.Single()
-                            : null));
+                // FrameworkProgramme is populated later in memory from deepest CallProgrammeParent{X}, see below.
+                .ForMember(dst => dst.FrameworkProgramme, opt => opt.Ignore())
+                // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be copied to dst.FrameworkProgramme in memory later.
+                // Note that these long chains of expressions can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
+                .ForMember(dst => dst.CallProgrammeParent1, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent2, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent3, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent4, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent5, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent6, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)));
 
             CreateProjection<DimDate, int?>()
                 .ConvertUsing(x => x != null && x.Id != -1 ? x.Year : null);

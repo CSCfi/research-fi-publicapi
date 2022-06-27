@@ -38,7 +38,18 @@ namespace Api.DataAccess.Repositories
                 {
                     fd.OrganizationConsortia = fd.OrganizationConsortia2;
                 }
-                
+
+                // FrameworkProgramme is the "deepest" (grand)parent of the decision's CallProgramme.
+                // Recursion is impossible with AutoMapper projections so let's use this.
+                fd.FrameworkProgramme =
+                    fd.CallProgrammeParent6
+                    ?? fd.CallProgrammeParent5
+                    ?? fd.CallProgrammeParent4
+                    ?? fd.CallProgrammeParent3
+                    ?? fd.CallProgrammeParent2
+                    ?? fd.CallProgrammeParent1;
+
+
             });
             return objects;
         }
