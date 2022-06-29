@@ -48,6 +48,9 @@ var app = builder.Build();
 
 app.UseHttpLogging();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Generate correlation ids for requests.
 app.UseMiddleware<CorrelationIdMiddleware>();
 
@@ -56,8 +59,7 @@ app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
 app.UseSwaggerAndSwaggerUI();
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 
 
