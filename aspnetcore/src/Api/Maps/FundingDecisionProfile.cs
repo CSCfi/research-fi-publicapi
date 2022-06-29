@@ -21,6 +21,8 @@ namespace Api.Maps
                 .ForMember(dst => dst.FundingEndDate, opt => opt.MapFrom(src => src.DimDateIdEndNavigation))
                 .ForMember(dst => dst.FundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
                 .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
+                // For akatemia decisions, map consortia from different table to here temporarily. They are moved under OrganizationConsortia later in memory.
+                .ForMember(dst => dst.OrganizationConsortia2, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups.Where(x => x.DimOrganization != null)))
                 .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
                 .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
                 .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
@@ -30,25 +32,16 @@ namespace Api.Maps
                 .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
                 .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
                 .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
-                // TODO: ugly because AutoMapper's ProjectTo projections do not support recursive calls, would have to use CTEs for this. Probably have to convert to direct sql query.
-                // Tries to find CallProgramme's FrameworkProgramme by checking if CallProgramme's DimCallProgrammeId2s contain another CallProgramme which we consider a parent and repeat the search process for it.
-                // Have to keep eye on the generated sql query and performance.
-                // Note that these long chains of commands can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
-                .ForMember(dst => dst.FrameworkProgramme, opt =>
-                    opt.MapFrom(src =>
-                        src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                    ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                        ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                            ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1) != null
-                                                ? src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                                : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                            : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                        : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                    : src.DimCallProgramme.DimCallProgrammeId2s.Single().DimCallProgrammeId2s.Single()
-                                : src.DimCallProgramme.DimCallProgrammeId2s.Single()
-                            : null));
+                // FrameworkProgramme is populated later in memory from deepest CallProgrammeParent{X}, see below.
+                .ForMember(dst => dst.FrameworkProgramme, opt => opt.Ignore())
+                // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be copied to dst.FrameworkProgramme in memory later.
+                // Note that these long chains of expressions can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
+                .ForMember(dst => dst.CallProgrammeParent1, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent2, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent3, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent4, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent5, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+                .ForMember(dst => dst.CallProgrammeParent6, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)));
 
             CreateProjection<DimDate, int?>()
                 .ConvertUsing(x => x != null && x.Id != -1 ? x.Year : null);
@@ -71,17 +64,19 @@ namespace Api.Maps
                 .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
                 .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
                 .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
-                .ForMember(dst => dst.BusinessId, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "BusinessID")))
+                .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
                 .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
                 .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
-                .ForMember(dst => dst.Pic, opt => opt.MapFrom(src => src.DimOrganization.DimPids.SingleOrDefault(p => p.PidType == "PIC")))
                 .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
-            // Used by
-            //  OrganizationConsortium.BusinessID
-            //  OrganizationConsortium.PIC
-            CreateProjection<DimPid, string?>()
-                .ConvertUsing(pid => pid.PidContent);
+            CreateProjection<BrParticipatesInFundingGroup, OrganizationConsortium>()
+                .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
+                .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
+                .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
+                .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
+                .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInFundingGroup))
+                .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
+                .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
             CreateProjection<DimOrganization, Funder>()
                 .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))

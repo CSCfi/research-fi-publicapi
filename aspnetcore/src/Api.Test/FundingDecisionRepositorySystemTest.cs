@@ -5,6 +5,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -61,12 +62,16 @@ namespace Api.Test
         public async Task Repo_ShouldReturn_Something3()
         {
             var entities = _repository.GetAll()
-                .Where(x => x.NameFi == "Tekoälyteknologioita vuorovaikutusten ennustamiseen biolääketieteessä")
+                .Where(x => x.Acronym.Contains("USSEE") || x.Acronym == "PandeVITA")
+                //.Where(x => x.NameFi.Contains("screenshotin "))
+                .Cast<object>()
                 .ToList();
+            entities = _repository.PerformInMemoryOperations(entities);
 
             // Assert
-            var e = entities.Where(x => x.OrganizationConsortia.Any()).FirstOrDefault();
-            e.Should().NotBeNull();
+            entities.Should().HaveCount(2);
+            var entity = entities.First();
+            var x = JsonSerializer.Serialize(entities.First());
 
         }
 

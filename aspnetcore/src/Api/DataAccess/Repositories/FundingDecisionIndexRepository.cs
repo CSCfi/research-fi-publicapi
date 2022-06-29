@@ -24,13 +24,36 @@ namespace Api.DataAccess.Repositories
                 .Set<DimFundingDecision>()
                 .AsNoTracking()
                 .AsSplitQuery()
-                // TODO: check if these are needed
-                //.Where(fd =>
-                //    fd.DimTypeOfFunding.TypeId != "62" &&   // Tutkijatohtorin tutkimuskulut
-                //    fd.DimTypeOfFunding.TypeId != "66" &&   // Akatemiatutkijan tutkimuskulut
-                //    fd.DimTypeOfFunding.TypeId != "69")     // Akatemiaprofessorin tutkimuskulut
                 .Where(fd => fd.Id != -1)
                 .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider);
         }
+
+        public override List<object> PerformInMemoryOperations(List<object> objects)
+        {
+            objects.ForEach(o =>
+            {
+                var fd = (FundingDecision)o;
+                // For akatemia decisions we move consortia from temporary property to the main one.
+                if (fd.OrganizationConsortia?.Any() != true)
+                {
+                    fd.OrganizationConsortia = fd.OrganizationConsortia2;
+                }
+
+                // FrameworkProgramme is the "deepest" (grand)parent of the decision's CallProgramme.
+                // Recursion is impossible with AutoMapper projections so let's use this.
+                fd.FrameworkProgramme =
+                    fd.CallProgrammeParent6
+                    ?? fd.CallProgrammeParent5
+                    ?? fd.CallProgrammeParent4
+                    ?? fd.CallProgrammeParent3
+                    ?? fd.CallProgrammeParent2
+                    ?? fd.CallProgrammeParent1;
+
+
+            });
+            return objects;
+        }
+
+
     }
 }

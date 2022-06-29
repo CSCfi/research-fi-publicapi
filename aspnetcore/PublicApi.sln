@@ -15,12 +15,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{CCDDA0B3-DAA
 	ProjectSection(SolutionItems) = preProject
 		openshift\api\Dockerfile = openshift\api\Dockerfile
 		openshift\api\template-api-devel.yml = openshift\api\template-api-devel.yml
+		openshift\api\template-api-pilot.yml = openshift\api\template-api-pilot.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexer", "indexer", "{1528738C-FE3C-4BF1-A1E3-F94B387A7ADF}"
 	ProjectSection(SolutionItems) = preProject
 		openshift\indexer\Dockerfile = openshift\indexer\Dockerfile
 		openshift\indexer\template-indexer-devel.yml = openshift\indexer\template-indexer-devel.yml
+		openshift\indexer\template-indexer-manualjob-devel.yml = openshift\indexer\template-indexer-manualjob-devel.yml
+		openshift\indexer\template-indexer-pilot.yml = openshift\indexer\template-indexer-pilot.yml
 	EndProjectSection
 EndProject
 Global

@@ -1,4 +1,5 @@
 ﻿using Api.Models.Entities;
+using System.Collections.Generic;
 
 namespace Api.Test.TestHelpers
 {
@@ -7,6 +8,7 @@ namespace Api.Test.TestHelpers
 
         public static DimCallProgramme With(this DimCallProgramme cp, DimCallProgramme parentProgramme)
         {
+            parentProgramme.DimCallProgrammeId2s ??= new List<DimCallProgramme> { new DimCallProgramme { Id = -1} };
             cp.DimCallProgrammeId2s = new[]
             {
                 parentProgramme

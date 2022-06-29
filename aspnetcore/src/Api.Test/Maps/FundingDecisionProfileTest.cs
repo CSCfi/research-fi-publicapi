@@ -37,7 +37,7 @@ namespace Api.Test.Maps
 
             // Assert
             var expected = GetDestination();
-            destination.Should().BeEquivalentTo(expected);
+            destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
         }
 
         [Fact]
@@ -52,64 +52,7 @@ namespace Api.Test.Maps
             // Assert
             var expected = GetEuDestination();
 
-            destination.Should().BeEquivalentTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(FrameworkProgrameTestCases))]
-        public void ShouldMapMembers_FrameworkProgramme(string expectedFrameworkProgrammeName, DimCallProgramme callProgramme)
-        {
-            // Arrange
-            var source = GetSource();
-            source.DimCallProgramme = callProgramme;
-
-            // Act
-            var destination = Act_Map(source);
-
-            // Assert
-            destination.FrameworkProgramme.Should().NotBeNull();
-            destination.FrameworkProgramme.NameFi.Should().Be(expectedFrameworkProgrammeName);
-        }
-
-        public static IEnumerable<object[]> FrameworkProgrameTestCases()
-        {
-            var testCases = new Dictionary<string, DimCallProgramme>
-            {
-                ["framework 1"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1"}),
-                ["framework 2"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1" }
-                    .With(new DimCallProgramme { NameFi = "framework 2" })),
-                ["framework 3"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1" }
-                    .With(new DimCallProgramme { NameFi = "framework 2" }
-                    .With(new DimCallProgramme { NameFi = "framework 3" }))),
-                ["framework 4"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1" }
-                    .With(new DimCallProgramme { NameFi = "framework 2" }
-                    .With(new DimCallProgramme { NameFi = "framework 3" }
-                    .With(new DimCallProgramme { NameFi = "framework 4" })))),
-                ["framework 5"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1" }
-                    .With(new DimCallProgramme { NameFi = "framework 2" }
-                    .With(new DimCallProgramme { NameFi = "framework 3" }
-                    .With(new DimCallProgramme { NameFi = "framework 4" }
-                    .With(new DimCallProgramme { NameFi = "framework 5" }))))),
-                ["framework 6"] = new DimCallProgramme()
-                    .With(new DimCallProgramme { NameFi = "framework 1" }
-                    .With(new DimCallProgramme { NameFi = "framework 2" }
-                    .With(new DimCallProgramme { NameFi = "framework 3" }
-                    .With(new DimCallProgramme { NameFi = "framework 4" }
-                    .With(new DimCallProgramme { NameFi = "framework 5" }
-                    .With(new DimCallProgramme { NameFi = "framework 6" })))))),
-            };
-
-            foreach (var testCase in testCases)
-            {
-                yield return new object[] { testCase.Key, testCase.Value };
-            }
-
-
+            destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
         }
 
         [Fact]
@@ -197,7 +140,11 @@ namespace Api.Test.Maps
                                 }
                             }
                         },
-                        RoleInFundingGroup = "leader"
+                        RoleInFundingGroup = "leader",
+                        DimOrganization = new DimOrganization()
+                        {
+                            NameFi = "sdf"
+                        }
                     }
                 },
                 BrFundingConsortiumParticipations = new[]
@@ -253,20 +200,55 @@ namespace Api.Test.Maps
                     NameEn = "type en",
                     TypeId = "type id"
                 },
-                DimCallProgramme = new()
+                DimCallProgramme = new DimCallProgramme
                 {
                     SourceId = "call programme id",
                     NameFi = "call programme fi",
                     NameSv = "call programme sv",
                     NameEn = "call programme en",
-                    DimCallProgrammeId2s = new []
+                    DimCallProgrammeId2s = new List<DimCallProgramme>
                     {
                         new DimCallProgramme
                         {
-                            NameFi = "framework fi",
-                            NameSv = "framework sv",
-                            NameEn = "framework en",
-                            DimCallProgrammeId2s = System.Array.Empty<DimCallProgramme>()
+                            NameFi = "parent 1",
+                            DimCallProgrammeId2s = new List<DimCallProgramme>
+                            {
+                                new DimCallProgramme
+                                {
+                                    NameFi = "parent 2",
+                                    DimCallProgrammeId2s = new List<DimCallProgramme>
+                                    {
+                                        new DimCallProgramme
+                                        {
+                                            NameFi = "parent 3",
+                                            DimCallProgrammeId2s = new List<DimCallProgramme>
+                                            {
+                                                new DimCallProgramme
+                                                {
+                                                    NameFi = "parent 4",
+                                                    DimCallProgrammeId2s = new List<DimCallProgramme>
+                                                    {
+                                                        new DimCallProgramme
+                                                        {
+                                                            NameFi = "parent 5",
+                                                            DimCallProgrammeId2s = new List<DimCallProgramme>
+                                                            {
+                                                                new DimCallProgramme
+                                                                {
+                                                                    NameFi = "parent 6",
+                                                                    DimCallProgrammeId2s = new List<DimCallProgramme>
+                                                                    {
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -370,10 +352,21 @@ namespace Api.Test.Maps
                         NameFi = "namefi",
                         NameSv = "namesv",
                         NameEn = "nameen",
-                        BusinessId = "business id",
                         RoleInConsortium = "partner",
                         ShareOfFundingInEur = 202,
-                        Pic = "org pic",
+                        Ids = new List<Id>
+                        {
+                            new Id
+                            {
+                                Content = "business id",
+                                Type = "BusinessID"
+                            },
+                            new Id
+                            {
+                                Content = "org pic",
+                                Type = "PIC"
+                            }
+                        },
                         IsFinnishOrganization = true
                     }
                 },
@@ -402,6 +395,30 @@ namespace Api.Test.Maps
                     NameSv = "call programme sv",
                     NameEn = "call programme en"
                 },
+                CallProgrammeParent1 = new()
+                {
+                    NameFi = "parent 1"
+                },
+                CallProgrammeParent2 = new()
+                {
+                    NameFi = "parent 2"
+                },
+                CallProgrammeParent3 = new()
+                {
+                    NameFi = "parent 3"
+                },
+                CallProgrammeParent4 = new()
+                {
+                    NameFi = "parent 4"
+                },
+                CallProgrammeParent5 = new()
+                {
+                    NameFi = "parent 5"
+                },
+                CallProgrammeParent6 = new()
+                {
+                    NameFi = "parent 6"
+                },
                 FunderProjectNumber = "funder project number",
                 FieldsOfScience = new[]
                 {
@@ -425,12 +442,7 @@ namespace Api.Test.Maps
                     "topic 1",
                     "topic 2"
                 },
-                FrameworkProgramme = new()
-                {
-                    NameFi = "framework fi",
-                    NameSv = "framework sv",
-                    NameEn = "framework en"
-                }
+                FrameworkProgramme = null
             };
         }
 

@@ -41,7 +41,7 @@
 
             var clientId = context.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId");
             var organizationId = context.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid");
-            _logger.LogInformation("Correlation id '{correlationID}' for '{clientId}' '{organizationId}'.", correlationId, clientId, organizationId);
+            _logger.LogInformation("Correlation id '{correlationID}' generated for '{clientId}' '{organizationId}'.", correlationId, clientId, organizationId);
 
             await _next(context);
         }

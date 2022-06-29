@@ -48,8 +48,6 @@ var app = builder.Build();
 
 app.UseHttpLogging();
 
-app.UseSwaggerAndSwaggerUI();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -58,6 +56,12 @@ app.UseMiddleware<CorrelationIdMiddleware>();
 
 // Error handler to prevent exceptions details showing up for end users.
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+
+app.UseSwaggerAndSwaggerUI();
+
+
+
+
 
 app.MapControllers();
 
