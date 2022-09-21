@@ -1,4 +1,5 @@
-﻿using Api.Models.Organization;
+﻿using Api.Models;
+using Api.Models.Organization;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,17 @@ namespace Api.Controllers
         /// Hae organisaatioita
         /// </summary>
         /// <param name="searchParameters"></param>
+        /// <param name="paginationParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetOrganization")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.Organization.Search)]
-        public async Task<IEnumerable<Organization>> Get([FromQuery] OrganizationSearchParameters searchParameters)
+        public async Task<IEnumerable<Organization>> Get([FromQuery] OrganizationSearchParameters searchParameters, [FromQuery]PaginationParameters paginationParameters)
         {
-            return await _searchService.Search(searchParameters);
+            var result = await _searchService.Search(searchParameters, paginationParameters.PageNumber, paginationParameters.PageSize);
+            ResponseHelper.AddPaginationResponseHeaders(HttpContext, result);
+
+            return result;
         }
     }
 }

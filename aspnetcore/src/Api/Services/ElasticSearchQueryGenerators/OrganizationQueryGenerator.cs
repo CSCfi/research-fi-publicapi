@@ -13,7 +13,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
         {
         }
 
-        protected override Func<SearchDescriptor<Organization>, ISearchRequest> GenerateQueryForIndex(OrganizationSearchParameters parameters, string indexName)
+        protected override Func<QueryContainerDescriptor<Organization>, QueryContainer> GenerateQueryForIndex(OrganizationSearchParameters parameters)
         {
             var subQueries = new List<Func<QueryContainerDescriptor<Organization>, QueryContainer>>();
             var filters = new List<Func<QueryContainerDescriptor<Organization>, QueryContainer>>();
@@ -27,14 +27,11 @@ namespace Api.Services.ElasticSearchQueryGenerators
                     .Query(parameters.Name)));
             }
 
-            return searchDescriptor => searchDescriptor
-                .Index(indexName)
-                .Query(queryDescriptor => queryDescriptor
+            return queryDescriptor => queryDescriptor
                     .Bool(boolDescriptor => boolDescriptor
                         .Must(subQueries)
                         .Filter(filters)
-                        )
-                );
+                        );
         }
     }
 }

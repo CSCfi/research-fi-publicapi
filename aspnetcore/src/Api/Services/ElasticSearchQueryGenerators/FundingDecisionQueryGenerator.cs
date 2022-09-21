@@ -10,7 +10,7 @@ namespace Api.Services.ElasticSearchQueryGenerators
         {
         }
 
-        protected override Func<SearchDescriptor<FundingDecision>, ISearchRequest> GenerateQueryForIndex(FundingDecisionSearchParameters searchParameters, string indexName)
+        protected override Func<QueryContainerDescriptor<FundingDecision>, QueryContainer> GenerateQueryForIndex(FundingDecisionSearchParameters searchParameters)
         {
             var subQueries = new List<Func<QueryContainerDescriptor<FundingDecision>, QueryContainer>>();
             var filters = new List<Func<QueryContainerDescriptor<FundingDecision>, QueryContainer>>();
@@ -143,12 +143,10 @@ namespace Api.Services.ElasticSearchQueryGenerators
                         !s.Exists(b => b.Field("fundingStartYear"))
                         )));
 
-            return searchDescriptor => searchDescriptor
-                .Index(indexName)
-                .Query(queryDescriptor => queryDescriptor
+            return queryDescriptor => queryDescriptor
                     .Bool(boolDescriptor => boolDescriptor
                         .Must(subQueries)
-                        .Filter(filters)));
+                        .Filter(filters));
         }
     }
 }

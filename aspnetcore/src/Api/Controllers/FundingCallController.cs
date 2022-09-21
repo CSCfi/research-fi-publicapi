@@ -1,4 +1,5 @@
 ﻿using Api.DataAccess;
+using Api.Models;
 using Api.Models.Entities;
 using Api.Models.FundingCall;
 using Api.Services;
@@ -32,14 +33,18 @@ namespace Api.Controllers
         /// <summary>
         /// Hae rahoitushakuja
         /// </summary>
-        /// <param name="searchParameters"></param>
-        /// <returns></returns>
+        /// <param name="searchParameters">Query parameters for filtering the results.</param>
+        /// <param name="paginationParameters">Query parameters for pagination of the results.</param>
+        /// <returns>Filtered and paginated results as an enumerated list of <see cref="FundingCall"/>.</returns>
         [HttpGet(Name = "GetFundingCall")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingCall.Search)]
-        public async Task<IEnumerable<FundingCall>> Get([FromQuery]FundingCallSearchParameters searchParameters)
+        public async Task<SearchResult<FundingCall>> Get([FromQuery]FundingCallSearchParameters searchParameters, [FromQuery]PaginationParameters paginationParameters)
         {
-            return await _searchService.Search(searchParameters);
+            var results = await _searchService.Search(searchParameters, paginationParameters.PageNumber, paginationParameters.PageSize);
+            ResponseHelper.AddPaginationResponseHeaders(HttpContext, results);
+            
+            return results;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Api.Models.FundingDecision;
+﻿using Api.Models;
+using Api.Models.FundingDecision;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,14 +27,18 @@ namespace Api.Controllers
         /// <summary>
         /// Hae rahoituspäätöksiä
         /// </summary>
-        /// <param name="searchParameters"></param>
+        /// <param name="searchParameters">Query parameters for filtering the results.</param>
+        /// <param name="paginationParameters">Query parameters for pagination of the results.</param>
         /// <returns></returns>
         [HttpGet(Name = "GetFundingDecision")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
-        public async Task<IEnumerable<FundingDecision>> Get([FromQuery] FundingDecisionSearchParameters searchParameters)
+        public async Task<SearchResult<FundingDecision>> Get([FromQuery] FundingDecisionSearchParameters searchParameters, [FromQuery] PaginationParameters paginationParameters)
         {
-            return await _searchService.Search(searchParameters);
+            var result = await _searchService.Search(searchParameters, paginationParameters.PageNumber, paginationParameters.PageSize);
+            ResponseHelper.AddPaginationResponseHeaders(HttpContext, result);
+
+            return result;
         }
     }
 }
