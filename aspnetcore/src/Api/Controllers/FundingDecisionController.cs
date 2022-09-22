@@ -8,7 +8,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [ApiVersion(ApiVersion)]
-    [Route("v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/funding-decisions")]
     
     public class FundingDecisionController : ControllerBase
     {

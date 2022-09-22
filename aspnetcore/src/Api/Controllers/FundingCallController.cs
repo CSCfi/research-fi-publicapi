@@ -11,7 +11,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [ApiVersion(ApiVersion)]
-    [Route("v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/funding-calls")]
     public class FundingCallController : ControllerBase
     {
         private const string ApiVersion = "1.0";
