@@ -1,4 +1,5 @@
-﻿using Api.Services.ElasticSearchQueryGenerators;
+﻿using Api.Models;
+using Api.Services.ElasticSearchQueryGenerators;
 using Nest;
 
 namespace Api.Services
@@ -16,12 +17,13 @@ namespace Api.Services
             _queryGenerator = queryGenerator;
         }
 
-        public async Task<IReadOnlyCollection<TOut>> Search(TIn parameters)
+        public async Task<SearchResult<TOut>> Search(TIn parameters, int pageNumber, int pageSize)
         {
-            var query = _queryGenerator.GenerateQuery(parameters);
+            var query = _queryGenerator.GenerateQuery(parameters, pageNumber, pageSize);
 
             var searchResult = await _elasticClient.SearchAsync(query);
-            return searchResult.Documents;
+
+            return new SearchResult<TOut>(searchResult.Documents, pageNumber, pageSize, searchResult.HitsMetadata?.Total.Value);
         }
     }
 }

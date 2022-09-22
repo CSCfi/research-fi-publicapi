@@ -1,4 +1,5 @@
-﻿using Api.Models.ResearchDataset;
+﻿using Api.Models;
+using Api.Models.ResearchDataset;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,17 @@ namespace Api.Controllers
         /// Hae aineistoja
         /// </summary>
         /// <param name="searchParameters"></param>
+        /// <param name="paginationParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetResearchDataset")]
         [MapToApiVersion(ApiVersion)]
         [Authorize(Policy = ApiPolicies.ResearchDataset.Search)]
-        public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] ResearchDatasetSearchParameters searchParameters)
+        public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] ResearchDatasetSearchParameters searchParameters, [FromQuery] PaginationParameters paginationParameters)
         {
-            return await _searchService.Search(searchParameters);
+            var result = await _searchService.Search(searchParameters, paginationParameters.PageNumber, paginationParameters.PageSize);
+            ResponseHelper.AddPaginationResponseHeaders(HttpContext, result);
+
+            return result;
         }
     }
 }

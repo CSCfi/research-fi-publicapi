@@ -1,7 +1,9 @@
-﻿namespace Api.Services
+﻿using Api.Models;
+
+namespace Api.Services
 {
     public interface ISearchService<TIn, TOut> where TOut : class
     {
-        Task<IReadOnlyCollection<TOut>> Search(TIn searchParameters);
+        Task<SearchResult<TOut>> Search(TIn searchParameters, int pageNumber, int pageSize);
     }
 }

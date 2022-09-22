@@ -12,12 +12,16 @@ namespace Api.Services.ElasticSearchQueryGenerators
             _configuration = configuration;
         }
 
-        public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuery(TIn searchParameters)
+        public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuery(TIn searchParameters, int pageNumber, int pageSize)
         {
             var indexName = _configuration.GetIndexNameForType(typeof(TOut));
-            return GenerateQueryForIndex(searchParameters, indexName);
+            return descriptor => descriptor
+                .Index(indexName)
+                .Skip((pageNumber-1)*pageSize)
+                .Take(pageSize)
+                .Query(GenerateQueryForIndex(searchParameters));
         }
 
-        protected abstract Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQueryForIndex(TIn searchParameters, string indexName);
+        protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForIndex(TIn searchParameters);
     }
 }

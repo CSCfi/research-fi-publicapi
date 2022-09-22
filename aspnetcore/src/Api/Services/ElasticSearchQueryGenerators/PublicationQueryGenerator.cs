@@ -10,15 +10,13 @@ namespace Api.Services.ElasticSearchQueryGenerators
         {
         }
 
-        protected override Func<SearchDescriptor<Publication>, ISearchRequest> GenerateQueryForIndex(PublicationSearchParameters searchParameters, string indexName)
+        protected override Func<QueryContainerDescriptor<Publication>, QueryContainer> GenerateQueryForIndex(PublicationSearchParameters searchParameters)
         {
-            return t => t
-                .Index(indexName)
-                .Query(q => q
+            return queryContainerDescriptor => queryContainerDescriptor
                     .MultiMatch(query => query
                         .Type(TextQueryType.PhrasePrefix)
                         .Fields("publicationName")
-                        .Query(searchParameters.PublicationName)));
+                        .Query(searchParameters.PublicationName));
         }
     }
 }

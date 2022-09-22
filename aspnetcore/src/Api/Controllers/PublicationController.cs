@@ -1,3 +1,4 @@
+using Api.Models;
 using Api.Models.Publication;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -25,11 +26,15 @@ namespace Api.Controllers
         /// Hae julkaisuja
         /// </summary>
         /// <param name="searchParameters">Julkaisun nimi</param>
+        /// <param name="paginationParameters"></param>
         /// <returns></returns>
         [HttpGet(Name = "GetPublication")]
-        public async Task<IEnumerable<Publication>> Get([FromQuery] PublicationSearchParameters searchParameters)
+        public async Task<IEnumerable<Publication>> Get([FromQuery] PublicationSearchParameters searchParameters, [FromQuery]PaginationParameters paginationParameters)
         {
-            return await _searchService.Search(searchParameters);
+            var result = await _searchService.Search(searchParameters, paginationParameters.PageNumber, paginationParameters.PageSize);
+            ResponseHelper.AddPaginationResponseHeaders(HttpContext, result);
+
+            return result;
         }
     }
 }
