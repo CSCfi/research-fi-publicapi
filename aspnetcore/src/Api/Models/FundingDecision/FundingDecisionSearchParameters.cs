@@ -1,19 +1,43 @@
-﻿namespace Api.Models.FundingDecision
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Api.Models.FundingDecision
 {
     public class FundingDecisionSearchParameters
     {
+        [FromQuery(Name = "name")]
         public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? FunderName { get; set; }
-        public string? FunderId { get; set; }
-        public string? FunderProjectNumber { get; set; }
-        public int? FundingStartYearFrom { get; set; }
-        public string? FundedOrganization { get; set; }
-        public string? FundedOrganizationId { get; set; }
-        public string? FundedPersonFirstName { get; set; }
-        public string? FundedPersonLastName { get; set; }
-        public string? FundedPersonOrcid { get; set; }
-        public string? TypeOfFunding { get; set; }
 
+        [FromQuery(Name = "description")] 
+        public string? Description { get; set; }
+
+        [FromQuery(Name = "funderName")] 
+        public string? FunderName { get; set; }
+
+        [FromQuery(Name = "funderId")] 
+        public string? FunderId { get; set; }
+
+        [FromQuery(Name = "funderProjectNumber")]
+        public string? FunderProjectNumber { get; set; }
+
+        [FromQuery(Name = "fundingStartYearFrom")]
+        public int? FundingStartYearFrom { get; set; }
+
+        [FromQuery(Name = "fundedOrganization")]
+        public string? FundedOrganization { get; set; }
+
+        [FromQuery(Name = "fundedOrganizationId")]
+        public string? FundedOrganizationId { get; set; }
+
+        [FromQuery(Name = "fundedPersonFirstName")]
+        public string? FundedPersonFirstName { get; set; }
+
+        [FromQuery(Name = "fundedPersonLastName")]
+        public string? FundedPersonLastName { get; set; }
+
+        [FromQuery(Name = "fundedPersonOrcid")]
+        public string? FundedPersonOrcid { get; set; }
+
+        [FromQuery(Name = "typeOfFunding")]
+        public string? TypeOfFunding { get; set; }
     }
 }
