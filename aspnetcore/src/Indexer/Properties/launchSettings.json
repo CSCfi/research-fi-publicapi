@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "ElasticSearchIndexer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "IndexNames__Api.Services.Models.FundingCall.FundingCall": "api-dev-funding-call",
+        "IndexNames__Api.Services.Models.FundingDecision.FundingDecision": "api-dev-funding-decision",
+        "IndexNames__Api.Services.Models.Infrastructure.Infrastructure": "api-dev-infrastructure",
+        "IndexNames__Api.Services.Models.Organization.Organization": "api-dev-organization",
+        "IndexNames__Api.Services.Models.ResearchDataset.ResearchDataset": "api-dev-researchdataset"
+      }
+    }
+  }
+}
