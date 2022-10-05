@@ -10,9 +10,9 @@ public class ResearchDatasetService : IResearchDataSetService
 {
     private readonly ILogger<ResearchDatasetService> _logger;
     private readonly IMapper _mapper;
-    private readonly ISearchService<ResearchDatasetSearchParameters, ResearchDataset> _searchService;
+    private readonly ISearchService<ResearchDatasetSearchParameters, Service.Models.ResearchDataset.ResearchDataset> _searchService;
 
-    public ResearchDatasetService(ILogger<ResearchDatasetService> logger, IMapper mapper, ISearchService<ResearchDatasetSearchParameters, ResearchDataset> searchService)
+    public ResearchDatasetService(ILogger<ResearchDatasetService> logger, IMapper mapper, ISearchService<ResearchDatasetSearchParameters, Service.Models.ResearchDataset.ResearchDataset> searchService)
     {
         _logger = logger;
         _mapper = mapper;

@@ -10,9 +10,9 @@ public class PublicationService : IPublicationService
 {
     private readonly ILogger<PublicationService> _logger;
     private readonly IMapper _mapper;
-    private readonly ISearchService<PublicationSearchParameters, Publication> _searchService;
+    private readonly ISearchService<PublicationSearchParameters, Service.Models.Publication.Publication> _searchService;
 
-    public PublicationService(ILogger<PublicationService> logger, IMapper mapper, ISearchService<PublicationSearchParameters, Publication> searchService)
+    public PublicationService(ILogger<PublicationService> logger, IMapper mapper, ISearchService<PublicationSearchParameters, Service.Models.Publication.Publication> searchService)
     {
         _logger = logger;
         _mapper = mapper;
