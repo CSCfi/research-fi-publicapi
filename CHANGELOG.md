@@ -11,3 +11,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  
 ### Changed
 - [CSCTTV-2810](https://jira.eduuni.fi/browse/CSCTTV-2810) - Change method and parameter naming to follow best practices
+- [CSCTTV-2830](https://jira.eduuni.fi/browse/CSCTTV-2830) - Add a project structure to separate the indexer from the api
