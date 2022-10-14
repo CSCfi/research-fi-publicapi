@@ -1,4 +1,4 @@
-﻿using CSC.PublicApi.DataAccess;
+﻿using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Indexer.Configuration;
 using Microsoft.EntityFrameworkCore;

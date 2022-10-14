@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using CSC.PublicApi.Interface.Models.ResearchDataset;
-using CSC.PublicApi.DataAccess.Entities;
 using CSC.PublicApi.DataAccess.Maps;
+using CSC.PublicApi.DatabaseContext.Entities;
 
 namespace CSC.PublicApi.Tests.Maps;
 

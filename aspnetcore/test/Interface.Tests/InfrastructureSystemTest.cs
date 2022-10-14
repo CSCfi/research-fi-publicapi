@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
+using CSC.PublicApi.DatabaseContext;
 using Xunit;
 using Infrastructure = CSC.PublicApi.Interface.Models.Infrastructure.Infrastructure;
 

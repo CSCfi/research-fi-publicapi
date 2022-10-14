@@ -10,8 +10,9 @@ using Xunit;
 using FundingCall = CSC.PublicApi.Interface.Models.FundingCall.FundingCall;
 using CSC.PublicApi.Tests.TestHelpers;
 using CSC.PublicApi.Interface;
-using CSC.PublicApi.DataAccess.Entities;
 using CSC.PublicApi.DataAccess;
+using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.DatabaseContext.Entities;
 
 namespace CSC.PublicApi.Tests;
 
