@@ -4,7 +4,7 @@ using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models.FundingCall;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
 {

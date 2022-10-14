@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
+using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using System.Collections.Generic;
-using System.Linq;
-using CSC.PublicApi.DatabaseContext.Entities;
 using Xunit;
-using FundingDecisionProfile = CSC.PublicApi.DataAccess.Maps.FundingDecisionProfile;
-using CSC.PublicApi.Service.Models.FundingDecision;
+using FundingDecisionProfile = CSC.PublicApi.Repositories.Maps.FundingDecisionProfile;
 
-namespace CSC.PublicApi.Tests.Maps;
+namespace CSC.PublicApi.Indexer.Tests.Maps;
 
 public class FundingDecisionProfileTest
 {
@@ -20,13 +18,13 @@ public class FundingDecisionProfileTest
     }
 
     [Fact]
-    public void ConfigurationShouldBeValid()
+    public void Configuration_ShouldBeValid()
     {
         _mapper.ConfigurationProvider.AssertConfigurationIsValid();
     }
 
     [Fact]
-    public void ShouldMapMembers()
+    public void ProjectTo_DimFundingDecision_ShouldBeMappedToFundingDecision()
     {
         // Arrange
         var source = GetSource();
@@ -40,7 +38,7 @@ public class FundingDecisionProfileTest
     }
 
     [Fact]
-    public void ShouldMapMembers_EU()
+    public void ProjectTo_DimFundingDecisionWithEUFunding_ShouldBeMappedToFundingDecision()
     {
         // Arrange
         var source = GetEuSource();
@@ -55,7 +53,7 @@ public class FundingDecisionProfileTest
     }
 
     [Fact]
-    public void ShouldMapMembers_WithoutUndefinedFieldOfSciences()
+    public void ProjectTo_DimFundingDecisionWithoutUndefinedFieldOFSciences_ShouldBeMappedToFundingDecision()
     {
         // Arrange
         var source = GetSource();
@@ -75,7 +73,7 @@ public class FundingDecisionProfileTest
     }
 
     [Fact]
-    public void ShouldMapMembers_WithoutUndefinedDates()
+    public void ProjectTo_DimFundingDecisionWithoutUndefinedDates_ShouldBeMappedToFundingDecision()
     {
         // Arrange
         var source = GetSource();

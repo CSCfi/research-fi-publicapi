@@ -1,7 +1,7 @@
 ﻿using CSC.PublicApi.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {

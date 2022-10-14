@@ -1,7 +1,11 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class Hanke
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public string Id { get; set; } = null!;
-    public string? DataJson { get; set; }
+    public partial class Hanke
+    {
+        public string Id { get; set; } = null!;
+        public string? DataJson { get; set; }
+    }
 }

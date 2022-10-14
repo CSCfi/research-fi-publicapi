@@ -1,10 +1,16 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class BrGrantedPermission
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public int DimUserProfileId { get; set; }
-    public int DimExternalServiceId { get; set; }
-    public int DimPermittedFieldGroup { get; set; }
+    public partial class BrGrantedPermission
+    {
+        public int DimUserProfileId { get; set; }
+        public int DimExternalServiceId { get; set; }
+        public int DimPermittedFieldGroup { get; set; }
 
-    public virtual DimUserProfile DimUserProfile { get; set; } = null!;
+        public virtual DimPurpose DimExternalService { get; set; } = null!;
+        public virtual DimReferencedatum DimPermittedFieldGroupNavigation { get; set; } = null!;
+        public virtual DimUserProfile DimUserProfile { get; set; } = null!;
+    }
 }

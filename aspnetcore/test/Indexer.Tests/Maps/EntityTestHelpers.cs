@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using CSC.PublicApi.DatabaseContext.Entities;
+﻿using CSC.PublicApi.DatabaseContext.Entities;
 
-namespace CSC.PublicApi.Tests.Maps;
+namespace CSC.PublicApi.Indexer.Tests.Maps;
 
 public static class EntityTestHelpers
 {

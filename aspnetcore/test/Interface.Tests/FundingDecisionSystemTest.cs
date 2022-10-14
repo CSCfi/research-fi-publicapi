@@ -1,19 +1,17 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
-using Xunit;
-using CSC.PublicApi.Service.Models.FundingDecision;
-using CSC.PublicApi.Tests.TestHelpers;
-using CSC.PublicApi.Interface;
-using CSC.PublicApi.DataAccess;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Interface.Tests.TestHelpers;
+using CSC.PublicApi.Service.Models.FundingDecision;
+using FluentAssertions;
+using FluentAssertions.Execution;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
 {
@@ -33,7 +31,7 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
     /// <summary>
     /// Test for running funding decision query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingDecisionResultTestCases))]
     public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingDecision, bool>> assertPredicate)
     {
@@ -60,7 +58,7 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
     /// <summary>
     /// Test for running funding decision query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingDecisionNoResultsTestCases))]
     public async void GET_ShouldReturnEmpty(string urlParams)
     {

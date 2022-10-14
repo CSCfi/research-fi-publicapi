@@ -1,7 +1,11 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class Publication
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public string Id { get; set; } = null!;
-    public string? DataJson { get; set; }
+    public partial class Publication
+    {
+        public string Id { get; set; } = null!;
+        public string? DataJson { get; set; }
+    }
 }

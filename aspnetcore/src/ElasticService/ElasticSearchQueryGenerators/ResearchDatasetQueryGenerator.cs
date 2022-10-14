@@ -24,6 +24,12 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                 .Query(parameters.Name)));
         }
 
+        // When filtering with IsLatestVersion.
+        if (parameters.IsLatestVersion is not null)
+        {
+            filters.Add(t => t.Term(s => s.Field(f => f.IsLatestVersion).Value(parameters.IsLatestVersion)));
+        }
+
         return queryDescriptor => queryDescriptor
             .Bool(boolDescriptor => boolDescriptor
                 .Must(subQueries)

@@ -1,11 +1,11 @@
-﻿using Elasticsearch.Net;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Elasticsearch.Net;
+using Newtonsoft.Json;
 
-namespace CSC.PublicApi.Tests.TestHelpers;
+namespace CSC.PublicApi.Interface.Tests.TestHelpers;
 
 public class MockElasticConnection : InMemoryConnection
 {

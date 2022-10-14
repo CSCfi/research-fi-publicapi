@@ -1,4 +1,4 @@
-﻿namespace CSC.PublicApi.Tests.TestHelpers;
+﻿namespace CSC.PublicApi.Interface.Tests.TestHelpers;
 
 public class TestModel
 {

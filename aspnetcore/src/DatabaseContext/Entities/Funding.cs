@@ -1,7 +1,11 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class Funding
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public int Id { get; set; }
-    public string? DataJson { get; set; }
+    public partial class Funding
+    {
+        public int Id { get; set; }
+        public string? DataJson { get; set; }
+    }
 }

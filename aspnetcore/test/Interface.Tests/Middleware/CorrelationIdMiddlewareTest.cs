@@ -1,13 +1,13 @@
-﻿using CSC.PublicApi.Interface.Middleware;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using CSC.PublicApi.Interface.Middleware;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace CSC.PublicApi.Tests.Middleware;
+namespace CSC.PublicApi.Interface.Tests.Middleware;
 
 public class CorrelationIdMiddlewareTest
 {

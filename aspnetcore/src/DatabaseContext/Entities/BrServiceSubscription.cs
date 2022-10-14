@@ -1,10 +1,14 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class BrServiceSubscription
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public int DimUserProfileId { get; set; }
-    public int DimExternalServiceId { get; set; }
+    public partial class BrServiceSubscription
+    {
+        public int DimUserProfileId { get; set; }
+        public int DimExternalServiceId { get; set; }
 
-    public virtual DimExternalService DimExternalService { get; set; } = null!;
-    public virtual DimUserProfile DimUserProfile { get; set; } = null!;
+        public virtual DimExternalService DimExternalService { get; set; } = null!;
+        public virtual DimUserProfile DimUserProfile { get; set; } = null!;
+    }
 }

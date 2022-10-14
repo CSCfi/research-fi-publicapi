@@ -14,11 +14,11 @@ public class ResearchDatasetController : ControllerBase
     private const string ApiVersion = "1.0";
 
     private readonly ILogger<ResearchDatasetController> _logger;
-    private IResearchDataSetService _service;
+    private IResearchDatasetService _service;
 
     public ResearchDatasetController(
         ILogger<ResearchDatasetController> logger,
-        IResearchDataSetService service)
+        IResearchDatasetService service)
     {
         _logger = logger;
         _service = service;

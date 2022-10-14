@@ -2,7 +2,7 @@
 using CSC.PublicApi.DatabaseContext.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public class FundingCallRepository : GenericRepository<DimCallProgramme>, IFundingCallRepository
 {

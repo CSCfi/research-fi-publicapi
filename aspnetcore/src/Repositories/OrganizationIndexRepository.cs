@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models.Organization;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public class OrganizationIndexRepository : IndexRepositoryBase<Organization>
 {

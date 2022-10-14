@@ -1,6 +1,7 @@
 ﻿using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Indexer.Configuration;
+using CSC.PublicApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -51,7 +52,7 @@ public class Program
 
             services.AddRepositories();
 
-            services.AddAutoMapper(typeof(ApiDbContext).Assembly);
+            services.AddAutoMapper(typeof(IUnitOfWork).Assembly);
         })
         .ConfigureHostConfiguration(configurationBuilder => configurationBuilder
             // Most of the configuration comes from environment variables.

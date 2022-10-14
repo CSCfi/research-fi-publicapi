@@ -1,21 +1,25 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class DimNewsFeed
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public DimNewsFeed()
+    public partial class DimNewsFeed
     {
-        DimNewsItems = new HashSet<DimNewsItem>();
-        FactContributions = new HashSet<FactContribution>();
+        public DimNewsFeed()
+        {
+            DimNewsItems = new HashSet<DimNewsItem>();
+            FactContributions = new HashSet<FactContribution>();
+        }
+
+        public int Id { get; set; }
+        public string? Title { get; set; }
+        public string? FeedUrl { get; set; }
+        public string SourceId { get; set; } = null!;
+        public string? SourceDescription { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
+
+        public virtual ICollection<DimNewsItem> DimNewsItems { get; set; }
+        public virtual ICollection<FactContribution> FactContributions { get; set; }
     }
-
-    public int Id { get; set; }
-    public string? Title { get; set; }
-    public string? FeedUrl { get; set; }
-    public string SourceId { get; set; } = null!;
-    public string? SourceDescription { get; set; }
-    public DateTime? Created { get; set; }
-    public DateTime? Modified { get; set; }
-
-    public virtual ICollection<DimNewsItem> DimNewsItems { get; set; }
-    public virtual ICollection<FactContribution> FactContributions { get; set; }
 }

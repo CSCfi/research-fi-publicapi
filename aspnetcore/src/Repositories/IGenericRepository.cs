@@ -1,4 +1,4 @@
-﻿namespace CSC.PublicApi.DataAccess.Repositories;
+﻿namespace CSC.PublicApi.Repositories;
 
 public interface IGenericRepository<T> where T : class
 {
