@@ -1,5 +1,5 @@
-﻿using CSC.PublicApi.DataAccess;
-using CSC.PublicApi.DataAccess.Repositories;
+﻿using CSC.PublicApi.DataAccess.Repositories;
+using CSC.PublicApi.DatabaseContext;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CSC.PublicApi.Indexer.Configuration;

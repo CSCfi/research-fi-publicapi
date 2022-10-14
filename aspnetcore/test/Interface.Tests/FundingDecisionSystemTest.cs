@@ -11,6 +11,7 @@ using CSC.PublicApi.Service.Models.FundingDecision;
 using CSC.PublicApi.Tests.TestHelpers;
 using CSC.PublicApi.Interface;
 using CSC.PublicApi.DataAccess;
+using CSC.PublicApi.DatabaseContext;
 
 namespace CSC.PublicApi.Tests;
 

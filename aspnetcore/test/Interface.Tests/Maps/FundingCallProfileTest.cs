@@ -2,9 +2,9 @@
 using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;
+using CSC.PublicApi.DatabaseContext.Entities;
 using Xunit;
 using FundingCall = CSC.PublicApi.Service.Models.FundingCall.FundingCall;
-using CSC.PublicApi.DataAccess.Entities;
 using CSC.PublicApi.Interface.Maps;
 using CSC.PublicApi.Service.Models.FundingCall;
 

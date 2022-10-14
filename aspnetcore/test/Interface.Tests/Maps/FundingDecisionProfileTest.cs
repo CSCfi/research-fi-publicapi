@@ -3,10 +3,10 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using System.Collections.Generic;
 using System.Linq;
+using CSC.PublicApi.DatabaseContext.Entities;
 using Xunit;
 using FundingDecisionProfile = CSC.PublicApi.DataAccess.Maps.FundingDecisionProfile;
 using CSC.PublicApi.Service.Models.FundingDecision;
-using CSC.PublicApi.DataAccess.Entities;
 
 namespace CSC.PublicApi.Tests.Maps;
 
