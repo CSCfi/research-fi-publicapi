@@ -3,7 +3,7 @@ using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models.FundingCall;
 using FundingCall = CSC.PublicApi.Service.Models.FundingCall.FundingCall;
 
-namespace CSC.PublicApi.DataAccess.Maps;
+namespace CSC.PublicApi.Repositories.Maps;
 
 public class FundingCallProfile : Profile
 {

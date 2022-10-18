@@ -3,33 +3,34 @@
 public class ResearchDataset
 {
     public string? NameFi { get; set; }
+
     public string? NameSv { get; set; }
+
     public string? NameEn { get; set; }
+
     public string? DescriptionFi { get; set; }
+
     public string? DescriptionSv { get; set; }
 
     public string? DescriptionEn { get; set; }
 
-    // TODO: just the year?
     public DateTime? DatasetCreated { get; set; }
 
-    //TODO: tekijät
+    public List<Contributor> Contributors { get; set; }
 
     public List<FieldOfScience>? FieldOfSciences { get; set; }
 
     public List<Language>? Languages { get; set; }
 
-    public string? AccessType { get; set; }
+    public Availability? AccessType { get; set; }
 
     public License? License { get; set; }
 
     public List<Keyword>? Keywords { get; set; }
 
-    // TODO: liittyvät aineistot
+    public List<DatasetRelation> DatasetRelations { get; set; }
 
-    // TODO: muut liittyvät tuotokset
-
-    public Version? VersionSet { get; set; }
+    public List<Version> VersionSet { get; set; }
 
     public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
 
@@ -37,8 +38,8 @@ public class ResearchDataset
 
     public string? FairDataUrl { get; set; }
 
-    // TODO: muu linkki
+    public ResearchDataCatalog ResearchDataCatalog { get; set; }
 
-    // TODO: tutkimusaineistotiedon lähde
+    public bool IsLatestVersion { get; set; }
 
 }

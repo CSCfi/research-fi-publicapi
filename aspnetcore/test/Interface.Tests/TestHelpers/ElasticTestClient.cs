@@ -1,9 +1,9 @@
-﻿using Elasticsearch.Net;
-using Nest;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Elasticsearch.Net;
+using Nest;
 
-namespace CSC.PublicApi.Tests.TestHelpers;
+namespace CSC.PublicApi.Interface.Tests.TestHelpers;
 
 public class ElasticTestClient
 {

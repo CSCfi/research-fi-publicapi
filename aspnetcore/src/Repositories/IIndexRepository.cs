@@ -1,4 +1,4 @@
-﻿namespace CSC.PublicApi.DataAccess.Repositories;
+﻿namespace CSC.PublicApi.Repositories;
 
 /// <summary>
 /// Responsible for fetching entities from database and mapping them to api models which are indexed to ElasticSearch.

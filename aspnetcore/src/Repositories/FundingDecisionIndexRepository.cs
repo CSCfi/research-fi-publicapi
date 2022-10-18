@@ -5,7 +5,7 @@ using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecision>
 {

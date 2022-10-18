@@ -1,21 +1,22 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using AutoMapper;
+using CSC.PublicApi.Service.Models.ResearchDataset;
+using FluentAssertions;
 using Xunit;
-using CSC.PublicApi.Interface.Models.ResearchDataset;
-using CSC.PublicApi.DataAccess.Maps;
-using CSC.PublicApi.DatabaseContext.Entities;
+using Language = CSC.PublicApi.Service.Models.ResearchDataset.Language;
+using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
-namespace CSC.PublicApi.Tests.Maps;
+namespace CSC.PublicApi.Interface.Tests.Maps;
 
 public class ResearchDatasetProfileTest
 {
     private readonly IMapper _mapper;
+    private const int Id = 32410;
 
     public ResearchDatasetProfileTest()
     {
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<ResearchDatasetProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<CSC.PublicApi.Interface.Maps.ReseachDatasetProfile>()).CreateMapper();
     }
 
     [Fact]
@@ -25,80 +26,263 @@ public class ResearchDatasetProfileTest
     }
 
     [Fact]
-    public void Should_Map_DimCallProgramme_To_FundingCall()
+    public void Map_ResearchDatasetServiceModel_ReturnsApiModel()
     {
         // Arrange
-        var entity = GetEntity();
+        var serviceModel = GetServiceModel();
+        var apiModel = GetApiModel();
 
         // Act
-        var model = Act_Map(entity);
+        var result = _mapper.Map<CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset>(serviceModel);
 
         // Assert
-        model.Should().BeEquivalentTo(GetModel());
+        result.Should().BeEquivalentTo(apiModel);
     }
 
-    private ResearchDataset Act_Map(DimResearchDataset dbEntity)
-    {
-        var entityQueryable = new List<DimResearchDataset>
-        {
-            dbEntity
-        }.AsQueryable();
-
-        var modelCollection = _mapper.ProjectTo<ResearchDataset>(entityQueryable);
-
-        return modelCollection.Single();
-    }
-
-    private static DimResearchDataset GetEntity()
-    {
-        return new DimResearchDataset
-        {
-            NameFi = "nameFi",
-            NameSv = "nameSv",
-            NameEn = "nameEn",
-            DescriptionFi = "descFi",
-            DescriptionSv = "descSv",
-            DescriptionEn = "descEn",
-            DatasetCreated = new System.DateTime(2021, 10, 1),
-            DimReferencedataAvailabilityNavigation = new()
-            {
-                CodeValue = "access type",
-                CodeScheme = "access_type"
-            },
-            DimReferencedataLicenseNavigation = new()
-            {
-                CodeValue = "license code",
-                CodeScheme = "license",
-                NameFi = "nameFi",
-                NameSv = "nameSv",
-                NameEn = "nameEn",
-            },
-            LocalIdentifier = "localID"
-
-        };
-    }
-
-    private static ResearchDataset GetModel()
+    private static ResearchDataset GetServiceModel()
     {
         return new ResearchDataset
         {
+            Id = Id,
             NameFi = "nameFi",
             NameSv = "nameSv",
             NameEn = "nameEn",
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            DatasetCreated = new System.DateTime(2021, 10, 1),
-            AccessType = "access type",
-            License = new()
+            DatasetCreated = new DateTime(2021, 10, 1),
+            Contributors = new List<Contributor>
             {
-                Code = "license code",
-                NameFi = "nameFi",
-                NameSv = "nameSv",
-                NameEn = "nameEn",
+                new()
+                {
+                    Organisation = new Organisation
+                    {
+                        organizationId = "organizationId",
+                        NameFi = "organizationNameFi",
+                        NameSv = "organizationNameSv",
+                        NameEn = "organizationNameEn",
+                        NameVariants = "organizationNameVariants"
+                    },
+                    Person = new Person {
+                        FirstNames  = "personFirstName",
+                        LastName = "personLastName",
+                        FullName = "personFullName"
+                    },
+                    Role = new Role
+                    {
+                        NameFi = "roleNameFi",
+                        NameSv = "roleNameSv",
+                        NameEn = "roleNameEn"
+                    }
+                }
             },
-            LocalIdentifier = "localID",
-            FairDataUrl = "https://etsin.fairdata.fi/dataset/localID"
+            FieldOfSciences = new List<FieldOfScience>
+            {
+                new()
+                {
+                    FieldId = "fieldOfScienceFieldId",
+                    NameFi = "fieldOfScienceNameFi",
+                    NameSv = "fieldOfScienceNameSv",
+                    NameEn = "fieldOfScienceNameEn"
+                }
+            },
+            Languages = new List<Language>
+            {
+                new()
+                {
+                    Code = "languageCode",
+                    NameEn = "languageNameEn",
+                    NameFi = "languageNameFi",
+                    NameSv = "languageNameSv"
+                }
+            },
+            AccessType = new Availability
+            {
+                Code = "accessTypeCode",
+                NameFi = "accessTypeNameFi",
+                NameSv = "accessTypeNameSv",
+                NameEn = "accessTypeNameEn"
+            },
+            License = new License
+            {
+                Code = "licenseCode",
+                NameFi = "licenseNameFi",
+                NameSv = "licenseNameSv",
+                NameEn = "licenseNameEn",
+            },
+            Keywords = new List<Keyword>
+            {
+                new()
+                {
+                    Language = "keywordLanguage",
+                    Scheme = "keywordScheme",
+                    Value = "keywordValue"
+                }
+            },
+            DatasetRelations = new List<DatasetRelation>
+            {
+                new()
+                {
+                    Id = "32410",
+                    Type = "dataSetRelationType"
+                }
+            },
+            PreferredIdentifiers = new List<PreferredIdentifier>
+            {
+                new()
+                {
+                    Content = "preferredIdentifierContent",
+                    Type = "preferredIdentifierType"
+                }
+            },
+            LocalIdentifier = "localIdentifier",
+            FairDataUrl = "https://etsin.fairdata.fi/dataset/localIdentifier",
+            ResearchDataCatalog = new ResearchDataCatalog
+            {
+                Id = 7,
+                NameFi = "researchDataCatalogNameFi",
+                NameSv = "researchDataCatalogNameSv",
+                NameEn = "researchDataCatalogNameEn",
+                SourceId = "researchDataCatalogSourceId",
+                SourceDescription = "researchDataCatalogSourceDescription"
+            },
+            VersionSet = new List<Version>
+            {
+                new()
+                {
+                    Identifier = 32410,
+                    VersionNumber = "123"
+                },
+                new()
+                {
+                    Identifier = 32411,
+                    VersionNumber = "321"
+                }
+            },
+            IsLatestVersion = false
+        };
+    }
+
+    private static CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset GetApiModel()
+    {
+        return new CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset
+        {
+            NameFi = "nameFi",
+            NameSv = "nameSv",
+            NameEn = "nameEn",
+            DescriptionFi = "descFi",
+            DescriptionSv = "descSv",
+            DescriptionEn = "descEn",
+            DatasetCreated = new DateTime(2021, 10, 1),
+            Contributors = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Contributor>
+            {
+                new()
+                {
+                    Organisation = new CSC.PublicApi.Interface.Models.ResearchDataset.Organisation
+                    {
+                        organizationId = "organizationId",
+                        NameFi = "organizationNameFi",
+                        NameSv = "organizationNameSv",
+                        NameEn = "organizationNameEn",
+                        NameVariants = "organizationNameVariants"
+                    },
+                    Person = new CSC.PublicApi.Interface.Models.ResearchDataset.Person {
+                        FirstNames  = "personFirstName",
+                        LastName = "personLastName",
+                        FullName = "personFullName"
+                    },
+                    Role = new CSC.PublicApi.Interface.Models.ResearchDataset.Role
+                    {
+                        NameFi = "roleNameFi",
+                        NameSv = "roleNameSv",
+                        NameEn = "roleNameEn"
+                    }
+                }
+            },
+            FieldOfSciences = new List<CSC.PublicApi.Interface.Models.ResearchDataset.FieldOfScience>
+            {
+                new()
+                {
+                    FieldId = "fieldOfScienceFieldId",
+                    NameFi = "fieldOfScienceNameFi",
+                    NameSv = "fieldOfScienceNameSv",
+                    NameEn = "fieldOfScienceNameEn"
+                }
+            },
+            Languages = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Language>
+            {
+                new()
+                {
+                    Code = "languageCode",
+                    NameEn = "languageNameEn",
+                    NameFi = "languageNameFi",
+                    NameSv = "languageNameSv"
+                }
+            },
+            AccessType = new CSC.PublicApi.Interface.Models.ResearchDataset.Availability
+            {
+                Code = "accessTypeCode",
+                NameFi = "accessTypeNameFi",
+                NameSv = "accessTypeNameSv",
+                NameEn = "accessTypeNameEn"
+            },
+            License = new CSC.PublicApi.Interface.Models.ResearchDataset.License
+            {
+                Code = "licenseCode",
+                NameFi = "licenseNameFi",
+                NameSv = "licenseNameSv",
+                NameEn = "licenseNameEn",
+            },
+            Keywords = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Keyword>
+            {
+                new()
+                {
+                    Language = "keywordLanguage",
+                    Scheme = "keywordScheme",
+                    Value = "keywordValue"
+                }
+            },
+            DatasetRelations = new List<CSC.PublicApi.Interface.Models.ResearchDataset.DatasetRelation>
+            {
+                new()
+                {
+                    Id = "32410",
+                    Type = "dataSetRelationType"
+                }
+            },
+            PreferredIdentifiers = new List<CSC.PublicApi.Interface.Models.ResearchDataset.PreferredIdentifier>
+            {
+                new()
+                {
+                    Content = "preferredIdentifierContent",
+                    Type = "preferredIdentifierType"
+                }
+            },
+            LocalIdentifier = "localIdentifier",
+            FairDataUrl = "https://etsin.fairdata.fi/dataset/localIdentifier",
+            ResearchDataCatalog = new CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataCatalog
+            {
+                Id = 7,
+                NameFi = "researchDataCatalogNameFi",
+                NameSv = "researchDataCatalogNameSv",
+                NameEn = "researchDataCatalogNameEn",
+                SourceId = "researchDataCatalogSourceId",
+                SourceDescription = "researchDataCatalogSourceDescription"
+            },
+            VersionSet = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Version>
+            {
+                new()
+                {
+                    Identifier = "32410",
+                    VersionNumber = "123"
+                },
+                new()
+                {
+                    Identifier = "32411",
+                    VersionNumber = "321"
+                }
+            },
+            IsLatestVersion = false
         };
     }
 }

@@ -1,11 +1,11 @@
-﻿using Elasticsearch.Net;
-using FluentAssertions;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Elasticsearch.Net;
+using FluentAssertions;
+using Newtonsoft.Json;
 
-namespace CSC.PublicApi.Tests.TestHelpers;
+namespace CSC.PublicApi.Interface.Tests.TestHelpers;
 
 public static class ElasticAssertExtensions
 {

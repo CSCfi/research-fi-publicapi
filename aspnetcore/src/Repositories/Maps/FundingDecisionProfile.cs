@@ -2,7 +2,7 @@
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models.FundingDecision;
 
-namespace CSC.PublicApi.DataAccess.Maps;
+namespace CSC.PublicApi.Repositories.Maps;
 
 public class FundingDecisionProfile : Profile
 {

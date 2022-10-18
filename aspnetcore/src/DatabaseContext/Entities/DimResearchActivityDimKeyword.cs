@@ -1,9 +1,13 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class DimResearchActivityDimKeyword
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public int DimResearchActivityId { get; set; }
-    public int DimKeywordId { get; set; }
+    public partial class DimResearchActivityDimKeyword
+    {
+        public int DimResearchActivityId { get; set; }
+        public int DimKeywordId { get; set; }
 
-    public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;
+        public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;
+    }
 }

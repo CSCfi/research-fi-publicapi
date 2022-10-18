@@ -1,15 +1,15 @@
-﻿using CSC.PublicApi.ElasticService;
-using CSC.PublicApi.Tests.TestHelpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CSC.PublicApi.ElasticService;
+using CSC.PublicApi.Interface.Tests.TestHelpers;
 using Elasticsearch.Net;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Nest;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace CSC.PublicApi.Tests.Services;
+namespace CSC.PublicApi.Interface.Tests.Services;
 
 public class ElasticSearchIndexServiceTest
 {

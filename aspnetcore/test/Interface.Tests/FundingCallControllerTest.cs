@@ -1,18 +1,18 @@
 ﻿using System;
+using AutoMapper;
+using CSC.PublicApi.ElasticService;
+using CSC.PublicApi.ElasticService.SearchParameters;
+using CSC.PublicApi.Interface.Controllers;
+using CSC.PublicApi.Interface.Maps;
+using CSC.PublicApi.Interface.Models;
+using CSC.PublicApi.Interface.Services;
+using CSC.PublicApi.Service.Models.FundingCall;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
-using FluentAssertions;
-using AutoMapper;
-using CSC.PublicApi.Service.Models.FundingCall;
-using CSC.PublicApi.ElasticService;
-using CSC.PublicApi.Interface.Maps;
-using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Controllers;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class FundingCallControllerTest : IDisposable
 {
@@ -96,7 +96,6 @@ public class FundingCallControllerTest : IDisposable
         result.Should().NotBeNull();
         _mockSearchService.Verify(m => m.Search(It.IsAny<FundingCallSearchParameters>(), pageNumber, maximumPageSize));
     }
-
 
     public void Dispose()
     {

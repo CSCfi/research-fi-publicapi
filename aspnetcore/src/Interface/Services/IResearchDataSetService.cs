@@ -4,7 +4,7 @@ using CSC.PublicApi.Interface.Models.ResearchDataset;
 
 namespace CSC.PublicApi.Interface.Services;
 
-public interface IResearchDataSetService
+public interface IResearchDatasetService
 {
     Task<(IEnumerable<ResearchDataset>, SearchResult)> GetResearchDatasets(GetResearchDatasetsQueryParameters queryParameters);
 }

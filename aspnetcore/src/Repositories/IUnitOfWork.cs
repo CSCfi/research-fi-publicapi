@@ -1,6 +1,4 @@
-﻿using CSC.PublicApi.DataAccess.Repositories;
-
-namespace CSC.PublicApi.DataAccess;
+﻿namespace CSC.PublicApi.Repositories;
 
 public interface IUnitOfWork
 {

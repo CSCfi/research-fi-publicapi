@@ -1,7 +1,6 @@
-﻿using CSC.PublicApi.DataAccess.Repositories;
-using CSC.PublicApi.DatabaseContext;
+﻿using CSC.PublicApi.DatabaseContext;
 
-namespace CSC.PublicApi.DataAccess;
+namespace CSC.PublicApi.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 /// <summary>
 /// Base class for IndexRepositories. Provides common logic for every IndexRepository.

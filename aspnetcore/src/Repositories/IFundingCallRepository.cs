@@ -1,6 +1,6 @@
 ﻿using CSC.PublicApi.DatabaseContext.Entities;
 
-namespace CSC.PublicApi.DataAccess.Repositories;
+namespace CSC.PublicApi.Repositories;
 
 public interface IFundingCallRepository : IGenericRepository<DimCallProgramme>
 {

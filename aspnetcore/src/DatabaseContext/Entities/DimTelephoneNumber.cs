@@ -1,22 +1,26 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class DimTelephoneNumber
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public DimTelephoneNumber()
+    public partial class DimTelephoneNumber
     {
-        FactFieldValues = new HashSet<FactFieldValue>();
+        public DimTelephoneNumber()
+        {
+            FactFieldValues = new HashSet<FactFieldValue>();
+        }
+
+        public int Id { get; set; }
+        public string? TelephoneNumber { get; set; }
+        public string SourceId { get; set; } = null!;
+        public string? SourceDescription { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public int DimRegisteredDataSourceId { get; set; }
+        public int DimKnownPersonId { get; set; }
+
+        public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
+        public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
-
-    public int Id { get; set; }
-    public string? TelephoneNumber { get; set; }
-    public string SourceId { get; set; } = null!;
-    public string? SourceDescription { get; set; }
-    public DateTime? Created { get; set; }
-    public DateTime? Modified { get; set; }
-    public int DimRegisteredDataSourceId { get; set; }
-    public int DimKnownPersonId { get; set; }
-
-    public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
-    public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
-    public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 }

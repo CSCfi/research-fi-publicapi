@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using FluentAssertions;
-using System.Collections.Generic;
-using System.Linq;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Repositories.Maps;
+using CSC.PublicApi.Service.Models.FundingCall;
+using FluentAssertions;
 using Xunit;
 using FundingCall = CSC.PublicApi.Service.Models.FundingCall.FundingCall;
-using CSC.PublicApi.Interface.Maps;
-using CSC.PublicApi.Service.Models.FundingCall;
 
-namespace CSC.PublicApi.Tests.Maps;
+namespace CSC.PublicApi.Indexer.Tests.Maps;
 
 public class FundingCallProfileTest
 {
@@ -26,7 +24,7 @@ public class FundingCallProfileTest
     }
 
     [Fact]
-    public void Should_Map_DimCallProgramme_To_FundingCall()
+    public void ProjectTo_DimCallProgramme_ShouldBeMappedToFundingCall()
     {
         // Arrange
         var entity = GetEntity();

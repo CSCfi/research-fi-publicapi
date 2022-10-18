@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CSC.PublicApi.Tests.TestHelpers;
+namespace CSC.PublicApi.Interface.Tests.TestHelpers;
 
 public static class ApiTestExtensions
 {

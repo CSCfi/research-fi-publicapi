@@ -1,17 +1,15 @@
-using CSC.PublicApi.DataAccess;
-using CSC.PublicApi.Interface;
-using CSC.PublicApi.Tests.TestHelpers;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Interface.Tests.TestHelpers;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Infrastructure = CSC.PublicApi.Interface.Models.Infrastructure.Infrastructure;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
 {
@@ -31,7 +29,7 @@ public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<
     /// <summary>
     /// Test for running infrastructure query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(InfrastructureResultTestCases))]
     public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<Infrastructure, bool>> assertPredicate)
     {
@@ -53,7 +51,7 @@ public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<
     /// <summary>
     /// Test for running infrastructure query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(InfrastructureNoResultsTestCases))]
     public async void GET_ShouldReturnEmpty(string urlParams)
     {

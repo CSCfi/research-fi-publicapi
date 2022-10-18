@@ -1,30 +1,36 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class DimUserProfile
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public DimUserProfile()
+    public partial class DimUserProfile
     {
-        DimFieldDisplaySettings = new HashSet<DimFieldDisplaySetting>();
-        DimUserChoices = new HashSet<DimUserChoice>();
-        FactFieldValues = new HashSet<FactFieldValue>();
+        public DimUserProfile()
+        {
+            BrGrantedPermissions = new HashSet<BrGrantedPermission>();
+            DimFieldDisplaySettings = new HashSet<DimFieldDisplaySetting>();
+            DimUserChoices = new HashSet<DimUserChoice>();
+            FactFieldValues = new HashSet<FactFieldValue>();
+        }
+
+        public int Id { get; set; }
+        public int DimKnownPersonId { get; set; }
+        public bool AllowAllSubscriptions { get; set; }
+        public string SourceId { get; set; } = null!;
+        public string? SourceDescription { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
+        public string? OrcidAccessToken { get; set; }
+        public string? OrcidRefreshToken { get; set; }
+        public string? OrcidTokenScope { get; set; }
+        public DateTime? OrcidTokenExpires { get; set; }
+        public string? OrcidId { get; set; }
+        public int? Statuscode { get; set; }
+
+        public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
+        public virtual ICollection<BrGrantedPermission> BrGrantedPermissions { get; set; }
+        public virtual ICollection<DimFieldDisplaySetting> DimFieldDisplaySettings { get; set; }
+        public virtual ICollection<DimUserChoice> DimUserChoices { get; set; }
+        public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
-
-    public int Id { get; set; }
-    public int DimKnownPersonId { get; set; }
-    public bool AllowAllSubscriptions { get; set; }
-    public string SourceId { get; set; } = null!;
-    public string? SourceDescription { get; set; }
-    public DateTime? Created { get; set; }
-    public DateTime? Modified { get; set; }
-    public string? OrcidAccessToken { get; set; }
-    public string? OrcidRefreshToken { get; set; }
-    public string? OrcidTokenScope { get; set; }
-    public DateTime? OrcidTokenExpires { get; set; }
-    public string? OrcidId { get; set; }
-    public int? Statuscode { get; set; }
-
-    public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
-    public virtual ICollection<DimFieldDisplaySetting> DimFieldDisplaySettings { get; set; }
-    public virtual ICollection<DimUserChoice> DimUserChoices { get; set; }
-    public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 }

@@ -1,8 +1,7 @@
-﻿using CSC.PublicApi.Interface;
-using System.Net.Http;
+﻿using System.Net.Http;
 using Xunit;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
 {

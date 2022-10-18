@@ -1,20 +1,24 @@
-﻿namespace CSC.PublicApi.DatabaseContext.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public partial class DimEsfri
+namespace CSC.PublicApi.DatabaseContext.Entities
 {
-    public DimEsfri()
+    public partial class DimEsfri
     {
-        DimInfrastructures = new HashSet<DimInfrastructure>();
+        public DimEsfri()
+        {
+            DimInfrastructures = new HashSet<DimInfrastructure>();
+        }
+
+        public int Id { get; set; }
+        public string? NameFi { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameSv { get; set; }
+        public string SourceId { get; set; } = null!;
+        public string? SourceDescription { get; set; }
+        public DateTime? Modified { get; set; }
+        public DateTime? Created { get; set; }
+
+        public virtual ICollection<DimInfrastructure> DimInfrastructures { get; set; }
     }
-
-    public int Id { get; set; }
-    public string? NameFi { get; set; }
-    public string? NameEn { get; set; }
-    public string? NameSv { get; set; }
-    public string SourceId { get; set; } = null!;
-    public string? SourceDescription { get; set; }
-    public DateTime? Modified { get; set; }
-    public DateTime? Created { get; set; }
-
-    public virtual ICollection<DimInfrastructure> DimInfrastructures { get; set; }
 }

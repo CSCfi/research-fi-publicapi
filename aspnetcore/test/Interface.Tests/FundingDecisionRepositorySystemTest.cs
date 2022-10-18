@@ -1,14 +1,13 @@
-﻿using CSC.PublicApi.DataAccess.Repositories;
-using CSC.PublicApi.Interface;
+﻿using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using CSC.PublicApi.Repositories;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class FundingDecisionRepositorySystemTest : IClassFixture<TestWebApplicationFactory<Program>>
 {

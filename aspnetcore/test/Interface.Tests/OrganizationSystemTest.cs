@@ -1,17 +1,15 @@
-﻿using CSC.PublicApi.DataAccess;
-using CSC.PublicApi.Interface;
-using CSC.PublicApi.Interface.Models.Organization;
-using CSC.PublicApi.Tests.TestHelpers;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Interface.Models.Organization;
+using CSC.PublicApi.Interface.Tests.TestHelpers;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace CSC.PublicApi.Tests;
+namespace CSC.PublicApi.Interface.Tests;
 
 public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
 {
@@ -31,7 +29,7 @@ public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Pr
     /// <summary>
     /// Test for running Organization query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(OrganizationResultTestCases))]
     public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<Organization, bool>> assertPredicate)
     {
@@ -53,7 +51,7 @@ public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Pr
     /// <summary>
     /// Test for running Organization query against a real elasticsearch instance.
     /// </summary>
-    [Theory]
+    [Theory(Skip = "Integration test")]
     [MemberData(nameof(OrganizationNoResultsTestCases))]
     public async void GET_ShouldReturnEmpty(string urlParams)
     {
