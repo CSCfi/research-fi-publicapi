@@ -16,7 +16,7 @@ public class ResearchDatasetProfileTest
 
     public ResearchDatasetProfileTest()
     {
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<CSC.PublicApi.Interface.Maps.ReseachDatasetProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<CSC.PublicApi.Interface.Maps.ResearchDatasetProfile>()).CreateMapper();
     }
 
     [Fact]

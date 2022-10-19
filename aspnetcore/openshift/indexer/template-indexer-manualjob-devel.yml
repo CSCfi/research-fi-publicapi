@@ -50,29 +50,29 @@ objects:
                     secretKeyRef:
                         name: publicapi-api-secret-devel
                         key: dbconnectionstring
-                - name: "IndexNames__Api.Models.FundingCall.FundingCall"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                   valueFrom:
                     configMapKeyRef:
                         name: publicapi-api-config-devel
-                        key: "IndexNames__Api.Models.FundingCall.FundingCall"
-                - name: "IndexNames__Api.Models.FundingDecision.FundingDecision"
+                        key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
                   valueFrom:
                     configMapKeyRef:
                         name: publicapi-api-config-devel
-                        key: "IndexNames__Api.Models.FundingDecision.FundingDecision"
-                - name: "IndexNames__Api.Models.Infrastructure.Infrastructure"
+                        key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
                   valueFrom:
                     configMapKeyRef:
                         name: publicapi-api-config-devel
-                        key: "IndexNames__Api.Models.Infrastructure.Infrastructure"
-                - name: "IndexNames__Api.Models.Organization.Organization"
+                        key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
                   valueFrom:
                     configMapKeyRef:
                         name: publicapi-api-config-devel
-                        key: "IndexNames__Api.Models.Organization.Organization"
-                - name: "IndexNames__Api.Models.ResearchDataset.ResearchDataset"
+                        key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                   valueFrom:
                     configMapKeyRef:
                         name: publicapi-api-config-devel
-                        key: "IndexNames__Api.Models.ResearchDataset.ResearchDataset"
+                        key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
           restartPolicy: Never
