@@ -9,7 +9,7 @@ public class FundingDecisionProfile : Profile
 {
     public FundingDecisionProfile()
     {
-        CreateMap<GetFundingCallQueryParameters, FundingDecisionSearchParameters>();
+        CreateMap<GetFundingDecisionQueryParameters, FundingDecisionSearchParameters>();
         CreateMap<Service.Models.FundingDecision.FundingDecision, FundingDecision>();
         CreateMap<Service.Models.FundingDecision.CallProgramme, CallProgramme>();
         CreateMap<Service.Models.FundingDecision.ContactPerson, ContactPerson>();
