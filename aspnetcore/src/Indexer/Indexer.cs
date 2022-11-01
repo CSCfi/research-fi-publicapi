@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Text;
 using CSC.PublicApi.Repositories;
 
 namespace CSC.PublicApi.Indexer;
@@ -34,17 +33,10 @@ public class Indexer
     {
         Stopwatch stopWatch = new();
         stopWatch.Start();
-        _logger.LogInformation("Starting indexing.. {stopWatch}", stopWatch.Elapsed);
-
-        var elasticLog = $"Using ElasticSearch '{_configuration["ELASTICSEARCH:URL"]}'";
-        elasticLog += _configuration["ELASTICSEARCH:USERNAME"] != null || _configuration["ELASTICSEARCH:PASSWORD"] != null
-            ? " with basic authentication."
-            : ".";
-        _logger.LogInformation(elasticLog);
+        _logger.LogInformation("Starting indexing...");
+        _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress}'", _configuration["ELASTICSEARCH:URL"]);
 
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
-
-        var indexingResults = new List<(string IndexName, bool Success, TimeSpan Elapsed)>();
 
         foreach (var indexNameAndType in configuredTypesAndIndexNames)
         {
@@ -52,24 +44,16 @@ public class Indexer
             var modelType = indexNameAndType.Value;
             var repositoryForType = _indexRepositories.Single(repo => repo.ModelType == modelType);
 
-            var indexingResult = await IndexEntities(indexName, repositoryForType, modelType);
-
-            indexingResults.Add(indexingResult);
+            await IndexEntities(indexName, repositoryForType, modelType);
         }
 
-        var summaryText = new StringBuilder();
-        summaryText.AppendLine($"All indexing done. Summary:");
-        foreach (var (IndexName, Success, Elapsed) in indexingResults)
-        {
-            summaryText.AppendLine($"{IndexName}: {(Success ? "OK" : "Error")} - {Elapsed}");
-        }
-        summaryText.AppendLine($"ALL: {indexingResults.Count(r => r.Success)} Ok, {indexingResults.Count(r => !r.Success)} failed. - {stopWatch.Elapsed.ToString("c")}");
-        _logger.LogInformation(summaryText.ToString());
+        var totalTime = stopWatch.Elapsed;
+
+        _logger.LogInformation("Indexing completed in {Elapsed}, finishing process", totalTime);
         stopWatch.Stop();
     }
 
-    private async Task<(string IndexName, bool Success, TimeSpan Elapsed)> IndexEntities(
-        string indexName,
+    private async Task IndexEntities(string indexName,
         IIndexRepository repository,
         Type type)
     {
@@ -78,26 +62,31 @@ public class Indexer
 
         try
         {
-            _logger.LogInformation("Getting '{entityType}' entities from the database.", type.Name);
-
+            _logger.LogDebug("{EntityType}: Recreating '{IndexName}' index...", type.Name, indexName);
+            
             var indexModels = await repository.GetAllAsync().ToListAsync();
 
-            _logger.LogInformation("Got {count} '{entityType}' entities from the database. {stopWatch}", indexModels.Count, type.Name, stopWatch.Elapsed);
+            var databaseElapsed = stopWatch.Elapsed;
+            
+            _logger.LogDebug("{EntityType}: Retrieved {DatabaseCount} entities from the database in {ElapsedDatabase}...",  type.Name, indexModels.Count, databaseElapsed);
 
             var finalized = repository.PerformInMemoryOperations(indexModels);
+            
+            var inMemoryElapsed = stopWatch.Elapsed;
 
-            _logger.LogInformation("Indexing '{indexName}' to ElasticSearch..", indexName);
+            _logger.LogDebug("{EntityType}: Performed in-memory operations in {ElapsedInMemory}...",  type.Name, inMemoryElapsed - databaseElapsed);
 
             await _indexService.IndexAsync(indexName, finalized, type);
+            
+            var indexingElapsed = stopWatch.Elapsed;
+            
+            _logger.LogDebug("{EntityType}: Indexed {IndexCount} entities in {ElapsedIndexing}...", type.Name, indexModels.Count,  indexingElapsed - inMemoryElapsed);
 
-            _logger.LogInformation("Index '{indexName}' created. {stopWatch}", indexName, stopWatch.Elapsed);
-
-            return (indexName, true, stopWatch.Elapsed);
+            _logger.LogInformation("{EntityType}: Index '{IndexName}' recreated successfully with {IndexCount} entities in {ElapsedTotal}", type.Name, indexName, indexModels.Count, stopWatch.Elapsed);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occurred while indexing '{indexName}' {stopWatch},", indexName, stopWatch.Elapsed);
-            return (indexName, false, stopWatch.Elapsed);
+            _logger.LogError(ex, "{EntityType}: Exception occurred while indexing '{IndexName}' index after {ElapsedException},", type.Name, indexName, stopWatch.Elapsed);
         }
     }
 }

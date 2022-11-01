@@ -3,6 +3,7 @@ using CSC.PublicApi.Interface.Models.FundingCall;
 using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
