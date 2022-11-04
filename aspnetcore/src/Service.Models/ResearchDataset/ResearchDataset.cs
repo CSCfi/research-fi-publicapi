@@ -4,11 +4,10 @@ namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class ResearchDataset
 {
-    private bool? _isLatestVersion;
-    private List<Version>? _versions;
+    public string? Identifier { get; set; }
 
     [Ignore]
-    public int Id { get; set; }
+    public int DatabaseId { get; set; }
 
     public string? NameFi { get; set; }
 
@@ -39,77 +38,34 @@ public class ResearchDataset
     public List<DatasetRelation>? DatasetRelations { get; set; }
 
     public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
-
-    public string? LocalIdentifier { get; set; }
-
-    public string? FairDataUrl { get; set; }
-
+    
     public ResearchDataCatalog? ResearchDataCatalog { get; set; }
 
     /// <summary>
     /// Intermediate collection for getting outgoing version relations from the database. Not to be stored in Elastic Search.
     /// </summary>
     [Ignore]
-    public List<VersionBridge>? OutgoingVersions { get; set; }
+    public List<DatasetRelationBridge>? OutgoingDatasetRelations { get; set; }
 
     /// <summary>
     /// Intermediate collection for getting incoming version relations from the database. Not to be stored in Elastic Search.
     /// </summary>
     [Ignore]
-    public List<VersionBridge>? IncomingVersions { get; set; }
+    public List<DatasetRelationBridge>? IncomingDatasetVersionRelations { get; set; }
 
     /// <summary>
     /// Collection of version references built from incoming and outgoing relations, to be able to include all versions of the data set for all entities.
     /// </summary>
-    public List<Version> VersionSet
-    {
-        get
-        {
-            if (_versions != null)
-            {
-                return _versions;
-            }
+    /// <remarks>
+    /// Filled in the in memory operations of the index repository.
+    /// </remarks>
+    public List<Version>? VersionSet { get; set; }
 
-            _versions = new List<Version>();
-
-            if (IncomingVersions != null)
-            {
-                _versions.AddRange(IncomingVersions.Select(version => new Version
-                    { Identifier = version.Identifier, VersionNumber = version.VersionNumber }).ToList());
-            }
-
-            if (OutgoingVersions != null)
-            {
-                foreach (var outgoingVersion in OutgoingVersions.Where(outgoingVersion =>
-                             _versions.All(s => s.Identifier != outgoingVersion.Identifier2)))
-                {
-                    _versions.Add(new Version
-                    {
-                        Identifier = outgoingVersion.Identifier2, VersionNumber = outgoingVersion.VersionNumber2
-                    });
-                }
-            }
-
-            return _versions;
-        }
-        set => _versions = value;
-    }
-
-    public bool IsLatestVersion
-    {
-        get
-        {
-            if (_isLatestVersion.HasValue)
-            {
-                return _isLatestVersion.Value;
-            }
-
-
-            _isLatestVersion = VersionSet.Count == 0 ||
-                               VersionSet.Any(s => s.Identifier == Id
-                                                   && s.VersionNumber == VersionSet.Max(s => s.VersionNumber));
-            return _isLatestVersion.Value;
-        }
-        set => _isLatestVersion = value;
-    }
+    /// <summary>
+    /// Indicates whether this is the latest version of the dataset or not.
+    /// </summary>
+    /// <remarks>
+    /// Filled in the in memory operations of the index repository.
+    /// </remarks>
+    public bool? IsLatestVersion { get; set; }
 }

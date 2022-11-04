@@ -17,7 +17,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
         _mapper = mapper;
     }
 
-    public override IQueryable<FundingCall> GetAll()
+    protected override IQueryable<FundingCall> GetAll()
     {
         return _context.DimCallProgrammes
             .AsNoTracking()

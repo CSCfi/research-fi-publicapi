@@ -34,7 +34,7 @@ public class ResearchDataset
 
     public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
 
-    public string? LocalIdentifier { get; set; }
+    public string? Identifier { get; set; }
 
     public string? FairDataUrl { get; set; }
 

@@ -8,10 +8,16 @@ namespace CSC.PublicApi.Interface.Maps;
 
 public class ResearchDatasetProfile : Profile
 {
+    private const string FairDataBaseUrl = "https://etsin.fairdata.fi/dataset/";
+    
     public ResearchDatasetProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
         CreateMap<GetResearchDatasetsQueryParameters, ResearchDatasetSearchParameters>();
-        CreateMap<Service.Models.ResearchDataset.ResearchDataset, ResearchDataset>();
+        CreateMap<Service.Models.ResearchDataset.ResearchDataset, ResearchDataset>()
+            .ForMember(r => r.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Identifier}"));
         CreateMap<Service.Models.ResearchDataset.FieldOfScience, FieldOfScience>();
         CreateMap<Service.Models.ResearchDataset.Keyword, Keyword>();
         CreateMap<Service.Models.ResearchDataset.Language, Language>();
@@ -25,6 +31,5 @@ public class ResearchDatasetProfile : Profile
         CreateMap<Service.Models.ResearchDataset.ResearchDataCatalog, ResearchDataCatalog>();
         CreateMap<Service.Models.ResearchDataset.Role, Role>();
         CreateMap<Service.Models.ResearchDataset.Version, Version>();
-
     }
 }

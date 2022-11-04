@@ -16,7 +16,7 @@ public class OrganizationIndexRepository : IndexRepositoryBase<Organization>
         _mapper = mapper;
     }
 
-    public override IQueryable<Organization> GetAll()
+    protected override IQueryable<Organization> GetAll()
     {
         return _context.DimOrganizations
             .Where(organization => organization.Id != -1)

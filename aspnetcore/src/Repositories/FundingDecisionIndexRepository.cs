@@ -18,7 +18,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         _mapper = mapper;
     }
 
-    public override IQueryable<FundingDecision> GetAll()
+    protected override IQueryable<FundingDecision> GetAll()
     {
         return _context
             .Set<DimFundingDecision>()
@@ -53,6 +53,4 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         });
         return objects;
     }
-
-
 }

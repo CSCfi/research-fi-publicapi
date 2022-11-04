@@ -43,7 +43,7 @@ public class ResearchDatasetProfileTest
     {
         return new ResearchDataset
         {
-            Id = Id,
+            DatabaseId = Id,
             NameFi = "nameFi",
             NameSv = "nameSv",
             NameEn = "nameEn",
@@ -57,16 +57,14 @@ public class ResearchDatasetProfileTest
                 {
                     Organisation = new Organisation
                     {
-                        organizationId = "organizationId",
+                        Id = "organizationId",
                         NameFi = "organizationNameFi",
                         NameSv = "organizationNameSv",
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
                     Person = new Person {
-                        FirstNames  = "personFirstName",
-                        LastName = "personLastName",
-                        FullName = "personFullName"
+                        Name = "personFullName"
                     },
                     Role = new Role
                     {
@@ -115,7 +113,6 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Language = "keywordLanguage",
-                    Scheme = "keywordScheme",
                     Value = "keywordValue"
                 }
             },
@@ -135,8 +132,7 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            LocalIdentifier = "localIdentifier",
-            FairDataUrl = "https://etsin.fairdata.fi/dataset/localIdentifier",
+            Identifier = "localIdentifier",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,
@@ -150,12 +146,12 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
-                    Identifier = 32410,
+                    Identifier = "45670894-2a22-422e-8858-2fe52938276d",
                     VersionNumber = "123"
                 },
                 new()
                 {
-                    Identifier = 32411,
+                    Identifier = "9936fbc2-f043-4c27-9a65-a52472aa94cb",
                     VersionNumber = "321"
                 }
             },
@@ -180,16 +176,14 @@ public class ResearchDatasetProfileTest
                 {
                     Organisation = new CSC.PublicApi.Interface.Models.ResearchDataset.Organisation
                     {
-                        organizationId = "organizationId",
+                        Id = "organizationId",
                         NameFi = "organizationNameFi",
                         NameSv = "organizationNameSv",
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
                     Person = new CSC.PublicApi.Interface.Models.ResearchDataset.Person {
-                        FirstNames  = "personFirstName",
-                        LastName = "personLastName",
-                        FullName = "personFullName"
+                        Name = "personFullName"
                     },
                     Role = new CSC.PublicApi.Interface.Models.ResearchDataset.Role
                     {
@@ -238,7 +232,6 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Language = "keywordLanguage",
-                    Scheme = "keywordScheme",
                     Value = "keywordValue"
                 }
             },
@@ -258,7 +251,7 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            LocalIdentifier = "localIdentifier",
+            Identifier = "localIdentifier",
             FairDataUrl = "https://etsin.fairdata.fi/dataset/localIdentifier",
             ResearchDataCatalog = new CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataCatalog
             {
@@ -273,12 +266,12 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
-                    Identifier = "32410",
+                    Identifier = "45670894-2a22-422e-8858-2fe52938276d",
                     VersionNumber = "123"
                 },
                 new()
                 {
-                    Identifier = "32411",
+                    Identifier = "9936fbc2-f043-4c27-9a65-a52472aa94cb",
                     VersionNumber = "321"
                 }
             },

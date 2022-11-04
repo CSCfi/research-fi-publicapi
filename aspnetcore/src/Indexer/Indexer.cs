@@ -78,7 +78,6 @@ public class Indexer
 
         try
         {
-
             _logger.LogInformation("Getting '{entityType}' entities from the database.", type.Name);
 
             var indexModels = await repository.GetAllAsync().ToListAsync();
