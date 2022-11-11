@@ -4,7 +4,9 @@ namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class Organisation
 {
-    public string? organizationId { get; set; }
+    public string? Id { get; set; }
+    
+    public PreferredIdentifier[]? Pids { get; set; }
 
     [Text(Name = "OrganizationNameFi")]
     public string? NameFi { get; set; }

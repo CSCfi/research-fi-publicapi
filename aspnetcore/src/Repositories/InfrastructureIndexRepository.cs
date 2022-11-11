@@ -16,7 +16,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         _mapper = mapper;
     }
 
-    public override IQueryable<Infrastructure> GetAll()
+    protected override IQueryable<Infrastructure> GetAll()
     {
         return _context.DimInfrastructures
             .Where(infrastructure => infrastructure.Id != -1)

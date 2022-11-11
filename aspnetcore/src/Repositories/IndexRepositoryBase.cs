@@ -12,7 +12,8 @@ public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : cla
     /// Method which every IndexRepository must override, provides every T as Queryable.
     /// </summary>
     /// <returns></returns>
-    public abstract IQueryable<T> GetAll();
+    protected abstract IQueryable<T> GetAll();
+    
     Type IIndexRepository.ModelType => typeof(T);
 
     IQueryable<T> IIndexRepository<T>.GetAll() => GetAll();
@@ -23,10 +24,10 @@ public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : cla
     /// If the data type needs special data manipulations after data has been fetched,
     /// this can be overriden in derived classes.
     /// </summary>
-    /// <param name="objects"></param>
+    /// <param name="entities"></param>
     /// <returns></returns>
-    public virtual List<object> PerformInMemoryOperations(List<object> objects)
+    public virtual List<object> PerformInMemoryOperations(List<object> entities)
     {
-        return objects;
+        return entities;
     }
 }

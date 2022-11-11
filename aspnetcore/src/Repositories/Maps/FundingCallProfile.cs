@@ -47,6 +47,5 @@ public class FundingCallProfile : Profile
 
         CreateProjection<DimWebLink, string?>()
             .ConvertUsing(x => x != null ? x.Url : null);
-
     }
 }

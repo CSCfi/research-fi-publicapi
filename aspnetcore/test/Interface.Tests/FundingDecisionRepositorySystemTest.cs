@@ -5,6 +5,7 @@ using CSC.PublicApi.Repositories;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;

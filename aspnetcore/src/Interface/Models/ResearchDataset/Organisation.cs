@@ -2,7 +2,7 @@
 
 public class Organisation
 {
-    public string? organizationId { get; set; }
+    public string? Id { get; set; }
 
     public string? NameFi { get; set; }
 

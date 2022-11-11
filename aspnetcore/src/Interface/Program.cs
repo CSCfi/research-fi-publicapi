@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 //using Api.DataAccess;
 //using Api.DatabaseContext;
 using CSC.PublicApi.ElasticService;
@@ -12,7 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSettings(builder.Configuration);
 
 // Add services to the container.
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
 // Configure and add Swagger with api versioning.
 builder.Services.AddSwaggerAndApiVersioning();
