@@ -16,7 +16,7 @@ public class ResearchDataset
 
     public DateTime? DatasetCreated { get; set; }
 
-    public List<Contributor> Contributors { get; set; }
+    public List<Contributor>? Contributors { get; set; }
 
     public List<FieldOfScience>? FieldOfSciences { get; set; }
 
@@ -28,9 +28,9 @@ public class ResearchDataset
 
     public List<Keyword>? Keywords { get; set; }
 
-    public List<DatasetRelation> DatasetRelations { get; set; }
+    public List<DatasetRelation>? DatasetRelations { get; set; }
 
-    public List<Version> VersionSet { get; set; }
+    public List<Version>? VersionSet { get; set; }
 
     public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
 
@@ -38,7 +38,7 @@ public class ResearchDataset
 
     public string? FairDataUrl { get; set; }
 
-    public ResearchDataCatalog ResearchDataCatalog { get; set; }
+    public ResearchDataCatalog? ResearchDataCatalog { get; set; }
 
     public bool IsLatestVersion { get; set; }
 

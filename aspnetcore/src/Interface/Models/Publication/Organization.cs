@@ -1,19 +1,14 @@
-﻿using Nest;
-
-namespace CSC.PublicApi.Interface.Models.Publication;
+﻿namespace CSC.PublicApi.Interface.Models.Publication;
 
 public class Organization
 {
-    public string? organizationId { get; set; }
+    public string? Id { get; set; }
 
-    [Text(Name = "OrganizationNameFi")]
-    public string? OrganizationNameFi { get; set; }
+    public string? NameFi { get; set; }
 
-    [Text(Name = "OrganizationNameEn")]
-    public string? OrganizationNameEn { get; set; }
+    public string? NameEn { get; set; }
 
-    [Text(Name = "OrganizationNameSv")]
-    public string? OrganizationNameSv { get; set; }
+    public string? NameSv { get; set; }
 
     public OrganizationUnit[]? organizationUnit { get; set; }
 }

@@ -2,6 +2,6 @@
 
 public class Person
 {
-    public string? authorFirstNames { get; set; }
-    public string? authorLastName { get; set; }
+    public string? FirstNames { get; set; }
+    public string? LastName { get; set; }
 }

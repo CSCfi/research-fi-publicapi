@@ -4,6 +4,7 @@ namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class ResearchDataset
 {
+    [Keyword]
     public string? Identifier { get; set; }
 
     [Ignore]

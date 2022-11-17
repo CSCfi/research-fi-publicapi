@@ -1,4 +1,5 @@
-﻿using CSC.PublicApi.ElasticService.ElasticSearchQueryGenerators;
+﻿using System.Diagnostics;
+using CSC.PublicApi.ElasticService.ElasticSearchQueryGenerators;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -35,7 +36,14 @@ public static class ElasticSearchExtensions
     {
         var elasticSearchClusterUrl = configuration["ELASTICSEARCH:URL"] ?? throw new InvalidOperationException("ElasticSearch url missing.");
 
-        var connectionSettings = new ConnectionSettings(new Uri(elasticSearchClusterUrl));
+        var connectionSettings = new ConnectionSettings(new Uri(elasticSearchClusterUrl))
+            .DefaultFieldNameInferrer(i => i); // This forces elastic to store .Net objects using type names, instead of camel casing. This enables using nameof when referring to fields.
+
+        if (Debugger.IsAttached)
+        {
+            // Disable direct streaming when debugging to be able to log the DebugInformation in the ES response.
+            connectionSettings.DisableDirectStreaming();
+        }
 
         if (configuration["ELASTICSEARCH:USERNAME"] == null && configuration["ELASTICSEARCH:PASSWORD"] == null)
         {

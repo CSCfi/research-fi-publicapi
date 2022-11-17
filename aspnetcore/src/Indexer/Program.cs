@@ -24,7 +24,7 @@ public class Program
         await indexer.Start();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) => Host
+    private static IHostBuilder CreateHostBuilder(string[] args) => Host
         .CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
