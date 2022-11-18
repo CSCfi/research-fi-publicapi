@@ -1,7 +1,12 @@
-﻿namespace CSC.PublicApi.Service.Models.ResearchDataset;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class PreferredIdentifier
 {
-    public string? Type { get; set; }
+    [Keyword]
     public string? Content { get; set; }
+    
+    public string? Type { get; set; }
+    
 }

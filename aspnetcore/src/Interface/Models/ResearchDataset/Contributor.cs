@@ -2,9 +2,9 @@
 
 public class Contributor
 {
-    public Organisation Organisation { get; set; }
+    public Organisation? Organisation { get; set; }
 
-    public Person Person { get; set; }
+    public Person? Person { get; set; }
 
-    public Role Role { get; set; }
+    public Role? Role { get; set; }
 }

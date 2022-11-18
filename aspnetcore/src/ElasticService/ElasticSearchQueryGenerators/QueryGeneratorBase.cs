@@ -21,5 +21,5 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Query(GenerateQueryForIndex(searchParameters));
     }
 
-    protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForIndex(TIn searchParameters);
+    protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForIndex(TIn parameters);
 }

@@ -14,10 +14,21 @@ public class ResearchDatasetProfile : Profile
     {
         AllowNullCollections = true;
         AllowNullDestinationValues = true;
+
+        CreateMap<GetResearchDatasetsQueryParameters, ResearchDatasetSearchParameters>()
+            .ForMember(dst => dst.Language,
+                opt => opt.MapFrom(src =>
+                    src.Language != null 
+                        ? src.Language.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries) 
+                        : null))
+            .ForMember(dst => dst.FieldOfScience,
+                opt => opt.MapFrom(src =>
+                    src.FieldOfScience != null
+                        ? src.FieldOfScience.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                        : null));
         
-        CreateMap<GetResearchDatasetsQueryParameters, ResearchDatasetSearchParameters>();
         CreateMap<Service.Models.ResearchDataset.ResearchDataset, ResearchDataset>()
-            .ForMember(r => r.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Identifier}"));
+            .ForMember(dst => dst.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Identifier}"));
         CreateMap<Service.Models.ResearchDataset.FieldOfScience, FieldOfScience>();
         CreateMap<Service.Models.ResearchDataset.Keyword, Keyword>();
         CreateMap<Service.Models.ResearchDataset.Language, Language>();

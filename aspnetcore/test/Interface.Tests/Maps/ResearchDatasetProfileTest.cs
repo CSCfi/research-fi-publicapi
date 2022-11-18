@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using CSC.PublicApi.ElasticService.SearchParameters;
+using CSC.PublicApi.Interface.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
@@ -38,7 +40,56 @@ public class ResearchDatasetProfileTest
         // Assert
         result.Should().BeEquivalentTo(apiModel);
     }
+    
+    [Fact]
+    public void Map_GetResearchDatasetsQueryParameters_ConvertsListsToArrays()
+    {
+        // Arrange
+        var apiModel = new GetResearchDatasetsQueryParameters
+        {
+            Access = "access",
+            Description = "description",
+            FieldOfScience = "111, 112, 113",
+            Keywords = "keywords",
+            Language = "fin, eng, est",
+            License = "license",
+            Name = "name",
+            DateFrom = DateTime.MinValue,
+            DateTo = DateTime.MaxValue,
+            OrganisationId = "organisationId",
+            OrganisationName = "organisationName",
+            PersonName = "personName",
+            IsLatestVersion = true,
+            RelatedDatasetId = "relatedDatasetId",
+            ResearchDataCatalog = "researchDataCatalog"
 
+        };
+        var elasticModel = new ResearchDatasetSearchParameters
+        {
+            Access = "access",
+            Description = "description",
+            FieldOfScience = new[] { "111", "112", "113" },
+            Keywords = "keywords",
+            Language = new[] { "fin", "eng", "est" },
+            License = "license",
+            Name = "name",
+            DateFrom = DateTime.MinValue,
+            DateTo = DateTime.MaxValue,
+            OrganisationId = "organisationId",
+            OrganisationName = "organisationName",
+            PersonName = "personName",
+            IsLatestVersion = true,
+            RelatedDatasetId = "relatedDatasetId",
+            ResearchDataCatalog = "researchDataCatalog"
+        };
+
+        // Act
+        var result = _mapper.Map<ResearchDatasetSearchParameters>(apiModel);
+
+        // Assert
+        result.Should().BeEquivalentTo(elasticModel);
+    }
+    
     private static ResearchDataset GetServiceModel()
     {
         return new ResearchDataset

@@ -1,7 +1,10 @@
-﻿namespace CSC.PublicApi.Service.Models.ResearchDataset;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class Availability
 {
+    [Keyword]
     public string? Code { get; set; }
 
     public string? NameFi { get; set; }

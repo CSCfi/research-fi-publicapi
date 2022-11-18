@@ -10,12 +10,12 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
     {
     }
 
-    protected override Func<QueryContainerDescriptor<Publication>, QueryContainer> GenerateQueryForIndex(PublicationSearchParameters searchParameters)
+    protected override Func<QueryContainerDescriptor<Publication>, QueryContainer> GenerateQueryForIndex(PublicationSearchParameters parameters)
     {
         return queryContainerDescriptor => queryContainerDescriptor
             .MultiMatch(query => query
                 .Type(TextQueryType.PhrasePrefix)
                 .Fields("publicationName")
-                .Query(searchParameters.PublicationName));
+                .Query(parameters.PublicationName));
     }
 }
