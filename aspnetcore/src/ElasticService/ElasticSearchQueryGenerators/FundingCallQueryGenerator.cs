@@ -58,10 +58,18 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
                 ))));
         }
 
+        return subQueries;
+    }
+
+    private static IEnumerable<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>> CreateFilters(
+        FundingCallSearchParameters parameters)
+    {
+        var filters = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
+
         // Searching with business id requires exact match.
         if (!string.IsNullOrWhiteSpace(parameters.FoundationBusinessId))
         {
-            subQueries.Add(t => t.Nested(query => query
+            filters.Add(t => t.Nested(query => query
                 .Path(f => f.Foundation)
                 .Query(q => q.Term(term => term
                     .Field(f => f.Foundation.Suffix(nameof(Foundation.BusinessId)))
@@ -72,22 +80,14 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
         // Searching with category code requires exact match.
         if (!string.IsNullOrWhiteSpace(parameters.CategoryCode))
         {
-            subQueries.Add(t => t.Nested(query => query
+            filters.Add(t => t.Nested(query => query
                 .Path(f => f.Categories)
                 .Query(q => q.Term(term => term
                     .Field(f => f.Categories.Suffix(nameof(Category.CodeValue)))
                     .Value(parameters.CategoryCode)
                 ))));
         }
-
-        return subQueries;
-    }
-
-    private static IEnumerable<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>> CreateFilters(
-        FundingCallSearchParameters parameters)
-    {
-        var filters = new List<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>>();
-
+        
         if (parameters.DateFrom != null || parameters.DateTo != null)
         {
             // Add date filters for OpenDate & DueDate

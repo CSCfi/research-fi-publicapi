@@ -14,5 +14,4 @@ public class Geo
     public string? MunicipalityFi { get; set; }
     public string? MunicipalitySv { get; set; }
     public string? CountryCode { get; set; }
-
 }

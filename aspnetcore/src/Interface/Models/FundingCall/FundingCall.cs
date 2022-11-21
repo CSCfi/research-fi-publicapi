@@ -2,6 +2,9 @@
 
 namespace CSC.PublicApi.Interface.Models.FundingCall;
 
+/// <summary>
+/// Interface model for funding calls.
+/// </summary>
 public class FundingCall
 {
     /// <summary>
