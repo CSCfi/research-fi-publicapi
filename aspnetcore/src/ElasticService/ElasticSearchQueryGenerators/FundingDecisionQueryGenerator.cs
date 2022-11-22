@@ -56,108 +56,49 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         // When searching with FoundationName, search from Fi,Sv,En names.
         if (!string.IsNullOrWhiteSpace(parameters.FunderName))
         {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.Funder)
-                .Query(q => q.MultiMatch(multi => multi
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields(r => r
-                        .Field(f => f.Funder.Suffix(nameof(Funder.NameFi)))
-                        .Field(f => f.Funder.Suffix(nameof(Funder.NameSv)))
-                        .Field(f => f.Funder.Suffix(nameof(Funder.NameEn))))
-                    .Query(parameters.FunderName)
-                ))));
-        }
-
-        // Searching with funder id requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.FunderId))
-        {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.Funder!.Ids)
-                .Query(q => q.Term(term => term
-                    .Field(f => f.Funder!.Ids.Suffix(nameof(Id.Content)))
-                    .Value(parameters.FunderId)
-                ))));
-        }
-
-        // Searching with project number requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.FunderProjectNumber))
-        {
-            subQueries.Add(t => t.Term(fd => fd.FunderProjectNumber, parameters.FunderProjectNumber));
+            subQueries.Add(t => t.MultiMatch(multi => multi
+                .Type(TextQueryType.PhrasePrefix)
+                .Fields(r => r
+                    .Field(f => f.Funder.Suffix(nameof(Funder.NameFi)))
+                    .Field(f => f.Funder.Suffix(nameof(Funder.NameSv)))
+                    .Field(f => f.Funder.Suffix(nameof(Funder.NameEn))))
+                .Query(parameters.FunderName)
+            ));
         }
 
         // When searching with FundedOrganisation, search from organization consortia Fi,Sv,En names.
         if (!string.IsNullOrWhiteSpace(parameters.FundedOrganization))
         {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.OrganizationConsortia)
-                .Query(q => q.MultiMatch(multi => multi
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields(r => r
-                        .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameFi)))
-                        .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameSv)))
-                        .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameEn))))
-                    .Query(parameters.FundedOrganization)
-                ))));
-        }
-
-        // Searching with funded organization id requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.FundedOrganizationId))
-        {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.Ids)))
-                .Query(q => q.Term(term => term
-                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.Ids))
-                        .Suffix(nameof(Id.Content)))
-                    .Value(parameters.FundedOrganizationId)
-                ))));
+            subQueries.Add(t => t.MultiMatch(multi => multi
+                .Type(TextQueryType.PhrasePrefix)
+                .Fields(r => r
+                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameFi)))
+                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameSv)))
+                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameEn))))
+                .Query(parameters.FundedOrganization)
+            ));
         }
 
         // Searching with funded person first name
         if (!string.IsNullOrWhiteSpace(parameters.FundedPersonFirstName))
         {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.FundingGroupPerson)
-                .Query(q => q.QueryString(multi => multi
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields(fields =>
-                        fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.FirstNames))))
-                    .Query(parameters.FundedPersonFirstName)
-                ))));
+            subQueries.Add(t => t.QueryString(multi => multi
+                .Type(TextQueryType.PhrasePrefix)
+                .Fields(fields =>
+                    fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.FirstNames))))
+                .Query(parameters.FundedPersonFirstName)
+            ));
         }
 
         // Searching with funded person last name
         if (!string.IsNullOrWhiteSpace(parameters.FundedPersonLastName))
         {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.FundingGroupPerson)
-                .Query(q => q.QueryString(multi => multi
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields(fields =>
-                        fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.LastName))))
-                    .Query(parameters.FundedPersonLastName)
-                ))));
-        }
-
-        // Searching with funded organization id requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.FundedPersonOrcid))
-        {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.FundingGroupPerson)
-                .Query(q => q.Term(term => term
-                    .Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.OrcId)))
-                    .Value(parameters.FundedPersonOrcid)
-                ))));
-        }
-
-        // Searching with type of funding id requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.TypeOfFunding))
-        {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(p => p.TypeOfFunding)
-                .Query(q => q.Term(term => term
-                    .Field(f => f.TypeOfFunding!.TypeId)
-                    .Value(parameters.TypeOfFunding)
-                ))));
+            subQueries.Add(t => t.QueryString(multi => multi
+                .Type(TextQueryType.PhrasePrefix)
+                .Fields(fields =>
+                    fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.LastName))))
+                .Query(parameters.FundedPersonLastName)
+            ));
         }
 
         return subQueries;
@@ -167,6 +108,49 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         FundingDecisionSearchParameters parameters)
     {
         var filters = new List<Func<QueryContainerDescriptor<FundingDecision>, QueryContainer>>();
+        
+        // Searching with project number requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.FunderProjectNumber))
+        {
+            filters.Add(t => t.Term(fd => fd.FunderProjectNumber, parameters.FunderProjectNumber));
+        }
+        
+        // Searching with funder id requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.FunderId))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.Funder!.Ids.Suffix(nameof(Id.Content)))
+                .Value(parameters.FunderId)
+            ));
+        }
+        
+        // Searching with funded organization id requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.FundedPersonOrcid))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.OrcId)))
+                .Value(parameters.FundedPersonOrcid)
+            ));
+        }
+        
+        // Searching with funded organization id requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.FundedOrganizationId))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.Ids))
+                    .Suffix(nameof(Id.Content)))
+                .Value(parameters.FundedOrganizationId)
+            ));
+        }
+
+        // Searching with type of funding id requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.TypeOfFunding))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.TypeOfFunding!.TypeId)
+                .Value(parameters.TypeOfFunding)
+            ));
+        }
 
         // Add date filter for FundingStartYearFrom
         filters.Add(x => x

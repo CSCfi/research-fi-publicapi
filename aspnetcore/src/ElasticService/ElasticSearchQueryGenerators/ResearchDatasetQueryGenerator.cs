@@ -98,12 +98,12 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
     {
         var filters = new List<Func<QueryContainerDescriptor<ResearchDataset>, QueryContainer>>();
 
-        // When filtering with IsLatestVersion.
-        if (parameters.IsLatestVersion is not null)
+        // IsLatestVersion returns only latest versions, otherwise return all versions.
+        if (parameters.IsLatestVersion is not null && parameters.IsLatestVersion.Value)
         {
             filters.Add(t =>
                 t.Term(s => s.Field(f => f.IsLatestVersion)
-                    .Value(parameters.IsLatestVersion)));
+                    .Value(true)));
         }
 
         if (parameters.FieldOfScience is not null)
