@@ -78,6 +78,7 @@ namespace CSC.PublicApi.DatabaseContext
         public virtual DbSet<DimWebLink> DimWebLinks { get; set; } = null!;
         public virtual DbSet<DimWordCluster> DimWordClusters { get; set; } = null!;
         public virtual DbSet<FactContribution> FactContributions { get; set; } = null!;
+        public virtual DbSet<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; } = null!;
         public virtual DbSet<FactFieldValue> FactFieldValues { get; set; } = null!;
         public virtual DbSet<FactInfraKeyword> FactInfraKeywords { get; set; } = null!;
         public virtual DbSet<FactJufoClassCodesForPubChannel> FactJufoClassCodesForPubChannels { get; set; } = null!;
@@ -96,11 +97,6 @@ namespace CSC.PublicApi.DatabaseContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=localhost;User Id=sa;Password=T68YKem$;database=dw_rih;");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -3497,23 +3493,6 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasForeignKey(d => d.DimResearchDataCatalogId)
                     .HasConstraintName("FKdim_resear753411");
 
-                entity.HasMany(d => d.DimFieldOfSciences)
-                    .WithMany(p => p.DimResearchDatasets)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BrResearchDatasetDimFieldOfScience",
-                        l => l.HasOne<DimFieldOfScience>().WithMany().HasForeignKey("DimFieldOfScienceid").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_researc385994"),
-                        r => r.HasOne<DimResearchDataset>().WithMany().HasForeignKey("DimResearchDatasetid").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_researc927326"),
-                        j =>
-                        {
-                            j.HasKey("DimResearchDatasetid", "DimFieldOfScienceid").HasName("PK__br_resea__ADD3384B1133C283");
-
-                            j.ToTable("br_research_dataset_dim_field_of_science");
-
-                            j.IndexerProperty<int>("DimResearchDatasetid").HasColumnName("dim_research_datasetid");
-
-                            j.IndexerProperty<int>("DimFieldOfScienceid").HasColumnName("dim_field_of_scienceid");
-                        });
-
                 entity.HasMany(d => d.DimKeywords)
                     .WithMany(p => p.DimResearchDatasets)
                     .UsingEntity<Dictionary<string, object>>(
@@ -4348,6 +4327,64 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasForeignKey(d => d.DimResearchDatasetId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("authors, infras, publications, funding decisions");
+            });
+
+            modelBuilder.Entity<FactDimReferencedataFieldOfScience>(entity =>
+            {
+                entity.HasKey(e => new { e.DimReferencedataId, e.DimResearchDatasetId, e.DimKnownPersonId, e.DimPublicationId, e.DimResearchActivityId, e.DimFundingDecisionId, e.DimInfrastructureId })
+                    .HasName("PK__fact_dim__3CB15DD38DEF14BF");
+
+                entity.ToTable("fact_dim_referencedata_field_of_science");
+
+                entity.Property(e => e.DimReferencedataId).HasColumnName("dim_referencedata_id");
+
+                entity.Property(e => e.DimResearchDatasetId).HasColumnName("dim_research_dataset_id");
+
+                entity.Property(e => e.DimKnownPersonId).HasColumnName("dim_known_person_id");
+
+                entity.Property(e => e.DimPublicationId).HasColumnName("dim_publication_id");
+
+                entity.Property(e => e.DimResearchActivityId).HasColumnName("dim_research_activity_id");
+
+                entity.Property(e => e.DimFundingDecisionId).HasColumnName("dim_funding_decision_id");
+
+                entity.Property(e => e.DimInfrastructureId).HasColumnName("dim_infrastructure_id");
+
+                entity.HasOne(d => d.DimFundingDecision)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimFundingDecisionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKfact_dim_r41359");
+
+                entity.HasOne(d => d.DimInfrastructure)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimInfrastructureId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKfact_dim_r956301");
+
+                entity.HasOne(d => d.DimKnownPerson)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimKnownPersonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName(" ");
+
+                entity.HasOne(d => d.DimPublication)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimPublicationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKfact_dim_r127122");
+
+                entity.HasOne(d => d.DimReferencedata)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimReferencedataId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKfact_dim_r588766");
+
+                entity.HasOne(d => d.DimResearchDataset)
+                    .WithMany(p => p.FactDimReferencedataFieldOfSciences)
+                    .HasForeignKey(d => d.DimResearchDatasetId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FKfact_dim_r926246");
             });
 
             modelBuilder.Entity<FactFieldValue>(entity =>

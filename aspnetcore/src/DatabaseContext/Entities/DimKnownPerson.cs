@@ -19,6 +19,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimTelephoneNumbers = new HashSet<DimTelephoneNumber>();
             DimUserProfiles = new HashSet<DimUserProfile>();
             DimWebLinks = new HashSet<DimWebLink>();
+            FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
             DimFieldOfSciences = new HashSet<DimFieldOfScience>();
         }
 
@@ -42,6 +43,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimTelephoneNumber> DimTelephoneNumbers { get; set; }
         public virtual ICollection<DimUserProfile> DimUserProfiles { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
+        public virtual ICollection<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; }
 
         public virtual ICollection<DimFieldOfScience> DimFieldOfSciences { get; set; }
     }
