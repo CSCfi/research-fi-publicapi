@@ -126,14 +126,17 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            DimFieldOfSciences = new List<DimFieldOfScience>
+            FactDimReferencedataFieldOfSciences = new List<FactDimReferencedataFieldOfScience>
             {
                 new()
                 {
-                    FieldId = "fieldOfScienceFieldId",
-                    NameFi = "fieldOfScienceNameFi",
-                    NameSv = "fieldOfScienceNameSv",
-                    NameEn = "fieldOfScienceNameEn"
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "fieldOfScienceFieldId",
+                        NameFi = "fieldOfScienceNameFi",
+                        NameSv = "fieldOfScienceNameSv",
+                        NameEn = "fieldOfScienceNameEn"
+                    }
                 }
             },
             DimReferencedata = new List<DimReferencedatum>

@@ -10,6 +10,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimLocallyReportedPubInfos = new HashSet<DimLocallyReportedPubInfo>();
             DimPids = new HashSet<DimPid>();
             FactContributions = new HashSet<FactContribution>();
+            FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
             FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldOfArts = new HashSet<DimFieldOfArt>();
             DimFieldOfEducations = new HashSet<DimFieldOfEducation>();
@@ -86,6 +87,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimLocallyReportedPubInfo> DimLocallyReportedPubInfos { get; set; }
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
+        public virtual ICollection<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 
         public virtual ICollection<DimFieldOfArt> DimFieldOfArts { get; set; }
