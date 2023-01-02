@@ -97,6 +97,11 @@ namespace CSC.PublicApi.DatabaseContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=localhost;User Id=sa;Password=T68YKem$;database=dw_rih;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -1249,23 +1254,6 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasMaxLength(255)
                     .HasColumnName("source_id");
 
-                entity.HasMany(d => d.DimFundingDecisions)
-                    .WithMany(p => p.DimFieldOfSciences)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BrFieldOfScienceDimFundingDecision",
-                        l => l.HasOne<DimFundingDecision>().WithMany().HasForeignKey("DimFundingDecisionId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_field_o993952"),
-                        r => r.HasOne<DimFieldOfScience>().WithMany().HasForeignKey("DimFieldOfScienceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_field_o643706"),
-                        j =>
-                        {
-                            j.HasKey("DimFieldOfScienceId", "DimFundingDecisionId").HasName("PK__br_field__1A103AF7D043056B");
-
-                            j.ToTable("br_field_of_science_dim_funding_decision");
-
-                            j.IndexerProperty<int>("DimFieldOfScienceId").HasColumnName("dim_field_of_science_id");
-
-                            j.IndexerProperty<int>("DimFundingDecisionId").HasColumnName("dim_funding_decision_id");
-                        });
-
                 entity.HasMany(d => d.DimKnownPeople)
                     .WithMany(p => p.DimFieldOfSciences)
                     .UsingEntity<Dictionary<string, object>>(
@@ -1281,25 +1269,6 @@ namespace CSC.PublicApi.DatabaseContext
                             j.IndexerProperty<int>("DimFieldOfScienceId").HasColumnName("dim_field_of_science_id");
 
                             j.IndexerProperty<int>("DimKnownPersonId").HasColumnName("dim_known_person_id");
-                        });
-
-                entity.HasMany(d => d.DimPublications)
-                    .WithMany(p => p.DimFieldOfSciences)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BrFieldOfScienceDimPublication",
-                        l => l.HasOne<DimPublication>().WithMany().HasForeignKey("DimPublicationId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_field_o201610"),
-                        r => r.HasOne<DimFieldOfScience>().WithMany().HasForeignKey("DimFieldOfScienceId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKbr_field_o934749"),
-                        j =>
-                        {
-                            j.HasKey("DimFieldOfScienceId", "DimPublicationId").HasName("PK__br_field__5088B77691221EC0");
-
-                            j.ToTable("br_field_of_science_dim_publication");
-
-                            j.HasIndex(new[] { "DimFieldOfScienceId", "DimPublicationId" }, "idx_br_field_of_science_lookup");
-
-                            j.IndexerProperty<int>("DimFieldOfScienceId").HasColumnName("dim_field_of_science_id");
-
-                            j.IndexerProperty<int>("DimPublicationId").HasColumnName("dim_publication_id");
                         });
 
                 entity.HasMany(d => d.DimResearchActivities)

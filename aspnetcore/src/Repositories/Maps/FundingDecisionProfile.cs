@@ -27,7 +27,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
             .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
             .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
-            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.DimFieldOfSciences.Where(fieldOfScience => fieldOfScience.Id != -1)))
+            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
             .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
             .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
@@ -96,11 +96,11 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.CallProgrammeId, opt => opt.MapFrom(src => src.SourceId));
 
-        CreateProjection<DimFieldOfScience, FieldOfScience>()
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.FieldId, opt => opt.MapFrom(src => src.FieldId));
+        CreateProjection<FactDimReferencedataFieldOfScience, FieldOfScience>()
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn))
+            .ForMember(dst => dst.FieldId, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue));
 
         CreateProjection<DimKeyword, string>()
             .ConvertUsing(keyword => keyword.Keyword);

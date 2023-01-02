@@ -57,11 +57,22 @@ public class FundingDecisionProfileTest
     {
         // Arrange
         var source = GetSource();
-        source.DimFieldOfSciences = new[]
+        source.FactDimReferencedataFieldOfSciences = new List<FactDimReferencedataFieldOfScience>
         {
-            new DimFieldOfScience() { Id = -1, NameFi = "undefined"},
-            new DimFieldOfScience() { Id = 1, NameFi = "first"},
-            new DimFieldOfScience() { Id = 2, NameFi = "second"},
+            new()
+            {
+                DimReferencedata = new DimReferencedatum
+                {
+                    NameFi = "first"
+                }
+            },
+            new()
+            {
+                DimReferencedata = new DimReferencedatum
+                {
+                    NameFi = "second"
+                }
+            }
         };
 
         // Act
@@ -250,14 +261,17 @@ public class FundingDecisionProfileTest
                 }
             },
             FunderProjectNumber = "funder project number",
-            DimFieldOfSciences = new[]
+            FactDimReferencedataFieldOfSciences =new List<FactDimReferencedataFieldOfScience>
             {
-                new DimFieldOfScience
+                new()
                 {
-                    FieldId = "abc",
-                    NameFi = "field fi",
-                    NameSv = "field sv",
-                    NameEn = "field en",
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "abc",
+                        NameFi = "field fi",
+                        NameSv = "field sv",
+                        NameEn = "field en",
+                    }
                 }
             },
             DimKeywords = new[]

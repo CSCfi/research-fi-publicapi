@@ -14,7 +14,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldOfArts = new HashSet<DimFieldOfArt>();
             DimFieldOfEducations = new HashSet<DimFieldOfEducation>();
-            DimFieldOfSciences = new HashSet<DimFieldOfScience>();
             DimKeywords = new HashSet<DimKeyword>();
             DimReferencedata = new HashSet<DimReferencedatum>();
         }
@@ -92,7 +91,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual ICollection<DimFieldOfArt> DimFieldOfArts { get; set; }
         public virtual ICollection<DimFieldOfEducation> DimFieldOfEducations { get; set; }
-        public virtual ICollection<DimFieldOfScience> DimFieldOfSciences { get; set; }
         public virtual ICollection<DimKeyword> DimKeywords { get; set; }
         public virtual ICollection<DimReferencedatum> DimReferencedata { get; set; }
     }
