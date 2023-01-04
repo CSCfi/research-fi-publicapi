@@ -6,11 +6,20 @@ using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Interface;
 using CSC.PublicApi.Interface.Configuration;
 using CSC.PublicApi.Interface.Middleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Register settings.
 builder.Services.AddSettings(builder.Configuration);
+
+// Configure logging with Serilog
+builder.Host.UseSerilog();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom
+    .Configuration(builder.Configuration)
+    .CreateLogger();
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -34,6 +43,9 @@ builder.Services.Scan(scan =>
 // Configure authentication and authorization.
 builder.Services.AddAuthentication(builder.Configuration);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHeaderPropagation(options => options.Headers.Add("x-correlation-id"));
+
 // Configure db & entity framework
 /*builder.Services.AddDbContext<ApiDbContext>(options =>
 {
@@ -49,22 +61,27 @@ builder.Services.AddRepositories();*/
 // Register Automapper and maps
 builder.Services.AddAutoMapper(typeof(ApiPolicies).Assembly);
 
-builder.Services.AddHttpLogging(options =>
-{
-    options.ResponseHeaders.Add(CorrelationIdMiddleware.CorrelationIdHeaderName);
-    options.RequestBodyLogLimit = 4096;
-    options.ResponseBodyLogLimit = 4096;
-});
-
 var app = builder.Build();
 
-app.UseHttpLogging();
-
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseHeaderPropagation();
 
 // Generate correlation ids for requests.
 app.UseMiddleware<CorrelationIdMiddleware>();
+
+// Add properties from the HTTP request to the logging.
+app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (context, httpContext) =>
+{
+    var correlationId = httpContext.Items[CorrelationIdMiddleware.CorrelationIdHeaderName];
+    var clientId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
+    var organizationId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid")?.Value;
+    
+    context.Set("correlationId", correlationId);
+    context.Set("clientId", clientId);
+    context.Set("organizationId", organizationId);
+});
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Error handler to prevent exceptions details showing up for end users.
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();

@@ -8,7 +8,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly IElasticClient _elasticClient;
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
-    private const int batchSize = 1000;
+    private const int BatchSize = 1000;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
@@ -29,7 +29,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         await CreateIndex(indexToCreate, modelType);
 
         // Add entities to the new index.
-        await IndexEntities(indexToCreate, entities);
+        await IndexEntities(indexToCreate, entities, modelType);
 
         // Wait for new index to be operational.
         await _elasticClient.Cluster
@@ -48,7 +48,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         // Delete the old index if it exists.
         await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
 
-        _logger.LogInformation("Indexing to {indexName} complete.", indexName);
+        _logger.LogDebug("{EntityType}: Indexing to {IndexName} complete", modelType.Name, indexName);
 
     }
 
@@ -76,15 +76,15 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         return (indexToCreate, indexToDelete);
     }
 
-    private async Task IndexEntities<T>(string indexName, List<T> entities) where T : class
+    private async Task IndexEntities<T>(string indexName, List<T> entities, Type modelType) where T : class
     {
         // Split entities into batches to avoid one big request.
         var documentBatches = new List<List<T>>();
-        for (var docIndex = 0; docIndex < entities.Count; docIndex += batchSize)
+        for (var docIndex = 0; docIndex < entities.Count; docIndex += BatchSize)
         {
-            documentBatches.Add(entities.GetRange(docIndex, Math.Min(batchSize, entities.Count - docIndex)));
+            documentBatches.Add(entities.GetRange(docIndex, Math.Min(BatchSize, entities.Count - docIndex)));
         }
-
+        
         foreach (var batchToIndex in documentBatches)
         {
             var indexBatchResponse = await _elasticClient.BulkAsync(b => b
@@ -93,11 +93,11 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
             if (!indexBatchResponse.IsValid)
             {
-                var errorMessage = $"Indexing entities to {indexName} failed.";
-                _logger.LogError(indexBatchResponse.OriginalException, errorMessage);
-                throw new InvalidOperationException(errorMessage, indexBatchResponse.OriginalException);
+                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType}: Indexing entities to {IndexName} failed", modelType, indexName);
+                throw new InvalidOperationException($"Indexing entities to {indexName} failed.", indexBatchResponse.OriginalException);
             }
-            _logger.LogInformation("Indexed {batchSize} documents to {indexName}.", batchToIndex.Count, indexName);
+            
+            _logger.LogDebug("{EntityType}: Indexed {BatchSize} documents to {IndexName}", modelType.Name, batchToIndex.Count, indexName);
         }
     }
 
@@ -111,17 +111,19 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     /// <exception cref="InvalidOperationException"></exception>
     private async Task CreateIndex(string indexName, Type type)
     {
-        await _elasticClient.Indices.DeleteAsync(indexName, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
+        await _elasticClient.Indices.DeleteAsync(indexName,
+            d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
 
-
-        var createResponse = await _elasticClient.Indices.CreateAsync(indexName, x => x.Map(x => x.AutoMap(type, maxRecursion: 1)));
+        var createResponse = await _elasticClient.Indices.CreateAsync(indexName,
+            indexDescriptor =>
+                indexDescriptor.Map(mappingDescriptor => mappingDescriptor.AutoMap(type, maxRecursion: 1)));
 
         if (!createResponse.IsValid)
         {
             throw new InvalidOperationException($"Creating index {indexName} failed.", createResponse.OriginalException);
         }
 
-        _logger.LogInformation("Index {indexName} created.", indexName);
+        _logger.LogDebug("{EntityType}: Index {IndexName} created", type.Name, indexName);
     }
 
 }

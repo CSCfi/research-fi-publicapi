@@ -11,18 +11,18 @@ namespace CSC.PublicApi.Interface.Tests.Middleware;
 
 public class CorrelationIdMiddlewareTest
 {
-    private readonly RequestDelegate _requestDelegate;
+    private const string CorrelationIdHeader = "x-correlation-id";
     private readonly CorrelationIdMiddleware _middleware;
 
     public CorrelationIdMiddlewareTest()
     {
-        _requestDelegate = async (ctx) =>
+        async Task RequestDelegate(HttpContext ctx)
         {
             await Task.CompletedTask;
-        };
+        }
 
         var loggerMock = new Mock<ILogger<CorrelationIdMiddleware>>();
-        _middleware = new CorrelationIdMiddleware(_requestDelegate, loggerMock.Object);
+        _middleware = new CorrelationIdMiddleware(RequestDelegate, loggerMock.Object);
 
     }
 
@@ -36,7 +36,7 @@ public class CorrelationIdMiddlewareTest
         await _middleware.InvokeAsync(httpContext);
 
         // Assert
-        var correlationId = httpContext.Items.SingleOrDefault(x => x.Key as string == "X-Correlation-ID");
+        var correlationId = httpContext.Items.SingleOrDefault(x => x.Key as string == CorrelationIdHeader);
 
         correlationId.Should().NotBeNull();
         correlationId.Value.Should().NotBe(default);
@@ -47,13 +47,13 @@ public class CorrelationIdMiddlewareTest
     {
         // Arrange
         var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers.Add("X-Correlation-ID", "123");
+        httpContext.Request.Headers.Add(CorrelationIdHeader, "123");
 
         // Act
         await _middleware.InvokeAsync(httpContext);
 
         // Assert
-        var correlationId = httpContext.Items.SingleOrDefault(x => x.Key as string == "X-Correlation-ID");
+        var correlationId = httpContext.Items.SingleOrDefault(x => x.Key as string == CorrelationIdHeader);
 
         correlationId.Should().NotBeNull();
         correlationId.Value.Should().Be("123");
