@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /build
 
 # Copy csproj and restore as distinct layers
+COPY ["packages","./packages"]
+COPY ["aspnetcore/nuget.config","./Interface/nuget.config"]
 COPY ["aspnetcore/src/Interface/Interface.csproj","./Interface/Interface.csproj"]
 COPY ["aspnetcore/src/ElasticService/ElasticService.csproj","./ElasticService/ElasticService.csproj"]
 COPY ["aspnetcore/src/Service.Models/Service.Models.csproj","./Service.Models/Service.Models.csproj"]
