@@ -31,7 +31,7 @@ public class InfrastructureController : ControllerBase
     /// <returns></returns>
     [HttpGet(Name = "GetInfrastructure")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.Infrastructure.Search)]
+    [Authorize(Policy = ApiPolicies.Infrastructure.Read)]
     public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters queryParameters)
     {
         var (infrastructures, searchResult) = await _service.GetInfrastructures(queryParameters);

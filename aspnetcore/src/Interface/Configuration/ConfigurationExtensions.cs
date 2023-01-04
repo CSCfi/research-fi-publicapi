@@ -7,11 +7,6 @@ public static class ConfigurationExtensions
 {
     public static void AddSettings(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register ElasticSearch index name settings
-        //var indexNameSettings = new IndexNameSettings();
-        //new ConfigureFromConfigurationOptions<IndexNameSettings>(configuration.GetSection("IndexNames")).Configure(indexNameSettings);
-        //services.AddSingleton(indexNameSettings);
-
         AddSettings<IndexNameSettings>("IndexNames", services, configuration);
         AddSettings<OpenApiSettings>("OpenApiSettings", services, configuration);
     }

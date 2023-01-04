@@ -31,7 +31,7 @@ public class ResearchDatasetController : ControllerBase
     /// <returns></returns>
     [HttpGet(Name = "GetResearchDataset")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.ResearchDataset.Search)]
+    [Authorize(Policy = ApiPolicies.ResearchDataset.Read)]
     public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters queryParameters)
     {
         var (researchDatasets, searchResult) = await _service.GetResearchDatasets(queryParameters);

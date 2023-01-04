@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace CSC.PublicApi.Indexer;
 
@@ -14,6 +15,18 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+       var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment}.json", true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+
         // Create and configure the host to support dependency injection, configuration, etc.
         var consoleHost = CreateHostBuilder(args).Build();
 
@@ -26,6 +39,7 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) => Host
         .CreateDefaultBuilder(args)
+        .UseSerilog()
         .ConfigureServices((hostContext, services) =>
         {
             // Register the "Main" service.

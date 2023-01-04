@@ -3,6 +3,7 @@ using CSC.PublicApi.Interface.Models.FundingCall;
 using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -31,7 +32,7 @@ public class FundingCallController : ControllerBase
     /// <returns>Filtered and paginated results as an enumerated list of <see cref="FundingCall"/>.</returns>
     [HttpGet(Name = "GetFundingCall")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.FundingCall.Search)]
+    [Authorize(Policy = ApiPolicies.FundingCall.Read)]
     public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters queryParameters)
     {
         var (fundingCalls, searchResult) = await _service.GetFundingCalls(queryParameters);
@@ -48,7 +49,7 @@ public class FundingCallController : ControllerBase
     /// <returns></returns>
     [HttpPost(Name = "PostFundingCall")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.FundingCall.Add)]
+    [Authorize(Policy = ApiPolicies.FundingCall.Write)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public async Task Post(FundingCall fundingCall)
     {

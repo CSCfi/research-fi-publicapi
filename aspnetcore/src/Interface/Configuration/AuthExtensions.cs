@@ -5,7 +5,7 @@ namespace CSC.PublicApi.Interface.Configuration;
 
 public static class AuthExtensions
 {
-    public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         // Configure and add Authentication
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -26,14 +26,8 @@ public static class AuthExtensions
                 };
                 options.Events = new JwtBearerEvents
                 {
-                    OnTokenValidated = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnForbidden = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
+                    OnTokenValidated = context => Task.CompletedTask,
+                    OnForbidden = context => Task.CompletedTask
                 };
             });
 
