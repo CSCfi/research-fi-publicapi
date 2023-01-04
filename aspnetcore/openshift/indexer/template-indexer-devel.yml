@@ -34,16 +34,6 @@ objects:
                       image: publicapi-indexer-devel
                       imagePullPolicy: Always
                       env:
-                        - name: "ELASTICSEARCH__URL"
-                          valueFrom:
-                            secretKeyRef:
-                                name: publicapi-api-secret-devel
-                                key: "ELASTICSEARCH__URL"
-                        - name: "ELASTICSEARCH__USERNAME"
-                          valueFrom:
-                            secretKeyRef:
-                                name: publicapi-api-secret-devel
-                                key: "ELASTICSEARCH__USERNAME"
                         - name: "ELASTICSEARCH__PASSWORD"
                           valueFrom:
                             secretKeyRef:
@@ -54,6 +44,16 @@ objects:
                             secretKeyRef:
                                 name: publicapi-api-secret-devel
                                 key: dbconnectionstring
+                        - name: "ELASTICSEARCH__URL"
+                          valueFrom:
+                            secretKeyRef:
+                              name: publicapi-api-config-devel
+                              key: "ELASTICSEARCH__URL"
+                        - name: "ELASTICSEARCH__USERNAME"
+                          valueFrom:
+                            secretKeyRef:
+                              name: publicapi-api-config-devel
+                              key: "ELASTICSEARCH__USERNAME"
                         - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                           valueFrom:
                             configMapKeyRef:
@@ -79,6 +79,16 @@ objects:
                             configMapKeyRef:
                                 name: publicapi-api-config-devel
                                 key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
+                        - name: "Serilog__MinimumLevel__Default"
+                          valueFrom:
+                            configMapKeyRef:
+                              name: publicapi-api-config-devel
+                              key: "Serilog__MinimumLevel__Default"
+                        - name: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
+                          valueFrom:
+                            configMapKeyRef:
+                              name: publicapi-api-config-devel
+                              key: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
                   restartPolicy: Never
   # ImageStream (development)
   - apiVersion: v1
