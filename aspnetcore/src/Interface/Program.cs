@@ -32,7 +32,7 @@ builder.Services.Scan(scan =>
         .WithScopedLifetime());
 
 // Configure authentication and authorization.
-builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddAuthentication(builder.Configuration);
 
 // Configure db & entity framework
 /*builder.Services.AddDbContext<ApiDbContext>(options =>

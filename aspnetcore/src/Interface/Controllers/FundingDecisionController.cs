@@ -30,7 +30,7 @@ public class FundingDecisionController : ControllerBase
     /// <returns></returns>
     [HttpGet(Name = "GetFundingDecision")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.FundingDecision.Search)]
+    [Authorize(Policy = ApiPolicies.FundingDecision.Read)]
     public async Task<IEnumerable<Models.FundingDecision.FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters queryParameters)
     {
         var (fundingDecisions, searchResult) = await _service.GetFundingDecisions(queryParameters);
