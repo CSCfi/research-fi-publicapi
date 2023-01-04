@@ -6,28 +6,28 @@ public static class ApiPolicies
 
     public static class FundingCall
     {
-        public const string Search = "FundingCallSearch";
-        public const string Add = "FundingCallAdd";
+        public const string Read = "FundingCallRead";
+        public const string Write = "FundingCallWrite";
     }
 
     public static class FundingDecision
     {
-        public const string Search = "FundingDecisionSearch";
+        public const string Read = "FundingDecisionRead";
     }
 
     public static class Infrastructure
     {
-        public const string Search = "InfrastructureSearch";
+        public const string Read = "InfrastructureRead";
     }
 
     public static class Organization
     {
-        public const string Search = "OrganizationSearch";
+        public const string Read = "OrganizationRead";
     };
 
     public static class ResearchDataset
     {
-        public const string Search = "ResearchDatasetSearch";
+        public const string Read = "ResearchDatasetRead";
     };
 
     /// <summary>
@@ -35,11 +35,11 @@ public static class ApiPolicies
     /// </summary>
     public static readonly Dictionary<string, string> PolicyRoleMap = new()
     {
-        [FundingCall.Search] = "fundingcallreadclient",
-        [FundingCall.Add] = "fundingcallwriteclient",
-        [FundingDecision.Search] = "fundingdecisionreadclient",
-        [Infrastructure.Search] = "infrastructurereadclient",
-        [Organization.Search] = "organizationreadclient",
-        [ResearchDataset.Search] = "researchdatasetreadclient"
+        [FundingCall.Read] = "funding-call-read",
+        [FundingCall.Write] = "funding-call-write",
+        [FundingDecision.Read] = "funding-decision-read",
+        [Infrastructure.Read] = "infrastructure-read",
+        [Organization.Read] = "organization-read",
+        [ResearchDataset.Read] = "research-dataset-read"
     };
 }

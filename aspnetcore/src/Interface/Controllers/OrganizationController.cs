@@ -31,7 +31,7 @@ public class OrganizationController : ControllerBase
     /// <returns></returns>
     [HttpGet(Name = "GetOrganization")]
     [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.Organization.Search)]
+    [Authorize(Policy = ApiPolicies.Organization.Read)]
     public async Task<IEnumerable<Organization>> Get([FromQuery] GetOrganizationsQueryParameters queryParameters)
     {
         var (organizations, searchResult) = await _service.GetOrganizations(queryParameters);
