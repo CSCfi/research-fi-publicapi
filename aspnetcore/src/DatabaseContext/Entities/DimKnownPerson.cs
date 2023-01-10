@@ -20,7 +20,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimUserProfiles = new HashSet<DimUserProfile>();
             DimWebLinks = new HashSet<DimWebLink>();
             FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
-            DimFieldOfSciences = new HashSet<DimFieldOfScience>();
         }
 
         public int Id { get; set; }
@@ -31,6 +30,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? SourceProjectId { get; set; }
         public int? DimRegisteredDataSourceId { get; set; }
 
+        public virtual DimRegisteredDataSource? DimRegisteredDataSource { get; set; }
         public virtual ICollection<DimAffiliation> DimAffiliations { get; set; }
         public virtual ICollection<DimCompetence> DimCompetences { get; set; }
         public virtual ICollection<DimEducation> DimEducations { get; set; }
@@ -44,7 +44,5 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimUserProfile> DimUserProfiles { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; }
-
-        public virtual ICollection<DimFieldOfScience> DimFieldOfSciences { get; set; }
     }
 }

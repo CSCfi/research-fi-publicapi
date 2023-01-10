@@ -15,6 +15,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimEvents = new HashSet<DimEvent>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimKeywords = new HashSet<DimKeyword>();
+            DimKnownPeople = new HashSet<DimKnownPerson>();
             DimNames = new HashSet<DimName>();
             DimOrcidPublications = new HashSet<DimOrcidPublication>();
             DimOrganizations = new HashSet<DimOrganization>();
@@ -25,6 +26,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimResearcherDescriptions = new HashSet<DimResearcherDescription>();
             DimResearcherToResearchCommunities = new HashSet<DimResearcherToResearchCommunity>();
             DimTelephoneNumbers = new HashSet<DimTelephoneNumber>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactFieldValues = new HashSet<FactFieldValue>();
             DimFieldDisplaySettings = new HashSet<DimFieldDisplaySetting>();
         }
@@ -46,6 +48,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimEvent> DimEvents { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimKeyword> DimKeywords { get; set; }
+        public virtual ICollection<DimKnownPerson> DimKnownPeople { get; set; }
         public virtual ICollection<DimName> DimNames { get; set; }
         public virtual ICollection<DimOrcidPublication> DimOrcidPublications { get; set; }
         public virtual ICollection<DimOrganization> DimOrganizations { get; set; }
@@ -56,6 +59,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimResearcherDescription> DimResearcherDescriptions { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunities { get; set; }
         public virtual ICollection<DimTelephoneNumber> DimTelephoneNumbers { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
 
         public virtual ICollection<DimFieldDisplaySetting> DimFieldDisplaySettings { get; set; }
