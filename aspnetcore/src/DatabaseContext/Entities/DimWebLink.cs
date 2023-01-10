@@ -27,11 +27,13 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
         public int? DimResearchActivityId { get; set; }
+        public int? DimRegisteredDataSourceId { get; set; }
 
         public virtual DimCallProgramme? DimCallProgramme { get; set; }
         public virtual DimFundingDecision? DimFundingDecision { get; set; }
         public virtual DimKnownPerson? DimKnownPerson { get; set; }
         public virtual DimOrganization? DimOrganization { get; set; }
+        public virtual DimRegisteredDataSource? DimRegisteredDataSource { get; set; }
         public virtual DimResearchActivity? DimResearchActivity { get; set; }
         public virtual DimResearchCommunity? DimResearchCommunity { get; set; }
         public virtual DimResearchDataCatalog? DimResearchDataCatalog { get; set; }

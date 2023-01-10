@@ -32,9 +32,9 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? SourceDescription { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
-        public int DimFieldOfScienceId { get; set; }
         public int DimResearchDatasetId { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
+        public int DimReferencedataFieldOfScienceId { get; set; }
 
         public virtual DimAffiliation DimAffiliation { get; set; } = null!;
         public virtual DimCompetence DimCompetence { get; set; } = null!;
@@ -42,7 +42,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimEmailAddrress DimEmailAddrress { get; set; } = null!;
         public virtual DimEvent DimEvent { get; set; } = null!;
         public virtual DimFieldDisplaySetting DimFieldDisplaySettings { get; set; } = null!;
-        public virtual DimFieldOfScience DimFieldOfScience { get; set; } = null!;
         public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
         public virtual DimIdentifierlessDatum DimIdentifierlessData { get; set; } = null!;
         public virtual DimKeyword DimKeyword { get; set; } = null!;
@@ -51,6 +50,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimPid DimPid { get; set; } = null!;
         public virtual DimPid DimPidIdOrcidPutCodeNavigation { get; set; } = null!;
         public virtual DimPublication DimPublication { get; set; } = null!;
+        public virtual DimReferencedatum DimReferencedataFieldOfScience { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;
         public virtual DimResearchCommunity DimResearchCommunity { get; set; } = null!;

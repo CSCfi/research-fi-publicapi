@@ -11,7 +11,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         }
 
         public int Id { get; set; }
-        public int? LocalIdentifier { get; set; }
+        public string? LocalIdentifier { get; set; }
         public float? Credits { get; set; }
         public string? NameFi { get; set; }
         public string? NameSv { get; set; }

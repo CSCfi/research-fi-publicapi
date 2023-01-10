@@ -17,7 +17,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? NameSv { get; set; }
         public string? NameEn { get; set; }
         public string? NameUnd { get; set; }
-        public int? EventLocationText { get; set; }
+        public string? EventLocationText { get; set; }
         public int? DimDateIdStartDate { get; set; }
         public int? DimDateIdEndDate { get; set; }
         public int? DimGeoIdEventCountry { get; set; }
