@@ -18,13 +18,13 @@ public class ResearchDataset
 
     public List<Contributor>? Contributors { get; set; }
 
-    public List<FieldOfScience>? FieldOfSciences { get; set; }
+    public List<ReferenceData>? FieldOfSciences { get; set; }
 
-    public List<Language>? Languages { get; set; }
+    public List<ReferenceData>? Languages { get; set; }
 
-    public Availability? AccessType { get; set; }
+    public ReferenceData? AccessType { get; set; }
 
-    public License? License { get; set; }
+    public ReferenceData? License { get; set; }
 
     public List<Keyword>? Keywords { get; set; }
 

@@ -4,9 +4,9 @@ namespace CSC.PublicApi.ElasticService.ElasticSearchQueryGenerators;
 
 public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut> where TOut : class
 {
-    protected readonly IndexNameSettings _configuration;
+    private readonly IndexNameSettings _configuration;
 
-    public QueryGeneratorBase(IndexNameSettings configuration)
+    protected QueryGeneratorBase(IndexNameSettings configuration)
     {
         _configuration = configuration;
     }
@@ -18,8 +18,18 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Index(indexName)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Query(GenerateQueryForIndex(searchParameters));
+            .Query(GenerateQueryForSearch(searchParameters));
     }
 
-    protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForIndex(TIn parameters);
+    public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateSingleQuery(string id)
+    {
+        var indexName = _configuration.GetIndexNameForType(typeof(TOut));
+        return descriptor => descriptor
+            .Index(indexName)
+            .Query(GenerateQueryForSingle(id));
+    }
+
+    protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForSearch(TIn parameters);
+    
+    protected abstract Func<QueryContainerDescriptor<TOut>,QueryContainer> GenerateQueryForSingle(string id);
 }

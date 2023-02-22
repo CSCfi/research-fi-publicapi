@@ -24,7 +24,8 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             .AsNoTracking()
             .AsSplitQuery()
             .Where(dataset => dataset.Id != -1)
-            .Include(d => d.FactContributions).ThenInclude(f => f.DimOrganization).AsSplitQuery().Where(o => o.Id != -1)
+            .Include(d => d.FactContributions)
+            .ThenInclude(f => f.DimOrganization)
             .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
     }
     
@@ -32,12 +33,14 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
     {
         entities.ForEach(o =>
         {
-            if (o is ResearchDataset researchDataset)
+            if (o is not ResearchDataset researchDataset)
             {
-                HandleEmptyContributors(researchDataset);
-                HandleDatasetRelations(researchDataset);
-                HandleEmptyCollections(researchDataset);                
+                return;
             }
+            
+            HandleEmptyContributors(researchDataset);
+            HandleDatasetRelations(researchDataset);
+            HandleEmptyCollections(researchDataset);
         });
         return entities;
     }

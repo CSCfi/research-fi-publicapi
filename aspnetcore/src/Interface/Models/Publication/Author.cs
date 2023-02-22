@@ -1,11 +1,32 @@
 ﻿namespace CSC.PublicApi.Interface.Models.Publication;
 
+/// <summary>
+/// Julkaisun tekijä
+/// </summary>
 public class Author
 {
-    public string? sectorId { get; set; }
-    public string? nameFiSector { get; set; }
-    public string? nameEnSector { get; set; }
-    public string? nameSvSector { get; set; }
-    public Organization[]? organization { get; set; }
+    /// <summary>
+    /// Tekijän etunimet
+    /// </summary>
+    public string? FirstNames { get; set; }
+    
+    /// <summary>
+    /// Tekijän sukunimi
+    /// </summary>
+    public string? LastName { get; set; }
+    
+    /// <summary>
+    /// Tekijän tutkijatunniste
+    /// </summary>
+    public string? Orcid { get; set; }
+    
+    /// <summary>
+    /// Tekijän taidejulkaisurooli
+    /// </summary>
+    public ReferenceData? ArtPublicationRole { get; set; }
 
+    /// <summary>
+    /// Tekijän organisaatiot
+    /// </summary>
+    public List<AuthorOrganization>? Organizations { get; set; }
 }

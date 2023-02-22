@@ -8,13 +8,11 @@ namespace CSC.PublicApi.Interface.Services;
 
 public class PublicationService : IPublicationService
 {
-    private readonly ILogger<PublicationService> _logger;
     private readonly IMapper _mapper;
     private readonly ISearchService<PublicationSearchParameters, Service.Models.Publication.Publication> _searchService;
 
-    public PublicationService(ILogger<PublicationService> logger, IMapper mapper, ISearchService<PublicationSearchParameters, Service.Models.Publication.Publication> searchService)
+    public PublicationService(IMapper mapper, ISearchService<PublicationSearchParameters, Service.Models.Publication.Publication> searchService)
     {
-        _logger = logger;
         _mapper = mapper;
         _searchService = searchService;
     }
@@ -26,5 +24,12 @@ public class PublicationService : IPublicationService
         var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
 
         return (_mapper.Map<IEnumerable<Publication>>(result), searchResult);
+    }
+
+    public async Task<Publication?> GetPublication(string publicationId)
+    {
+        var result = await _searchService.GetSingle(publicationId);
+
+        return _mapper.Map<Publication>(result);
     }
 }

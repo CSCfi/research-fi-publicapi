@@ -7,7 +7,6 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     /// <summary>
     /// Jokin kentistä nameFi, nameSv, nameEn sisältää koko tekstin.
     /// </summary>
-    [FromQuery(Name = "name")]
     public string? Name { get; set; }
 
     /// <summary>

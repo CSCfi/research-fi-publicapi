@@ -13,7 +13,7 @@ public class OrganizationQueryGenerator : QueryGeneratorBase<OrganizationSearchP
     {
     }
 
-    protected override Func<QueryContainerDescriptor<Organization>, QueryContainer> GenerateQueryForIndex(OrganizationSearchParameters parameters)
+    protected override Func<QueryContainerDescriptor<Organization>, QueryContainer> GenerateQueryForSearch(OrganizationSearchParameters parameters)
     {
         var subQueries = new List<Func<QueryContainerDescriptor<Organization>, QueryContainer>>();
         var filters = new List<Func<QueryContainerDescriptor<Organization>, QueryContainer>>();
@@ -32,5 +32,10 @@ public class OrganizationQueryGenerator : QueryGeneratorBase<OrganizationSearchP
                 .Must(subQueries)
                 .Filter(filters)
             );
+    }
+
+    protected override Func<QueryContainerDescriptor<Organization>, QueryContainer> GenerateQueryForSingle(string id)
+    {
+        throw new NotImplementedException();
     }
 }

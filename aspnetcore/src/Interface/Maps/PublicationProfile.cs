@@ -7,19 +7,28 @@ namespace CSC.PublicApi.Interface.Maps;
 
 public class PublicationProfile : Profile
 {
+    private const string DateTimeYearFormat = "yyyy";
+
     public PublicationProfile()
     {
-        CreateMap<GetPublicationsQueryParameters, PublicationSearchParameters>();
-        CreateMap<Service.Models.Publication.Publication, Publication>();
-        CreateMap<Service.Models.Publication.Author, Author>();
-        CreateMap<Service.Models.Publication.FieldOfEducation, FieldOfEducation>();
-        CreateMap<Service.Models.Publication.FieldOfScience, FieldOfScience>();
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
+        CreateMap<GetPublicationsQueryParameters, PublicationSearchParameters>()
+            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.TypeCode.ToLower()));
+        
+        CreateMap<Service.Models.Publication.Publication, Publication>()
+            .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src =>  src.PublicationYear.HasValue ? src.PublicationYear.Value.ToString(DateTimeYearFormat) : null))
+            .ForMember(dst => dst.ReportingYear, opt => opt.MapFrom(src =>  src.ReportingYear.HasValue ? src.ReportingYear.Value.ToString(DateTimeYearFormat) : null))
+            .ForMember(dst => dst.ApcPaymentYear, opt => opt.MapFrom(src =>  src.ApcPaymentYear.HasValue ? src.ApcPaymentYear.Value.ToString(DateTimeYearFormat) : null));
+
         CreateMap<Service.Models.Publication.Organization, Organization>();
         CreateMap<Service.Models.Publication.OrganizationUnit, OrganizationUnit>();
-        CreateMap<Service.Models.Publication.ParentPublicationType, ParentPublicationType>();
-        CreateMap<Service.Models.Publication.PeerReviewed, PeerReviewed>();
-        CreateMap<Service.Models.Publication.Person, Person>();
-        CreateMap<Service.Models.Publication.SelfArchived, SelfArchived>();
-        CreateMap<Service.Models.Publication.SelfArchivedData, SelfArchivedData>();
+        CreateMap<Service.Models.Publication.ParentPublication, ParentPublication>();
+        CreateMap<Service.Models.Publication.Author, Author>();
+        CreateMap<Service.Models.Publication.AuthorOrganization, AuthorOrganization>();
+        CreateMap<Service.Models.Publication.LocallyReportedPublicationInformation, LocallyReportedPublicationInformation>();
+        CreateMap<Service.Models.ReferenceData, ReferenceData>();
+        CreateMap<Service.Models.Keyword, Keyword>();
     }
 }

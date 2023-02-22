@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
-using Language = CSC.PublicApi.Service.Models.ResearchDataset.Language;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
@@ -34,33 +34,21 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.ResearchDataCatalog, opt => opt.MapFrom(src => src.DimResearchDataCatalog))
             .ForMember(dst => dst.OutgoingDatasetRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasets))
             .ForMember(dst => dst.IncomingDatasetVersionRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations.Where(s => s.Type == DataSetTypeVersion)))
-            .ForMember(dst => dst.DatasetRelations, opt => opt.Ignore())
-            .ForMember(dst => dst.VersionSet, opt => opt.Ignore())
-            .ForMember(dst => dst.IsLatestVersion, opt => opt.Ignore())
+            .ForMember(dst => dst.DatasetRelations, opt => opt.Ignore()) // Handled during in memory operations in the index repository
+            .ForMember(dst => dst.VersionSet, opt => opt.Ignore()) // Handled during in memory operations in the index repository
+            .ForMember(dst => dst.IsLatestVersion, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             ;
 
-        // AccessType
-        CreateProjection<DimReferencedatum, Availability>()
-            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
-
-        CreateProjection<DimReferencedatum, License>()
+        CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
-
-        CreateProjection<DimReferencedatum, Language>()
-            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
-
-        CreateProjection<FactDimReferencedataFieldOfScience, FieldOfScience>()
-            .ForMember(dst => dst.FieldId, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue))
+      
+        CreateProjection<FactDimReferencedataFieldOfScience, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn));
@@ -73,11 +61,6 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.Organisation, opt => opt.MapFrom(src => src.DimOrganization))
             .ForMember(dst => dst.Person, opt => opt.MapFrom(src => src.DimName))
             .ForMember(dst => dst.Role, opt => opt.MapFrom(src => src.DimReferencedataActorRole));
-
-        CreateProjection<DimReferencedatum, Role>()
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
 
         CreateProjection<DimOrganization, Organisation>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

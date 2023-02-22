@@ -12,7 +12,7 @@ public class FundingCallRepository : GenericRepository<DimCallProgramme>, IFundi
 
     public IAsyncEnumerable<DimCallProgramme> GetAllAsync()
     {
-        return dbSet
+        return DbSet
             .Include(x => x.DimOrganizations).AsSplitQuery()
             .Include(x => x.DimReferencedata).AsSplitQuery()
             //.Include(x => x.DimWebLinks).AsSplitQuery()

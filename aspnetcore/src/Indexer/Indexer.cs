@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using CSC.PublicApi.Repositories;
+using CSC.PublicApi.Service.Models.Organization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CSC.PublicApi.Indexer;
 
@@ -14,35 +16,46 @@ public class Indexer
     private readonly IndexNameSettings _indexNameSettings;
     private readonly IEnumerable<IIndexRepository> _indexRepositories;
 
+    private readonly IMemoryCache _organizationCache;
+
     public Indexer(
         ILogger<Indexer> logger,
         IElasticSearchIndexService indexService,
         IConfiguration configuration,
         IndexNameSettings indexNameSettings,
-        IEnumerable<IIndexRepository> indexRepositories
-    )
+        IEnumerable<IIndexRepository> indexRepositories, 
+        IMemoryCache organizationCache)
     {
         _logger = logger;
         _indexService = indexService;
         _configuration = configuration;
         _indexNameSettings = indexNameSettings;
         _indexRepositories = indexRepositories;
+        _organizationCache = organizationCache;
     }
 
     public async Task Start()
     {
         Stopwatch stopWatch = new();
         stopWatch.Start();
+        
+        await PopulateOrganizationCache();
+
         _logger.LogInformation("Starting indexing...");
         _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress}'", _configuration["ELASTICSEARCH:URL"]);
 
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
 
-        foreach (var indexNameAndType in configuredTypesAndIndexNames)
+        foreach (var (indexName, modelType) in configuredTypesAndIndexNames)
         {
-            var indexName = indexNameAndType.Key;
-            var modelType = indexNameAndType.Value;
-            var repositoryForType = _indexRepositories.Single(repo => repo.ModelType == modelType);
+            var repositoryForType = _indexRepositories.SingleOrDefault(repo => repo.ModelType == modelType);
+
+            if (repositoryForType is null)
+            {
+                _logger.LogError("{EntityType}: Unable to find database repository for index {IndexName}", modelType.Name, indexName);
+                
+                continue;
+            }
 
             await IndexEntities(indexName, repositoryForType, modelType);
         }
@@ -51,6 +64,24 @@ public class Indexer
 
         _logger.LogInformation("Indexing completed in {Elapsed}, finishing process", totalTime);
         stopWatch.Stop();
+    }
+
+    /// <summary>
+    /// Gets all organizations from the database to an in-memory cache to simplify SQL queries by automapper.
+    /// </summary>
+    private async Task PopulateOrganizationCache()
+    {
+        _logger.LogInformation("Populating Organization cache...");
+
+        var organizationRepository = _indexRepositories.SingleOrDefault(repo => repo.ModelType == typeof(Organization));
+        if (organizationRepository != null)
+        {
+            var organizations = await organizationRepository.GetAllAsync().ToListAsync();
+            foreach (Organization organization in organizations)
+            {
+                _organizationCache.Set(organization.Id, organization);
+            }
+        }
     }
 
     private async Task IndexEntities(string indexName,
