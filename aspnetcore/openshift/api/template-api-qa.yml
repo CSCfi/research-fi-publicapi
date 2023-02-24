@@ -1,0 +1,99 @@
+# This file is part of the research.fi api
+#
+# Copyright 2023 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-api-qa
+    template: publicapi-api-qa
+  name: publicapi-api-qa
+objects:
+  # Service (qa)
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: publicapi-api-service-qa
+      labels:
+        app: publicapi-api-qa
+      annotations:
+        description: Public api service for qa branch
+    spec:
+      ports:
+        - name: publicapi-api-port-qa
+          port: 8080
+          targetPort: 8080
+      selector:
+        depcfg: publicapi-api-depcfg-qa
+
+  # ImageStream (qa)
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: publicapi-api-qa
+      labels:
+        app: publicapi-api-qa
+
+  # BuildConfig using Docker build strategy
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: publicapi-api-build-qa
+      labels:
+        app: publicapi-api-qa
+    spec:
+      source:
+        git:
+          uri: https://github.com/CSCfi/research-fi-publicapi.git
+          ref: qa
+        contextDir: .
+      strategy:
+        dockerStrategy:
+          dockerfilePath: aspnetcore/openshift/api/Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: publicapi-api-qa:latest
+      successfulBuildsHistoryLimit: 4
+      failedBuildsHistoryLimit: 4
+
+  # Deployment config (qa)
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: publicapi-api-deployment-qa
+      labels:
+        app: publicapi-api-qa
+    spec:
+      selector:
+        app: publicapi-api-qa
+        depcfg: publicapi-api-depcfg-qa
+      template:
+        metadata:
+          labels:
+            app: publicapi-api-qa
+            depcfg: publicapi-api-depcfg-qa
+        spec:
+          containers:
+            - name: publicapi-api-container-qa
+              image: publicapi/publicapi-api-qa
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+      replicas: 1
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - publicapi-api-container-qa
+            from:
+              kind: ImageStreamTag
+              name: publicapi-api-qa:latest
+      strategy:
+        type: Rolling
