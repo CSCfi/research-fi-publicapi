@@ -1,7 +1,10 @@
-﻿namespace CSC.PublicApi.Service.Models.ResearchDataset;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models;
 
 public class Keyword
 {
+    [Keyword]
     public string? Value { get; set; }
     
     public string? Language { get; set; }

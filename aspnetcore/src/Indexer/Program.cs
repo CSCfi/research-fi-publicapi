@@ -54,6 +54,8 @@ public class Program
             // Add ElasticSearchIndexingService.
             services.AddScoped<IElasticSearchIndexService, ElasticSearchIndexService>();
 
+            services.AddMemoryCache();
+
             // Configure db & entity framework.
             services.AddDbContext<ApiDbContext>(options =>
             {

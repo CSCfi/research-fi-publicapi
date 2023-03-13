@@ -13,7 +13,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
     {
     }
 
-    protected override Func<QueryContainerDescriptor<Infrastructure>, QueryContainer> GenerateQueryForIndex(InfrastructureSearchParameters parameters)
+    protected override Func<QueryContainerDescriptor<Infrastructure>, QueryContainer> GenerateQueryForSearch(InfrastructureSearchParameters parameters)
     {
         var subQueries = new List<Func<QueryContainerDescriptor<Infrastructure>, QueryContainer>>();
         var filters = new List<Func<QueryContainerDescriptor<Infrastructure>, QueryContainer>>();
@@ -32,5 +32,10 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                 .Must(subQueries)
                 .Filter(filters)
             );
+    }
+
+    protected override Func<QueryContainerDescriptor<Infrastructure>, QueryContainer> GenerateQueryForSingle(string id)
+    {
+        throw new NotImplementedException();
     }
 }

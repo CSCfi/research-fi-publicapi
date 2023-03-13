@@ -13,7 +13,7 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
     {
     }
 
-    protected override Func<QueryContainerDescriptor<FundingCall>, QueryContainer> GenerateQueryForIndex(
+    protected override Func<QueryContainerDescriptor<FundingCall>, QueryContainer> GenerateQueryForSearch(
         FundingCallSearchParameters parameters)
     {
         var subQueries = CreateSubQueries(parameters);
@@ -24,6 +24,11 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
                 .Must(subQueries)
                 .Filter(filters)
             );
+    }
+
+    protected override Func<QueryContainerDescriptor<FundingCall>, QueryContainer> GenerateQueryForSingle(string id)
+    {
+        throw new NotImplementedException();
     }
 
     private static IEnumerable<Func<QueryContainerDescriptor<FundingCall>, QueryContainer>> CreateSubQueries(

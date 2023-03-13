@@ -1,8 +1,7 @@
 ﻿using CSC.PublicApi.ElasticService.SearchParameters;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using Nest;
-using Language = CSC.PublicApi.Service.Models.ResearchDataset.Language;
-using License = CSC.PublicApi.Service.Models.ResearchDataset.License;
 
 namespace CSC.PublicApi.ElasticService.ElasticSearchQueryGenerators;
 
@@ -12,7 +11,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
     {
     }
 
-    protected override Func<QueryContainerDescriptor<ResearchDataset>, QueryContainer> GenerateQueryForIndex(
+    protected override Func<QueryContainerDescriptor<ResearchDataset>, QueryContainer> GenerateQueryForSearch(
         ResearchDatasetSearchParameters parameters)
     {
         var subQueries = CreateSubQueries(parameters);
@@ -23,6 +22,11 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                 .Must(subQueries)
                 .Filter(filters)
             );
+    }
+
+    protected override Func<QueryContainerDescriptor<ResearchDataset>, QueryContainer> GenerateQueryForSingle(string id)
+    {
+        throw new NotImplementedException();
     }
 
     private static IEnumerable<Func<QueryContainerDescriptor<ResearchDataset>, QueryContainer>> CreateSubQueries(
@@ -111,7 +115,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
             filters.Add(t =>
                 t.Terms(term =>
                     term.Field(f =>
-                            f.FieldOfSciences.Suffix(nameof(FieldOfScience.FieldId)))
+                            f.FieldOfSciences.Suffix(nameof(ReferenceData.Code)))
                         .Terms(parameters.FieldOfScience)
                 ));
         }
@@ -120,7 +124,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
         {
             filters.Add(t =>
                 t.Terms(term =>
-                    term.Field(f => f.Languages.Suffix(nameof(Language.Code)))
+                    term.Field(f => f.Languages.Suffix(nameof(ReferenceData.Code)))
                         .Terms(parameters.Language)
                 ));
         }
@@ -129,7 +133,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
         {
             filters.Add(t =>
                 t.Term(term =>
-                    term.Field(f => f.AccessType.Suffix(nameof(Availability.Code)))
+                    term.Field(f => f.AccessType.Suffix(nameof(ReferenceData.Code)))
                         .Value(parameters.Access)
                 ));
         }
@@ -138,7 +142,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
         {
             filters.Add(t =>
                 t.Term(term =>
-                    term.Field(f => f.License.Suffix(nameof(License.Code)))
+                    term.Field(f => f.License.Suffix(nameof(ReferenceData.Code)))
                         .Value(parameters.License)
                 ));
         }

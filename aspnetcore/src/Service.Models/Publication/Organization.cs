@@ -4,6 +4,7 @@ namespace CSC.PublicApi.Service.Models.Publication;
 
 public class Organization
 {
+    [Keyword]
     public string? Id { get; set; }
 
     public string? NameFi { get; set; }
@@ -12,5 +13,5 @@ public class Organization
 
     public string? NameSv { get; set; }
 
-    public OrganizationUnit[]? Unit { get; set; }
+    public List<OrganizationUnit>? Units { get; set; }
 }

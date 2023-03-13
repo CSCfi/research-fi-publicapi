@@ -29,18 +29,15 @@ public class ResearchDatasetProfile : Profile
         
         CreateMap<Service.Models.ResearchDataset.ResearchDataset, ResearchDataset>()
             .ForMember(dst => dst.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Identifier}"));
-        CreateMap<Service.Models.ResearchDataset.FieldOfScience, FieldOfScience>();
-        CreateMap<Service.Models.ResearchDataset.Keyword, Keyword>();
-        CreateMap<Service.Models.ResearchDataset.Language, Language>();
-        CreateMap<Service.Models.ResearchDataset.License, License>();
+        
         CreateMap<Service.Models.ResearchDataset.PreferredIdentifier, PreferredIdentifier>();
-        CreateMap<Service.Models.ResearchDataset.Availability, Availability>();
         CreateMap<Service.Models.ResearchDataset.Contributor, Contributor>();
         CreateMap<Service.Models.ResearchDataset.DatasetRelation, DatasetRelation>();
         CreateMap<Service.Models.ResearchDataset.Organisation, Organisation>();
         CreateMap<Service.Models.ResearchDataset.Person, Person>();
         CreateMap<Service.Models.ResearchDataset.ResearchDataCatalog, ResearchDataCatalog>();
-        CreateMap<Service.Models.ResearchDataset.Role, Role>();
         CreateMap<Service.Models.ResearchDataset.Version, Version>();
+        CreateMap<Service.Models.ReferenceData, ReferenceData>();
+        CreateMap<Service.Models.Keyword, Keyword>();
     }
 }

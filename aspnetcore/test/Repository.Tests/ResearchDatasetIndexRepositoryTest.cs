@@ -1,4 +1,5 @@
 ﻿using CSC.PublicApi.Repositories;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
@@ -127,7 +128,7 @@ public class ResearchDatasetIndexRepositoryTest
                         NameVariants = " "
                     },
                     Person = null,
-                    Role = new Role
+                    Role = new ReferenceData
                     {
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
@@ -135,16 +136,16 @@ public class ResearchDatasetIndexRepositoryTest
                     }
                 }
             },
-            FieldOfSciences = new List<FieldOfScience>(),
-            Languages = new List<Language>(),
-            AccessType = new Availability
+            FieldOfSciences = new List<ReferenceData>(),
+            Languages = new List<ReferenceData>(),
+            AccessType = new ReferenceData()
             {
                 Code = "accessTypeCode",
                 NameFi = "accessTypeNameFi",
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new License
+            License = new ReferenceData()
             {
                 Code = null,
                 NameFi = null,

@@ -2,7 +2,10 @@
 
 public static class ApiPolicies
 {
-    public const string PublicationSearch = nameof(PublicationSearch);
+    public static class Publication
+    {
+        public const string Read = "PublicationRead";
+    };
 
     public static class FundingCall
     {
@@ -40,6 +43,7 @@ public static class ApiPolicies
         [FundingDecision.Read] = "funding-decision-read",
         [Infrastructure.Read] = "infrastructure-read",
         [Organization.Read] = "organization-read",
-        [ResearchDataset.Read] = "research-dataset-read"
+        [ResearchDataset.Read] = "research-dataset-read",
+        [Publication.Read] = "publication-read"
     };
 }

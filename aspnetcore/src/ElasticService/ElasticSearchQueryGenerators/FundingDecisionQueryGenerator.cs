@@ -11,7 +11,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
     {
     }
 
-    protected override Func<QueryContainerDescriptor<FundingDecision>, QueryContainer> GenerateQueryForIndex(
+    protected override Func<QueryContainerDescriptor<FundingDecision>, QueryContainer> GenerateQueryForSearch(
         FundingDecisionSearchParameters parameters)
     {
         var subQueries = CreateSubQueries(parameters);
@@ -22,6 +22,11 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
                 .Must(subQueries)
                 .Filter(filters)
             );
+    }
+
+    protected override Func<QueryContainerDescriptor<FundingDecision>, QueryContainer> GenerateQueryForSingle(string id)
+    {
+        throw new NotImplementedException();
     }
 
     private static IEnumerable<Func<QueryContainerDescriptor<FundingDecision>, QueryContainer>> CreateSubQueries(

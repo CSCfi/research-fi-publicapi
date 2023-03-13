@@ -4,11 +4,12 @@
       "commandName": "Project",
       "environmentVariables": {        
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication": "api-dev-publication",
         "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall": "api-dev-funding-call",
         "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision": "api-dev-funding-decision",
         "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure": "api-dev-infrastructure",
         "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization": "api-dev-organization",
-        "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset": "api-dev-researchdataset"
+        "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset": "api-dev-research-dataset"
       }
     }
   }
