@@ -79,6 +79,11 @@ objects:
                             configMapKeyRef:
                                 name: publicapi-api-config-production
                                 key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
+                        - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
+                          valueFrom:
+                            configMapKeyRef:
+                              name: publicapi-api-config-production
+                              key: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
                         - name: "Serilog__MinimumLevel__Default"
                           valueFrom:
                             configMapKeyRef:

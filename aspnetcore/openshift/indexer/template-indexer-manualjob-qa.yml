@@ -70,6 +70,11 @@ objects:
                     configMapKeyRef:
                         name: publicapi-api-config-qa
                         key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-qa
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                   valueFrom:
                     configMapKeyRef:
