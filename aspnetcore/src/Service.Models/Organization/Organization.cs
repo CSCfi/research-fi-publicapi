@@ -8,7 +8,7 @@ public class Organization
     
     public int? ParentId { get; set; }
 
-    public string OrganizationId { get; set; }
+    public string? OrganizationId { get; set; }
     
     public string? LocalOrganizationUnitId { get; set; }
     

@@ -80,7 +80,7 @@ public class Publication
     /// Julkaisuun liittyvät ISSN tunnisteet 
     /// </summary>
     [Keyword]
-    public List<string?> Issn { get; set; }
+    public List<string>? Issn { get; set; }
     
     /// <summary>
     /// ISSN
@@ -112,13 +112,13 @@ public class Publication
     /// <summary>
     /// Emojulkaisu
     /// </summary>
-    public ParentPublication ParentPublication { get; set; }
+    public ParentPublication? ParentPublication { get; set; }
 
     /// <summary>
     /// Julkaisuun liittyvät ISBN tunnisteet 
     /// </summary>
     [Keyword]
-    public List<string?> Isbn { get; set; }
+    public List<string>? Isbn { get; set; }
     
     /// <summary>
     /// ISBN
