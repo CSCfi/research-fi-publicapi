@@ -29,7 +29,7 @@ public class OrganizationController : ControllerBase
     /// </summary>
     /// <param name="queryParameters"></param>
     /// <returns></returns>
-    [HttpGet(Name = "GetOrganization")]
+    /*[HttpGet(Name = "GetOrganization")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.Organization.Read)]
     public async Task<IEnumerable<Organization>> Get([FromQuery] GetOrganizationsQueryParameters queryParameters)
@@ -39,5 +39,5 @@ public class OrganizationController : ControllerBase
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 
         return organizations;
-    }
+    }*/
 }

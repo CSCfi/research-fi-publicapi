@@ -29,7 +29,7 @@ public class InfrastructureController : ControllerBase
     /// </summary>
     /// <param name="queryParameters">Query parameters for filtering the results.</param>
     /// <returns></returns>
-    [HttpGet(Name = "GetInfrastructure")]
+    /*[HttpGet(Name = "GetInfrastructure")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.Infrastructure.Read)]
     public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters queryParameters)
@@ -39,5 +39,5 @@ public class InfrastructureController : ControllerBase
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 
         return infrastructures;
-    }
+    }*/
 }
