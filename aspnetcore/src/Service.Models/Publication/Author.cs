@@ -1,11 +1,17 @@
-﻿namespace CSC.PublicApi.Service.Models.Publication;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models.Publication;
 
 public class Author
 {
-    public string? sectorId { get; set; }
-    public string? nameFiSector { get; set; }
-    public string? nameEnSector { get; set; }
-    public string? nameSvSector { get; set; }
-    public Organization[]? organization { get; set; }
+    public string? FirstNames { get; set; }
+    
+    public string? LastName { get; set; }
 
+    [Keyword]
+    public string? Orcid { get; set; }
+
+    public List<AuthorOrganization>? Organizations { get; set; }
+    
+    public ReferenceData? ArtPublicationRole { get; set; }
 }

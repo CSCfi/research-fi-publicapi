@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
 using CSC.PublicApi.Interface.Models;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
-using Language = CSC.PublicApi.Service.Models.ResearchDataset.Language;
 using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Interface.Tests.Maps;
@@ -117,7 +117,7 @@ public class ResearchDatasetProfileTest
                     Person = new Person {
                         Name = "personFullName"
                     },
-                    Role = new Role
+                    Role = new Service.Models.ReferenceData
                     {
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
@@ -125,17 +125,17 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<FieldOfScience>
+            FieldOfSciences = new List<Service.Models.ReferenceData>
             {
                 new()
                 {
-                    FieldId = "fieldOfScienceFieldId",
+                    Code = "fieldOfScienceFieldId",
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            Languages = new List<Language>
+            Languages = new List<Service.Models.ReferenceData>
             {
                 new()
                 {
@@ -145,14 +145,14 @@ public class ResearchDatasetProfileTest
                     NameSv = "languageNameSv"
                 }
             },
-            AccessType = new Availability
+            AccessType = new Service.Models.ReferenceData
             {
                 Code = "accessTypeCode",
                 NameFi = "accessTypeNameFi",
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new License
+            License = new Service.Models.ReferenceData
             {
                 Code = "licenseCode",
                 NameFi = "licenseNameFi",
@@ -236,7 +236,7 @@ public class ResearchDatasetProfileTest
                     Person = new CSC.PublicApi.Interface.Models.ResearchDataset.Person {
                         Name = "personFullName"
                     },
-                    Role = new CSC.PublicApi.Interface.Models.ResearchDataset.Role
+                    Role = new Models.ReferenceData
                     {
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
@@ -244,17 +244,17 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<CSC.PublicApi.Interface.Models.ResearchDataset.FieldOfScience>
+            FieldOfSciences = new List<Models.ReferenceData>
             {
                 new()
                 {
-                    FieldId = "fieldOfScienceFieldId",
+                    Code = "fieldOfScienceFieldId",
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            Languages = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Language>
+            Languages = new List<Models.ReferenceData>
             {
                 new()
                 {
@@ -264,14 +264,14 @@ public class ResearchDatasetProfileTest
                     NameSv = "languageNameSv"
                 }
             },
-            AccessType = new CSC.PublicApi.Interface.Models.ResearchDataset.Availability
+            AccessType = new Models.ReferenceData
             {
                 Code = "accessTypeCode",
                 NameFi = "accessTypeNameFi",
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new CSC.PublicApi.Interface.Models.ResearchDataset.License
+            License = new Models.ReferenceData
             {
                 Code = "licenseCode",
                 NameFi = "licenseNameFi",

@@ -14,7 +14,6 @@ public class PaginationQueryParameters
     /// <summary>
     /// Haettavan sivun numero. Oletusarvo 1.
     /// </summary>
-    [FromQuery(Name = "pageNumber")]
     public int PageNumber
     {
         get => _pageNumber;
@@ -24,7 +23,6 @@ public class PaginationQueryParameters
     /// <summary>
     /// Tulosten määrä sivulla. Oletusarvo 20. Suurin sallittu arvo 100. Suurin mahdollinen tulosjoukko 10 000 tulosta.
     /// </summary>
-    [FromQuery(Name = "pageSize")]
     public int PageSize
     {
         get => _pageSize;

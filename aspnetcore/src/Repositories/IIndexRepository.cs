@@ -4,7 +4,7 @@
 /// Responsible for fetching entities from database and mapping them to api models which are indexed to ElasticSearch.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IIndexRepository<T> : IIndexRepository where T : class
+public interface IIndexRepository<out T> : IIndexRepository where T : class
 {
     /// <summary>
     /// Gets all database entities for indexing, projected as T.

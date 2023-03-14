@@ -6,5 +6,5 @@ public class Contributor
 
     public Person? Person { get; set; }
 
-    public Role? Role { get; set; }
+    public ReferenceData? Role { get; set; }
 }

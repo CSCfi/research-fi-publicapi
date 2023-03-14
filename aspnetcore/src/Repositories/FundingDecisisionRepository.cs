@@ -12,7 +12,7 @@ public class FundingDecisionRepository : GenericRepository<DimFundingDecision>, 
 
     public IAsyncEnumerable<DimFundingDecision> GetAllAsync()
     {
-        return dbSet
+        return DbSet
             .AsNoTracking()
             .Include(fd => fd.DimTypeOfFunding)
             .Include(fd => fd.BrParticipatesInFundingGroups)

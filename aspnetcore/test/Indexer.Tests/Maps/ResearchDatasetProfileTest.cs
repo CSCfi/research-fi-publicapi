@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Repositories.Maps;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
-using Language = CSC.PublicApi.Service.Models.ResearchDataset.Language;
-using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -26,7 +25,7 @@ public class ResearchDatasetProfileTest
     }
 
     [Fact]
-    public void ProjectTo_DimRearchDataset_ShouldBeMappedToResearchDataset()
+    public void ProjectTo_DimResearchDataset_ShouldBeMappedToResearchDataset()
     {
         // Arrange
         var entity = GetEntity();
@@ -40,7 +39,7 @@ public class ResearchDatasetProfileTest
     }
 
     [Fact]
-    public void ProjectTo_DimRearchDatasetWithoutVersions_ShouldBeMappedToResearchDataset()
+    public void ProjectTo_DimResearchDatasetWithoutVersions_ShouldBeMappedToResearchDataset()
     {
         // Arrange
         var entity = GetEntity();
@@ -304,10 +303,11 @@ public class ResearchDatasetProfileTest
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
-                    Person = new Person {
+                    Person = new Person 
+                    {
                         Name = "personFullName"
                     },
-                    Role = new Role
+                    Role = new ReferenceData
                     {
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
@@ -315,17 +315,17 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<FieldOfScience>
+            FieldOfSciences = new List<ReferenceData>
             {
                 new()
                 {
-                    FieldId = "fieldOfScienceFieldId",
+                    Code = "fieldOfScienceFieldId",
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            Languages = new List<Language>
+            Languages = new List<ReferenceData>
             {
                 new()
                 {
@@ -335,14 +335,14 @@ public class ResearchDatasetProfileTest
                     NameSv = "languageNameSv"
                 }
             },
-            AccessType = new Availability
+            AccessType = new ReferenceData
             {
                 Code = "accessTypeCode",
                 NameFi = "accessTypeNameFi",
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new License
+            License = new ReferenceData
             {
                 Code = "licenseCode",
                 NameFi = "licenseNameFi",
@@ -375,7 +375,7 @@ public class ResearchDatasetProfileTest
                 SourceId = "researchDataCatalogSourceId",
                 SourceDescription = "researchDataCatalogSourceDescription"
             },
-            IncomingDatasetVersionRelations = new List<DatasetRelationBridge>()
+            IncomingDatasetVersionRelations = new List<DatasetRelationBridge>
             {
                 new()
                 {
@@ -388,7 +388,7 @@ public class ResearchDatasetProfileTest
                     VersionNumber2 = "321"
                 }
             },
-            OutgoingDatasetRelations = new List<DatasetRelationBridge>()
+            OutgoingDatasetRelations = new List<DatasetRelationBridge>
             {
                 new()
                 {

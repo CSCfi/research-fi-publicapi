@@ -5,28 +5,26 @@ namespace CSC.PublicApi.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
-    protected readonly DbSet<T> dbSet;
+    protected readonly DbSet<T> DbSet;
 
-    public GenericRepository(ApiDbContext context)
+    protected GenericRepository(ApiDbContext context)
     {
-        dbSet = context.Set<T>();
+        DbSet = context.Set<T>();
     }
-
 
     public async Task<bool> AddAsync(T entity)
     {
-        await dbSet.AddAsync(entity);
+        await DbSet.AddAsync(entity);
         return true;
     }
 
-
-    public async Task<T> GetAsync(Guid id)
+    public async Task<T?> GetAsync(Guid id)
     {
-        return await dbSet.FindAsync(id);
+        return await DbSet.FindAsync(id);
     }
 
     public IQueryable<T> GetAll()
     {
-        return dbSet;
+        return DbSet;
     }
 }
