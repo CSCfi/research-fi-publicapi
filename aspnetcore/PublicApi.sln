@@ -3,19 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "src\Api\Api.csproj", "{292C0230-B2F9-4688-A139-2FB80B59A773}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Test", "src\Api.Test\Api.Test.csproj", "{B68C05CA-4425-4A4E-B77D-ABF186C280FA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchIndexer", "src\ElasticSearchIndexer\ElasticSearchIndexer.csproj", "{AA119832-3664-4B90-9996-05C8B0C8614D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openshift", "openshift", "{938F9047-A17A-4D91-95DE-DF09E7349593}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{CCDDA0B3-DAA4-4143-81B2-50DAA10A77E5}"
 	ProjectSection(SolutionItems) = preProject
 		openshift\api\Dockerfile = openshift\api\Dockerfile
 		openshift\api\template-api-devel.yml = openshift\api\template-api-devel.yml
-		openshift\api\template-api-pilot.yml = openshift\api\template-api-pilot.yml
+		openshift\api\template-api-production.yml = openshift\api\template-api-production.yml
+		openshift\api\template-api-qa.yml = openshift\api\template-api-qa.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexer", "indexer", "{1528738C-FE3C-4BF1-A1E3-F94B387A7ADF}"
@@ -23,8 +18,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "indexer", "indexer", "{1528
 		openshift\indexer\Dockerfile = openshift\indexer\Dockerfile
 		openshift\indexer\template-indexer-devel.yml = openshift\indexer\template-indexer-devel.yml
 		openshift\indexer\template-indexer-manualjob-devel.yml = openshift\indexer\template-indexer-manualjob-devel.yml
-		openshift\indexer\template-indexer-pilot.yml = openshift\indexer\template-indexer-pilot.yml
+		openshift\indexer\template-indexer-manualjob-production.yml = openshift\indexer\template-indexer-manualjob-production.yml
+		openshift\indexer\template-indexer-manualjob-qa.yml = openshift\indexer\template-indexer-manualjob-qa.yml
+		openshift\indexer\template-indexer-production.yml = openshift\indexer\template-indexer-production.yml
+		openshift\indexer\template-indexer-qa.yml = openshift\indexer\template-indexer-qa.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8FE4A34D-734E-483C-93DC-B26C22102117}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interface", "src\Interface\Interface.csproj", "{F6687DD7-61F6-4FFE-8DD8-A0473D18E684}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticService", "src\ElasticService\ElasticService.csproj", "{0DD50094-C7EA-4926-8B2E-E8A7D08BB815}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Indexer", "src\Indexer\Indexer.csproj", "{4230DC11-085E-4324-9825-BE06933A2351}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Models", "src\Service.Models\Service.Models.csproj", "{7627162B-B311-4768-9310-9C63CE9737C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interface.Tests", "test\Interface.Tests\Interface.Tests.csproj", "{AAB7423E-7C73-4B91-8936-A8FE618758D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "src\Repositories\Repositories.csproj", "{BE73F63B-AD32-4DCE-AEDF-B6E382B2A8DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseContext", "src\DatabaseContext\DatabaseContext.csproj", "{6FE4C03F-1BFE-4309-8F66-5FF0F2769449}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indexer.Tests", "test\Indexer.Tests\Indexer.Tests.csproj", "{524A21EE-8B67-470F-9F44-5DA92AEF327B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Tests", "test\Repository.Tests\Repository.Tests.csproj", "{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,18 +50,42 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{292C0230-B2F9-4688-A139-2FB80B59A773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{292C0230-B2F9-4688-A139-2FB80B59A773}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{292C0230-B2F9-4688-A139-2FB80B59A773}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{292C0230-B2F9-4688-A139-2FB80B59A773}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B68C05CA-4425-4A4E-B77D-ABF186C280FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B68C05CA-4425-4A4E-B77D-ABF186C280FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B68C05CA-4425-4A4E-B77D-ABF186C280FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B68C05CA-4425-4A4E-B77D-ABF186C280FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA119832-3664-4B90-9996-05C8B0C8614D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA119832-3664-4B90-9996-05C8B0C8614D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA119832-3664-4B90-9996-05C8B0C8614D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA119832-3664-4B90-9996-05C8B0C8614D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6687DD7-61F6-4FFE-8DD8-A0473D18E684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6687DD7-61F6-4FFE-8DD8-A0473D18E684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6687DD7-61F6-4FFE-8DD8-A0473D18E684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6687DD7-61F6-4FFE-8DD8-A0473D18E684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DD50094-C7EA-4926-8B2E-E8A7D08BB815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD50094-C7EA-4926-8B2E-E8A7D08BB815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DD50094-C7EA-4926-8B2E-E8A7D08BB815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DD50094-C7EA-4926-8B2E-E8A7D08BB815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4230DC11-085E-4324-9825-BE06933A2351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4230DC11-085E-4324-9825-BE06933A2351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4230DC11-085E-4324-9825-BE06933A2351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4230DC11-085E-4324-9825-BE06933A2351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7627162B-B311-4768-9310-9C63CE9737C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7627162B-B311-4768-9310-9C63CE9737C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7627162B-B311-4768-9310-9C63CE9737C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7627162B-B311-4768-9310-9C63CE9737C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAB7423E-7C73-4B91-8936-A8FE618758D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAB7423E-7C73-4B91-8936-A8FE618758D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAB7423E-7C73-4B91-8936-A8FE618758D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAB7423E-7C73-4B91-8936-A8FE618758D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE73F63B-AD32-4DCE-AEDF-B6E382B2A8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE73F63B-AD32-4DCE-AEDF-B6E382B2A8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE73F63B-AD32-4DCE-AEDF-B6E382B2A8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE73F63B-AD32-4DCE-AEDF-B6E382B2A8DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FE4C03F-1BFE-4309-8F66-5FF0F2769449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE4C03F-1BFE-4309-8F66-5FF0F2769449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE4C03F-1BFE-4309-8F66-5FF0F2769449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE4C03F-1BFE-4309-8F66-5FF0F2769449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524A21EE-8B67-470F-9F44-5DA92AEF327B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524A21EE-8B67-470F-9F44-5DA92AEF327B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524A21EE-8B67-470F-9F44-5DA92AEF327B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524A21EE-8B67-470F-9F44-5DA92AEF327B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +93,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CCDDA0B3-DAA4-4143-81B2-50DAA10A77E5} = {938F9047-A17A-4D91-95DE-DF09E7349593}
 		{1528738C-FE3C-4BF1-A1E3-F94B387A7ADF} = {938F9047-A17A-4D91-95DE-DF09E7349593}
+		{AAB7423E-7C73-4B91-8936-A8FE618758D4} = {8FE4A34D-734E-483C-93DC-B26C22102117}
+		{524A21EE-8B67-470F-9F44-5DA92AEF327B} = {8FE4A34D-734E-483C-93DC-B26C22102117}
+		{F198C67C-94A9-4AEA-BAC6-F30550A0CEA1} = {8FE4A34D-734E-483C-93DC-B26C22102117}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FD24884-1B60-47DA-9633-6CA7CFC6FAC1}

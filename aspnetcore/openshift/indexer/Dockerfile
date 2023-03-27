@@ -1,25 +1,27 @@
 # Builder
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-WORKDIR /app
+WORKDIR /build
 
 # Copy csproj and restore as distinct layers
-COPY ["aspnetcore/PublicApi.sln", "./"]
-COPY ["aspnetcore/src/ElasticSearchIndexer/ElasticSearchIndexer.csproj", "src/ElasticSearchIndexer/"]
-COPY ["aspnetcore/src/Api/Api.csproj", "src/Api/"]
-COPY ["aspnetcore/src/Api.Test/Api.Test.csproj", "src/Api.Test/"]
-RUN dotnet restore
+COPY ["packages","./packages"]
+COPY ["aspnetcore/nuget.config","./Indexer/nuget.config"]
+COPY ["aspnetcore/src/Indexer/Indexer.csproj","./Indexer/Indexer.csproj"]
+COPY ["aspnetcore/src/ElasticService/ElasticService.csproj","./ElasticService/ElasticService.csproj"]
+COPY ["aspnetcore/src/DatabaseContext/DatabaseContext.csproj","./DatabaseContext/DatabaseContext.csproj"]
+COPY ["aspnetcore/src/Repositories/Repositories.csproj","./Repositories/Repositories.csproj"]
+COPY ["aspnetcore/src/Service.Models/Service.Models.csproj","./Service.Models/Service.Models.csproj"]
+RUN dotnet restore "Indexer/Indexer.csproj"
 
 # Copy everything else and build
-COPY ["aspnetcore/src/Api/.", "src/Api/"]
-COPY ["aspnetcore/src/ElasticSearchIndexer/.", "src/ElasticSearchIndexer/"]
-COPY ["aspnetcore/src/Api.Test/.", "src/Api.Test/"]
-WORKDIR /app
-
-RUN dotnet publish "src/ElasticSearchIndexer/ElasticSearchIndexer.csproj" -c Release -o out
+COPY ["aspnetcore/src/Indexer/","./Indexer"]
+COPY ["aspnetcore/src/ElasticService/","./ElasticService"]
+COPY ["aspnetcore/src/DatabaseContext/","./DatabaseContext"]
+COPY ["aspnetcore/src/Repositories/","./Repositories"]
+COPY ["aspnetcore/src/Service.Models/","./Service.Models"]
+RUN dotnet publish "Indexer/Indexer.csproj" -c Release -o out
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/runtime:6.0
 WORKDIR /app
-COPY --from=build-env /app/out .
-#EXPOSE 8080
-ENTRYPOINT ["dotnet", "ElasticSearchIndexer.dll"]
+COPY --from=build-env /build/out .
+ENTRYPOINT ["dotnet", "CSC.PublicApi.Indexer.dll"]

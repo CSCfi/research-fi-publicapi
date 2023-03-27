@@ -1,0 +1,99 @@
+# This file is part of the research.fi api
+#
+# Copyright 2023 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-api-production
+    template: publicapi-api-production
+  name: publicapi-api-production
+objects:
+  # Service (production)
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: publicapi-api-service-production
+      labels:
+        app: publicapi-api-production
+      annotations:
+        description: Public api service for production branch
+    spec:
+      ports:
+        - name: publicapi-api-port-production
+          port: 8080
+          targetPort: 8080
+      selector:
+        depcfg: publicapi-api-depcfg-production
+
+  # ImageStream (production)
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: publicapi-api-production
+      labels:
+        app: publicapi-api-production
+
+  # BuildConfig using Docker build strategy
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: publicapi-api-build-production
+      labels:
+        app: publicapi-api-production
+    spec:
+      source:
+        git:
+          uri: https://github.com/CSCfi/research-fi-publicapi.git
+          ref: master
+        contextDir: .
+      strategy:
+        dockerStrategy:
+          dockerfilePath: aspnetcore/openshift/api/Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: publicapi-api-production:latest
+      successfulBuildsHistoryLimit: 4
+      failedBuildsHistoryLimit: 4
+
+  # Deployment config (production)
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: publicapi-api-deployment-production
+      labels:
+        app: publicapi-api-production
+    spec:
+      selector:
+        app: publicapi-api-production
+        depcfg: publicapi-api-depcfg-production
+      template:
+        metadata:
+          labels:
+            app: publicapi-api-production
+            depcfg: publicapi-api-depcfg-production
+        spec:
+          containers:
+            - name: publicapi-api-container-production
+              image: publicapi/publicapi-api-production
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+      replicas: 1
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - publicapi-api-container-production
+            from:
+              kind: ImageStreamTag
+              name: publicapi-api-production:latest
+      strategy:
+        type: Rolling
