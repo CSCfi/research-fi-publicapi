@@ -1,6 +1,4 @@
-﻿using Nest;
-
-namespace CSC.PublicApi.Service.Models.FundingCall;
+﻿namespace CSC.PublicApi.Service.Models.FundingCall;
 
 public class Foundation
 {

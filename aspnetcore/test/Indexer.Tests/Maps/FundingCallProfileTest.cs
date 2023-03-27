@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Repositories.Maps;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingCall;
 using FluentAssertions;
 using Xunit;
@@ -143,26 +144,26 @@ public class FundingCallProfileTest
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            ApplicationURLFi = "http://urlFi",
-            ApplicationURLSv = "http://urlSv",
-            ApplicationURLEn = "http://urlEn",
+            ApplicationUrlFi = "http://urlFi",
+            ApplicationUrlSv = "http://urlSv",
+            ApplicationUrlEn = "http://urlEn",
             ContactInformation = "contact info",
-            CallProgrammeOpenDate = new System.DateTime(2020, 1, 1),
-            CallProgrammeDueDate = new System.DateTime(2021, 1, 1),
+            CallProgrammeOpenDate = new DateTime(2020, 1, 1),
+            CallProgrammeDueDate = new DateTime(2021, 1, 1),
             ContinuosApplication = true,
-            Categories = new[]
+            Categories = new List<ReferenceData>
             {
-                new Category
+                new()
                 {
                     NameFi = "category name fi",
                     NameSv = "category name sv",
                     NameEn = "category name en",
-                    CodeValue = "category code"
+                    Code = "category code"
                 }
             },
-            Foundation = new[]
+            Foundations = new List<Foundation>
             {
-                new Foundation
+                new()
                 {
                     NameFi = "foundation name fi",
                     NameSv = "foundation name sv",

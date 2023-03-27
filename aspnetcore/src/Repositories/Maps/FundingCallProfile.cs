@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingCall;
 using FundingCall = CSC.PublicApi.Service.Models.FundingCall.FundingCall;
 
@@ -23,19 +24,21 @@ public class FundingCallProfile : Profile
             .ForMember(dst => dst.CallProgrammeDueDate, opt => opt.MapFrom(src => src.DimDateIdDueNavigation))
             .ForMember(dst => dst.ContactInformation, opt => opt.MapFrom(src => src.ContactInformation))
             .ForMember(dst => dst.Categories, opt => opt.MapFrom(src => src.DimReferencedata))
-            .ForMember(dst => dst.Foundation, opt => opt.MapFrom(src => src.DimOrganizations))
+            .ForMember(dst => dst.Foundations, opt => opt.MapFrom(src => src.DimOrganizations))
             .ForMember(dst => dst.ContinuosApplication, opt => opt.MapFrom(src => src.ContinuousApplicationPeriod))
-            .ForMember(dst => dst.ApplicationURLFi, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "fi")))
-            .ForMember(dst => dst.ApplicationURLSv, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "sv")))
-            .ForMember(dst => dst.ApplicationURLEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")));
+            .ForMember(dst => dst.ApplicationUrlFi, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "fi")))
+            .ForMember(dst => dst.ApplicationUrlSv, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "sv")))
+            .ForMember(dst => dst.ApplicationUrlEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")));
 
-        CreateProjection<DimReferencedatum, Category>()
-            .ForMember(dst => dst.CodeValue, opt => opt.MapFrom(src => src.CodeValue))
+        CreateProjection<DimReferencedatum, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
 
         CreateProjection<DimOrganization, Foundation>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))

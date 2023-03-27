@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
+using Keyword = CSC.PublicApi.Service.Models.Keyword;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
@@ -26,12 +28,12 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
             .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
             .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
+            .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
             .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
             .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
             .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
-            .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
             // FrameworkProgramme is populated later in memory from deepest CallProgrammeParent{X}, see below.
             .ForMember(dst => dst.FrameworkProgramme, opt => opt.Ignore())
             // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be copied to dst.FrameworkProgramme in memory later.
@@ -50,6 +52,7 @@ public class FundingDecisionProfile : Profile
             .ConvertUsing(dimDate => dimDate.Id == -1 ? null : new DateTime(dimDate.Year, dimDate.Month, dimDate.Day));
 
         CreateProjection<BrParticipatesInFundingGroup, FundingGroupPerson>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.LastName, opt => opt.MapFrom(src => src.DimName.LastName))
             .ForMember(dst => dst.FirstNames, opt => opt.MapFrom(src => src.DimName.FirstNames))
             .ForMember(dst => dst.OrcId, opt => opt.MapFrom(src => src.DimName.DimKnownPersonIdConfirmedIdentityNavigation))
@@ -61,6 +64,7 @@ public class FundingDecisionProfile : Profile
                 .SingleOrDefault());
 
         CreateProjection<BrFundingConsortiumParticipation, OrganizationConsortium>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
@@ -70,6 +74,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
         CreateProjection<BrParticipatesInFundingGroup, OrganizationConsortium>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimOrganization.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimOrganization.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimOrganization.NameEn))
@@ -79,47 +84,56 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimOrganization.DimPids.Any(p => p.PidType == "BusinessID")));
 
         CreateProjection<DimOrganization, Funder>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.Ids, opt => opt.MapFrom(src => src.DimPids));
 
-        CreateProjection<DimTypeOfFunding, FundingType>()
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.TypeId, opt => opt.MapFrom(src => src.TypeId));
-
         CreateProjection<DimCallProgramme, CallProgramme>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.CallProgrammeId, opt => opt.MapFrom(src => src.SourceId));
-
-        CreateProjection<FactDimReferencedataFieldOfScience, FieldOfScience>()
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn))
-            .ForMember(dst => dst.FieldId, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue));
-
-        CreateProjection<DimKeyword, string>()
-            .ConvertUsing(keyword => keyword.Keyword);
-
+        
         CreateProjection<DimCallProgramme, Topic>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.EuCallId, opt => opt.MapFrom(src => src.EuCallId))
             .ForMember(dst => dst.TopicId, opt => opt.MapFrom(src => src.Abbreviation));
 
+        CreateProjection<DimTypeOfFunding, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.TypeId));
+        
+        CreateProjection<FactDimReferencedataFieldOfScience, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn))
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue));
+
+        CreateProjection<DimKeyword, Keyword>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Keyword))
+            .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.Language))
+            .ForMember(dst => dst.Scheme, opt => opt.MapFrom(src => src.Scheme));
+
         CreateProjection<BrWordsDefineACluster, string>()
             .ConvertUsing(x => x.DimMinedWords.Word);
 
-        CreateProjection<DimPid, Id>()
+        CreateProjection<DimPid, PersistentIdentifier>()
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType))
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent));
 
         CreateProjection<DimCallProgramme, FrameworkProgramme>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));

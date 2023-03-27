@@ -22,7 +22,7 @@ public class OrganizationProfile : Profile
             .ForMember(dst => dst.LocalOrganizationUnitId, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.LocalOrganizationUnitId) || string.Equals(src.LocalOrganizationUnitId, "-1") ? null : src.LocalOrganizationUnitId ))
             .ForMember(dst => dst.ParentId, opt => opt.MapFrom(src => src.DimOrganizationBroader == null || src.DimOrganizationBroader == -1 ? null : src.DimOrganizationBroader));
         
-        CreateProjection<DimPid, Service.Models.Organization.PreferredIdentifier>()
+        CreateProjection<DimPid, Service.Models.PersistentIdentifier>()
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent))
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType));
     }

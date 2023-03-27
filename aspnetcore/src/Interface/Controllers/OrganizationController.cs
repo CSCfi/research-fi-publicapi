@@ -1,8 +1,8 @@
-﻿using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
+﻿using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Organization = CSC.PublicApi.Interface.Models.Organization.Organization;
+using ResearchFi.Query;
+using Organization = ResearchFi.Organization.Organization;
 
 namespace CSC.PublicApi.Interface.Controllers;
 

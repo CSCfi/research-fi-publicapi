@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using CSC.PublicApi.Interface.Models.FundingCall;
+using ResearchFi.FundingCall;
 using CSC.PublicApi.Repositories;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

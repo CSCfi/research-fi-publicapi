@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.Publication;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
-using FluentAssertions;
 using Xunit;
-using Author = CSC.PublicApi.Interface.Models.Publication.Author;
-using LocallyReportedPublicationInformation = CSC.PublicApi.Interface.Models.Publication.LocallyReportedPublicationInformation;
-using Organization = CSC.PublicApi.Interface.Models.Publication.Organization;
-using ParentPublication = CSC.PublicApi.Interface.Models.Publication.ParentPublication;
-using Publication = CSC.PublicApi.Interface.Models.Publication.Publication;
+using FluentAssertions;
+using ResearchFi.CodeList;
+using ResearchFi.Query;
+using Author = ResearchFi.Publication.Author;
+using Keyword = ResearchFi.Keyword;
+using LocallyReportedPublicationInformation = ResearchFi.Publication.LocallyReportedPublicationInformation;
+using Organization = ResearchFi.Publication.Organization;
+using ParentPublication = ResearchFi.Publication.ParentPublication;
+using Publication = ResearchFi.Publication.Publication;
 
 namespace CSC.PublicApi.Interface.Tests.Maps;
 
@@ -21,7 +23,8 @@ public class PublicationProfileTest
 
     public PublicationProfileTest()
     {
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<CSC.PublicApi.Interface.Maps.PublicationProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<CSC.PublicApi.Interface.Maps.PublicationProfile>())
+            .CreateMapper();
     }
 
     [Fact]
@@ -29,7 +32,7 @@ public class PublicationProfileTest
     {
         _mapper.ConfigurationProvider.AssertConfigurationIsValid();
     }
-    
+
     [Fact]
     public void Map_PublicationServiceModel_ReturnsApiModel()
     {
@@ -52,9 +55,8 @@ public class PublicationProfileTest
         {
             Keywords = "keywords",
             Name = "name",
-
         };
-        
+
         var elasticModel = new PublicationSearchParameters
         {
             Keywords = "keywords",
@@ -74,9 +76,9 @@ public class PublicationProfileTest
         {
             Id = "publicationId",
             Name = "nameFi",
-            PublicationYear = new DateTime(2021,1,1),
-            ReportingYear = new DateTime(2022,1,1),
-            ApcPaymentYear = new DateTime(2023,1,1),
+            PublicationYear = new DateTime(2021, 1, 1),
+            ReportingYear = new DateTime(2022, 1, 1),
+            ApcPaymentYear = new DateTime(2023, 1, 1),
             AuthorsText = "authorsText",
             Format = new Service.Models.ReferenceData
             {
@@ -99,14 +101,17 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
-            TypeCode = "publicationTypeCode",
+            Type = new ReferenceData
+            {
+                Code = "publicationTypeCode"
+            },
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
             ConferenceName = "ConferenceName",
-            Issn = new List<string?>
+            Issn = new List<string>
             {
                 "issn",
-                "issn2"                
+                "issn2"
             },
             Volume = "volume",
             PageNumberText = "pageNumberText",
@@ -120,10 +125,10 @@ public class PublicationProfileTest
                     Code = "parentPublicationTypeCode",
                     NameFi = "parentPublicationTypeNameFi",
                     NameSv = "parentPublicationTypeNameSv",
-                    NameEn = "parentPublicationTypeNameEn"                    
+                    NameEn = "parentPublicationTypeNameEn"
                 }
             },
-            Isbn = new List<string?>
+            Isbn = new List<string>
             {
                 "isbn",
                 "isbn2",
@@ -131,7 +136,10 @@ public class PublicationProfileTest
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
             JufoCode = "jufoCode",
-            JufoClassCode = "jufoClassCode",
+            JufoClass = new ReferenceData
+            {
+                Code = "jufoClassCode"
+            },
             Doi = "doi",
             DoiHandle = "doiHandle",
             FieldsOfEducation = new List<Service.Models.ReferenceData>
@@ -210,34 +218,52 @@ public class PublicationProfileTest
             FieldsOfScience = new List<Service.Models.ReferenceData>
             {
                 new()
-                { 
+                {
                     Code = "fieldOfScienceFieldId",
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            LanguageCode = "languageCode",
+            Language = new ReferenceData
+            {
+                Code = "languageCode"
+            },
             InternationalPublication = false,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
-            ArticleTypeCode = new Service.Models.ReferenceData
+            ArticleType = new Service.Models.ReferenceData
             {
                 Code = "articleTypeCode",
                 NameEn = "articleTypeCodeNameEn",
                 NameFi = "articleTypeCodeNameFi",
                 NameSv = "articleTypeCodeNameSv",
             },
-            StatusCode = "publicationStatusCode",
-            LicenseId = "1337",
+            Status = new ReferenceData
+            {
+                Code = "publicationStatusCode",
+                NameFi = "publicationStatusNameFi",
+                NameSv = "publicationStatusNameSv",
+                NameEn = "publicationStatusNameEn"
+            },
+            License = new ReferenceData
+            {
+                Code = "1337"
+            },
             Preprint = new List<Service.Models.Publication.LocallyReportedPublicationInformation>
             {
                 new()
                 {
                     Url = "preprintArchivedUrl",
-                    LicenseCode = "preprintArchivedLicenseCode",
-                    VersionCode = "preprintArchivedVersionCode",
+                    License = new ReferenceData
+                    {
+                        Code = "preprintArchivedLicenseCode"
+                    },
+                    Version = new ReferenceData
+                    {
+                        Code = "preprintArchivedVersionCode"
+                    },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00)
                 }
             },
@@ -246,12 +272,18 @@ public class PublicationProfileTest
                 new()
                 {
                     Url = "selfArchivedUrl",
-                    LicenseCode = "selfArchivedLicenseCode",
-                    VersionCode = "selfArchivedVersionCode",
+                    License = new ReferenceData
+                    {
+                        Code = "selfArchivedLicenseCode"
+                    },
+                    Version = new ReferenceData
+                    {
+                        Code = "selfArchivedVersionCode"
+                    },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            FieldOfArts = new List<Service.Models.ReferenceData>
+            FieldsOfArts = new List<Service.Models.ReferenceData>
             {
                 new()
                 {
@@ -262,9 +294,9 @@ public class PublicationProfileTest
                 }
             },
             Abstract = "abstract",
-            ArtPublicationTypeCategory =  new List<Service.Models.ReferenceData>
+            ArtPublicationTypeCategory = new List<Service.Models.ReferenceData>
             {
-                new ()
+                new()
                 {
                     Code = "artPublicationTypeCategory",
                     NameFi = "artPublicationTypeNameFi",
@@ -277,7 +309,7 @@ public class PublicationProfileTest
         };
     }
 
-    private object GetApiModel()
+    private static object GetApiModel()
     {
         return new Publication
         {
@@ -287,7 +319,7 @@ public class PublicationProfileTest
             ReportingYear = "2022",
             ApcPaymentYear = "2023",
             AuthorsText = "authorsText",
-            Format = new ReferenceData
+            Format = new PublicationFormat
             {
                 Code = "formatCode",
                 NameFi = "formatNameFi",
@@ -298,29 +330,32 @@ public class PublicationProfileTest
             {
                 Name = "parentPublicationName",
                 Publisher = "parentPublicationPublisher",
-                Type = new ReferenceData
+                Type = new ParentPublicationType
                 {
                     Code = "parentPublicationTypeCode",
                     NameFi = "parentPublicationTypeNameFi",
                     NameSv = "parentPublicationTypeNameSv",
-                    NameEn = "parentPublicationTypeNameEn"                    
+                    NameEn = "parentPublicationTypeNameEn"
                 }
             },
-            PeerReviewed = new ReferenceData
+            PeerReviewed = new PeerReviewed
             {
                 Code = "peerReviewedCode",
                 NameFi = "peerReviewedNameFi",
                 NameSv = "peerReviewedNameSv",
                 NameEn = "peerReviewedNameEn"
             },
-            TargetAudience = new ReferenceData
+            TargetAudience = new TargetAudience
             {
                 Code = "targetAudienceCode",
                 NameFi = "targetAudienceNameFi",
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
-            TypeCode = "publicationTypeCode",
+            Type = new PublicationType
+            {
+                Code = "publicationTypeCode"
+            },
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
             ConferenceName = "ConferenceName",
@@ -340,10 +375,13 @@ public class PublicationProfileTest
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
             JufoCode = "jufoCode",
-            JufoClassCode = "jufoClassCode",
+            JufoClass = new JufoClass
+            {
+                Code = "jufoClassCode"
+            },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<ReferenceData>
+            FieldsOfEducation = new List<FieldOfEducation>
             {
                 new()
                 {
@@ -378,7 +416,7 @@ public class PublicationProfileTest
                 {
                     FirstNames = "first Names",
                     LastName = "lastName",
-                    ArtPublicationRole = new ReferenceData()
+                    ArtPublicationRole = new ArtPublicationRole
                     {
                         Code = "artPublicationRole",
                         NameFi = "artPublicationNameFi",
@@ -389,37 +427,55 @@ public class PublicationProfileTest
                     Organizations = null
                 }
             },
-            FieldsOfScience = new List<ReferenceData>
+            FieldsOfScience = new List<FieldOfScience>
             {
                 new()
-                { 
+                {
                     Code = "fieldOfScienceFieldId",
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            LanguageCode = "languageCode",
+            Language = new Language
+            {
+                Code = "languageCode"
+            },
             InternationalPublication = false,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
-            ArticleTypeCode = new ReferenceData
+            ArticleType = new ArticleType
             {
                 Code = "articleTypeCode",
                 NameEn = "articleTypeCodeNameEn",
                 NameFi = "articleTypeCodeNameFi",
                 NameSv = "articleTypeCodeNameSv",
             },
-            StatusCode = "publicationStatusCode",
-            LicenseId = "1337",
+            Status = new PublicationStatus
+            {
+                Code = "publicationStatusCode",
+                NameFi = "publicationStatusNameFi",
+                NameSv = "publicationStatusNameSv",
+                NameEn = "publicationStatusNameEn"
+            },
+            License = new License
+            {
+                Code = "1337"
+            },
             Preprint = new List<LocallyReportedPublicationInformation>
             {
                 new()
                 {
                     Url = "preprintArchivedUrl",
-                    LicenseCode = "preprintArchivedLicenseCode",
-                    VersionCode = "preprintArchivedVersionCode",
+                    License = new License
+                    {
+                        Code = "preprintArchivedLicenseCode"
+                    },
+                    Version = new SelfArchiveVersion
+                    {
+                        Code = "preprintArchivedVersionCode"
+                    },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00)
                 }
             },
@@ -428,12 +484,18 @@ public class PublicationProfileTest
                 new()
                 {
                     Url = "selfArchivedUrl",
-                    LicenseCode = "selfArchivedLicenseCode",
-                    VersionCode = "selfArchivedVersionCode",
+                    License = new License
+                    {
+                        Code = "selfArchivedLicenseCode"
+                    },
+                    Version = new SelfArchiveVersion
+                    {
+                        Code = "selfArchivedVersionCode"
+                    },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            FieldOfArts = new List<ReferenceData>
+            FieldsOfArts = new List<FieldOfArts>
             {
                 new()
                 {
@@ -444,9 +506,9 @@ public class PublicationProfileTest
                 }
             },
             Abstract = "abstract",
-            ArtPublicationTypeCategory =  new List<ReferenceData>
+            ArtPublicationTypeCategory = new List<ArtPublicationTypeCategory>
             {
-                new ()
+                new()
                 {
                     Code = "artPublicationTypeCategory",
                     NameFi = "artPublicationTypeNameFi",
@@ -459,4 +521,3 @@ public class PublicationProfileTest
         };
     }
 }
-

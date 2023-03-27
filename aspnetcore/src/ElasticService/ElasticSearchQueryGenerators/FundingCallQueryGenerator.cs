@@ -1,4 +1,5 @@
 ﻿using CSC.PublicApi.ElasticService.SearchParameters;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingCall;
 using Nest;
 
@@ -52,13 +53,13 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
         if (!string.IsNullOrWhiteSpace(parameters.FoundationName))
         {
             subQueries.Add(t => t.Nested(query => query
-                .Path(f => f.Foundation)
+                .Path(f => f.Foundations)
                 .Query(q => q.MultiMatch(multi => multi
                     .Type(TextQueryType.PhrasePrefix)
                     .Fields(r => r
-                        .Field(f => f.Foundation.Suffix(nameof(Foundation.NameFi)))
-                        .Field(f => f.Foundation.Suffix(nameof(Foundation.NameSv)))
-                        .Field(f => f.Foundation.Suffix(nameof(Foundation.NameEn))))
+                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameFi)))
+                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameSv)))
+                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameEn))))
                     .Query(parameters.FoundationName)
                 ))));
         }
@@ -74,23 +75,23 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
         // Searching with business id requires exact match.
         if (!string.IsNullOrWhiteSpace(parameters.FoundationBusinessId))
         {
-            filters.Add(t => t.Nested(query => query
-                .Path(f => f.Foundation)
-                .Query(q => q.Term(term => term
-                    .Field(f => f.Foundation.Suffix(nameof(Foundation.BusinessId)))
-                    .Value(parameters.FoundationBusinessId)
-                ))));
+            filters.Add(x => x
+                .Bool(b => b
+                    .Should(s =>
+                        s.Term(r => r
+                            .Field(f => f.Foundations.Suffix(nameof(Foundation.BusinessId)))
+                            .Value(parameters.FoundationBusinessId)))));
         }
 
         // Searching with category code requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.CategoryCode))
+        if (!string.IsNullOrWhiteSpace(parameters.Category))
         {
-            filters.Add(t => t.Nested(query => query
-                .Path(f => f.Categories)
-                .Query(q => q.Term(term => term
-                    .Field(f => f.Categories.Suffix(nameof(Category.CodeValue)))
-                    .Value(parameters.CategoryCode)
-                ))));
+            filters.Add(x => x
+                .Bool(b => b
+                    .Should(s =>
+                    s.Term(r => r
+                        .Field(f => f.Categories.Suffix(nameof(ReferenceData.Code)))
+                        .Value(parameters.Category)))));
         }
         
         if (parameters.DateFrom != null || parameters.DateTo != null)

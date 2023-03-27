@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.Organization;
+using ResearchFi.Organization;
+using ResearchFi.Query;
 
 namespace CSC.PublicApi.Interface.Maps;
 

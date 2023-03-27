@@ -25,4 +25,31 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             .Where(callProgramme => callProgramme.Id != -1)
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
+    
+    public override List<object> PerformInMemoryOperations(List<object> entities)
+    {
+        entities.ForEach(o =>
+        {
+            if (o is not FundingCall fundingCall)
+            {
+                return;
+            }
+
+            HandleEmptyCollections(fundingCall);
+        });
+        return entities;
+    }
+
+    private static void HandleEmptyCollections(FundingCall fundingCall)
+    {
+        if (fundingCall.Foundations != null && !fundingCall.Foundations.Any())
+        {
+            fundingCall.Foundations = null;
+        }
+        
+        if (fundingCall.Categories != null && !fundingCall.Categories.Any())
+        {
+            fundingCall.Categories = null;
+        }
+    }
 }

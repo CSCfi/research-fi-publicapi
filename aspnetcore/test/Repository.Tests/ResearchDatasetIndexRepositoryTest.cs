@@ -46,7 +46,7 @@ public class ResearchDatasetIndexRepositoryTest
 
         researchDataset.IsLatestVersion.Should().Be(false);
         researchDataset.Contributors.Should().BeNull();
-        researchDataset.FieldOfSciences.Should().BeNull();
+        researchDataset.FieldsOfScience.Should().BeNull();
         researchDataset.Keywords.Should().BeNull();
         researchDataset.Languages.Should().BeNull();
         researchDataset.License.Should().BeNull();
@@ -113,15 +113,15 @@ public class ResearchDatasetIndexRepositoryTest
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            DatasetCreated = new DateTime(2021, 10, 1),
+            Created = new DateTime(2021, 10, 1),
             Contributors = new List<Contributor>
             {
                 new()
                 {
-                    Organisation = new Organisation
+                    Organization = new Organization
                     {
                         Id = "-1",
-                        Pids = Array.Empty<PreferredIdentifier>(),
+                        Pids = new List<PersistentIdentifier>(),
                         NameFi = " ",
                         NameSv = " ",
                         NameEn = " ",
@@ -136,7 +136,7 @@ public class ResearchDatasetIndexRepositoryTest
                     }
                 }
             },
-            FieldOfSciences = new List<ReferenceData>(),
+            FieldsOfScience = new List<ReferenceData>(),
             Languages = new List<ReferenceData>(),
             AccessType = new ReferenceData()
             {
@@ -153,8 +153,8 @@ public class ResearchDatasetIndexRepositoryTest
                 NameEn = null,
             },
             Keywords = new List<Keyword>(),
-            PreferredIdentifiers = new List<PreferredIdentifier>(),
-            Identifier = "localIdentifier",
+            PersistentIdentifiers = new List<PersistentIdentifier>(),
+            Id = "localIdentifier",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,

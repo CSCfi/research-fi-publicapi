@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.FundingDecision;
+using ResearchFi.FundingDecision;
+using ResearchFi.Query;
 
 namespace CSC.PublicApi.Interface.Services;
 

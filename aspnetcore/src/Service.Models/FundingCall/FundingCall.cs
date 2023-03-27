@@ -1,6 +1,4 @@
-﻿using Nest;
-
-namespace CSC.PublicApi.Service.Models.FundingCall;
+﻿namespace CSC.PublicApi.Service.Models.FundingCall;
 
 public class FundingCall
 {
@@ -67,29 +65,27 @@ public class FundingCall
     /// <summary>
     /// Rahoitushaun verkkosivu
     /// </summary>
-    public string? ApplicationURLFi { get; set; }
+    public string? ApplicationUrlFi { get; set; }
 
     /// <summary>
     /// Utlysningens webbsida
     /// </summary>
-    public string? ApplicationURLSv { get; set; }
+    public string? ApplicationUrlSv { get; set; }
 
     /// <summary>
     /// Webpage of the funding call
     /// </summary>
-    public string? ApplicationURLEn { get; set; }
+    public string? ApplicationUrlEn { get; set; }
 
     /// <summary>
     /// Rahoittajat
     /// </summary>
-    [Nested]
-    public Foundation[]? Foundation { get; set; }
+    public List<Foundation>? Foundations { get; set; }
 
     /// <summary>
     /// Hakualat
     /// </summary>
-    [Nested]
-    public Category[]? Categories { get; set; }
+    public List<ReferenceData>? Categories { get; set; }
 
     /// <summary>
     /// Yhteystiedot

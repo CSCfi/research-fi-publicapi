@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Nest;
 using Xunit;
 using FundingDecisionProfile = CSC.PublicApi.Repositories.Maps.FundingDecisionProfile;
+using Keyword = CSC.PublicApi.Service.Models.Keyword;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -279,11 +282,13 @@ public class FundingDecisionProfileTest
                 new DimKeyword
                 {
                     Keyword = "keyword 1",
+                    Language = "english",
                     Scheme = "Tutkimusala"
                 },
                 new DimKeyword
                 {
                     Keyword = "keyword 2",
+                    Language = "finnish",
                     Scheme = "Tutkimusala"
                 },
                 new DimKeyword
@@ -345,10 +350,10 @@ public class FundingDecisionProfileTest
             DescriptionEn = "desc en",
             FundingStartYear = 1987,
             FundingEndYear = 1988,
-            FundingEndDate = new System.DateTime(1988, 2, 20),
-            FundingGroupPerson = new[]
+            FundingEndDate = new DateTime(1988, 2, 20),
+            FundingGroupPerson = new List<FundingGroupPerson>
             {
-                new FundingGroupPerson
+                new()
                 {
                     FirstNames = "first names",
                     LastName = "lastname",
@@ -356,23 +361,23 @@ public class FundingDecisionProfileTest
                     RoleInFundingGroup = "leader"
                 }
             },
-            OrganizationConsortia = new[]
+            OrganizationConsortia = new List<OrganizationConsortium>
             {
-                new OrganizationConsortium
+                new()
                 {
                     NameFi = "namefi",
                     NameSv = "namesv",
                     NameEn = "nameen",
                     RoleInConsortium = "partner",
                     ShareOfFundingInEur = 202,
-                    Ids = new List<Id>
+                    Ids = new List<PersistentIdentifier>
                     {
-                        new Id
+                        new()
                         {
                             Content = "business id",
                             Type = "BusinessID"
                         },
-                        new Id
+                        new()
                         {
                             Content = "org pic",
                             Type = "PIC"
@@ -381,74 +386,91 @@ public class FundingDecisionProfileTest
                     IsFinnishOrganization = true
                 }
             },
-            Funder = new()
+            Funder = new Funder
             {
                 NameFi = "funder fi",
                 NameSv = "funder sv",
                 NameEn = "funder en",
-                Ids = new[]
+                Ids = new List<PersistentIdentifier>
                 {
-                    new Id { Type = "BusinessID", Content = "123"},
-                    new Id { Type = "PIC", Content = "456"},
+                    new()
+                    {
+                        Type = "BusinessID", 
+                        Content = "123"
+                    }, 
+                    new() 
+                    { 
+                        Type = "PIC", 
+                        Content = "456"
+                    }
                 }
             },
-            TypeOfFunding = new()
+            TypeOfFunding = new ReferenceData
             {
                 NameFi = "type fi",
                 NameSv = "type sv",
                 NameEn = "type en",
-                TypeId = "type id"
+                Code = "type id"
             },
-            CallProgramme = new()
+            CallProgramme = new CallProgramme
             {
                 CallProgrammeId = "call programme id",
                 NameFi = "call programme fi",
                 NameSv = "call programme sv",
                 NameEn = "call programme en"
             },
-            CallProgrammeParent1 = new()
+            CallProgrammeParent1 = new FrameworkProgramme
             {
                 NameFi = "parent 1"
             },
-            CallProgrammeParent2 = new()
+            CallProgrammeParent2 = new FrameworkProgramme
             {
                 NameFi = "parent 2"
             },
-            CallProgrammeParent3 = new()
+            CallProgrammeParent3 = new FrameworkProgramme
             {
                 NameFi = "parent 3"
             },
-            CallProgrammeParent4 = new()
+            CallProgrammeParent4 = new FrameworkProgramme
             {
                 NameFi = "parent 4"
             },
-            CallProgrammeParent5 = new()
+            CallProgrammeParent5 = new FrameworkProgramme
             {
                 NameFi = "parent 5"
             },
-            CallProgrammeParent6 = new()
+            CallProgrammeParent6 = new FrameworkProgramme
             {
                 NameFi = "parent 6"
             },
             FunderProjectNumber = "funder project number",
-            FieldsOfScience = new[]
+            FieldsOfScience = new List<ReferenceData>
             {
-                new FieldOfScience
+                new()
                 {
-                    FieldId = "abc",
+                    Code = "abc",
                     NameFi = "field fi",
                     NameSv = "field sv",
                     NameEn = "field en",
                 }
             },
-            Keywords = new[]
+            Keywords = new List<Keyword>
             {
-                "keyword 1",
-                "keyword 2"
+                new()
+                {
+                    Value ="keyword 1",
+                    Language = "english",
+                    Scheme = "Tutkimusala"
+                },
+                new()
+                {
+                    Value ="keyword 2",
+                    Language = "finnish",
+                    Scheme = "Tutkimusala"
+                }
             },
             AmountInEur = 123.456m,
-            Topic = null,
-            IdentifiedTopics = new[]
+            IdentifiedTopics = new List<string>
             {
                 "topic 1",
                 "topic 2"
@@ -461,16 +483,14 @@ public class FundingDecisionProfileTest
     {
         var fundingDecision = GetDestination();
         fundingDecision.CallProgramme = null;
-        fundingDecision.Topic = new()
+        fundingDecision.Topic = new Topic
         {
+            TopicId = "topic id",
             NameFi = "call programme fi",
             NameSv = "call programme sv",
             NameEn = "call programme en",
-            TopicId = "topic id",
             EuCallId = "eu call id"
         };
         return fundingDecision;
     }
-
-
 }
