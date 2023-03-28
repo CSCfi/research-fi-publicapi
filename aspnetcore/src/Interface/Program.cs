@@ -6,9 +6,15 @@ using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Interface;
 using CSC.PublicApi.Interface.Configuration;
 using CSC.PublicApi.Interface.Middleware;
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 // Register settings.
 builder.Services.AddSettings(builder.Configuration);
@@ -63,6 +69,7 @@ builder.Services.AddAutoMapper(typeof(ApiPolicies).Assembly);
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseHeaderPropagation();
 
 // Generate correlation ids for requests.
