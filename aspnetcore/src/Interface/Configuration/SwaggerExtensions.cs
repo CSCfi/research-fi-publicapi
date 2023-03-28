@@ -65,7 +65,7 @@ public static class SwaggerExtensions
         {
             c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
             {
-                swaggerDoc.Servers = new List<OpenApiServer> { new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}" } };
+                swaggerDoc.Servers = new List<OpenApiServer> { new() { Url = $"https://{httpReq.Host.Value}{basePath}" } };
             });
         });
         app.UseSwaggerUI(options =>
