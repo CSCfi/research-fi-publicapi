@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Models;
 
 namespace CSC.PublicApi.Interface.Configuration;
 
@@ -58,7 +60,14 @@ public static class SwaggerExtensions
 
     public static void UseSwaggerAndSwaggerUI(this WebApplication app)
     {
-        app.UseSwagger();
+        var basePath = Debugger.IsAttached ? string.Empty : "/api/rest";
+        app.UseSwagger(c =>
+        {
+            c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+            {
+                swaggerDoc.Servers = new List<OpenApiServer> { new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}" } };
+            });
+        });
         app.UseSwaggerUI(options =>
         {
             foreach (var description in app.Services.GetRequiredService<IApiVersionDescriptionProvider>().ApiVersionDescriptions)
