@@ -86,7 +86,6 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
             if (apiVersionDescription.IsDeprecated)
             {
                 openApiInfo.Description += " (Deprecated)";
-
             }
 
             options.SwaggerDoc(apiVersionDescription.GroupName, openApiInfo);
