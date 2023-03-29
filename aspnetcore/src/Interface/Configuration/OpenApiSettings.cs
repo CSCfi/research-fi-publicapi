@@ -8,4 +8,8 @@ public class OpenApiSettings
     public string? ContactName { get; set; }
     public string? ContactEmail { get; set; }
     public Uri? ContactUrl { get; set; }
+    
+    public string? HttpScheme { get; set; }
+    
+    public string? BasePath { get; set; }
 }
