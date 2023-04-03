@@ -15,7 +15,7 @@ RUN dotnet restore "Interface/Interface.csproj"
 COPY ["aspnetcore/src/Interface/","./Interface"]
 COPY ["aspnetcore/src/ElasticService/","./ElasticService"]
 COPY ["aspnetcore/src/Service.Models/","./Service.Models"]
-COPY ["aspnetcore/src/ApiModels/","./ApiModels"]z
+COPY ["aspnetcore/src/ApiModels/","./ApiModels"]
 RUN dotnet publish "Interface/Interface.csproj" -c Release -o out
 
 # Runtime image
