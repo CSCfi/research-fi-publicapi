@@ -9,6 +9,9 @@ public class InfrastructureProfileProfile : Profile
 {
     public InfrastructureProfileProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
         CreateMap<GetInfrastructuresQueryParameters, InfrastructureSearchParameters>();
         CreateMap<Service.Models.Infrastructure.Infrastructure, Infrastructure>();
     }
