@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.ResearchDataset;
-using Version = CSC.PublicApi.Interface.Models.ResearchDataset.Version;
+using ResearchFi;
+using ResearchFi.CodeList;
+using ResearchFi.Query;
+using ResearchFi.ResearchDataset;
+using Version = ResearchFi.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Interface.Maps;
 
@@ -28,16 +30,20 @@ public class ResearchDatasetProfile : Profile
                         : null));
         
         CreateMap<Service.Models.ResearchDataset.ResearchDataset, ResearchDataset>()
-            .ForMember(dst => dst.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Identifier}"));
+            .ForMember(dst => dst.FairDataUrl, opt => opt.MapFrom(src => $"{FairDataBaseUrl}{src.Id}"));
         
-        CreateMap<Service.Models.ResearchDataset.PreferredIdentifier, PreferredIdentifier>();
+        CreateMap<Service.Models.PersistentIdentifier, PersistentIdentifier>();
         CreateMap<Service.Models.ResearchDataset.Contributor, Contributor>();
         CreateMap<Service.Models.ResearchDataset.DatasetRelation, DatasetRelation>();
-        CreateMap<Service.Models.ResearchDataset.Organisation, Organisation>();
+        CreateMap<Service.Models.ResearchDataset.Organization, Organization>();
         CreateMap<Service.Models.ResearchDataset.Person, Person>();
         CreateMap<Service.Models.ResearchDataset.ResearchDataCatalog, ResearchDataCatalog>();
         CreateMap<Service.Models.ResearchDataset.Version, Version>();
-        CreateMap<Service.Models.ReferenceData, ReferenceData>();
+        CreateMap<Service.Models.ReferenceData, AgentRole>();
+        CreateMap<Service.Models.ReferenceData, FieldOfScience>();
+        CreateMap<Service.Models.ReferenceData, LexvoLanguage>();
+        CreateMap<Service.Models.ReferenceData, AccessType>();
+        CreateMap<Service.Models.ReferenceData, License>();
         CreateMap<Service.Models.Keyword, Keyword>();
     }
 }

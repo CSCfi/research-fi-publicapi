@@ -1,7 +1,7 @@
 ﻿using CSC.PublicApi.ElasticService.SearchParameters;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using Nest;
-using Id = CSC.PublicApi.Service.Models.FundingDecision.Id;
 
 namespace CSC.PublicApi.ElasticService.ElasticSearchQueryGenerators;
 
@@ -124,7 +124,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         if (!string.IsNullOrWhiteSpace(parameters.FunderId))
         {
             filters.Add(t => t.Term(term => term
-                .Field(f => f.Funder!.Ids.Suffix(nameof(Id.Content)))
+                .Field(f => f.Funder!.Ids.Suffix(nameof(PersistentIdentifier.Content)))
                 .Value(parameters.FunderId)
             ));
         }
@@ -143,7 +143,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         {
             filters.Add(t => t.Term(term => term
                 .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.Ids))
-                    .Suffix(nameof(Id.Content)))
+                    .Suffix(nameof(PersistentIdentifier.Content)))
                 .Value(parameters.FundedOrganizationId)
             ));
         }
@@ -152,7 +152,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         if (!string.IsNullOrWhiteSpace(parameters.TypeOfFunding))
         {
             filters.Add(t => t.Term(term => term
-                .Field(f => f.TypeOfFunding!.TypeId)
+                .Field(f => f.TypeOfFunding!.Code)
                 .Value(parameters.TypeOfFunding)
             ));
         }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
+using ResearchFi;
+using ResearchFi.CodeList;
+using ResearchFi.Query;
 using Xunit;
+using Keyword = CSC.PublicApi.Service.Models.Keyword;
 using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Interface.Tests.Maps;
@@ -35,7 +37,7 @@ public class ResearchDatasetProfileTest
         var apiModel = GetApiModel();
 
         // Act
-        var result = _mapper.Map<CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset>(serviceModel);
+        var result = _mapper.Map<ResearchFi.ResearchDataset.ResearchDataset>(serviceModel);
 
         // Assert
         result.Should().BeEquivalentTo(apiModel);
@@ -56,8 +58,8 @@ public class ResearchDatasetProfileTest
             Name = "name",
             DateFrom = DateTime.MinValue,
             DateTo = DateTime.MaxValue,
-            OrganisationId = "organisationId",
-            OrganisationName = "organisationName",
+            OrganizationId = "organisationId",
+            OrganizationName = "organisationName",
             PersonName = "personName",
             IsLatestVersion = true,
             RelatedDatasetId = "relatedDatasetId",
@@ -68,15 +70,15 @@ public class ResearchDatasetProfileTest
         {
             Access = "access",
             Description = "description",
-            FieldOfScience = new[] { "111", "112", "113" },
+            FieldOfScience = new List<string> { "111", "112", "113" },
             Keywords = "keywords",
-            Language = new[] { "fin", "eng", "est" },
+            Language = new List<string> { "fin", "eng", "est" },
             License = "license",
             Name = "name",
             DateFrom = DateTime.MinValue,
             DateTo = DateTime.MaxValue,
-            OrganisationId = "organisationId",
-            OrganisationName = "organisationName",
+            OrganizationId = "organisationId",
+            OrganizationName = "organisationName",
             PersonName = "personName",
             IsLatestVersion = true,
             RelatedDatasetId = "relatedDatasetId",
@@ -101,12 +103,12 @@ public class ResearchDatasetProfileTest
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            DatasetCreated = new DateTime(2021, 10, 1),
+            Created = new DateTime(2021, 10, 1),
             Contributors = new List<Contributor>
             {
                 new()
                 {
-                    Organisation = new Organisation
+                    Organization = new Organization
                     {
                         Id = "organizationId",
                         NameFi = "organizationNameFi",
@@ -125,7 +127,7 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<Service.Models.ReferenceData>
+            FieldsOfScience = new List<Service.Models.ReferenceData>
             {
                 new()
                 {
@@ -175,7 +177,7 @@ public class ResearchDatasetProfileTest
                     Type = "dataSetRelationType"
                 }
             },
-            PreferredIdentifiers = new List<PreferredIdentifier>
+            PersistentIdentifiers = new List<Service.Models.PersistentIdentifier>
             {
                 new()
                 {
@@ -183,7 +185,7 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            Identifier = "localIdentifier",
+            Id = "localIdentifier",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,
@@ -210,9 +212,9 @@ public class ResearchDatasetProfileTest
         };
     }
 
-    private static CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset GetApiModel()
+    private static ResearchFi.ResearchDataset.ResearchDataset GetApiModel()
     {
-        return new CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset
+        return new ResearchFi.ResearchDataset.ResearchDataset
         {
             NameFi = "nameFi",
             NameSv = "nameSv",
@@ -220,12 +222,12 @@ public class ResearchDatasetProfileTest
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            DatasetCreated = new DateTime(2021, 10, 1),
-            Contributors = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Contributor>
+            Created = new DateTime(2021, 10, 1),
+            Contributors = new List<ResearchFi.ResearchDataset.Contributor>
             {
                 new()
                 {
-                    Organisation = new CSC.PublicApi.Interface.Models.ResearchDataset.Organisation
+                    Organization = new ResearchFi.ResearchDataset.Organization
                     {
                         Id = "organizationId",
                         NameFi = "organizationNameFi",
@@ -233,10 +235,10 @@ public class ResearchDatasetProfileTest
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
-                    Person = new CSC.PublicApi.Interface.Models.ResearchDataset.Person {
+                    Person = new ResearchFi.ResearchDataset.Person {
                         Name = "personFullName"
                     },
-                    Role = new Models.ReferenceData
+                    Role = new AgentRole
                     {
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
@@ -244,7 +246,7 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<Models.ReferenceData>
+            FieldsOfScience = new List<FieldOfScience>
             {
                 new()
                 {
@@ -254,7 +256,7 @@ public class ResearchDatasetProfileTest
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
-            Languages = new List<Models.ReferenceData>
+            Languages = new List<LexvoLanguage>
             {
                 new()
                 {
@@ -264,21 +266,21 @@ public class ResearchDatasetProfileTest
                     NameSv = "languageNameSv"
                 }
             },
-            AccessType = new Models.ReferenceData
+            AccessType = new AccessType
             {
                 Code = "accessTypeCode",
                 NameFi = "accessTypeNameFi",
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new Models.ReferenceData
+            License = new License
             {
                 Code = "licenseCode",
                 NameFi = "licenseNameFi",
                 NameSv = "licenseNameSv",
                 NameEn = "licenseNameEn",
             },
-            Keywords = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Keyword>
+            Keywords = new List<ResearchFi.Keyword>
             {
                 new()
                 {
@@ -286,7 +288,7 @@ public class ResearchDatasetProfileTest
                     Value = "keywordValue"
                 }
             },
-            DatasetRelations = new List<CSC.PublicApi.Interface.Models.ResearchDataset.DatasetRelation>
+            DatasetRelations = new List<ResearchFi.ResearchDataset.DatasetRelation>
             {
                 new()
                 {
@@ -294,7 +296,7 @@ public class ResearchDatasetProfileTest
                     Type = "dataSetRelationType"
                 }
             },
-            PreferredIdentifiers = new List<CSC.PublicApi.Interface.Models.ResearchDataset.PreferredIdentifier>
+            PersistentIdentifiers = new List<PersistentIdentifier>
             {
                 new()
                 {
@@ -302,9 +304,9 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            Identifier = "localIdentifier",
+            Id = "localIdentifier",
             FairDataUrl = "https://etsin.fairdata.fi/dataset/localIdentifier",
-            ResearchDataCatalog = new CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataCatalog
+            ResearchDataCatalog = new ResearchFi.ResearchDataset.ResearchDataCatalog
             {
                 Id = 7,
                 NameFi = "researchDataCatalogNameFi",
@@ -313,7 +315,7 @@ public class ResearchDatasetProfileTest
                 SourceId = "researchDataCatalogSourceId",
                 SourceDescription = "researchDataCatalogSourceDescription"
             },
-            VersionSet = new List<CSC.PublicApi.Interface.Models.ResearchDataset.Version>
+            VersionSet = new List<ResearchFi.ResearchDataset.Version>
             {
                 new()
                 {

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.Publication;
+using ResearchFi;
+using ResearchFi.CodeList;
+using ResearchFi.Publication;
+using ResearchFi.Query;
 
 namespace CSC.PublicApi.Interface.Maps;
 
@@ -15,7 +17,7 @@ public class PublicationProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateMap<GetPublicationsQueryParameters, PublicationSearchParameters>()
-            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.TypeCode.ToLower()));
+            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.Type!.ToLower()));
         
         CreateMap<Service.Models.Publication.Publication, Publication>()
             .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src =>  src.PublicationYear.HasValue ? src.PublicationYear.Value.ToString(DateTimeYearFormat) : null))
@@ -28,7 +30,25 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.Publication.Author, Author>();
         CreateMap<Service.Models.Publication.AuthorOrganization, AuthorOrganization>();
         CreateMap<Service.Models.Publication.LocallyReportedPublicationInformation, LocallyReportedPublicationInformation>();
-        CreateMap<Service.Models.ReferenceData, ReferenceData>();
+        CreateMap<Service.Models.ReferenceData, ArtPublicationRole>();
+        CreateMap<Service.Models.ReferenceData, PublicationFormat>();
+        CreateMap<Service.Models.ReferenceData, PeerReviewed>();
+        CreateMap<Service.Models.ReferenceData, TargetAudience>();
+        CreateMap<Service.Models.ReferenceData, PublicationType>();
+        CreateMap<Service.Models.ReferenceData, ParentPublicationType>();
+        CreateMap<Service.Models.ReferenceData, JufoClass>();
+        CreateMap<Service.Models.ReferenceData, FieldOfScience>();
+        CreateMap<Service.Models.ReferenceData, FieldOfEducation>();
+        CreateMap<Service.Models.ReferenceData, FieldOfArts>();
+        CreateMap<Service.Models.ReferenceData, ArticleType>();
+        CreateMap<Service.Models.ReferenceData, ArtPublicationTypeCategory>();
+        CreateMap<Service.Models.ReferenceData, PublicationStatus>();
+        CreateMap<Service.Models.ReferenceData, License>();
+        CreateMap<Service.Models.ReferenceData, CountryCode>();
+        CreateMap<Service.Models.ReferenceData, Language>();
+        CreateMap<Service.Models.ReferenceData, SelfArchiveVersion>();
+        CreateMap<Service.Models.ReferenceData, OpenAccess>();
+        CreateMap<Service.Models.ReferenceData, PublisherOpenAccess>();
         CreateMap<Service.Models.Keyword, Keyword>();
     }
 }

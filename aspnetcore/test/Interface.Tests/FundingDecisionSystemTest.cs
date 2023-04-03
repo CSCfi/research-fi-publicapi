@@ -270,7 +270,7 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
 
     private static bool TypeOfFundingShouldMatch(FundingDecision fd, string text)
     {
-        return fd.TypeOfFunding != null && fd.TypeOfFunding.TypeId == text;
+        return fd.TypeOfFunding != null && fd.TypeOfFunding.Code == text;
     }
 
 }

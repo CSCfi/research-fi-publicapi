@@ -1,19 +1,17 @@
-﻿using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.FundingCall;
-using CSC.PublicApi.Interface.Services;
+﻿using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ResearchFi.FundingCall;
+using ResearchFi.Query;
 using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
-[ApiVersion(ApiVersion)]
+[ApiVersion(ApiConstants.ApiVersion1)]
 [Route("v{version:apiVersion}/funding-calls")]
 public class FundingCallController : ControllerBase
 {
-    private const string ApiVersion = "1.0";
-
     private readonly ILogger<FundingCallController> _logger;
     private readonly IFundingCallService _service;
 
@@ -26,13 +24,21 @@ public class FundingCallController : ControllerBase
     }
 
     /// <summary>
-    /// Hae rahoitushakuja
+    /// Metodi rahoitushakujen suodattamiseen määritellyillä hakuehdoilla.
     /// </summary>
-    /// <param name="queryParameters">Query parameters for filtering the results.</param>
-    /// <returns>Filtered and paginated results as an enumerated list of <see cref="FundingCall"/>.</returns>
+    /// <param name="queryParameters">Hakuehdot, joiden perusteella tuloksia suodatetaan.</param>
+    /// <returns>Sivutettu hakutulos joka koostuu kokoelmasta <see cref="FundingCall"/> objekteja.</returns>
+    /// <response code="200">Ok.</response>
+    /// <response code="401">Ei autentikoitu.</response>
+    /// <response code="403">Ei lupaa suorittaa operaatiota.</response>
     [HttpGet(Name = "GetFundingCall")]
-    [MapToApiVersion(ApiVersion)]
+    [MapToApiVersion(ApiConstants.ApiVersion1)]
     [Authorize(Policy = ApiPolicies.FundingCall.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<FundingCall>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters queryParameters)
     {
         var (fundingCalls, searchResult) = await _service.GetFundingCalls(queryParameters);
@@ -48,7 +54,7 @@ public class FundingCallController : ControllerBase
     /// <param name="fundingCall"></param>
     /// <returns></returns>
     [HttpPost(Name = "PostFundingCall")]
-    [MapToApiVersion(ApiVersion)]
+    [MapToApiVersion(ApiConstants.ApiVersion1)]
     [Authorize(Policy = ApiPolicies.FundingCall.Write)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public async Task Post(FundingCall fundingCall)

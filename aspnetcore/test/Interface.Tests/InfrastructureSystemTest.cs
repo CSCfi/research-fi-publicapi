@@ -7,7 +7,7 @@ using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using Infrastructure = CSC.PublicApi.Interface.Models.Infrastructure.Infrastructure;
+using Infrastructure = ResearchFi.Infrastructure.Infrastructure;
 
 namespace CSC.PublicApi.Interface.Tests;
 

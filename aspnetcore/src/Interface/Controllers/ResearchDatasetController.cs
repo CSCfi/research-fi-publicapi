@@ -1,8 +1,8 @@
-﻿using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
+﻿using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ResearchDataset = CSC.PublicApi.Interface.Models.ResearchDataset.ResearchDataset;
+using ResearchFi.Query;
+using ResearchDataset = ResearchFi.ResearchDataset.ResearchDataset;
 
 namespace CSC.PublicApi.Interface.Controllers;
 

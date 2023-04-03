@@ -2,12 +2,12 @@
 
 namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
-public class Organisation
+public class Organization
 {
     [Keyword]
     public string? Id { get; set; }
     
-    public PreferredIdentifier[]? Pids { get; set; }
+    public List<PersistentIdentifier>? Pids { get; set; }
 
     public string? NameFi { get; set; }
 

@@ -5,6 +5,7 @@ using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
+using Organization = CSC.PublicApi.Service.Models.ResearchDataset.Organization;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -277,15 +278,15 @@ public class ResearchDatasetProfileTest
             DescriptionFi = "descFi",
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
-            DatasetCreated = new DateTime(2021, 10, 1),
+            Created = new DateTime(2021, 10, 1),
             Contributors = new List<Contributor>
             {
                 new()
                 {
-                    Organisation = new Organisation
+                    Organization = new Organization
                     {
                         Id = "42",
-                        Pids = new PreferredIdentifier[]
+                        Pids = new List<PersistentIdentifier>
                         {
                             new()
                             {
@@ -315,7 +316,7 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FieldOfSciences = new List<ReferenceData>
+            FieldsOfScience = new List<ReferenceData>
             {
                 new()
                 {
@@ -354,10 +355,11 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Language = "keywordLanguage",
-                    Value = "keywordValue"
+                    Value = "keywordValue",
+                    Scheme = "keywordScheme"
                 }
             },
-            PreferredIdentifiers = new List<PreferredIdentifier>
+            PersistentIdentifiers = new List<PersistentIdentifier>
             {
                 new()
                 {
@@ -365,7 +367,7 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            Identifier = "localIdentifier",
+            Id = "localIdentifier",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,

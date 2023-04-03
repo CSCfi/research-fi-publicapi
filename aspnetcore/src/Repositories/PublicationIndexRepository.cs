@@ -64,7 +64,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         return entities;
     }
 
-    private void HandlePeerReviewed(Publication publication)
+    private static void HandlePeerReviewed(Publication publication)
     {
         if (publication.DatabasePeerReviewed is not null)
         {
@@ -78,7 +78,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         }
     }
 
-    private void HandleParentPublications(Publication publication)
+    private static void HandleParentPublications(Publication publication)
     {
         publication.ParentPublication = new ParentPublication
         {
@@ -236,9 +236,9 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         }
 
         publication.Organizations = new List<Organization>();
-        foreach (var mainOrganisation in mainOrganizations.Values)
+        foreach (var mainOrganization in mainOrganizations.Values)
         {
-            publication.Organizations.Add(mainOrganisation);
+            publication.Organizations.Add(mainOrganization);
         }
     }
 

@@ -1,8 +1,8 @@
-﻿using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
+﻿using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure = CSC.PublicApi.Interface.Models.Infrastructure.Infrastructure;
+using ResearchFi.Query;
+using Infrastructure =ResearchFi.Infrastructure.Infrastructure;
 
 namespace CSC.PublicApi.Interface.Controllers;
 

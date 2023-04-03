@@ -15,3 +15,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - [CSCTTV-2810](https://jira.eduuni.fi/browse/CSCTTV-2810) - Change method and parameter naming to follow best practices
 - [CSCTTV-2830](https://jira.eduuni.fi/browse/CSCTTV-2830) - Add a project structure to separate the indexer from the api
 - [CSCTTV-3047](https://jira.eduuni.fi/browse/CSCTTV-3047) - Field of science reference structure change in the database for Research Datasets
+- [CSCTTV-3221](https://jira.eduuni.fi/browse/CSCTTV-3221) - Add code list uris to swagger

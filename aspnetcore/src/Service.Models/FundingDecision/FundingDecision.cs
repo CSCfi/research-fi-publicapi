@@ -26,9 +26,9 @@ public class FundingDecision
 
     public DateTime? FundingEndDate { get; set; }
 
-    public FundingGroupPerson[]? FundingGroupPerson { get; set; }
+    public List<FundingGroupPerson>? FundingGroupPerson { get; set; }
 
-    public OrganizationConsortium[]? OrganizationConsortia { get; set; }
+    public List<OrganizationConsortium>? OrganizationConsortia { get; set; }
 
     [Number(NumberType.ScaledFloat, ScalingFactor = 100)]
     public decimal? AmountInEur { get; set; }
@@ -37,28 +37,29 @@ public class FundingDecision
     
     public string? FunderProjectNumber { get; set; }
 
-    public FundingType? TypeOfFunding { get; set; }
+    public ReferenceData? TypeOfFunding { get; set; }
 
     public CallProgramme? CallProgramme { get; set; }
+    
+    public Topic? Topic { get; set; }
 
     /// <summary>
     /// Contains the "deepest" call programme parent, also known as FrameworkProgramme
     /// </summary>
     public FrameworkProgramme? FrameworkProgramme { get; set; }
 
-    public FieldOfScience[]? FieldsOfScience { get; set; }
+    public List<ReferenceData>? FieldsOfScience { get; set; }
 
-    public string[]? Keywords { get; set; }
-    public string[]? IdentifiedTopics { get; set; }
-
-    public Topic? Topic { get; set; }
+    public List<Keyword>? Keywords { get; set; }
     
+    public List<string>? IdentifiedTopics { get; set; }
+
     /// <summary>
     /// OrganizationConsortia from Suomen Akatemia decisions are mapped here temporarily during db query.
     /// They are moved to 
     /// </summary>
     [Ignore]
-    public OrganizationConsortium[]? OrganizationConsortia2 { get; set; }
+    public List<OrganizationConsortium>? OrganizationConsortia2 { get; set; }
     
     /// <summary>
     /// "Temporary" property for getting parent of decision's CallProgramme.
