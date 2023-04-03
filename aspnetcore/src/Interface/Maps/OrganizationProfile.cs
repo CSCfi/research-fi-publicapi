@@ -9,6 +9,9 @@ public class OrganizationProfile : Profile
 {
     public OrganizationProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
         CreateMap<GetOrganizationsQueryParameters, OrganizationSearchParameters>();
         CreateMap<Service.Models.Organization.Organization, Organization>();
     }

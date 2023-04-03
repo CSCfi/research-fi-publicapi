@@ -11,6 +11,9 @@ public class FundingDecisionProfile : Profile
 {
     public FundingDecisionProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
         CreateMap<GetFundingDecisionQueryParameters, FundingDecisionSearchParameters>();
         CreateMap<Service.Models.FundingDecision.FundingDecision, FundingDecision>();
         CreateMap<Service.Models.FundingDecision.CallProgramme, CallProgramme>();
