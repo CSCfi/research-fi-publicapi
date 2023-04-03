@@ -1,6 +1,6 @@
 ﻿using CSC.PublicApi.ElasticService;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.Publication;
+using ResearchFi.Publication;
+using ResearchFi.Query;
 
 namespace CSC.PublicApi.Interface.Services;
 

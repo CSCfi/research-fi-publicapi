@@ -67,20 +67,20 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                 ));
         }
 
-        if (parameters.OrganisationName is not null)
+        if (parameters.OrganizationName is not null)
         {
             subQueries.Add(t =>
                 t.MultiMatch(m =>
                     m.Fields(r => r
-                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organisation))
-                                .Suffix(nameof(Organisation.NameFi)))
-                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organisation))
-                                .Suffix(nameof(Organisation.NameSv)))
-                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organisation))
-                                .Suffix(nameof(Organisation.NameEn)))
-                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organisation))
-                                .Suffix(nameof(Organisation.NameVariants))))
-                        .Query(parameters.OrganisationName)
+                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organization))
+                                .Suffix(nameof(Organization.NameFi)))
+                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organization))
+                                .Suffix(nameof(Organization.NameSv)))
+                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organization))
+                                .Suffix(nameof(Organization.NameEn)))
+                            .Field(f => f.Contributors.Suffix(nameof(Contributor.Organization))
+                                .Suffix(nameof(Organization.NameVariants))))
+                        .Query(parameters.OrganizationName)
                 ));
         }
 
@@ -115,7 +115,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
             filters.Add(t =>
                 t.Terms(term =>
                     term.Field(f =>
-                            f.FieldOfSciences.Suffix(nameof(ReferenceData.Code)))
+                            f.FieldsOfScience.Suffix(nameof(ReferenceData.Code)))
                         .Terms(parameters.FieldOfScience)
                 ));
         }
@@ -156,13 +156,13 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                 ));
         }
 
-        if (parameters.OrganisationId is not null)
+        if (parameters.OrganizationId is not null)
         {
             filters.Add(t =>
                 t.Term(term =>
                     term.Field(f =>
-                            f.Contributors.Suffix(nameof(Contributor.Organisation)).Suffix(nameof(Organisation.Id)))
-                        .Value(parameters.OrganisationId)
+                            f.Contributors.Suffix(nameof(Contributor.Organization)).Suffix(nameof(Organization.Id)))
+                        .Value(parameters.OrganizationId)
                 ));
         }
 
@@ -183,7 +183,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                     .Should(s =>
                     (
                         s.DateRange(r => r
-                            .Field(f => f.DatasetCreated)
+                            .Field(f => f.Created)
                             .GreaterThanOrEquals(parameters.DateFrom))
                     ))));
         }
@@ -195,7 +195,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                     .Should(s =>
                     (
                         s.DateRange(r => r
-                            .Field(f => f.DatasetCreated)
+                            .Field(f => f.Created)
                             .LessThanOrEquals(parameters.DateTo))
                     ))));
         }

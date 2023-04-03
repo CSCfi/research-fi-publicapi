@@ -4,12 +4,12 @@ using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.ElasticService.SearchParameters;
 using CSC.PublicApi.Interface.Controllers;
 using CSC.PublicApi.Interface.Maps;
-using CSC.PublicApi.Interface.Models;
 using CSC.PublicApi.Interface.Services;
 using CSC.PublicApi.Service.Models.FundingCall;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using ResearchFi.Query;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;

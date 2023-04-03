@@ -12,7 +12,7 @@ public class Organization
     
     public string? LocalOrganizationUnitId { get; set; }
     
-    public List<PreferredIdentifier>? Pids { get; set; }
+    public List<PersistentIdentifier>? Pids { get; set; }
 
     public string? NameFi { get; set; }
 

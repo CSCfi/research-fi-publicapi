@@ -5,7 +5,7 @@ namespace CSC.PublicApi.Service.Models.ResearchDataset;
 public class ResearchDataset
 {
     [Keyword]
-    public string? Identifier { get; set; }
+    public string? Id { get; set; }
 
     [Ignore]
     public int DatabaseId { get; set; }
@@ -22,11 +22,11 @@ public class ResearchDataset
 
     public string? DescriptionEn { get; set; }
 
-    public DateTime? DatasetCreated { get; set; }
+    public DateTime? Created { get; set; }
 
     public List<Contributor>? Contributors { get; set; }
 
-    public List<ReferenceData>? FieldOfSciences { get; set; }
+    public List<ReferenceData>? FieldsOfScience { get; set; }
 
     public List<ReferenceData>? Languages { get; set; }
 
@@ -38,7 +38,7 @@ public class ResearchDataset
 
     public List<DatasetRelation>? DatasetRelations { get; set; }
 
-    public List<PreferredIdentifier>? PreferredIdentifiers { get; set; }
+    public List<PersistentIdentifier>? PersistentIdentifiers { get; set; }
     
     public ResearchDataCatalog? ResearchDataCatalog { get; set; }
 

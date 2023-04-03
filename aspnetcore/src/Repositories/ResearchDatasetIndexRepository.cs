@@ -52,9 +52,9 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             researchDataset.Keywords = null;
         }
         
-        if (researchDataset.FieldOfSciences != null && !researchDataset.FieldOfSciences.Any())
+        if (researchDataset.FieldsOfScience != null && !researchDataset.FieldsOfScience.Any())
         {
-            researchDataset.FieldOfSciences = null;
+            researchDataset.FieldsOfScience = null;
         }
         
         if (researchDataset.Languages != null && !researchDataset.Languages.Any())
@@ -62,9 +62,9 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             researchDataset.Languages = null;
         }
         
-        if (researchDataset.PreferredIdentifiers != null && !researchDataset.PreferredIdentifiers.Any())
+        if (researchDataset.PersistentIdentifiers != null && !researchDataset.PersistentIdentifiers.Any())
         {
-            researchDataset.PreferredIdentifiers = null;
+            researchDataset.PersistentIdentifiers = null;
         }
 
         if (researchDataset.License is { Code: null, NameEn: null, NameFi: null, NameSv: null })
@@ -84,12 +84,12 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         }
 
         // Remove organisations with Id == -1 because they are not actual organisations
-        foreach (var contributor in researchDataset.Contributors.Where(contributor => contributor.Organisation?.Id == "-1"))
+        foreach (var contributor in researchDataset.Contributors.Where(contributor => contributor.Organization?.Id == "-1"))
         {
-            contributor.Organisation = null;
+            contributor.Organization = null;
         }
 
-        researchDataset.Contributors.RemoveAll(s => s.Organisation == null && s.Person == null);
+        researchDataset.Contributors.RemoveAll(s => s.Organization == null && s.Person == null);
         if (!researchDataset.Contributors.Any())
         {
             researchDataset.Contributors = null;
