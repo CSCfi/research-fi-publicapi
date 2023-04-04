@@ -8,5 +8,5 @@ public class Funder
     
     public string? NameEn { get; set; }
     
-    public Id[]? Ids { get; set; }
+    public List<PersistentIdentifier>? Ids { get; set; }
 }

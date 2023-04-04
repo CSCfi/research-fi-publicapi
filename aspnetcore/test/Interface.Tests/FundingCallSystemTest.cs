@@ -10,7 +10,7 @@ using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
-using FundingCall = CSC.PublicApi.Interface.Models.FundingCall.FundingCall;
+using FundingCall = ResearchFi.FundingCall.FundingCall;
 
 namespace CSC.PublicApi.Interface.Tests;
 
@@ -117,8 +117,8 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
                 NamesShouldMatch(fc, "apurahojen"),
 
             // should find only calls with the given foundation name
-            [FoundationName("säätiö")] = fc =>
-                FoundationNamesShouldMatch(fc, "säätiö"),
+            [FoundationName("sï¿½ï¿½tiï¿½")] = fc =>
+                FoundationNamesShouldMatch(fc, "sï¿½ï¿½tiï¿½"),
 
             // should find calls with the given foundation business id
             [FoundationBusinessId("02509")] = fc =>
@@ -211,8 +211,8 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
 
     private static bool FoundationNamesShouldMatch(FundingCall fc, string text)
     {
-        return fc.Foundation != null &&
-               fc.Foundation.Any(f =>
+        return fc.Foundations != null &&
+               fc.Foundations.Any(f =>
                    f.NameFi != null && f.NameFi.Contains(text, StringComparison.InvariantCultureIgnoreCase) ||
                    f.NameSv != null && f.NameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase) ||
                    f.NameEn != null && f.NameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase));
@@ -220,13 +220,13 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
 
     private static bool FoundationBusinessIdShouldEqual(FundingCall fc, string text)
     {
-        return fc.Foundation != null && fc.Foundation.Any(f => f.BusinessId == text);
+        return fc.Foundations != null && fc.Foundations.Any(f => f.BusinessId == text);
     }
 
     private static bool CategoriesShouldContain(FundingCall fc, string code)
     {
         return fc.Categories != null &&
-               fc.Categories.Any(c => c.CodeValue == code);
+               fc.Categories.Any(c => c.Code == code);
     }
 
     private static bool DatesShouldBeBetween(FundingCall fc, DateTime start, DateTime end)

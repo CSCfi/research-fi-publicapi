@@ -200,8 +200,15 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
         if (parameters.TypeCode is not null)
         {
             filters.Add(t =>
-                t.Term(s => s.Field(f => f.TypeCode)
+                t.Term(s => s.Field(f => f.Type)
                     .Value(parameters.TypeCode)));
+        }
+        
+        if (parameters.PublisherOpenAccess is not null)
+        {
+            filters.Add(t =>
+                t.Term(s => s.Field(f => f.PublisherOpenAccess)
+                    .Value(parameters.PublisherOpenAccess)));
         }
         
         if (parameters.Issn is not null)
@@ -233,11 +240,11 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Value(parameters.Doi)));
         }
 
-        if (parameters.StatusCode is not null)
+        if (parameters.Status is not null)
         {
             filters.Add(t =>
-                t.Term(s => s.Field(f => f.StatusCode)
-                    .Value(parameters.StatusCode)));
+                t.Term(s => s.Field(f => f.Status)
+                    .Value(parameters.Status)));
         }
 
         return filters;

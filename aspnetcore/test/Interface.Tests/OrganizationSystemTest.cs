@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
 using CSC.PublicApi.DatabaseContext;
-using CSC.PublicApi.Interface.Models.Organization;
+using ResearchFi.Organization;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

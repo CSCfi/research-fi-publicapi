@@ -33,7 +33,9 @@ public class PublicationSearchParameters
     public string? ParentPublicationPublisher { get; set; }
 
     public string? PublisherName { get; set; }
-
+    
+    public string? PublisherOpenAccess { get; set; }
+    
     public string? JufoCode { get; set; }
 
     public string? Doi { get; set; }
@@ -42,7 +44,7 @@ public class PublicationSearchParameters
 
     public string? ReportingYear { get; set; }
 
-    public string? StatusCode { get; set; }
+    public string? Status { get; set; }
 
     public string? CreatedFrom { get; set; }
     

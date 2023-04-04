@@ -11,7 +11,7 @@ public class FundingCallSearchParameters
 
     public string? FoundationBusinessId { get; set; }
 
-    public string? CategoryCode { get; set; }
+    public string? Category { get; set; }
     
     public DateTime? DateFrom { get; set; }
 

@@ -6,15 +6,15 @@ public class ResearchDatasetSearchParameters
 
     public string? Description { get; set; }
 
-    public string? OrganisationId { get; set; }
+    public string? OrganizationId { get; set; }
 
-    public string? OrganisationName { get; set; }
+    public string? OrganizationName { get; set; }
 
     public string? PersonName { get; set; }
 
-    public string[]? FieldOfScience { get; set; }
+    public List<string>? FieldOfScience { get; set; }
 
-    public string[]? Language { get; set; }
+    public List<string>? Language { get; set; }
 
     public string? Access { get; set; }
 

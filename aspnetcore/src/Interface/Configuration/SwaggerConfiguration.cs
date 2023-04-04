@@ -31,6 +31,7 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
     {
         // Needed for getting Swagger UI page's controller/model member descriptions from code comments.
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"ApiModels.xml"));
 
         // Setup OAuth login for Swagger UI
         var authorityUrl = _configuration.GetSection("keycloak")["authority"] ?? throw new InvalidOperationException("Could not get authority url from configuration.");

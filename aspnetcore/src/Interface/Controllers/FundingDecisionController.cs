@@ -1,7 +1,8 @@
-﻿using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
+﻿using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ResearchFi.FundingDecision;
+using ResearchFi.Query;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -31,7 +32,7 @@ public class FundingDecisionController : ControllerBase
     [HttpGet(Name = "GetFundingDecision")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.FundingDecision.Read)]
-    public async Task<IEnumerable<Models.FundingDecision.FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters queryParameters)
+    public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters queryParameters)
     {
         var (fundingDecisions, searchResult) = await _service.GetFundingDecisions(queryParameters);
 

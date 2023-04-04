@@ -25,7 +25,7 @@ public static class SwaggerExtensions
         {
             // Needed because our models have non-unique names in different namespaces,
             // causing error "SchemaId already used for different type".
-            options.CustomSchemaIds(type => GetShortTypeName(type));
+            options.CustomSchemaIds(type => type.FullName);
         });
         services.ConfigureOptions<SwaggerConfiguration>();
     }

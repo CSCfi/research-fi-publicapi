@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Models.ResearchDataset;
+using ResearchFi.Query;
+using ResearchFi.ResearchDataset;
 
 namespace CSC.PublicApi.Interface.Services;
 

@@ -2,6 +2,7 @@
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
+using Organization = CSC.PublicApi.Service.Models.ResearchDataset.Organization;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
@@ -22,15 +23,15 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DescriptionFi))
             .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DescriptionSv))
             .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DescriptionEn))
-            .ForMember(dst => dst.DatasetCreated, opt => opt.MapFrom(src => src.DatasetCreated))
+            .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.DatasetCreated))
             .ForMember(dst => dst.Contributors, opt => opt.MapFrom(src => src.FactContributions.Where(fc => fc.DimOrganizationId != -1 || fc.DimNameId != -1)))
-            .ForMember(dst => dst.FieldOfSciences, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
+            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
             .ForMember(dst => dst.Languages, opt => opt.MapFrom(src => src.DimReferencedata))
             .ForMember(dst => dst.AccessType, opt => opt.MapFrom(src => src.DimReferencedataAvailabilityNavigation))
             .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.DimReferencedataLicenseNavigation))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords))
-            .ForMember(dst => dst.PreferredIdentifiers, opt => opt.MapFrom(src => src.DimPids))
-            .ForMember(dst => dst.Identifier, opt => opt.MapFrom(src => src.LocalIdentifier))
+            .ForMember(dst => dst.PersistentIdentifiers, opt => opt.MapFrom(src => src.DimPids))
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.ResearchDataCatalog, opt => opt.MapFrom(src => src.DimResearchDataCatalog))
             .ForMember(dst => dst.OutgoingDatasetRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasets))
             .ForMember(dst => dst.IncomingDatasetVersionRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations.Where(s => s.Type == DataSetTypeVersion)))
@@ -54,15 +55,16 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn));
 
         CreateProjection<DimKeyword, Keyword>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Keyword))
             .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.Language));
 
         CreateProjection<FactContribution, Contributor>()
-            .ForMember(dst => dst.Organisation, opt => opt.MapFrom(src => src.DimOrganization))
+            .ForMember(dst => dst.Organization, opt => opt.MapFrom(src => src.DimOrganization))
             .ForMember(dst => dst.Person, opt => opt.MapFrom(src => src.DimName))
             .ForMember(dst => dst.Role, opt => opt.MapFrom(src => src.DimReferencedataActorRole));
 
-        CreateProjection<DimOrganization, Organisation>()
+        CreateProjection<DimOrganization, Organization>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
@@ -92,7 +94,8 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.SourceId, opt => opt.MapFrom(src => src.SourceId))
             .ForMember(dst => dst.SourceDescription, opt => opt.MapFrom(src => src.SourceDescription));
 
-        CreateProjection<DimPid, PreferredIdentifier>()
+        CreateProjection<DimPid, PersistentIdentifier>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent))
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType));
     }

@@ -2,6 +2,9 @@ using Nest;
 
 namespace CSC.PublicApi.Service.Models.Publication;
 
+/// <summary>
+/// Julkaisu
+/// </summary>
 public class Publication
 {
     /// <summary>
@@ -35,9 +38,6 @@ public class Publication
     /// </summary>
     public List<Author>? Authors { get; set; }
 
-    [Ignore]
-    public List<FactContribution>? DatabaseContributions { get; set; }
-
     /// <summary>
     /// Julkaisun muoto
     /// </summary>
@@ -47,9 +47,6 @@ public class Publication
     /// Vertaisarvioitu
     /// </summary>
     public ReferenceData? PeerReviewed { get; set; }
-    
-    [Ignore]
-    public bool? DatabasePeerReviewed { get; set; }
 
     /// <summary>
     /// Yleisö
@@ -59,7 +56,7 @@ public class Publication
     /// <summary>
     /// OKM:n julkaisutyyppiluokitus
     /// </summary>
-    public string? TypeCode { get; set; }
+    public ReferenceData? Type { get; set; }
 
     /// <summary>
     /// Lehti
@@ -81,18 +78,6 @@ public class Publication
     /// </summary>
     [Keyword]
     public List<string>? Issn { get; set; }
-    
-    /// <summary>
-    /// ISSN
-    /// </summary>
-    [Ignore]
-    public string? Issn1 { get; set; }
-
-    /// <summary>
-    /// ISSN2
-    /// </summary>
-    [Ignore]
-    public string? Issn2 { get; set; }
 
     /// <summary>
     /// Volyymi
@@ -119,18 +104,6 @@ public class Publication
     /// </summary>
     [Keyword]
     public List<string>? Isbn { get; set; }
-    
-    /// <summary>
-    /// ISBN
-    /// </summary>
-    [Ignore]
-    public string? Isbn1 { get; set; }
-
-    /// <summary>
-    /// ISBN2
-    /// </summary>
-    [Ignore]
-    public string? Isbn2 { get; set; }
 
     /// <summary>
     /// Kustantaja
@@ -150,7 +123,7 @@ public class Publication
     /// <summary>
     /// Julkaisufoorumitaso
     /// </summary>
-    public string? JufoClassCode { get; set; }
+    public ReferenceData? JufoClass { get; set; }
 
     /// <summary>
     /// Linkit
@@ -175,6 +148,16 @@ public class Publication
     public List<LocallyReportedPublicationInformation>? Preprint { get; set; }
 
     /// <summary>
+    /// Avoin saatavuus
+    /// </summary>
+    public ReferenceData OpenAccess { get; set; }
+    
+    /// <summary>
+    /// Julkaisukanavan avoin saatavuus  
+    /// </summary>
+    public ReferenceData PublisherOpenAccess { get; set; }
+
+    /// <summary>
     /// Tieteenalat
     /// </summary>
     public List<ReferenceData>? FieldsOfScience { get; set; }
@@ -197,14 +180,12 @@ public class Publication
     /// <summary>
     /// Julkaisumaa
     /// </summary>
-    [Keyword]
-    public string? CountryCode { get; set; }
+    public ReferenceData? Country { get; set; }
 
     /// <summary>
     /// Kieli
     /// </summary>
-    [Keyword]
-    public string? LanguageCode { get; set; }
+    public ReferenceData? Language { get; set; }
 
     /// <summary>
     /// Kansainvälinen yhteisjulkaisu
@@ -229,7 +210,7 @@ public class Publication
     /// <summary>
     /// Artikkelin tyyppi
     /// </summary>
-    public ReferenceData? ArticleTypeCode { get; set; }
+    public ReferenceData? ArticleType { get; set; }
 
     /// <summary>
     /// Ilmoitusvuosi 	
@@ -237,21 +218,19 @@ public class Publication
     public DateTime? ReportingYear { get; set; }
     
     /// <summary>
-    /// Julkaisun tila	
+    /// Julkaisun tila
     /// </summary>
-    [Keyword]
-    public string? StatusCode { get; set; }
+    public ReferenceData? Status { get; set; }
 
     /// <summary>
-    /// Lisenssikoodi
+    /// Lisenssi
     /// </summary>
-    [Keyword]
-    public string? LicenseId { get; set; }
+    public ReferenceData? License { get; set; }
 
     /// <summary>
     /// Taiteenala
     /// </summary>
-    public List<ReferenceData>? FieldOfArts { get; set; }
+    public List<ReferenceData>? FieldsOfArts { get; set; }
 
     /// <summary>
     /// TaidealanTyyppiKategoria
@@ -273,6 +252,24 @@ public class Publication
     /// </summary>
     public DateTime Modified { get; set; }
 
+    [Ignore]
+    public string? Isbn1 { get; set; }
+
+    [Ignore]
+    public string? Isbn2 { get; set; }
+    
+    [Ignore]
+    public string? Issn1 { get; set; }
+
+    [Ignore]
+    public string? Issn2 { get; set; }
+    
+    [Ignore]
+    public List<FactContribution>? DatabaseContributions { get; set; }
+
+    [Ignore]
+    public bool? DatabasePeerReviewed { get; set; }
+    
     [Ignore]
     public ReferenceData? ParentPublicationType { get; set; }
 

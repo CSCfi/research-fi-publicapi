@@ -10,7 +10,7 @@ public class OrganizationConsortium
     
     public string? NameEn { get; set; }
 
-    public List<Id>? Ids { get; set; }
+    public List<PersistentIdentifier>? Ids { get; set; }
 
     public string? RoleInConsortium { get; set; }
 
