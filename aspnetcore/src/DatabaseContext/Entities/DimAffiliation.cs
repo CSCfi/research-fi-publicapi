@@ -15,7 +15,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimOrganizationId { get; set; }
         public int StartDate { get; set; }
         public int? EndDate { get; set; }
-        public int AffiliationType { get; set; }
         public int? PositionCode { get; set; }
         public string? PositionNameFi { get; set; }
         public string? PositionNameEn { get; set; }
@@ -25,8 +24,11 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
+        public string? LocalIdentifier { get; set; }
+        public string? AffiliationTypeFi { get; set; }
+        public string? AffiliationTypeEn { get; set; }
+        public string? AffiliationTypeSv { get; set; }
 
-        public virtual DimReferencedatum AffiliationTypeNavigation { get; set; } = null!;
         public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
         public virtual DimOrganization DimOrganization { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;

@@ -41,6 +41,9 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? ContactInformation { get; set; }
         public bool? ContinuousApplicationPeriod { get; set; }
         public bool IsOpenCall { get; set; }
+        public string? CallNameDetailsFi { get; set; }
+        public string? CallNameDetailsEn { get; set; }
+        public string? CallNameDetailsSv { get; set; }
 
         public virtual DimDate DimDateIdDueNavigation { get; set; } = null!;
         public virtual DimDate DimDateIdOpenNavigation { get; set; } = null!;
