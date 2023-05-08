@@ -8,6 +8,8 @@ namespace CSC.PublicApi.Repositories.Maps;
 
 public class FundingDecisionProfile : Profile
 {
+    private const string FieldOfResearchKeywordScheme = "Tutkimusala";
+
     public FundingDecisionProfile()
     {
         CreateProjection<DimFundingDecision, FundingDecision>()
@@ -27,24 +29,25 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.OrganizationConsortia2, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups.Where(x => x.DimOrganization != null)))
             .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
             .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
-            .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src => src.SourceDescription != "eu_funding" ? src.DimCallProgramme : null))
-            .ForMember(dst => dst.Topic, opt => opt.MapFrom(src => src.SourceDescription == "eu_funding" ? src.DimCallProgramme : null))
+            .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src =>src.DimCallProgramme))
             .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
-            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == "Tutkimusala")))
+            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(kw => kw.Scheme == FieldOfResearchKeywordScheme)))
             .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
             .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
-            // FrameworkProgramme is populated later in memory from deepest CallProgrammeParent{X}, see below.
-            .ForMember(dst => dst.FrameworkProgramme, opt => opt.Ignore())
-            // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be copied to dst.FrameworkProgramme in memory later.
+            // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be later copied to FrameworkProgramme in the index repository in memory operations.
             // Note that these long chains of expressions can cause null reference exceptions easily in unit tests but in linq-to-entities (sql) they will not throw.
             .ForMember(dst => dst.CallProgrammeParent1, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
             .ForMember(dst => dst.CallProgrammeParent2, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
             .ForMember(dst => dst.CallProgrammeParent3, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
             .ForMember(dst => dst.CallProgrammeParent4, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
             .ForMember(dst => dst.CallProgrammeParent5, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
-            .ForMember(dst => dst.CallProgrammeParent6, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)));
-
+            .ForMember(dst => dst.CallProgrammeParent6, opt => opt.MapFrom(src => src.DimCallProgramme.DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1).DimCallProgrammeId2s.SingleOrDefault(cp => cp.Id != -1)))
+            .ForMember(dst => dst.FrameworkProgramme, opt => opt.Ignore()) // FrameworkProgramme is populated later in memory from deepest CallProgrammeParent{X}, see above.
+            .ForMember(dst => dst.Topic, opt => opt.Ignore()) // Topic will be included only for EU funding projects, where source_description is eu_funding.
+            .ForMember(dst => dst.CallProgrammes, opt => opt.Ignore()) // CallProgrammes will be populated during the in memory operations
+            ;
+        
         CreateProjection<DimDate, int?>()
             .ConvertUsing(x => x != null && x.Id != -1 ? x.Year : null);
 
@@ -92,10 +95,19 @@ public class FundingDecisionProfile : Profile
 
         CreateProjection<DimCallProgramme, CallProgramme>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.CallProgrammeId, opt => opt.MapFrom(src => src.SourceId));
+            .ForMember(dst => dst.SourceId, opt => opt.MapFrom(src => src.SourceId))
+            .ForMember(dst => dst.SourceDescription, opt => opt.MapFrom(src => src.SourceDescription))
+            .ForMember(dst => dst.SourceProgrammeId, opt => opt.MapFrom(src => src.SourceProgrammeId));
+        
+        CreateProjection<DimCallProgramme, FrameworkProgramme>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
         
         CreateProjection<DimCallProgramme, Topic>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
@@ -131,11 +143,5 @@ public class FundingDecisionProfile : Profile
         CreateProjection<DimPid, PersistentIdentifier>()
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PidType))
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent));
-
-        CreateProjection<DimCallProgramme, FrameworkProgramme>()
-            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
     }
 }

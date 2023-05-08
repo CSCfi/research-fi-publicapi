@@ -15,8 +15,10 @@ public class FundingDecisionProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateMap<GetFundingDecisionQueryParameters, FundingDecisionSearchParameters>();
+        
         CreateMap<Service.Models.FundingDecision.FundingDecision, FundingDecision>();
-        CreateMap<Service.Models.FundingDecision.CallProgramme, CallProgramme>();
+        CreateMap<Service.Models.FundingDecision.CallProgramme, CallProgramme>()
+            .ForMember(dst => dst.CallProgrammeId, opt => opt.MapFrom(src => src.SourceId));
         CreateMap<Service.Models.FundingDecision.Topic, Topic>();
         CreateMap<Service.Models.FundingDecision.FrameworkProgramme, FrameworkProgramme>();
         CreateMap<Service.Models.FundingDecision.Funder, Funder>();
