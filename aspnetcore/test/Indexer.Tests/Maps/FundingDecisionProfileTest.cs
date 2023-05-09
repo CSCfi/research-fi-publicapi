@@ -4,7 +4,6 @@ using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Nest;
 using Xunit;
 using FundingDecisionProfile = CSC.PublicApi.Repositories.Maps.FundingDecisionProfile;
 using Keyword = CSC.PublicApi.Service.Models.Keyword;
@@ -37,21 +36,6 @@ public class FundingDecisionProfileTest
 
         // Assert
         var expected = GetDestination();
-        destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
-    }
-
-    [Fact]
-    public void ProjectTo_DimFundingDecisionWithEUFunding_ShouldBeMappedToFundingDecision()
-    {
-        // Arrange
-        var source = GetEuSource();
-
-        // Act
-        var destination = Act_Map(source);
-
-        // Assert
-        var expected = GetEuDestination();
-
         destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
     }
 
@@ -327,16 +311,6 @@ public class FundingDecisionProfileTest
         };
     }
 
-    private static DimFundingDecision GetEuSource()
-    {
-        var fundingDecision = GetSource();
-        fundingDecision.SourceDescription = "eu_funding";
-        fundingDecision.DimCallProgramme.Abbreviation = "topic id";
-        fundingDecision.DimCallProgramme.EuCallId = "eu call id";
-
-        return fundingDecision;
-    }
-
     private static FundingDecision GetDestination()
     {
         return new FundingDecision
@@ -414,16 +388,16 @@ public class FundingDecisionProfileTest
             },
             CallProgramme = new CallProgramme
             {
-                CallProgrammeId = "call programme id",
+                SourceId = "call programme id",
                 NameFi = "call programme fi",
                 NameSv = "call programme sv",
                 NameEn = "call programme en"
             },
-            CallProgrammeParent1 = new FrameworkProgramme
+            CallProgrammeParent1 = new CallProgramme()
             {
                 NameFi = "parent 1"
             },
-            CallProgrammeParent2 = new FrameworkProgramme
+            CallProgrammeParent2 = new CallProgramme()
             {
                 NameFi = "parent 2"
             },
@@ -477,20 +451,5 @@ public class FundingDecisionProfileTest
             },
             FrameworkProgramme = null
         };
-    }
-
-    private static FundingDecision GetEuDestination()
-    {
-        var fundingDecision = GetDestination();
-        fundingDecision.CallProgramme = null;
-        fundingDecision.Topic = new Topic
-        {
-            TopicId = "topic id",
-            NameFi = "call programme fi",
-            NameSv = "call programme sv",
-            NameEn = "call programme en",
-            EuCallId = "eu call id"
-        };
-        return fundingDecision;
     }
 }

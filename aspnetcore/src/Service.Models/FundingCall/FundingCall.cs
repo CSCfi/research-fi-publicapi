@@ -1,4 +1,6 @@
-﻿namespace CSC.PublicApi.Service.Models.FundingCall;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models.FundingCall;
 
 public class FundingCall
 {
@@ -91,4 +93,22 @@ public class FundingCall
     /// Yhteystiedot
     /// </summary>
     public string? ContactInformation { get; set; }
+    
+    [Ignore]
+    public int Id { get; set; }
+    
+    [Ignore]
+    public string? Abbreviation { get; set; }
+    
+    [Ignore]
+    public string? SourceId { get; set; }
+    
+    [Ignore]
+    public string? SourceDescription { get; set; }
+
+    [Ignore]
+    public string? EuCallId { get; set; }
+
+    [Ignore]
+    public string? SourceProgrammeId { get; set; }
 }
