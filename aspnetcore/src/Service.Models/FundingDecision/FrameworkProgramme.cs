@@ -1,4 +1,6 @@
-﻿namespace CSC.PublicApi.Service.Models.FundingDecision;
+﻿using Nest;
+
+namespace CSC.PublicApi.Service.Models.FundingDecision;
 
 public class FrameworkProgramme
 {

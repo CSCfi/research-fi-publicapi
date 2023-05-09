@@ -39,13 +39,17 @@ public class FundingDecision
 
     public ReferenceData? TypeOfFunding { get; set; }
 
-    public CallProgramme? CallProgramme { get; set; }
+    public List<CallProgramme>? CallProgrammes { get; set; }
     
+    /// <summary>
+    /// Only applicable for EU funding
+    /// </summary>
     public Topic? Topic { get; set; }
 
     /// <summary>
     /// Contains the "deepest" call programme parent, also known as FrameworkProgramme
     /// </summary>
+    /// <remarks>Only applicable for EU funding.</remarks>
     public FrameworkProgramme? FrameworkProgramme { get; set; }
 
     public List<ReferenceData>? FieldsOfScience { get; set; }
@@ -65,13 +69,13 @@ public class FundingDecision
     /// "Temporary" property for getting parent of decision's CallProgramme.
     /// </summary>
     [Ignore]
-    public FrameworkProgramme? CallProgrammeParent1 { get; set; }
+    public CallProgramme? CallProgrammeParent1 { get; set; }
 
     /// <summary>
     /// "Temporary" property for getting parent's parent of decision's CallProgramme.
     /// </summary>
     [Ignore]
-    public FrameworkProgramme? CallProgrammeParent2 { get; set; }
+    public CallProgramme? CallProgrammeParent2 { get; set; }
 
     /// <summary>
     /// "Temporary" property for getting parent's parent's parent of decision's CallProgramme.
@@ -96,4 +100,7 @@ public class FundingDecision
     /// </summary>
     [Ignore]
     public FrameworkProgramme? CallProgrammeParent6 { get; set; }
+    
+    [Ignore]
+    public CallProgramme? CallProgramme { get; set; }
 }

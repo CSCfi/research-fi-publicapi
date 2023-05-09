@@ -22,7 +22,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimEmailAddrressId { get; set; }
         public int DimResearcherDescriptionId { get; set; }
         public int DimIdentifierlessDataId { get; set; }
-        public int DimOrcidPublicationId { get; set; }
+        public int DimProfileOnlyPublicationId { get; set; }
         public int DimKeywordId { get; set; }
         public int DimAffiliationId { get; set; }
         public int DimResearcherToResearchCommunityId { get; set; }
@@ -35,6 +35,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimResearchDatasetId { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
         public int DimReferencedataFieldOfScienceId { get; set; }
+        public int DimProfileOnlyResearchActivityId { get; set; }
+        public int DimReferencedataActorRoleId { get; set; }
+        public int DimProfileOnlyDatasetId { get; set; }
+        public int DimProfileOnlyFundingDecisionId { get; set; }
 
         public virtual DimAffiliation DimAffiliation { get; set; } = null!;
         public virtual DimCompetence DimCompetence { get; set; } = null!;
@@ -46,10 +50,14 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimIdentifierlessDatum DimIdentifierlessData { get; set; } = null!;
         public virtual DimKeyword DimKeyword { get; set; } = null!;
         public virtual DimName DimName { get; set; } = null!;
-        public virtual DimOrcidPublication DimOrcidPublication { get; set; } = null!;
         public virtual DimPid DimPid { get; set; } = null!;
         public virtual DimPid DimPidIdOrcidPutCodeNavigation { get; set; } = null!;
+        public virtual DimProfileOnlyDataset DimProfileOnlyDataset { get; set; } = null!;
+        public virtual DimProfileOnlyFundingDecision DimProfileOnlyFundingDecision { get; set; } = null!;
+        public virtual DimProfileOnlyPublication DimProfileOnlyPublication { get; set; } = null!;
+        public virtual DimProfileOnlyResearchActivity DimProfileOnlyResearchActivity { get; set; } = null!;
         public virtual DimPublication DimPublication { get; set; } = null!;
+        public virtual DimReferencedatum DimReferencedataActorRole { get; set; } = null!;
         public virtual DimReferencedatum DimReferencedataFieldOfScience { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;

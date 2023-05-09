@@ -85,9 +85,9 @@ public class FundingDecision
     public FundingType? TypeOfFunding { get; set; }
     
     /// <summary>
-    /// Ohjelman osa
+    /// Ohjelman osat
     /// </summary>
-    public CallProgramme? CallProgramme { get; set; }
+    public List<CallProgramme>? CallProgrammes { get; set; }
     
     /// <summary>
     /// Rahoitushaun aihe

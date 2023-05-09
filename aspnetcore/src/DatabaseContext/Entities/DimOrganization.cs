@@ -13,6 +13,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimExternalServices = new HashSet<DimExternalService>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimPids = new HashSet<DimPid>();
+            DimProfileOnlyResearchActivities = new HashSet<DimProfileOnlyResearchActivity>();
             DimPurposes = new HashSet<DimPurpose>();
             DimRegisteredDataSources = new HashSet<DimRegisteredDataSource>();
             DimResearchActivities = new HashSet<DimResearchActivity>();
@@ -65,6 +66,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimExternalService> DimExternalServices { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimProfileOnlyResearchActivity> DimProfileOnlyResearchActivities { get; set; }
         public virtual ICollection<DimPurpose> DimPurposes { get; set; }
         public virtual ICollection<DimRegisteredDataSource> DimRegisteredDataSources { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }

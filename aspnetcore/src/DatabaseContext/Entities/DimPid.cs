@@ -25,18 +25,22 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimResearchDataCatalogId { get; set; }
         public int DimResearchActivityId { get; set; }
         public int DimEventId { get; set; }
-        public int DimOrcidPublicationId { get; set; }
+        public int DimProfileOnlyPublicationId { get; set; }
         public string SourceId { get; set; } = null!;
         public string? SourceDescription { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
+        public int? DimProfileOnlyDatasetId { get; set; }
+        public int? DimProfileOnlyFundingDecisionId { get; set; }
 
         public virtual DimEvent DimEvent { get; set; } = null!;
         public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
         public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
         public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
-        public virtual DimOrcidPublication DimOrcidPublication { get; set; } = null!;
         public virtual DimOrganization DimOrganization { get; set; } = null!;
+        public virtual DimProfileOnlyDataset? DimProfileOnlyDataset { get; set; }
+        public virtual DimProfileOnlyFundingDecision? DimProfileOnlyFundingDecision { get; set; }
+        public virtual DimProfileOnlyPublication DimProfileOnlyPublication { get; set; } = null!;
         public virtual DimPublication DimPublication { get; set; } = null!;
         public virtual DimPublicationChannel DimPublicationChannel { get; set; } = null!;
         public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;

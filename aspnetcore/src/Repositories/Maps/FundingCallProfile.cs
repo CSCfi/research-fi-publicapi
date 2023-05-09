@@ -11,6 +11,7 @@ public class FundingCallProfile : Profile
     public FundingCallProfile()
     {
         CreateProjection<DimCallProgramme, FundingCall>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
@@ -28,7 +29,13 @@ public class FundingCallProfile : Profile
             .ForMember(dst => dst.ContinuosApplication, opt => opt.MapFrom(src => src.ContinuousApplicationPeriod))
             .ForMember(dst => dst.ApplicationUrlFi, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "fi")))
             .ForMember(dst => dst.ApplicationUrlSv, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "sv")))
-            .ForMember(dst => dst.ApplicationUrlEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")));
+            .ForMember(dst => dst.ApplicationUrlEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")))
+            .ForMember(dst => dst.SourceId, opt => opt.MapFrom(src => src.SourceId))
+            .ForMember(dst => dst.SourceDescription, opt => opt.MapFrom(src => src.SourceDescription))
+            .ForMember(dst => dst.SourceProgrammeId, opt => opt.MapFrom(src => src.SourceProgrammeId))
+            .ForMember(dst => dst.Abbreviation, opt => opt.MapFrom(src => src.Abbreviation))
+            .ForMember(dst => dst.EuCallId, opt => opt.MapFrom(src => src.EuCallId))
+            ;
 
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
