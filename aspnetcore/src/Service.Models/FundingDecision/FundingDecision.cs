@@ -39,7 +39,7 @@ public class FundingDecision
 
     public ReferenceData? TypeOfFunding { get; set; }
 
-    public List<CallProgramme?> CallProgrammes { get; set; }
+    public List<CallProgramme>? CallProgrammes { get; set; }
     
     /// <summary>
     /// Only applicable for EU funding
