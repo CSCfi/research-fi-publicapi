@@ -18,22 +18,16 @@ public class FundingDecision
 
     public string? DescriptionEn { get; set; }
 
-    [Number(NumberType.Short)]
-    public int? FundingStartYear { get; set; }
-
-    [Number(NumberType.Short)]
-    public int? FundingEndYear { get; set; }
+    public DateTime? FundingStartDate { get; set; }
 
     public DateTime? FundingEndDate { get; set; }
 
-    public List<FundingGroupPerson>? FundingGroupPerson { get; set; }
-
-    public List<OrganizationConsortium>? OrganizationConsortia { get; set; }
+    public List<FundingReceiver>? FundingReceivers { get; set; }
 
     [Number(NumberType.ScaledFloat, ScalingFactor = 100)]
     public decimal? AmountInEur { get; set; }
 
-    public Funder? Funder { get; set; }
+    public Organization? Funder { get; set; }
     
     public string? FunderProjectNumber { get; set; }
 
@@ -57,14 +51,11 @@ public class FundingDecision
     public List<Keyword>? Keywords { get; set; }
     
     public List<string>? IdentifiedTopics { get; set; }
-
-    /// <summary>
-    /// OrganizationConsortia from Suomen Akatemia decisions are mapped here temporarily during db query.
-    /// They are moved to 
-    /// </summary>
-    [Ignore]
-    public List<OrganizationConsortium>? OrganizationConsortia2 { get; set; }
     
+    public DateTime Created { get; set; }
+    
+    public DateTime Modified { get; set; }
+
     /// <summary>
     /// "Temporary" property for getting parent of decision's CallProgramme.
     /// </summary>
@@ -103,4 +94,23 @@ public class FundingDecision
     
     [Ignore]
     public CallProgramme? CallProgramme { get; set; }
+    
+    /// <summary>
+    /// Temporary property to create funding receivers during the in memory operations
+    /// </summary>
+    [Ignore]
+    public List<FundingGroupPerson>? SelfFundingGroupPerson { get; set; }
+    
+    /// <summary>
+    /// Temporary property to create funding receivers during the in memory operations
+    /// </summary>
+    [Ignore]
+    public List<FundingGroupPerson>? ParentFundingGroupPerson { get; set; }
+    
+    /// <summary>
+    /// Temporary property to create funding receivers during the in memory operations
+    /// </summary>
+    [Ignore]
+    public List<OrganizationConsortium>? OrganizationConsortia { get; set; }
+
 }

@@ -10,6 +10,9 @@ public class FundingCallProfile : Profile
 {
     public FundingCallProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+        
         CreateProjection<DimCallProgramme, FundingCall>()
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))

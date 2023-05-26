@@ -30,10 +30,6 @@ public class FundingDecisionRepositorySystemTest : IClassFixture<TestWebApplicat
         // Assert
         entities.Should().NotBeEmpty();
         var e = entities.First();
-        e.FundingGroupPerson.Should().NotBeNullOrEmpty();
-        var p = e.FundingGroupPerson.First();
-        p.OrcId.Should().NotBeNullOrEmpty();
-        p.RoleInFundingGroup.Should().NotBeNullOrEmpty();
 
     }
 
@@ -48,11 +44,7 @@ public class FundingDecisionRepositorySystemTest : IClassFixture<TestWebApplicat
         // 4 entities found
         entities.Should().NotBeEmpty();
         var e = entities.First();
-        e.FundingGroupPerson.Should().NotBeNullOrEmpty();
         e.OrganizationConsortia.Should().NotBeNullOrEmpty();
-        var p = e.FundingGroupPerson.First();
-        p.OrcId.Should().NotBeNullOrEmpty();
-        p.RoleInFundingGroup.Should().NotBeNullOrEmpty();
 
 
     }
