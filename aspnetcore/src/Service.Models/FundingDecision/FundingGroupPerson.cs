@@ -1,15 +1,32 @@
-﻿using Nest;
-
-namespace CSC.PublicApi.Service.Models.FundingDecision;
+﻿namespace CSC.PublicApi.Service.Models.FundingDecision;
 
 public class FundingGroupPerson
 {
-    [Keyword]
-    public string? OrcId { get; set; }
-    
-    public string? FirstNames { get; set; }
-    
-    public string? LastName { get; set; }
+    public string SourceId { get; set; }
+
+    public Person? Person { get; set; }
 
     public string? RoleInFundingGroup { get; set; }
+
+    public Organization Organization { get; set; }
+
+    public decimal ShareOfFundingInEur { get; set; }
+
+    public FundingReceiver ToFundingReceiver()
+    {
+        var receiver = new FundingReceiver
+        {
+            Person = Person,
+            Organization = Organization,
+            RoleInFundingGroup = RoleInFundingGroup,
+            ShareOfFundingInEur = ShareOfFundingInEur
+        };
+
+        if (receiver.Organization.Pids != null && !receiver.Organization.Pids.Any())
+        {
+            receiver.Organization.Pids = null;
+        }
+
+        return receiver;
+    }
 }

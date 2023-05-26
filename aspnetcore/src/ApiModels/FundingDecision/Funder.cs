@@ -23,5 +23,5 @@ public class Funder
     /// <summary>
     /// Rahoittajan tunnisteet
     /// </summary>
-    public List<PersistentIdentifier>? Ids { get; set; }
+    public List<PersistentIdentifier>? Pids { get; set; }
 }

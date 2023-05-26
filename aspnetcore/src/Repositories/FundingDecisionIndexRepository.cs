@@ -41,14 +41,66 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
                 return;
             }
 
-            SetAkatemiaConsortia(fundingDecision);
-
+            SetFundingReceivers(fundingDecision);
             SetFrameworkProgramme(fundingDecision);
-
             SetCallProgrammes(fundingDecision);
         });
 
         return objects;
+    }
+
+    private static void SetFundingReceivers(FundingDecision fundingDecision)
+    {
+        fundingDecision.FundingReceivers = new List<FundingReceiver>();
+        
+        HandleFundingGroupPerson(fundingDecision);
+        SetOrganizationConsortia(fundingDecision);
+
+        if (!fundingDecision.FundingReceivers.Any())
+        {
+            fundingDecision.FundingReceivers = null;
+        }
+    }
+
+    private static void HandleFundingGroupPerson(FundingDecision fundingDecision)
+    {
+        var fundingGroupPersons = new Dictionary<string, FundingReceiver>();
+        
+        if (fundingDecision.SelfFundingGroupPerson != null)
+        {
+            foreach (var fundingGroupPerson in fundingDecision.SelfFundingGroupPerson)
+            {
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, fundingGroupPerson.ToFundingReceiver());
+            }
+        }
+
+        if (fundingDecision.ParentFundingGroupPerson != null)
+        {
+            foreach (var fundingGroupPerson in fundingDecision.ParentFundingGroupPerson)
+            {
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, fundingGroupPerson.ToFundingReceiver());
+            }
+        }
+
+        if (!fundingGroupPersons.Values.Any())
+        {
+            return;
+        }
+
+        fundingDecision.FundingReceivers.AddRange(fundingGroupPersons.Values.ToList());
+    }
+
+    private static void SetOrganizationConsortia(FundingDecision fundingDecision)
+    {
+        if (fundingDecision.OrganizationConsortia == null)
+        {
+            return;
+        }
+
+        foreach (var organizationConsortium in fundingDecision.OrganizationConsortia)
+        {
+            fundingDecision.FundingReceivers.Add(organizationConsortium.ToFundingReceiver());
+        }
     }
 
     private void SetCallProgrammes(FundingDecision fundingDecision)
@@ -77,7 +129,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
                 return;
             }
             
-            fundingDecision.CallProgrammes = new List<CallProgramme?>();
+            fundingDecision.CallProgrammes = new List<CallProgramme>();
             
             foreach (var sourceId in foundFundingCalls)
             {
@@ -96,7 +148,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         // Non-EU funding
         else
         {
-            fundingDecision.CallProgrammes = new List<CallProgramme?>
+            fundingDecision.CallProgrammes = new List<CallProgramme>
             {
                 fundingDecision.CallProgramme
             };
@@ -117,17 +169,5 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             ?? fundingDecision.CallProgrammeParent3
             ?? fundingDecision.CallProgrammeParent2?.ToFrameworkProgramme()
             ?? fundingDecision.CallProgrammeParent1?.ToFrameworkProgramme();
-    }
-
-    /// <summary>
-    /// For akatemia decisions we move consortia from temporary property to the main one. 
-    /// </summary>
-    /// <param name="fundingDecision"></param>
-    private static void SetAkatemiaConsortia(FundingDecision fundingDecision)
-    {
-        if (fundingDecision.OrganizationConsortia?.Any() != true)
-        {
-            fundingDecision.OrganizationConsortia = fundingDecision.OrganizationConsortia2;
-        }
     }
 }

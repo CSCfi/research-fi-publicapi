@@ -7,6 +7,7 @@ using FluentAssertions.Execution;
 using Xunit;
 using FundingDecisionProfile = CSC.PublicApi.Repositories.Maps.FundingDecisionProfile;
 using Keyword = CSC.PublicApi.Service.Models.Keyword;
+using Organization = CSC.PublicApi.Service.Models.FundingDecision.Organization;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -36,7 +37,7 @@ public class FundingDecisionProfileTest
 
         // Assert
         var expected = GetDestination();
-        destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
+        destination.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -84,8 +85,7 @@ public class FundingDecisionProfileTest
         // Assert
         using (new AssertionScope())
         {
-            destination.FundingStartYear.Should().BeNull();
-            destination.FundingEndYear.Should().BeNull();
+            destination.FundingStartDate.Should().BeNull();
             destination.FundingEndDate.Should().BeNull();
         }
     }
@@ -113,32 +113,63 @@ public class FundingDecisionProfileTest
             DescriptionFi = "desc fi",
             DescriptionSv = "desc sv",
             DescriptionEn = "desc en",
-            DimDateIdStartNavigation = new DimDate { Year = 1987 },
+            DimDateIdStartNavigation = new DimDate { Year = 1987, Month = 1, Day = 1 },
             DimDateIdEndNavigation = new DimDate { Year = 1988, Month = 2, Day = 20 },
             BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
             {
                 new ()
                 {
-                    DimName = new ()
+                    RoleInFundingGroup = "partner",
+                    DimOrganization = new DimOrganization
                     {
-                        LastName = "lastname",
-                        FirstNames = "first names",
-                        DimKnownPersonIdConfirmedIdentityNavigation = new ()
+                        NameFi = "Foreign organization"
+                    },
+                    ShareOfFundingInEur = 123
+                }
+            },
+            DimFundingDecisionIdParentDecisionNavigation = new DimFundingDecision
+            {
+                BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
+                {
+                    new ()
+                    {
+                        DimName = new DimName
                         {
-                            DimPids = new List<DimPid>
+                            LastName = "lastname",
+                            FirstNames = "first names",
+                            DimKnownPersonIdConfirmedIdentityNavigation = new DimKnownPerson
                             {
-                                new ()
+                                DimPids = new List<DimPid>
                                 {
-                                    PidType = "Orcid",
-                                    PidContent = "some orcid"
+                                    new ()
+                                    {
+                                        PidType = "Orcid",
+                                        PidContent = "some orcid"
+                                    }
                                 }
                             }
-                        }
-                    },
-                    RoleInFundingGroup = "leader",
-                    DimOrganization = new DimOrganization()
-                    {
-                        NameFi = "sdf"
+                        },
+                        RoleInFundingGroup = "leader",
+                        DimOrganization = new DimOrganization
+                        {
+                            NameFi = "suomalainen organisaatio",
+                            NameEn = "finnish organization",
+                            NameSv = "finsk organization",
+                            DimPids = new []
+                            {
+                                new DimPid
+                                {
+                                    PidType = "BusinessID",
+                                    PidContent = "business id",
+                                },
+                                new DimPid
+                                {
+                                    PidType = "PIC",
+                                    PidContent = "org pic",
+                                }
+                            },
+                        },
+                        ShareOfFundingInEur = 456
                     }
                 }
             },
@@ -146,7 +177,7 @@ public class FundingDecisionProfileTest
             {
                 new BrFundingConsortiumParticipation
                 {
-                    DimOrganization = new ()
+                    DimOrganization = new DimOrganization
                     {
                         NameFi = "namefi",
                         NameSv = "namesv",
@@ -169,7 +200,7 @@ public class FundingDecisionProfileTest
                     ShareOfFundingInEur = 202
                 }
             },
-            DimOrganizationIdFunderNavigation = new()
+            DimOrganizationIdFunderNavigation = new DimOrganization
             {
                 NameFi = "funder fi",
                 NameSv = "funder sv",
@@ -188,7 +219,7 @@ public class FundingDecisionProfileTest
                     }
                 }
             },
-            DimTypeOfFunding = new()
+            DimTypeOfFunding = new DimTypeOfFunding
             {
                 NameFi = "type fi",
                 NameSv = "type sv",
@@ -203,32 +234,32 @@ public class FundingDecisionProfileTest
                 NameEn = "call programme en",
                 DimCallProgrammeId2s = new List<DimCallProgramme>
                 {
-                    new DimCallProgramme
+                    new()
                     {
                         NameFi = "parent 1",
                         DimCallProgrammeId2s = new List<DimCallProgramme>
                         {
-                            new DimCallProgramme
+                            new()
                             {
                                 NameFi = "parent 2",
                                 DimCallProgrammeId2s = new List<DimCallProgramme>
                                 {
-                                    new DimCallProgramme
+                                    new()
                                     {
                                         NameFi = "parent 3",
                                         DimCallProgrammeId2s = new List<DimCallProgramme>
                                         {
-                                            new DimCallProgramme
+                                            new()
                                             {
                                                 NameFi = "parent 4",
                                                 DimCallProgrammeId2s = new List<DimCallProgramme>
                                                 {
-                                                    new DimCallProgramme
+                                                    new()
                                                     {
                                                         NameFi = "parent 5",
                                                         DimCallProgrammeId2s = new List<DimCallProgramme>
                                                         {
-                                                            new DimCallProgramme
+                                                            new()
                                                             {
                                                                 NameFi = "parent 6",
                                                                 DimCallProgrammeId2s = new List<DimCallProgramme>
@@ -286,20 +317,20 @@ public class FundingDecisionProfileTest
             {
                 new BrWordClusterDimFundingDecision
                 {
-                    DimWordCluster = new ()
+                    DimWordCluster = new DimWordCluster
                     {
                         BrWordsDefineAClusters = new[]
                         {
                             new BrWordsDefineACluster
                             {
-                                DimMinedWords = new ()
+                                DimMinedWords = new DimMinedWord
                                 {
                                     Word = "topic 1"
                                 }
                             },
                             new BrWordsDefineACluster
                             {
-                                DimMinedWords = new ()
+                                DimMinedWords = new DimMinedWord
                                 {
                                     Word = "topic 2"
                                 }
@@ -322,50 +353,91 @@ public class FundingDecisionProfileTest
             DescriptionFi = "desc fi",
             DescriptionSv = "desc sv",
             DescriptionEn = "desc en",
-            FundingStartYear = 1987,
-            FundingEndYear = 1988,
+            FundingStartDate = new DateTime(1987, 1,1),
             FundingEndDate = new DateTime(1988, 2, 20),
-            FundingGroupPerson = new List<FundingGroupPerson>
+            SelfFundingGroupPerson = new List<FundingGroupPerson>
             {
                 new()
                 {
-                    FirstNames = "first names",
-                    LastName = "lastname",
-                    OrcId = "some orcid",
-                    RoleInFundingGroup = "leader"
+                    Person = null,
+                    RoleInFundingGroup = "partner",
+                    Organization = new Organization
+                    {
+                        NameFi = "Foreign organization",
+                        Pids = new List<PersistentIdentifier>(),
+                        IsFinnishOrganization = false
+                    },
+                    ShareOfFundingInEur = 123
+                }
+            },
+            ParentFundingGroupPerson = new List<FundingGroupPerson>
+            {
+                new()
+                {
+                    Person = new Person
+                    {
+                        FirstNames = "first names",
+                        LastName = "lastname",
+                        OrcId = "some orcid"
+                    },
+                    RoleInFundingGroup = "leader",
+                    ShareOfFundingInEur = 456,
+                    Organization = new Organization
+                    {
+                        NameFi = "suomalainen organisaatio",
+                        NameEn = "finnish organization",
+                        NameSv = "finsk organization",
+                        Pids = new List<PersistentIdentifier>
+                        {
+                            new()
+                            {
+                                Content = "business id",
+                                Type = "BusinessID"
+                            },
+                            new()
+                            {
+                                Content = "org pic",
+                                Type = "PIC"
+                            }
+                        },
+                        IsFinnishOrganization = true
+                    }
                 }
             },
             OrganizationConsortia = new List<OrganizationConsortium>
             {
                 new()
                 {
-                    NameFi = "namefi",
-                    NameSv = "namesv",
-                    NameEn = "nameen",
-                    RoleInConsortium = "partner",
-                    ShareOfFundingInEur = 202,
-                    Ids = new List<PersistentIdentifier>
+                    Organization = new Organization
                     {
-                        new()
+                        NameFi = "namefi",
+                        NameSv = "namesv",
+                        NameEn = "nameen",
+                        Pids = new List<PersistentIdentifier>
                         {
-                            Content = "business id",
-                            Type = "BusinessID"
+                            new()
+                            {
+                                Content = "business id",
+                                Type = "BusinessID"
+                            },
+                            new()
+                            {
+                                Content = "org pic",
+                                Type = "PIC"
+                            }
                         },
-                        new()
-                        {
-                            Content = "org pic",
-                            Type = "PIC"
-                        }
+                        IsFinnishOrganization = true
                     },
-                    IsFinnishOrganization = true
+                    RoleInConsortium = "partner",
+                    ShareOfFundingInEur = 202
                 }
             },
-            Funder = new Funder
+            Funder = new Organization
             {
                 NameFi = "funder fi",
                 NameSv = "funder sv",
                 NameEn = "funder en",
-                Ids = new List<PersistentIdentifier>
+                Pids = new List<PersistentIdentifier>
                 {
                     new()
                     {
@@ -377,7 +449,8 @@ public class FundingDecisionProfileTest
                         Type = "PIC", 
                         Content = "456"
                     }
-                }
+                },
+                IsFinnishOrganization = true
             },
             TypeOfFunding = new ReferenceData
             {
@@ -397,7 +470,7 @@ public class FundingDecisionProfileTest
             {
                 NameFi = "parent 1"
             },
-            CallProgrammeParent2 = new CallProgramme()
+            CallProgrammeParent2 = new CallProgramme
             {
                 NameFi = "parent 2"
             },

@@ -1,9 +1,9 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Rahoituksen saaja
+/// Henkilö
 /// </summary>
-public class FundingGroupPerson
+public class Person
 {
     /// <summary>
     /// ORCID
@@ -11,17 +11,12 @@ public class FundingGroupPerson
     public string? OrcId { get; set; }
     
     /// <summary>
-    /// Saajan etunimet
+    /// Henkilön etunimet
     /// </summary>
     public string? FirstNames { get; set; }
     
     /// <summary>
-    /// Saajan sukunimi
+    /// Henkilön sukunimi
     /// </summary>
     public string? LastName { get; set; }
-    
-    /// <summary>
-    /// Rooli Akatemian konsortiossa
-    /// </summary>
-    public string? RoleInFundingGroup { get; set; }
 }

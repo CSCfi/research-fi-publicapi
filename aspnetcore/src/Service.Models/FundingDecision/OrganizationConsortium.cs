@@ -1,22 +1,25 @@
-﻿using Nest;
-
-namespace CSC.PublicApi.Service.Models.FundingDecision;
+﻿namespace CSC.PublicApi.Service.Models.FundingDecision;
 
 public class OrganizationConsortium
 {
-    public string? NameFi { get; set; }
-    
-    public string? NameSv { get; set; }
-    
-    public string? NameEn { get; set; }
-
-    public List<PersistentIdentifier>? Ids { get; set; }
-
+    public Organization Organization { get; set; }
     public string? RoleInConsortium { get; set; }
-
-    [Number(NumberType.ScaledFloat, ScalingFactor = 100)]
     public decimal? ShareOfFundingInEur { get; set; }
-    
-    public bool? IsFinnishOrganization { get; set; }
 
+    public FundingReceiver ToFundingReceiver()
+    {
+        var receiver =  new FundingReceiver
+        {
+            Organization = Organization,
+            RoleInFundingGroup = RoleInConsortium,
+            ShareOfFundingInEur = ShareOfFundingInEur
+        };
+        
+        if (receiver.Organization.Pids != null && !receiver.Organization.Pids.Any())
+        {
+            receiver.Organization.Pids = null;
+        }
+
+        return receiver;
+    }
 }
