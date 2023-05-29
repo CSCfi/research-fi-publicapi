@@ -2,12 +2,12 @@
 
 public static class MemoryCacheKeys
 {
-    public static string FundingDecisionByAbbreviationAndEuCallId(string abbreviation, string euCallId)
+    public static string FundingCallByAbbreviationAndEuCallId(string abbreviation, string euCallId)
     {
         return $"fc-sid-{abbreviation}-{euCallId}";
     }
     
-    public static string FundingDecisionBySourceId(string sourceId)
+    public static string FundingCallBySourceId(string sourceId)
     {
         return $"fc-{sourceId}";
     }

@@ -19,6 +19,7 @@ public class OrganizationProfile : Profile
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.NameVariants, opt => opt.MapFrom(src => src.NameVariants))
+            .ForMember(dst => dst.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
             .ForMember(dst => dst.LocalOrganizationUnitId, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.LocalOrganizationUnitId) || string.Equals(src.LocalOrganizationUnitId, "-1") ? null : src.LocalOrganizationUnitId ))
             .ForMember(dst => dst.ParentId, opt => opt.MapFrom(src => src.DimOrganizationBroader == null || src.DimOrganizationBroader == -1 ? null : src.DimOrganizationBroader));
         

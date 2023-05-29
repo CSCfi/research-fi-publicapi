@@ -56,6 +56,9 @@ public class FundingDecision
     
     public DateTime Modified { get; set; }
 
+    [Ignore]
+    public int? FunderId { get; set; }
+    
     /// <summary>
     /// "Temporary" property for getting parent of decision's CallProgramme.
     /// </summary>

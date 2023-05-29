@@ -3,7 +3,6 @@ using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using Keyword = CSC.PublicApi.Service.Models.Keyword;
-using Organization = CSC.PublicApi.Service.Models.FundingDecision.Organization;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
@@ -29,7 +28,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.SelfFundingGroupPerson, opt => opt.MapFrom(src => src.BrParticipatesInFundingGroups))
             .ForMember(dst => dst.ParentFundingGroupPerson, opt => opt.MapFrom(src => src.DimFundingDecisionIdParentDecisionNavigation.BrParticipatesInFundingGroups))
             .ForMember(dst => dst.OrganizationConsortia, opt => opt.MapFrom(src => src.BrFundingConsortiumParticipations))
-            .ForMember(dst => dst.Funder, opt => opt.MapFrom(src => src.DimOrganizationIdFunderNavigation))
+            .ForMember(dst => dst.FunderId, opt => opt.MapFrom(src => src.DimOrganizationIdFunder))
             .ForMember(dst => dst.TypeOfFunding, opt => opt.MapFrom(src => src.DimTypeOfFunding))
             .ForMember(dst => dst.CallProgramme, opt => opt.MapFrom(src =>src.DimCallProgramme))
             .ForMember(dst => dst.FunderProjectNumber, opt => opt.MapFrom(src => src.FunderProjectNumber))
@@ -51,6 +50,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.Topic, opt => opt.Ignore()) // Topic will be included only for EU funding projects, where source_description is eu_funding.
             .ForMember(dst => dst.CallProgrammes, opt => opt.Ignore()) // CallProgrammes will be populated during the in memory operations
             .ForMember(dst => dst.FundingReceivers, opt => opt.Ignore()) // GrantedFunding will be populated during the in memory operations;
+            .ForMember(dst => dst.Funder, opt => opt.Ignore()) // Funder will be populated during the in memory operations;
             ;
         
         CreateProjection<DimDate, DateTime?>()
@@ -60,10 +60,9 @@ public class FundingDecisionProfile : Profile
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.SourceId, opt => opt.MapFrom(src => src.SourceId))
             .ForMember(dst => dst.Person, opt => opt.MapFrom(src => src.DimName))
-            .ForMember(dst => dst.Organization, opt => opt.MapFrom(src => src.DimOrganization))
+            .ForMember(dst => dst.OrganizationId, opt => opt.MapFrom(src => src.DimOrganizationId))
             .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur))
             .ForMember(dst => dst.RoleInFundingGroup, opt => opt.MapFrom(src => src.RoleInFundingGroup));
-
 
         CreateProjection<DimName, Person>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
@@ -78,18 +77,9 @@ public class FundingDecisionProfile : Profile
 
         CreateProjection<BrFundingConsortiumParticipation, OrganizationConsortium>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
-            .ForMember(dst => dst.Organization, opt => opt.MapFrom(src => src.DimOrganization))
+            .ForMember(dst => dst.OrganizationId, opt => opt.MapFrom(src => src.DimOrganizationid))
             .ForMember(dst => dst.RoleInConsortium, opt => opt.MapFrom(src => src.RoleInConsortium))
             .ForMember(dst => dst.ShareOfFundingInEur, opt => opt.MapFrom(src => src.ShareOfFundingInEur));
-
-        CreateProjection<DimOrganization, Organization>()
-            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids.Where(id => id.PidType == "BusinessID" || id.PidType == "PIC")))
-            .ForMember(dst => dst.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
-            .ForMember(dst => dst.IsFinnishOrganization, opt => opt.MapFrom(src => src.DimPids.Any(p => p.PidType == "BusinessID")));
 
         CreateProjection<DimCallProgramme, CallProgramme>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

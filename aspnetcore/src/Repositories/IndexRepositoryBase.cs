@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CSC.PublicApi.Repositories;
 
@@ -8,6 +9,13 @@ namespace CSC.PublicApi.Repositories;
 /// <typeparam name="T"></typeparam>
 public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : class
 {
+    protected readonly IMemoryCache MemoryCache;
+    
+    protected IndexRepositoryBase(IMemoryCache memoryCache)
+    {
+        MemoryCache = memoryCache;
+    }
+
     /// <summary>
     /// Method which every IndexRepository must override, provides every T as Queryable.
     /// </summary>
@@ -29,5 +37,10 @@ public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : cla
     public virtual List<object> PerformInMemoryOperations(List<object> entities)
     {
         return entities;
+    }
+    
+    protected Service.Models.Organization.Organization? GetOrganization(int organizationId)
+    {
+        return MemoryCache.TryGetValue<CSC.PublicApi.Service.Models.Organization.Organization>(MemoryCacheKeys.OrganizationById(organizationId), out var organization) ? organization : null;
     }
 }

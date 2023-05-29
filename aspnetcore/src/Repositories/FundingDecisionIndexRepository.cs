@@ -13,13 +13,11 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
 {
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IMemoryCache _memoryCache;
 
-    public FundingDecisionIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache)
+    public FundingDecisionIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache) : base(memoryCache)
     {
         _context = context;
         _mapper = mapper;
-        _memoryCache = memoryCache;
     }
 
     protected override IQueryable<FundingDecision> GetAll()
@@ -42,6 +40,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             }
 
             SetFundingReceivers(fundingDecision);
+            SetFunder(fundingDecision);
             SetFrameworkProgramme(fundingDecision);
             SetCallProgrammes(fundingDecision);
         });
@@ -49,7 +48,17 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         return objects;
     }
 
-    private static void SetFundingReceivers(FundingDecision fundingDecision)
+    private void SetFunder(FundingDecision fundingDecision)
+    {
+        if (!fundingDecision.FunderId.HasValue)
+        {
+            return;
+        }
+        
+        fundingDecision.Funder = GetOrganization(fundingDecision.FunderId.Value)?.ToFundingDecisionOrganization();
+    }
+
+    private void SetFundingReceivers(FundingDecision fundingDecision)
     {
         fundingDecision.FundingReceivers = new List<FundingReceiver>();
         
@@ -62,7 +71,25 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         }
     }
 
-    private static void HandleFundingGroupPerson(FundingDecision fundingDecision)
+    private FundingReceiver ToFundingReceiver(FundingGroupPerson fundingGroupPerson)
+    {
+        var receiver = new FundingReceiver
+        {
+            Person = fundingGroupPerson.Person,
+            Organization = GetOrganization(fundingGroupPerson.OrganizationId)?.ToFundingDecisionOrganization(),
+            RoleInFundingGroup = fundingGroupPerson.RoleInFundingGroup,
+            ShareOfFundingInEur = fundingGroupPerson.ShareOfFundingInEur
+        };
+
+        if (receiver.Organization?.Pids != null && !receiver.Organization.Pids.Any())
+        {
+            receiver.Organization.Pids = null;
+        }
+
+        return receiver;
+    }
+
+    private void HandleFundingGroupPerson(FundingDecision fundingDecision)
     {
         var fundingGroupPersons = new Dictionary<string, FundingReceiver>();
         
@@ -70,7 +97,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         {
             foreach (var fundingGroupPerson in fundingDecision.SelfFundingGroupPerson)
             {
-                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, fundingGroupPerson.ToFundingReceiver());
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson));
             }
         }
 
@@ -78,7 +105,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         {
             foreach (var fundingGroupPerson in fundingDecision.ParentFundingGroupPerson)
             {
-                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, fundingGroupPerson.ToFundingReceiver());
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson));
             }
         }
 
@@ -90,7 +117,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         fundingDecision.FundingReceivers.AddRange(fundingGroupPersons.Values.ToList());
     }
 
-    private static void SetOrganizationConsortia(FundingDecision fundingDecision)
+    private void SetOrganizationConsortia(FundingDecision fundingDecision)
     {
         if (fundingDecision.OrganizationConsortia == null)
         {
@@ -99,8 +126,25 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
 
         foreach (var organizationConsortium in fundingDecision.OrganizationConsortia)
         {
-            fundingDecision.FundingReceivers.Add(organizationConsortium.ToFundingReceiver());
+            fundingDecision.FundingReceivers.Add(ToFundingReceiver(organizationConsortium));
         }
+    }
+
+    private FundingReceiver ToFundingReceiver(OrganizationConsortium organizationConsortium)
+    {
+        var receiver =  new FundingReceiver
+        {
+            Organization = GetOrganization(organizationConsortium.OrganizationId)?.ToFundingDecisionOrganization(),
+            RoleInFundingGroup = organizationConsortium.RoleInConsortium,
+            ShareOfFundingInEur = organizationConsortium.ShareOfFundingInEur
+        };
+        
+        if (receiver.Organization?.Pids != null && !receiver.Organization.Pids.Any())
+        {
+            receiver.Organization.Pids = null;
+        }
+
+        return receiver;
     }
 
     private void SetCallProgrammes(FundingDecision fundingDecision)
@@ -124,7 +168,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
                 EuCallId = callProgramme.EuCallId
             };
 
-            if (!_memoryCache.TryGetValue(MemoryCacheKeys.FundingDecisionByAbbreviationAndEuCallId(callProgramme.Abbreviation, callProgramme.EuCallId), out List<string?> foundFundingCalls))
+            if (!MemoryCache.TryGetValue(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(callProgramme.Abbreviation, callProgramme.EuCallId), out List<string?> foundFundingCalls))
             {
                 return;
             }
@@ -133,7 +177,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             
             foreach (var sourceId in foundFundingCalls)
             {
-                if (_memoryCache.TryGetValue(MemoryCacheKeys.FundingDecisionBySourceId(sourceId), out FundingCall fundingCall))
+                if (MemoryCache.TryGetValue(MemoryCacheKeys.FundingCallBySourceId(sourceId), out FundingCall fundingCall))
                 {
                     fundingDecision.CallProgrammes.Add(new CallProgramme
                     {
