@@ -191,8 +191,7 @@ public class FundingDecisionProfileTest
                     Organization = new CSC.PublicApi.Service.Models.FundingDecision.Organization
                     {
                         NameFi = "Foreign organization",
-                        Pids = new List<CSC.PublicApi.Service.Models.PersistentIdentifier>(),
-                        IsFinnishOrganization = false
+                        Pids = new List<CSC.PublicApi.Service.Models.PersistentIdentifier>()
                     },
                     ShareOfFundingInEur = 123
                 },
@@ -223,12 +222,11 @@ public class FundingDecisionProfileTest
                                 Content = "org pic",
                                 Type = "PIC"
                             }
-                        },
-                        IsFinnishOrganization = true
+                        }
                     }
                 }
             },
-            Funder = new CSC.PublicApi.Service.Models.FundingDecision.Organization
+            Funder = new Service.Models.FundingDecision.Organization
             {
                 NameFi = "funder fi",
                 NameSv = "funder sv",
@@ -245,8 +243,7 @@ public class FundingDecisionProfileTest
                         Type = "PIC", 
                         Content = "456"
                     }
-                },
-                IsFinnishOrganization = true
+                }
             },
             TypeOfFunding = new ReferenceData
             {

@@ -99,20 +99,20 @@ public class Indexer
             var fundingCalls = await fundingCallRepository.GetAllAsync().ToListAsync();
             foreach (var fundingCall in fundingCalls.Cast<FundingCall>().Where(fundingCall => fundingCall.Id != -1))
             {
-                _memoryCache.Set(MemoryCacheKeys.FundingDecisionBySourceId(fundingCall.SourceId), fundingCall);
+                _memoryCache.Set(MemoryCacheKeys.FundingCallBySourceId(fundingCall.SourceId), fundingCall);
 
                 if (fundingCall.SourceProgrammeId == "-1")
                 {
                     continue;
                 }
                 
-                if (_memoryCache.TryGetValue(MemoryCacheKeys.FundingDecisionByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), out List<string?> foundFundingCalls))
+                if (_memoryCache.TryGetValue(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), out List<string?> foundFundingCalls))
                 {
                     foundFundingCalls.Add(fundingCall.SourceProgrammeId);
                 }
                 else
                 {
-                    _memoryCache.Set(MemoryCacheKeys.FundingDecisionByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), new List<string?> { fundingCall.SourceProgrammeId });    
+                    _memoryCache.Set(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), new List<string?> { fundingCall.SourceProgrammeId });    
                 }
             }
         }

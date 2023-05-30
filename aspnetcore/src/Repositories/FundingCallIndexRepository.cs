@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models.FundingCall;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CSC.PublicApi.Repositories;
 
@@ -11,7 +12,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
 
-    public FundingCallIndexRepository(ApiDbContext context, IMapper mapper)
+    public FundingCallIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache) : base(memoryCache)
     {
         _context = context;
         _mapper = mapper;

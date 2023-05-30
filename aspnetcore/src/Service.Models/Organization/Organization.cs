@@ -21,6 +21,8 @@ public class Organization
     public string? NameSv { get; set; }
 
     public string? NameVariants { get; set; }
+    
+    public string? CountryCode { get; set; }
 
     public Publication.Organization ToMainOrganization()
     {
@@ -42,6 +44,18 @@ public class Organization
             NameFi = NameFi,
             NameSv = NameSv,
             NameEn = NameEn
+        };
+    }
+
+    public FundingDecision.Organization ToFundingDecisionOrganization()
+    {
+        return new FundingDecision.Organization
+        {
+            NameFi = NameFi,
+            NameSv = NameSv,
+            NameEn = NameEn,
+            CountryCode = CountryCode,
+            Pids = Pids
         };
     }
 }

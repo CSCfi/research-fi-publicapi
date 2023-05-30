@@ -9,9 +9,8 @@ public class Organization
     public string? NameEn { get; set; }
 
     public string? NameSv { get; set; }
-    
 
-    public string CountryCode { get; set; }
+    public string? CountryCode { get; set; }
 
-    public bool IsFinnishOrganization { get; set; }
+    public bool IsFinnishOrganization => Pids != null && Pids.Any(p => p.Type == "BusinessID");
 }

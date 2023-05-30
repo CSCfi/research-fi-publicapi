@@ -120,10 +120,7 @@ public class FundingDecisionProfileTest
                 new ()
                 {
                     RoleInFundingGroup = "partner",
-                    DimOrganization = new DimOrganization
-                    {
-                        NameFi = "Foreign organization"
-                    },
+                    DimOrganizationId = 1,
                     ShareOfFundingInEur = 123
                 }
             },
@@ -150,25 +147,7 @@ public class FundingDecisionProfileTest
                             }
                         },
                         RoleInFundingGroup = "leader",
-                        DimOrganization = new DimOrganization
-                        {
-                            NameFi = "suomalainen organisaatio",
-                            NameEn = "finnish organization",
-                            NameSv = "finsk organization",
-                            DimPids = new []
-                            {
-                                new DimPid
-                                {
-                                    PidType = "BusinessID",
-                                    PidContent = "business id",
-                                },
-                                new DimPid
-                                {
-                                    PidType = "PIC",
-                                    PidContent = "org pic",
-                                }
-                            },
-                        },
+                        DimOrganizationId = 2,
                         ShareOfFundingInEur = 456
                     }
                 }
@@ -177,48 +156,12 @@ public class FundingDecisionProfileTest
             {
                 new BrFundingConsortiumParticipation
                 {
-                    DimOrganization = new DimOrganization
-                    {
-                        NameFi = "namefi",
-                        NameSv = "namesv",
-                        NameEn = "nameen",
-                        DimPids = new []
-                        {
-                            new DimPid
-                            {
-                                PidType = "BusinessID",
-                                PidContent = "business id",
-                            },
-                            new DimPid
-                            {
-                                PidType = "PIC",
-                                PidContent = "org pic",
-                            }
-                        },
-                    },
+                    DimOrganizationid = 1,
                     RoleInConsortium = "partner",
                     ShareOfFundingInEur = 202
                 }
             },
-            DimOrganizationIdFunderNavigation = new DimOrganization
-            {
-                NameFi = "funder fi",
-                NameSv = "funder sv",
-                NameEn = "funder en",
-                DimPids = new[]
-                {
-                    new DimPid
-                    {
-                        PidType = "BusinessID",
-                        PidContent = "123"
-                    },
-                    new DimPid
-                    {
-                        PidType = "PIC",
-                        PidContent = "456"
-                    }
-                }
-            },
+            DimOrganizationIdFunder = 3,
             DimTypeOfFunding = new DimTypeOfFunding
             {
                 NameFi = "type fi",
@@ -361,13 +304,8 @@ public class FundingDecisionProfileTest
                 {
                     Person = null,
                     RoleInFundingGroup = "partner",
-                    Organization = new Organization
-                    {
-                        NameFi = "Foreign organization",
-                        Pids = new List<PersistentIdentifier>(),
-                        IsFinnishOrganization = false
-                    },
-                    ShareOfFundingInEur = 123
+                    ShareOfFundingInEur = 123,
+                    OrganizationId = 1
                 }
             },
             ParentFundingGroupPerson = new List<FundingGroupPerson>
@@ -382,76 +320,19 @@ public class FundingDecisionProfileTest
                     },
                     RoleInFundingGroup = "leader",
                     ShareOfFundingInEur = 456,
-                    Organization = new Organization
-                    {
-                        NameFi = "suomalainen organisaatio",
-                        NameEn = "finnish organization",
-                        NameSv = "finsk organization",
-                        Pids = new List<PersistentIdentifier>
-                        {
-                            new()
-                            {
-                                Content = "business id",
-                                Type = "BusinessID"
-                            },
-                            new()
-                            {
-                                Content = "org pic",
-                                Type = "PIC"
-                            }
-                        },
-                        IsFinnishOrganization = true
-                    }
+                    OrganizationId = 2
                 }
             },
             OrganizationConsortia = new List<OrganizationConsortium>
             {
                 new()
                 {
-                    Organization = new Organization
-                    {
-                        NameFi = "namefi",
-                        NameSv = "namesv",
-                        NameEn = "nameen",
-                        Pids = new List<PersistentIdentifier>
-                        {
-                            new()
-                            {
-                                Content = "business id",
-                                Type = "BusinessID"
-                            },
-                            new()
-                            {
-                                Content = "org pic",
-                                Type = "PIC"
-                            }
-                        },
-                        IsFinnishOrganization = true
-                    },
+                    OrganizationId = 1,
                     RoleInConsortium = "partner",
                     ShareOfFundingInEur = 202
                 }
             },
-            Funder = new Organization
-            {
-                NameFi = "funder fi",
-                NameSv = "funder sv",
-                NameEn = "funder en",
-                Pids = new List<PersistentIdentifier>
-                {
-                    new()
-                    {
-                        Type = "BusinessID", 
-                        Content = "123"
-                    }, 
-                    new() 
-                    { 
-                        Type = "PIC", 
-                        Content = "456"
-                    }
-                },
-                IsFinnishOrganization = true
-            },
+            FunderId = 3,
             TypeOfFunding = new ReferenceData
             {
                 NameFi = "type fi",
