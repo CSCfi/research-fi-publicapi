@@ -50,7 +50,7 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     /// <summary>
     /// Kenttä fundingStartYear oltava suurempi tai yhtäsuuri kuin teksti.
     /// </summary>
-    /// <see cref="FundingDecision.FundingStartYear"/>
+    /// <see cref="FundingDecision.FundingStartDate"/>
     public int? FundingStartYearFrom { get; set; }
 
     /// <summary>

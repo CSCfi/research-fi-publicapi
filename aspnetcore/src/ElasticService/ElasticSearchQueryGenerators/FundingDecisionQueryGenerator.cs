@@ -77,9 +77,9 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
             subQueries.Add(t => t.MultiMatch(multi => multi
                 .Type(TextQueryType.PhrasePrefix)
                 .Fields(r => r
-                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameFi)))
-                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameSv)))
-                    .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.NameEn))))
+                    .Field(f => f.FundingReceivers.Suffix(nameof(Organization)).Suffix(nameof(Organization.NameFi)))
+                    .Field(f => f.FundingReceivers.Suffix(nameof(Organization)).Suffix(nameof(Organization.NameSv)))
+                    .Field(f => f.FundingReceivers.Suffix(nameof(Organization)).Suffix(nameof(Organization.NameEn))))
                 .Query(parameters.FundedOrganization)
             ));
         }
@@ -90,7 +90,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
             subQueries.Add(t => t.QueryString(multi => multi
                 .Type(TextQueryType.PhrasePrefix)
                 .Fields(fields =>
-                    fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.FirstNames))))
+                    fields.Field(f => f.FundingReceivers.Suffix(nameof(FundingReceiver.Person)).Suffix(nameof(Person.FirstNames))))
                 .Query(parameters.FundedPersonFirstName)
             ));
         }
@@ -101,7 +101,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
             subQueries.Add(t => t.QueryString(multi => multi
                 .Type(TextQueryType.PhrasePrefix)
                 .Fields(fields =>
-                    fields.Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.LastName))))
+                    fields.Field(f => f.FundingReceivers.Suffix(nameof(FundingReceiver.Person)).Suffix(nameof(Person.LastName))))
                 .Query(parameters.FundedPersonLastName)
             ));
         }
@@ -124,7 +124,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         if (!string.IsNullOrWhiteSpace(parameters.FunderId))
         {
             filters.Add(t => t.Term(term => term
-                .Field(f => f.Funder!.Ids.Suffix(nameof(PersistentIdentifier.Content)))
+                .Field(f => f.Funder!.Pids.Suffix(nameof(PersistentIdentifier.Content)))
                 .Value(parameters.FunderId)
             ));
         }
@@ -133,7 +133,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         if (!string.IsNullOrWhiteSpace(parameters.FundedPersonOrcid))
         {
             filters.Add(t => t.Term(term => term
-                .Field(f => f.FundingGroupPerson.Suffix(nameof(FundingGroupPerson.OrcId)))
+                .Field(f => f.FundingReceivers.Suffix(nameof(FundingReceiver.Person)).Suffix(nameof(Person.OrcId)))
                 .Value(parameters.FundedPersonOrcid)
             ));
         }
@@ -142,7 +142,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         if (!string.IsNullOrWhiteSpace(parameters.FundedOrganizationId))
         {
             filters.Add(t => t.Term(term => term
-                .Field(f => f.OrganizationConsortia.Suffix(nameof(OrganizationConsortium.Ids))
+                .Field(f => f.FundingReceivers.Suffix(nameof(Organization)).Suffix(nameof(Organization.Pids))
                     .Suffix(nameof(PersistentIdentifier.Content)))
                 .Value(parameters.FundedOrganizationId)
             ));
@@ -158,16 +158,19 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
         }
 
         // Add date filter for FundingStartYearFrom
-        filters.Add(x => x
-            .Bool(b => b
-                .Should(s =>
-                    s.Range(r => r
-                        .Field(f => f.FundingStartYear)
-                        .GreaterThanOrEquals(parameters.FundingStartYearFrom ?? 0)
-                        .LessThan(2100))
-                    ||
-                    !s.Exists(q => q.Field(f => f.FundingStartYear))
-                )));
+        if (parameters.FundingStartYearFrom is not null)
+        {
+            filters.Add(x => x
+                .Bool(b => b
+                    .Should(s => (
+                        s.DateRange(r => r
+                            .Field(f => f.FundingStartDate)
+                            .GreaterThanOrEquals(parameters.FundingStartYearFrom))
+                        ||
+                        !s.Exists(q => q.Field(f => f.FundingStartDate)))
+                    )));    
+        }
+        
 
         return filters;
     }

@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Repositories;
@@ -12,7 +13,7 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
 
-    public ResearchDatasetIndexRepository(ApiDbContext context, IMapper mapper)
+    public ResearchDatasetIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache) : base(memoryCache)
     {
         _context = context;
         _mapper = mapper;

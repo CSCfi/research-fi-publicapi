@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
+using Elasticsearch.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Publication = CSC.PublicApi.Service.Models.Publication.Publication;
@@ -28,7 +29,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
     private const string PeerReviewedCode = "1";
     private const string NotPeerReviewedCode = "0";
 
-    public PublicationIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache)
+    public PublicationIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache) : base(memoryCache)
     {
         _context = context;
         _mapper = mapper;
@@ -183,11 +184,6 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         }
 
         publication.Authors.AddRange(persons); }
-
-    private Service.Models.Organization.Organization? GetOrganization(int organizationId)
-    {
-        return _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(MemoryCacheKeys.OrganizationById(organizationId));
-    }
 
     private void HandleOrganizations(Publication publication)
     {

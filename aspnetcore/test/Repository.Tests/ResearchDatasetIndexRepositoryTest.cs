@@ -12,7 +12,7 @@ public class ResearchDatasetIndexRepositoryTest
     
     public ResearchDatasetIndexRepositoryTest()
     {
-        _researchDatasetIndexRepository = new ResearchDatasetIndexRepository(null, null);
+        _researchDatasetIndexRepository = new ResearchDatasetIndexRepository(null, null, null);
     }
     
     [Fact]
