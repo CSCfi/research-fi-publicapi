@@ -7,6 +7,8 @@ public class FundingReceiver
     public Person? Person { get; set; }
 
     public Organization? Organization { get; set; }
+
+    public string? FunderProjectNumber { get; set; }
     
     public string? RoleInFundingGroup { get; set; }
 
