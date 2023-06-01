@@ -16,6 +16,11 @@ public class FundingReceiver
     public Organization Organization { get; set; }
     
     /// <summary>
+    /// Rahoituspäätöksen numero
+    /// </summary>
+    public string? FunderProjectNumber { get; set; }
+    
+    /// <summary>
     /// Rooli rahoitusryhmässä
     /// </summary>
     public string? RoleInFundingGroup { get; set; }
