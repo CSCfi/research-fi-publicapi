@@ -121,7 +121,8 @@ public class FundingDecisionProfileTest
                 {
                     RoleInFundingGroup = "partner",
                     DimOrganizationId = 1,
-                    ShareOfFundingInEur = 123
+                    ShareOfFundingInEur = 123,
+                    SourceId = "336100"
                 }
             },
             DimFundingDecisionIdParentDecisionNavigation = new DimFundingDecision
@@ -148,7 +149,8 @@ public class FundingDecisionProfileTest
                         },
                         RoleInFundingGroup = "leader",
                         DimOrganizationId = 2,
-                        ShareOfFundingInEur = 456
+                        ShareOfFundingInEur = 456,
+                        SourceId = "336102"
                     }
                 }
             },
@@ -305,7 +307,8 @@ public class FundingDecisionProfileTest
                     Person = null,
                     RoleInFundingGroup = "partner",
                     ShareOfFundingInEur = 123,
-                    OrganizationId = 1
+                    OrganizationId = 1,
+                    SourceId = "336100"
                 }
             },
             ParentFundingGroupPerson = new List<FundingGroupPerson>
@@ -320,7 +323,8 @@ public class FundingDecisionProfileTest
                     },
                     RoleInFundingGroup = "leader",
                     ShareOfFundingInEur = 456,
-                    OrganizationId = 2
+                    OrganizationId = 2,
+                    SourceId = "336102"
                 }
             },
             OrganizationConsortia = new List<OrganizationConsortium>

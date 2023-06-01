@@ -78,7 +78,8 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             Person = fundingGroupPerson.Person,
             Organization = GetOrganization(fundingGroupPerson.OrganizationId)?.ToFundingDecisionOrganization(),
             RoleInFundingGroup = fundingGroupPerson.RoleInFundingGroup,
-            ShareOfFundingInEur = fundingGroupPerson.ShareOfFundingInEur
+            ShareOfFundingInEur = fundingGroupPerson.ShareOfFundingInEur,
+            FunderProjectNumber = fundingGroupPerson.SourceId
         };
 
         if (receiver.Organization?.Pids != null && !receiver.Organization.Pids.Any())

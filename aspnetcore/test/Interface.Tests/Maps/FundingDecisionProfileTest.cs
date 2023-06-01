@@ -63,13 +63,13 @@ public class FundingDecisionProfileTest
                 new()
                 {
                     Person = null,
-                    RoleInFundingGroup = "partner",
                     Organization = new Organization
                     {
                         NameFi = "Foreign organization",
                         Pids = new List<PersistentIdentifier>(),
                         IsFinnishOrganization = false
                     },
+                    RoleInFundingGroup = "partner",
                     ShareOfFundingInEur = 123
                 },
                 new()
@@ -80,8 +80,6 @@ public class FundingDecisionProfileTest
                         LastName = "lastname",
                         OrcId = "some orcid"
                     },
-                    RoleInFundingGroup = "leader",
-                    ShareOfFundingInEur = 456,
                     Organization = new Organization
                     {
                         NameFi = "suomalainen organisaatio",
@@ -101,7 +99,10 @@ public class FundingDecisionProfileTest
                             }
                         },
                         IsFinnishOrganization = true
-                    }
+                    },
+                    RoleInFundingGroup = "leader",
+                    ShareOfFundingInEur = 456,
+                    FunderProjectNumber = "336100"
                 }
             },
             Funder = new Funder
@@ -203,8 +204,6 @@ public class FundingDecisionProfileTest
                         LastName = "lastname",
                         OrcId = "some orcid"
                     },
-                    RoleInFundingGroup = "leader",
-                    ShareOfFundingInEur = 456,
                     Organization = new CSC.PublicApi.Service.Models.FundingDecision.Organization
                     {
                         NameFi = "suomalainen organisaatio",
@@ -223,7 +222,10 @@ public class FundingDecisionProfileTest
                                 Type = "PIC"
                             }
                         }
-                    }
+                    },
+                    RoleInFundingGroup = "leader",
+                    ShareOfFundingInEur = 456,
+                    FunderProjectNumber = "336100"
                 }
             },
             Funder = new Service.Models.FundingDecision.Organization
