@@ -28,6 +28,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ElasticService\ElasticService.csproj" />
+	  <ProjectReference Include="..\Logging\Logging.csproj" />
 	  <ProjectReference Include="..\Repositories\Repositories.csproj" />
 	</ItemGroup>
 
