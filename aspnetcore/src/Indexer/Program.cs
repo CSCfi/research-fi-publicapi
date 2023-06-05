@@ -22,12 +22,12 @@ public class Program
             .AddJsonFile($"appsettings.{environment}.json", true)
             .AddEnvironmentVariables()
             .Build();
+       
+       Log.Logger = new LoggerConfiguration()
+           .ReadFrom.Configuration(configuration)
+           .CreateLogger();;
 
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
-
-        // Create and configure the host to support dependency injection, configuration, etc.
+       // Create and configure the host to support dependency injection, configuration, etc.
         var consoleHost = CreateHostBuilder(args).Build();
 
         // Get the "Main" service which handles the indexing.
