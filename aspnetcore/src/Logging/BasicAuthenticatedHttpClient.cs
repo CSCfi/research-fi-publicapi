@@ -19,8 +19,8 @@ public class BasicAuthenticationHttpClient : IHttpClient
 
     public void Configure(IConfiguration configuration)
     {
-        var username = configuration["logStash:username"];
-        var password = configuration["logStash:password"];
+        var username = configuration["ElasticSearch:Username"];
+        var password = configuration["ElasticSearch:Password"];
 
         if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
         {
