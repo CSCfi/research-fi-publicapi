@@ -10,6 +10,7 @@ COPY ["aspnetcore/src/ElasticService/ElasticService.csproj","./ElasticService/El
 COPY ["aspnetcore/src/DatabaseContext/DatabaseContext.csproj","./DatabaseContext/DatabaseContext.csproj"]
 COPY ["aspnetcore/src/Repositories/Repositories.csproj","./Repositories/Repositories.csproj"]
 COPY ["aspnetcore/src/Service.Models/Service.Models.csproj","./Service.Models/Service.Models.csproj"]
+COPY ["aspnetcore/src/Logging/Logging.csproj","./Logging/Logging.csproj"]
 RUN dotnet restore "Indexer/Indexer.csproj"
 
 # Copy everything else and build
@@ -18,6 +19,7 @@ COPY ["aspnetcore/src/ElasticService/","./ElasticService"]
 COPY ["aspnetcore/src/DatabaseContext/","./DatabaseContext"]
 COPY ["aspnetcore/src/Repositories/","./Repositories"]
 COPY ["aspnetcore/src/Service.Models/","./Service.Models"]
+COPY ["aspnetcore/src/Logging/","./Logging"]
 RUN dotnet publish "Indexer/Indexer.csproj" -c Release -o out
 
 # Runtime image

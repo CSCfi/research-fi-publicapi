@@ -22,14 +22,12 @@ public class BasicAuthenticationHttpClient : IHttpClient
         var username = configuration["logStash:username"];
         var password = configuration["logStash:password"];
 
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
         {
-            return;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
         }
-
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Basic",
-            Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
     }
 
     public async Task<HttpResponseMessage> PostAsync(string requestUri, Stream contentStream)
