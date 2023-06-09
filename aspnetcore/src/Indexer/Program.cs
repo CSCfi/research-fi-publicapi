@@ -13,6 +13,8 @@ namespace CSC.PublicApi.Indexer;
 
 public class Program
 {
+    private const int DefaultQueryTimeout = 300;
+
     public static async Task Main(string[] args)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -56,12 +58,17 @@ public class Program
 
             services.AddMemoryCache();
 
+            if(!int.TryParse(hostContext.Configuration["QueryTimeout"], out var queryTimeout))
+            {
+                queryTimeout = DefaultQueryTimeout;
+            }
+                
             // Configure db & entity framework.
             services.AddDbContext<ApiDbContext>(options =>
             {
                 options.UseSqlServer("name=dbconnectionstring", opt =>
                 {
-                    opt.CommandTimeout(60);
+                    opt.CommandTimeout(queryTimeout);
                 });
                 options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             });

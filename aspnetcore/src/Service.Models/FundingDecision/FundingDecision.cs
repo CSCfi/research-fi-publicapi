@@ -56,6 +56,8 @@ public class FundingDecision
     
     public DateTime Modified { get; set; }
 
+    public string? SourceDescription { get; set; }
+
     [Ignore]
     public int? FunderId { get; set; }
     
