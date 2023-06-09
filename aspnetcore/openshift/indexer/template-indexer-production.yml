@@ -95,6 +95,11 @@ objects:
                         configMapKeyRef:
                           name: publicapi-api-config-production
                           key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                    - name: "QueryTimeout"
+                      valueFrom:
+                        configMapKeyRef:
+                          name: publicapi-api-config-production
+                          key: "QueryTimeout"
               restartPolicy: Never
   # ImageStream (production)
   - apiVersion: v1
