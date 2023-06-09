@@ -61,7 +61,7 @@ public class Program
             {
                 options.UseSqlServer("name=dbconnectionstring", opt =>
                 {
-                    opt.CommandTimeout(60);
+                    opt.CommandTimeout(300);
                 });
                 options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             });
