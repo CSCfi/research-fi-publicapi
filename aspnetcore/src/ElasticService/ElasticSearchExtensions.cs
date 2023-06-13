@@ -34,7 +34,7 @@ public static class ElasticSearchExtensions
 
     private static ConnectionSettings GetConnectionSettings(IConfiguration configuration)
     {
-        var elasticSearchClusterUrl = configuration["ELASTICSEARCH:URL"] ?? throw new InvalidOperationException("ElasticSearch url missing.");
+        var elasticSearchClusterUrl = configuration["ElasticSearch:Url"] ?? throw new InvalidOperationException("ElasticSearch url missing.");
 
         var connectionSettings = new ConnectionSettings(new Uri(elasticSearchClusterUrl))
             .DefaultFieldNameInferrer(i => i); // This forces elastic to store .Net objects using type names, instead of camel casing. This enables using nameof when referring to fields.
@@ -45,13 +45,24 @@ public static class ElasticSearchExtensions
             connectionSettings.DisableDirectStreaming();
         }
 
-        if (configuration["ELASTICSEARCH:USERNAME"] == null && configuration["ELASTICSEARCH:PASSWORD"] == null)
+        var elasticSearchUserName = configuration["ElasticSearch:Username"];
+        var elasticSearchPassword = configuration["ElasticSearch:Password"];
+
+        // If both are missing, basic auth is not used.
+        if (string.IsNullOrWhiteSpace(elasticSearchUserName) && string.IsNullOrWhiteSpace(elasticSearchPassword))
         {
             return connectionSettings;
         }
 
-        var elasticSearchUserName = configuration["ELASTICSEARCH:USERNAME"] ?? throw new InvalidOperationException("ElasticSearch username missing.");
-        var elasticSearchPassword = configuration["ELASTICSEARCH:PASSWORD"] ?? throw new InvalidOperationException("ElasticSearch password missing.");
+        if (string.IsNullOrWhiteSpace(elasticSearchUserName))
+        {
+            throw new InvalidOperationException("ElasticSearch username missing.");
+        }
+
+        if (string.IsNullOrWhiteSpace(elasticSearchPassword))
+        {
+            throw new InvalidOperationException("ElasticSearch password missing.");
+        }
 
         return connectionSettings.BasicAuthentication(elasticSearchUserName, elasticSearchPassword);
     }

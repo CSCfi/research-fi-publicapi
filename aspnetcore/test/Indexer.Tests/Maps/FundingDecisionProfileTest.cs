@@ -4,10 +4,10 @@ using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Nest;
 using Xunit;
 using FundingDecisionProfile = CSC.PublicApi.Repositories.Maps.FundingDecisionProfile;
 using Keyword = CSC.PublicApi.Service.Models.Keyword;
+using Organization = CSC.PublicApi.Service.Models.FundingDecision.Organization;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -37,22 +37,7 @@ public class FundingDecisionProfileTest
 
         // Assert
         var expected = GetDestination();
-        destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
-    }
-
-    [Fact]
-    public void ProjectTo_DimFundingDecisionWithEUFunding_ShouldBeMappedToFundingDecision()
-    {
-        // Arrange
-        var source = GetEuSource();
-
-        // Act
-        var destination = Act_Map(source);
-
-        // Assert
-        var expected = GetEuDestination();
-
-        destination.Should().BeEquivalentTo(expected, opt => opt.Excluding(d => d.OrganizationConsortia2));
+        destination.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -100,8 +85,7 @@ public class FundingDecisionProfileTest
         // Assert
         using (new AssertionScope())
         {
-            destination.FundingStartYear.Should().BeNull();
-            destination.FundingEndYear.Should().BeNull();
+            destination.FundingStartDate.Should().BeNull();
             destination.FundingEndDate.Should().BeNull();
         }
     }
@@ -129,32 +113,44 @@ public class FundingDecisionProfileTest
             DescriptionFi = "desc fi",
             DescriptionSv = "desc sv",
             DescriptionEn = "desc en",
-            DimDateIdStartNavigation = new DimDate { Year = 1987 },
+            DimDateIdStartNavigation = new DimDate { Year = 1987, Month = 1, Day = 1 },
             DimDateIdEndNavigation = new DimDate { Year = 1988, Month = 2, Day = 20 },
             BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
             {
                 new ()
                 {
-                    DimName = new ()
+                    RoleInFundingGroup = "partner",
+                    DimOrganizationId = 1,
+                    ShareOfFundingInEur = 123,
+                    SourceId = "336100"
+                }
+            },
+            DimFundingDecisionIdParentDecisionNavigation = new DimFundingDecision
+            {
+                BrParticipatesInFundingGroups = new List<BrParticipatesInFundingGroup>
+                {
+                    new ()
                     {
-                        LastName = "lastname",
-                        FirstNames = "first names",
-                        DimKnownPersonIdConfirmedIdentityNavigation = new ()
+                        DimName = new DimName
                         {
-                            DimPids = new List<DimPid>
+                            LastName = "lastname",
+                            FirstNames = "first names",
+                            DimKnownPersonIdConfirmedIdentityNavigation = new DimKnownPerson
                             {
-                                new ()
+                                DimPids = new List<DimPid>
                                 {
-                                    PidType = "Orcid",
-                                    PidContent = "some orcid"
+                                    new ()
+                                    {
+                                        PidType = "Orcid",
+                                        PidContent = "some orcid"
+                                    }
                                 }
                             }
-                        }
-                    },
-                    RoleInFundingGroup = "leader",
-                    DimOrganization = new DimOrganization()
-                    {
-                        NameFi = "sdf"
+                        },
+                        RoleInFundingGroup = "leader",
+                        DimOrganizationId = 2,
+                        ShareOfFundingInEur = 456,
+                        SourceId = "336102"
                     }
                 }
             },
@@ -162,49 +158,13 @@ public class FundingDecisionProfileTest
             {
                 new BrFundingConsortiumParticipation
                 {
-                    DimOrganization = new ()
-                    {
-                        NameFi = "namefi",
-                        NameSv = "namesv",
-                        NameEn = "nameen",
-                        DimPids = new []
-                        {
-                            new DimPid
-                            {
-                                PidType = "BusinessID",
-                                PidContent = "business id",
-                            },
-                            new DimPid
-                            {
-                                PidType = "PIC",
-                                PidContent = "org pic",
-                            }
-                        },
-                    },
+                    DimOrganizationid = 1,
                     RoleInConsortium = "partner",
                     ShareOfFundingInEur = 202
                 }
             },
-            DimOrganizationIdFunderNavigation = new()
-            {
-                NameFi = "funder fi",
-                NameSv = "funder sv",
-                NameEn = "funder en",
-                DimPids = new[]
-                {
-                    new DimPid
-                    {
-                        PidType = "BusinessID",
-                        PidContent = "123"
-                    },
-                    new DimPid
-                    {
-                        PidType = "PIC",
-                        PidContent = "456"
-                    }
-                }
-            },
-            DimTypeOfFunding = new()
+            DimOrganizationIdFunder = 3,
+            DimTypeOfFunding = new DimTypeOfFunding
             {
                 NameFi = "type fi",
                 NameSv = "type sv",
@@ -219,32 +179,32 @@ public class FundingDecisionProfileTest
                 NameEn = "call programme en",
                 DimCallProgrammeId2s = new List<DimCallProgramme>
                 {
-                    new DimCallProgramme
+                    new()
                     {
                         NameFi = "parent 1",
                         DimCallProgrammeId2s = new List<DimCallProgramme>
                         {
-                            new DimCallProgramme
+                            new()
                             {
                                 NameFi = "parent 2",
                                 DimCallProgrammeId2s = new List<DimCallProgramme>
                                 {
-                                    new DimCallProgramme
+                                    new()
                                     {
                                         NameFi = "parent 3",
                                         DimCallProgrammeId2s = new List<DimCallProgramme>
                                         {
-                                            new DimCallProgramme
+                                            new()
                                             {
                                                 NameFi = "parent 4",
                                                 DimCallProgrammeId2s = new List<DimCallProgramme>
                                                 {
-                                                    new DimCallProgramme
+                                                    new()
                                                     {
                                                         NameFi = "parent 5",
                                                         DimCallProgrammeId2s = new List<DimCallProgramme>
                                                         {
-                                                            new DimCallProgramme
+                                                            new()
                                                             {
                                                                 NameFi = "parent 6",
                                                                 DimCallProgrammeId2s = new List<DimCallProgramme>
@@ -302,20 +262,20 @@ public class FundingDecisionProfileTest
             {
                 new BrWordClusterDimFundingDecision
                 {
-                    DimWordCluster = new ()
+                    DimWordCluster = new DimWordCluster
                     {
                         BrWordsDefineAClusters = new[]
                         {
                             new BrWordsDefineACluster
                             {
-                                DimMinedWords = new ()
+                                DimMinedWords = new DimMinedWord
                                 {
                                     Word = "topic 1"
                                 }
                             },
                             new BrWordsDefineACluster
                             {
-                                DimMinedWords = new ()
+                                DimMinedWords = new DimMinedWord
                                 {
                                     Word = "topic 2"
                                 }
@@ -325,16 +285,6 @@ public class FundingDecisionProfileTest
                 }
             }
         };
-    }
-
-    private static DimFundingDecision GetEuSource()
-    {
-        var fundingDecision = GetSource();
-        fundingDecision.SourceDescription = "eu_funding";
-        fundingDecision.DimCallProgramme.Abbreviation = "topic id";
-        fundingDecision.DimCallProgramme.EuCallId = "eu call id";
-
-        return fundingDecision;
     }
 
     private static FundingDecision GetDestination()
@@ -348,63 +298,45 @@ public class FundingDecisionProfileTest
             DescriptionFi = "desc fi",
             DescriptionSv = "desc sv",
             DescriptionEn = "desc en",
-            FundingStartYear = 1987,
-            FundingEndYear = 1988,
+            FundingStartDate = new DateTime(1987, 1,1),
             FundingEndDate = new DateTime(1988, 2, 20),
-            FundingGroupPerson = new List<FundingGroupPerson>
+            SelfFundingGroupPerson = new List<FundingGroupPerson>
             {
                 new()
                 {
-                    FirstNames = "first names",
-                    LastName = "lastname",
-                    OrcId = "some orcid",
-                    RoleInFundingGroup = "leader"
+                    Person = null,
+                    RoleInFundingGroup = "partner",
+                    ShareOfFundingInEur = 123,
+                    OrganizationId = 1,
+                    SourceId = "336100"
+                }
+            },
+            ParentFundingGroupPerson = new List<FundingGroupPerson>
+            {
+                new()
+                {
+                    Person = new Person
+                    {
+                        FirstNames = "first names",
+                        LastName = "lastname",
+                        OrcId = "some orcid"
+                    },
+                    RoleInFundingGroup = "leader",
+                    ShareOfFundingInEur = 456,
+                    OrganizationId = 2,
+                    SourceId = "336102"
                 }
             },
             OrganizationConsortia = new List<OrganizationConsortium>
             {
                 new()
                 {
-                    NameFi = "namefi",
-                    NameSv = "namesv",
-                    NameEn = "nameen",
+                    OrganizationId = 1,
                     RoleInConsortium = "partner",
-                    ShareOfFundingInEur = 202,
-                    Ids = new List<PersistentIdentifier>
-                    {
-                        new()
-                        {
-                            Content = "business id",
-                            Type = "BusinessID"
-                        },
-                        new()
-                        {
-                            Content = "org pic",
-                            Type = "PIC"
-                        }
-                    },
-                    IsFinnishOrganization = true
+                    ShareOfFundingInEur = 202
                 }
             },
-            Funder = new Funder
-            {
-                NameFi = "funder fi",
-                NameSv = "funder sv",
-                NameEn = "funder en",
-                Ids = new List<PersistentIdentifier>
-                {
-                    new()
-                    {
-                        Type = "BusinessID", 
-                        Content = "123"
-                    }, 
-                    new() 
-                    { 
-                        Type = "PIC", 
-                        Content = "456"
-                    }
-                }
-            },
+            FunderId = 3,
             TypeOfFunding = new ReferenceData
             {
                 NameFi = "type fi",
@@ -414,16 +346,16 @@ public class FundingDecisionProfileTest
             },
             CallProgramme = new CallProgramme
             {
-                CallProgrammeId = "call programme id",
+                SourceId = "call programme id",
                 NameFi = "call programme fi",
                 NameSv = "call programme sv",
                 NameEn = "call programme en"
             },
-            CallProgrammeParent1 = new FrameworkProgramme
+            CallProgrammeParent1 = new CallProgramme()
             {
                 NameFi = "parent 1"
             },
-            CallProgrammeParent2 = new FrameworkProgramme
+            CallProgrammeParent2 = new CallProgramme
             {
                 NameFi = "parent 2"
             },
@@ -477,20 +409,5 @@ public class FundingDecisionProfileTest
             },
             FrameworkProgramme = null
         };
-    }
-
-    private static FundingDecision GetEuDestination()
-    {
-        var fundingDecision = GetDestination();
-        fundingDecision.CallProgramme = null;
-        fundingDecision.Topic = new Topic
-        {
-            TopicId = "topic id",
-            NameFi = "call programme fi",
-            NameSv = "call programme sv",
-            NameEn = "call programme en",
-            EuCallId = "eu call id"
-        };
-        return fundingDecision;
     }
 }

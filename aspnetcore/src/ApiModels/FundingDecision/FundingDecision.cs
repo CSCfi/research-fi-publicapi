@@ -45,14 +45,9 @@ public class FundingDecision
     /// <summary>
     /// Aloitusvuosi
     /// </summary>
-    public int? FundingStartYear { get; set; }
+    public DateTime? FundingStartDate { get; set; }
     
-    /// <summary>
-    /// Päättymisvuosi
-    /// </summary>
-    public int? FundingEndYear { get; set; }
-    
-    /// <summary>
+   /// <summary>
     /// Päättymispäivämäärä
     /// </summary>
     public DateTime? FundingEndDate { get; set; }
@@ -60,13 +55,8 @@ public class FundingDecision
     /// <summary>
     /// Rahoituksen saajat
     /// </summary>
-    public List<FundingGroupPerson>? FundingGroupPerson { get; set; }
-    
-    /// <summary>
-    /// Organisaatiot
-    /// </summary>
-    public List<OrganizationConsortium>? OrganizationConsortia { get; set; }
-    
+    public List<FundingReceiver> FundingReceivers { get; set; }
+
     /// <summary>
     /// Myöntösumma
     /// </summary>
@@ -85,9 +75,9 @@ public class FundingDecision
     public FundingType? TypeOfFunding { get; set; }
     
     /// <summary>
-    /// Ohjelman osa
+    /// Ohjelman osat
     /// </summary>
-    public CallProgramme? CallProgramme { get; set; }
+    public List<CallProgramme>? CallProgrammes { get; set; }
     
     /// <summary>
     /// Rahoitushaun aihe

@@ -12,7 +12,7 @@ public class FundingDecisionSearchParameters
 
     public string? FunderProjectNumber { get; set; }
 
-    public int? FundingStartYearFrom { get; set; }
+    public DateTime? FundingStartYearFrom { get; set; }
 
     public string? FundedOrganization { get; set; }
 

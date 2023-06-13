@@ -1,4 +1,4 @@
-﻿namespace ResearchFi.Publication;
+﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
 /// Organisaatio
@@ -6,9 +6,9 @@
 public class Organization
 {
     /// <summary>
-    /// Organisaation tunnus
+    /// Organisaation pysyvät tunnisteet
     /// </summary>
-    public string? Id { get; set; }
+    public List<PersistentIdentifier>? Pids { get; set; }
 
     /// <summary>
     /// Organisaation nimi
@@ -26,7 +26,12 @@ public class Organization
     public string? NameSv { get; set; }
 
     /// <summary>
-    /// Organisaation yksiköt
+    /// Organisaation maakoodi
     /// </summary>
-    public List<OrganizationUnit>? Units { get; set; }
+    public string? CountryCode { get; set; }
+
+    /// <summary>
+    /// Suomalainen organisaatio
+    /// </summary>
+    public bool IsFinnishOrganization { get; set; }
 }

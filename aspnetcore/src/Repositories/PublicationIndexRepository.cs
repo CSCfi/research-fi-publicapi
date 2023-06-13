@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
+using Elasticsearch.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Publication = CSC.PublicApi.Service.Models.Publication.Publication;
@@ -28,7 +29,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
     private const string PeerReviewedCode = "1";
     private const string NotPeerReviewedCode = "0";
 
-    public PublicationIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache)
+    public PublicationIndexRepository(ApiDbContext context, IMapper mapper, IMemoryCache memoryCache) : base(memoryCache)
     {
         _context = context;
         _mapper = mapper;
@@ -127,7 +128,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
             
             foreach (var contribution in nameIdGroup)
             {
-                var organization = _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(contribution.OrganizationId);
+                var organization = GetOrganization(contribution.OrganizationId.Value);
                 if (organization is null)
                 {
                     continue;
@@ -152,8 +153,11 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
 
                             if (!mainOrganizations.TryGetValue(organization.ParentId.Value, out _))
                             {
-                                var mainOrganization = _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(organization.ParentId.Value);
-                                mainOrganizations.Add(mainOrganization.Id, mainOrganization.OrganizationId);
+                                var mainOrganization = GetOrganization(organization.ParentId.Value);
+                                if (mainOrganization is not null)
+                                {
+                                    mainOrganizations.Add(mainOrganization.Id, mainOrganization.OrganizationId);                                    
+                                }
                             }
                         }
 
@@ -199,7 +203,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
                 continue;
             }
             
-            var organization = _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(contribution.OrganizationId);
+            var organization = GetOrganization(contribution.OrganizationId.Value);
             if (organization is null)
             {
                 continue;
@@ -210,7 +214,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         
         foreach (var contribution in publication.DatabaseContributions.Where(contribution => contribution.ContributionType == PublicationOrganizationUnit))
         {
-            var organization = _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(contribution.OrganizationId);
+            var organization = GetOrganization(contribution.OrganizationId.Value);
             if (organization is null)
             {
                 continue;
@@ -218,7 +222,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
 
             if (!mainOrganizations.TryGetValue(organization.ParentId.Value, out var mainOrganization))
             {
-                var missingOrganization = _memoryCache.Get<CSC.PublicApi.Service.Models.Organization.Organization>(organization.ParentId.Value);
+                var missingOrganization = GetOrganization(organization.ParentId.Value);
                 if (missingOrganization is null)
                 {
                     continue;

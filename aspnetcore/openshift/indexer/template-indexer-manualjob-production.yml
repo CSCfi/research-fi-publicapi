@@ -33,13 +33,13 @@ objects:
                 - name: "ELASTICSEARCH__PASSWORD"
                   valueFrom:
                     secretKeyRef:
-                        name: publicapi-api-secret-production
-                        key: "ELASTICSEARCH__PASSWORD"
+                      name: publicapi-api-secret-production
+                      key: "ELASTICSEARCH__PASSWORD"
                 - name: "dbconnectionstring"
                   valueFrom:
                     secretKeyRef:
-                        name: publicapi-api-secret-production
-                        key: dbconnectionstring
+                      name: publicapi-api-secret-production
+                      key: dbconnectionstring
                 - name: "ELASTICSEARCH__URL"
                   valueFrom:
                     configMapKeyRef:
@@ -53,28 +53,28 @@ objects:
                 - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                   valueFrom:
                     configMapKeyRef:
-                        name: publicapi-api-config-production
-                        key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
                   valueFrom:
                     configMapKeyRef:
-                        name: publicapi-api-config-production
-                        key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
                   valueFrom:
                     configMapKeyRef:
-                        name: publicapi-api-config-production
-                        key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
                   valueFrom:
                     configMapKeyRef:
-                        name: publicapi-api-config-production
-                        key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                   valueFrom:
                     configMapKeyRef:
-                        name: publicapi-api-config-production
-                        key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                 - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
                   valueFrom:
                     configMapKeyRef:
@@ -85,9 +85,14 @@ objects:
                     configMapKeyRef:
                       name: publicapi-api-config-production
                       key: "Serilog__MinimumLevel__Default"
-                - name: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
+                - name: "Serilog__WriteTo__HttpSink__Args__requestUri"
                   valueFrom:
                     configMapKeyRef:
                       name: publicapi-api-config-production
-                      key: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
+                      key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                - name: "QueryTimeout"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "QueryTimeout"
           restartPolicy: Never

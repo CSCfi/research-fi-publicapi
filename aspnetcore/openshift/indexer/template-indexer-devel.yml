@@ -90,11 +90,16 @@ objects:
                         configMapKeyRef:
                           name: publicapi-api-config-devel
                           key: "Serilog__MinimumLevel__Default"
-                    - name: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
+                    - name: "Serilog__WriteTo__HttpSink__Args__requestUri"
                       valueFrom:
                         configMapKeyRef:
                           name: publicapi-api-config-devel
-                          key: "Serilog__WriteTo__OpenSearchSink__Args__nodeUris"
+                          key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                    - name: "QueryTimeout"
+                      valueFrom:
+                        configMapKeyRef:
+                          name: publicapi-api-config-devel
+                          key: "QueryTimeout"
               restartPolicy: Never
   # ImageStream (development)
   - apiVersion: v1

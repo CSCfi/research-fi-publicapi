@@ -14,14 +14,9 @@ public class FundingDecisionRepository : GenericRepository<DimFundingDecision>, 
     {
         return DbSet
             .AsNoTracking()
-            .Include(fd => fd.DimTypeOfFunding)
-            .Include(fd => fd.BrParticipatesInFundingGroups)
-            // TODO: check if these are needed
-            //.Where(fd =>
-            //    fd.DimTypeOfFunding.TypeId != "62" &&
-            //    fd.DimTypeOfFunding.TypeId != "66" &&
-            //    fd.DimTypeOfFunding.TypeId != "69")
-
+            //.Include(fd => fd.DimTypeOfFunding)
+            //.Include(fd => fd.BrParticipatesInFundingGroups)
+            //.Include(fd => fd.DimFundingDecisionIdParentDecisionNavigation)
             .Where(fd => fd.Id != -1)
             .AsAsyncEnumerable();
     }

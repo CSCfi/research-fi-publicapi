@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using CSC.PublicApi.Repositories;
+using CSC.PublicApi.Service.Models.FundingCall;
 using CSC.PublicApi.Service.Models.Organization;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -16,7 +17,7 @@ public class Indexer
     private readonly IndexNameSettings _indexNameSettings;
     private readonly IEnumerable<IIndexRepository> _indexRepositories;
 
-    private readonly IMemoryCache _organizationCache;
+    private readonly IMemoryCache _memoryCache;
 
     public Indexer(
         ILogger<Indexer> logger,
@@ -24,14 +25,14 @@ public class Indexer
         IConfiguration configuration,
         IndexNameSettings indexNameSettings,
         IEnumerable<IIndexRepository> indexRepositories, 
-        IMemoryCache organizationCache)
+        IMemoryCache memoryCache)
     {
         _logger = logger;
         _indexService = indexService;
         _configuration = configuration;
         _indexNameSettings = indexNameSettings;
         _indexRepositories = indexRepositories;
-        _organizationCache = organizationCache;
+        _memoryCache = memoryCache;
     }
 
     public async Task Start()
@@ -40,6 +41,7 @@ public class Indexer
         stopWatch.Start();
         
         await PopulateOrganizationCache();
+        await PopulateFundingCallCache();
 
         _logger.LogInformation("Starting indexing...");
         _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress}'", _configuration["ELASTICSEARCH:URL"]);
@@ -79,7 +81,39 @@ public class Indexer
             var organizations = await organizationRepository.GetAllAsync().ToListAsync();
             foreach (Organization organization in organizations)
             {
-                _organizationCache.Set(organization.Id, organization);
+                _memoryCache.Set(MemoryCacheKeys.OrganizationById(organization.Id), organization);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Gets all call programmes from the database to an in-memory cache to simplify SQL queries by automapper.
+    /// </summary>
+    private async Task PopulateFundingCallCache()
+    {
+        _logger.LogInformation("Populating Funding Call cache...");
+
+        var fundingCallRepository = _indexRepositories.SingleOrDefault(repo => repo.ModelType == typeof(FundingCall));
+        if (fundingCallRepository != null)
+        {
+            var fundingCalls = await fundingCallRepository.GetAllAsync().ToListAsync();
+            foreach (var fundingCall in fundingCalls.Cast<FundingCall>().Where(fundingCall => fundingCall.Id != -1))
+            {
+                _memoryCache.Set(MemoryCacheKeys.FundingCallBySourceId(fundingCall.SourceId), fundingCall);
+
+                if (fundingCall.SourceProgrammeId == "-1")
+                {
+                    continue;
+                }
+                
+                if (_memoryCache.TryGetValue(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), out List<string?> foundFundingCalls))
+                {
+                    foundFundingCalls.Add(fundingCall.SourceProgrammeId);
+                }
+                else
+                {
+                    _memoryCache.Set(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), new List<string?> { fundingCall.SourceProgrammeId });    
+                }
             }
         }
     }

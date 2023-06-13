@@ -8,6 +8,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DimEvent()
         {
             DimPids = new HashSet<DimPid>();
+            DimProfileOnlyResearchActivities = new HashSet<DimProfileOnlyResearchActivity>();
             DimResearchActivities = new HashSet<DimResearchActivity>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
@@ -32,6 +33,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimGeo? DimGeoIdEventCountryNavigation { get; set; }
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimProfileOnlyResearchActivity> DimProfileOnlyResearchActivities { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
