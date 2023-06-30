@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Artikkelintyyppikoodi
+/// Article type -code
 ///
 /// http://uri.suomi.fi/codelist/research/Artikkelintyyppikoodi
 /// </summary>

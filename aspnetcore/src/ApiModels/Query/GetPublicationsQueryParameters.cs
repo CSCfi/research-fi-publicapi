@@ -3,38 +3,38 @@
 namespace ResearchFi.Query;
 
 /// <summary>
-/// Hakuparametrit julkaisjen hakemiseen.
+/// Query parameters for searching publications.
 /// </summary>
 /// <see cref="Publication"/>
 public class GetPublicationsQueryParameters : PaginationQueryParameters
 {
     /// <summary>
-    /// Kenttä name sisältää tekstin.
+    /// The field name contains text.
     /// </summary>
     /// <see cref="Publication.Name"/>
     public string? Name { get; set; }
 
     /// <summary>
-    /// Kenttä publicationYear on täsmälleen sama kuin teksti.
+    /// The field publicationYear is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.PublicationYear"/>
     public string? PublicationYear { get; set; }
 
     /// <summary>
-    /// Kenttä authorsText sisältää tekstin.
+    /// The field authorsText contains text.
     /// </summary>
     /// <see cref="Publication.AuthorsText"/>
     public string? AuthorsText { get; set; }
 
     /// <summary>
-    /// Taulukko organizations sisältää organisaation jonka kenttä Id on täsmälleen sama kuin teksti.
+    /// Table organizations contains an organization whose field Id is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Organizations"/>
     /// <see cref="Organization.Id"/>
     public string? OrganizationId { get; set; }
 
     /// <summary>
-    /// Taulukko organization sisältää organisaation jolla taulukossa Units on yksikkö, jonka kenttä Id on täsmälleen sama kuin teksti.
+    /// Table organization contains an organization in which the table Units has a unit whose field Id is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Organizations"/>
     /// <see cref="Organization.Units"/>
@@ -42,139 +42,139 @@ public class GetPublicationsQueryParameters : PaginationQueryParameters
     public string? OrganizationUnitId { get; set; }
 
     /// <summary>
-    /// Taulukko Authors sisältää tekijän, jonka firstNames kenttä sisältää tekstin.
+    /// Table Authors contains an author, whose firstNames field contains the text.
     /// </summary>
     /// <see cref="Publication.Authors"/>
     /// <see cref="Author.FirstNames"/>
     public string? AuthorFirstNames { get; set; }
 
     /// <summary>
-    /// Taulukko Authors sisältää tekijän, jonka lastNames kenttä sisältää tekstin.
+    /// Table Authors contains an author, whose lastNames field contains the text.
     /// </summary>
     /// <see cref="Publication.Authors"/>
     /// <see cref="Author.LastName"/>
     public string? AuthorLastName { get; set; }
 
     /// <summary>
-    /// Taulukko Authors sisältää tekijän, jonka orcId kenttä on täsmälleen sama kuin teksti.
+    /// Table Authors contains an author whose orcId field is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Authors"/>
     /// <see cref="Author.Orcid"/>
     public string? AuthorOrcId { get; set; }
 
     /// <summary>
-    /// Kenttä type:code on täsmälleen sama kuin teksti.
+    /// The field type:code is exactly equal to the text.
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
+    /// Code: http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
     /// </summary>
     /// <see cref="Publication.Type"/>
     public string? Type { get; set; }
 
     /// <summary>
-    /// Kenttä journalName sisältää tekstin.
+    /// The field journalName contains text.
     /// </summary>
     /// <see cref="Publication.JournalName"/>
     public string? JournalName { get; set; }
 
     /// <summary>
-    /// Kenttä conferenceName sisältää tekstin.
+    /// The field conferenceName contains text.
     /// </summary>
     /// <see cref="Publication.ConferenceName"/>
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// Taulukko issn sisältää arvon, joka on täsmälleen sama kuin teksti.
+    /// Table issn contains a value that is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Issn"/>
     public string? Issn { get; set; }
 
     /// <summary>
-    /// Taulukko isbn sisältää arvon, joka on täsmälleen sama kuin teksti.
+    /// Table isbn contains a value that is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Isbn"/>
     public string? Isbn { get; set; }
 
     /// <summary>
-    /// Kenttä parentPublication:name sisältää tekstin. 
+    /// The field parentPublication:name contains text.
     /// </summary>
     /// <see cref="Publication.ParentPublication"/>
     /// <see cref="ParentPublication.Name"/>
     public string? ParentPublicationName { get; set; }
 
     /// <summary>
-    /// Kenttä parentPublication:publisher sisältää tekstin. 
+    /// The field parentPublication:publisher contains text.
     /// </summary>
     /// <see cref="Publication.ParentPublication"/>
     /// <see cref="ParentPublication.Publisher"/>
     public string? ParentPublicationPublisher { get; set; }
 
     /// <summary>
-    /// Kenttä publisherName sisältää tekstin.
+    /// The field publisherName contains text.
     /// </summary>
     /// <see cref="Publication.PublisherName"/>
     public string? PublisherName { get; set; }
 
     /// <summary>
-    /// kenttä jufoCode sisältää tekstin.
+    /// The field jufocode contains text.
     /// </summary>
     /// <see cref="Publication.JufoCode"/>
     public string? JufoCode { get; set; }
 
     /// <summary>
-    /// Kenttä doi on täsmälleen sama kuin teksti.
+    /// The field doi is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.Doi"/>
     public string? Doi { get; set; }
 
     /// <summary>
-    /// Taulukko keywords sisältää avainsanan, jonka kenttä value on täsmälleen sama kuin teksti. Mahdollista määritellä useampi arvo erotettuna pilkulla.
+    /// Table keywords contains a keyword whose field value is exactly equal to the text. It is possible to define several values separated by a comma.
     /// </summary>
     /// <see cref="Publication.Keywords"/>
     /// <see cref="ResearchFi.Keyword.Value"/>
     public string? Keywords { get; set; }
 
     /// <summary>
-    /// Kenttä publisherOpenAccess:code on täsmälleen sama kuin teksti.
+    /// The field publisherOpenAccess:code is exactly equal to the text.
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
+    /// Code: http://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
     /// </summary>
     /// <see cref="Publication.PublisherOpenAccess"/>
     public string? PublisherOpenAccess { get; set; }
 
     /// <summary>
-    /// Kenttä reportingYear on täsmälleen sama kuin teksti.
+    /// The field reportingYear is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.ReportingYear"/>
     public string? ReportingYear { get; set; }
 
     /// <summary>
-    /// Kenttä status on täsmälleen sama kuin teksti.
+    /// The field status is exactly equal to the text.
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/julkaisuntila
+    /// Code: http://uri.suomi.fi/codelist/research/julkaisuntila
     /// </summary>
     /// <see cref="Publication.Status"/>
     public string? Status { get; set; }
 
     /// <summary>
-    /// Luotu aikaisintaan. Päivämäärä muodossa vvvv-kk-pp
+    /// Created at the earliest. Date format yyyy-mm-dd
     /// </summary>
     /// <see cref="Publication.Created"/>
     public string? CreatedFrom { get; set; }
 
     /// <summary>
-    /// Luotu viimeistään. Päivämäärä muodossa vvvv-kk-pp
+    /// Created at the latest. Date format yyyy-mm-dd
     /// </summary>
     /// <see cref="Publication.Created"/>
     public string? CreatedTo { get; set; }
 
     /// <summary>
-    /// Muokattu aikaisintaan. Päivämäärä muodossa vvvv-kk-pp
+    /// Edited at the earliest. Date format yyyy-mm-dd
     /// </summary>
     /// <see cref="Publication.Modified"/>
     public string? ModifiedFrom { get; set; }
 
     /// <summary>
-    /// Muokattu viimeistään. Päivämäärä muodossa vvvv-kk-pp
+    /// Edited at the latest. Date format yyyy-mm-dd
     /// </summary>
     /// <see cref="Publication.Modified"/>
     public string? ModifiedTo { get; set; }

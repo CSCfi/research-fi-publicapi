@@ -24,15 +24,16 @@ public class PublicationController : ControllerBase
     }
 
     /// <summary>
-    /// Hae julkaisuja
+    /// Endpoint for filtering publications using the specified query parameters.
     /// </summary>
-    /// <param name="queryParameters">Julkaisun hakuparametrit</param>
-    /// <returns>Taulukko löydettyjä julkaisuja.</returns>
+    /// <returns>Paged search result as a collection of <see cref="Publication"/> objects.</returns>
     /// <response code="200">Ok.</response>
-    /// <response code="401">Ei autentikoitu.</response>
-    /// <response code="403">Ei lupaa suorittaa operaatiota.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "SearchPublications")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
@@ -46,21 +47,21 @@ public class PublicationController : ControllerBase
     }
 
     /// <summary>
-    /// Hae julkaisu
+    /// Endpoint for getting a single publication based on the ID.
     /// </summary>
-    /// <param name="publicationId">Julkaisun tunnus</param>
-    /// <returns>Löydetty julkaisu.</returns>
+    /// <param name="publicationId">ID of the publication.</param>
+    /// <returns>An instance of <see cref="Publication"/>.</returns>
     /// <response code="200">Ok.</response>
-    /// <response code="401">Ei autentikoitu.</response>
-    /// <response code="403">Ei lupaa suorittaa operaatiota.</response>
-    /// <response code="404">Julkaisua ei löydy</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
+    /// <response code="404">Not found.</response>
     [HttpGet("{publicationId}",Name = "GetPublication")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(Publication), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void),StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void),StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status404NotFound)]
     public async Task<IResult> Get(string publicationId)
     {
         var publication = await _service.GetPublication(publicationId);

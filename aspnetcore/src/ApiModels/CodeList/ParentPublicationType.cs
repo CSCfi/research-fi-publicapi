@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Emojulkaisun tyyppi
+/// Parent publication type
 ///
 /// http://uri.suomi.fi/codelist/research/Emojulkaisuntyyppi
 /// </summary>

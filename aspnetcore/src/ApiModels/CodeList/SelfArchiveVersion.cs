@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Rinnakkaistallenteen versio
+/// Self archive version
 ///
 /// http://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
 /// </summary>

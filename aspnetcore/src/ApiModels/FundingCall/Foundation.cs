@@ -1,32 +1,32 @@
 ﻿namespace ResearchFi.FundingCall;
 
 /// <summary>
-/// Rahoittaja
+/// Funding foundation
 /// </summary>
 public class Foundation
 {
     /// <summary>
-    /// Rahoittajan nimi
+    /// Name of the funder in Finnish
     /// </summary>
     public string? NameFi { get; set; }
 
     /// <summary>
-    /// Finansiärens namn
+    /// Name of the funder in Swedish
     /// </summary>
     public string? NameSv { get; set; }
 
     /// <summary>
-    /// The name of the financier
+    /// Name of the funder in English
     /// </summary>
     public string? NameEn { get; set; }
 
     /// <summary>
-    /// Y-tunnus
+    /// Finnish business ID
     /// </summary>
     public string? BusinessId { get; set; }
 
     /// <summary>
-    /// Rahoittajan verkkosivu
+    /// Funders webpage
     /// </summary>
     public string? FoundationUrl { get; set; }
 }

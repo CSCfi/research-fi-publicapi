@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Lexvo kielet
+/// Lexvo languages
 /// 
 /// http://lexvo.org/id/iso639-3
 /// </summary>

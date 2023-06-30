@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Rahoitusmuoto
+/// Funding type
 ///
 /// http://uri.suomi.fi/codelist/research/rahoitusmuoto
 /// </summary>

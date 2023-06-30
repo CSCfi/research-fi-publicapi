@@ -3,34 +3,34 @@
 namespace ResearchFi.Publication;
 
 /// <summary>
-/// Julkaisun tekijä
+/// Publication author
 /// </summary>
 public class Author
 {
     /// <summary>
-    /// Tekijän etunimet
+    /// First names of the author
     /// </summary>
     public string? FirstNames { get; set; }
     
     /// <summary>
-    /// Tekijän sukunimi
+    /// Last name of the author
     /// </summary>
     public string? LastName { get; set; }
     
     /// <summary>
-    /// Tekijän tutkijatunniste
+    /// ORCID of the author
     /// </summary>
     public string? Orcid { get; set; }
     
     /// <summary>
-    /// Tekijän taidejulkaisurooli
+    /// Art publications role code of the author
     ///
     /// http://uri.suomi.fi/codelist/research/TaidejulkaisuRooli
     /// </summary>
     public ArtPublicationRole? ArtPublicationRole { get; set; }
 
     /// <summary>
-    /// Tekijän organisaatiot
+    /// Organizations of the author
     /// </summary>
     public List<AuthorOrganization>? Organizations { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisufoorumi
+/// Publication forum
 ///
 /// http://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
 /// </summary>

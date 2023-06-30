@@ -24,13 +24,13 @@ public class FundingCallController : ControllerBase
     }
 
     /// <summary>
-    /// Metodi rahoitushakujen suodattamiseen määritellyillä hakuehdoilla.
+    /// Endpoint for filtering funding calls using the specified query parameters.
     /// </summary>
-    /// <param name="queryParameters">Hakuehdot, joiden perusteella tuloksia suodatetaan.</param>
-    /// <returns>Sivutettu hakutulos joka koostuu kokoelmasta <see cref="FundingCall"/> objekteja.</returns>
+    /// <param name="queryParameters">The query parameters for filtering the results.</param>
+    /// <returns>Paged search result as a collection of <see cref="FundingCall"/> objects.</returns>
     /// <response code="200">Ok.</response>
-    /// <response code="401">Ei autentikoitu.</response>
-    /// <response code="403">Ei lupaa suorittaa operaatiota.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "GetFundingCall")]
     [MapToApiVersion(ApiConstants.ApiVersion1)]
     [Authorize(Policy = ApiPolicies.FundingCall.Read)]

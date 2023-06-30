@@ -3,24 +3,24 @@
 namespace ResearchFi.Publication;
 
 /// <summary>
-/// Emojulkaisun tiedot
+/// Parent publication information
 /// </summary>
 public class ParentPublication
 {
     /// <summary>
-    /// Emojulkaisun nimi
+    /// Name of the parent publication
     /// </summary>
     public string? Name { get; set; }
     
     /// <summary>
-    /// Emojulkaisun tyyppi
+    /// Parent publication type
     ///
     /// http://uri.suomi.fi/codelist/research/Emojulkaisuntyyppi
     /// </summary>
     public ParentPublicationType? Type { get; set; }
 
     /// <summary>
-    /// Emojulkaisun toimittajat
+    /// Parent publication publisher
     /// </summary>
     public string? Publisher { get; set; }
 }

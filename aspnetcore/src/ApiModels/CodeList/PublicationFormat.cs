@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisumuoto
+/// Publication format
 ///
 /// http://uri.suomi.fi/codelist/research/julkaisumuoto
 /// </summary>

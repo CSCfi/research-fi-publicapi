@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisun yleisö
+/// Target audience of a publication
 ///
 /// http://uri.suomi.fi/codelist/research/julkaisunyleiso
 /// </summary>

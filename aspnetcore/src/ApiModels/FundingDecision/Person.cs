@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Henkilö
+/// Person
 /// </summary>
 public class Person
 {
@@ -11,12 +11,12 @@ public class Person
     public string? OrcId { get; set; }
     
     /// <summary>
-    /// Henkilön etunimet
+    /// First names of the person
     /// </summary>
     public string? FirstNames { get; set; }
     
     /// <summary>
-    /// Henkilön sukunimi
+    /// Last name of the person
     /// </summary>
     public string? LastName { get; set; }
 }

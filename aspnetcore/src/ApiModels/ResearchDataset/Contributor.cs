@@ -3,22 +3,22 @@
 namespace ResearchFi.ResearchDataset;
 
 /// <summary>
-/// Tekijä
+/// Contributor
 /// </summary>
 public class Contributor
 {
     /// <summary>
-    /// Organisaatio
+    /// Contributing organization
     /// </summary>
     public Organization? Organization { get; set; }
 
     /// <summary>
-    /// Tekijä
+    /// Contributing person
     /// </summary>
     public Person? Person { get; set; }
 
     /// <summary>
-    /// Rooli
+    /// Agent role
     /// 
     /// http://uri.suomi.fi/codelist/fairdata/agentrole
     /// </summary>
