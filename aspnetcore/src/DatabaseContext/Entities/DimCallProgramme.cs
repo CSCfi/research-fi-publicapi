@@ -8,6 +8,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DimCallProgramme()
         {
             DimFundingDecisions = new HashSet<DimFundingDecision>();
+            DimProfileOnlyFundingDecisions = new HashSet<DimProfileOnlyFundingDecision>();
             DimWebLinks = new HashSet<DimWebLink>();
             DimCallProgrammeId2s = new HashSet<DimCallProgramme>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
@@ -49,6 +50,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimDate DimDateIdOpenNavigation { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
+        public virtual ICollection<DimProfileOnlyFundingDecision> DimProfileOnlyFundingDecisions { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammeId2s { get; set; }

@@ -32,7 +32,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? Isbn2 { get; set; }
         public string? JufoCode { get; set; }
         public string? JufoClassCode { get; set; }
-        public string? PublicationCountryCode { get; set; }
+        public int PublicationCountryCode { get; set; }
         public string? JournalName { get; set; }
         public string? Issn { get; set; }
         public string? Issn2 { get; set; }
@@ -43,13 +43,13 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? PublisherLocation { get; set; }
         public string? ParentPublicationName { get; set; }
         public string? ParentPublicationPublisher { get; set; }
-        public string PublicationTypeCode { get; set; } = null!;
+        public int PublicationTypeCode { get; set; }
         public bool? InternationalCollaboration { get; set; }
         public bool HospitalDistrictCollaboration { get; set; }
         public int InternationalPublication { get; set; }
         public bool GovermentCollaboration { get; set; }
         public bool OtherCollaboration { get; set; }
-        public string? LanguageCode { get; set; }
+        public int LanguageCode { get; set; }
         public string? OpenAccessCode { get; set; }
         public bool SpecialStateSubsidy { get; set; }
         public bool? BusinessCollaboration { get; set; }
@@ -58,7 +58,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? OriginalPublicationId { get; set; }
         public string? Doi { get; set; }
         public int? PublicationYear { get; set; }
-        public int? LicenseCode { get; set; }
+        public int LicenseCode { get; set; }
         public decimal? ApcFeeEur { get; set; }
         public int? ApcPaymentYear { get; set; }
         public int? PublicationTypeCode2 { get; set; }
@@ -67,7 +67,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int? ArticleTypeCode { get; set; }
         public bool? PeerReviewed { get; set; }
         public bool? Report { get; set; }
-        public int? ThesisTypeCode { get; set; }
+        public int ThesisTypeCode { get; set; }
         public bool? SelfArchivedCode { get; set; }
         public string SourceId { get; set; } = null!;
         public string? SourceDescription { get; set; }
@@ -80,9 +80,14 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual DimReferencedatum? ArticleTypeCodeNavigation { get; set; }
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual DimReferencedatum LanguageCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? ParentPublicationTypeCodeNavigation { get; set; }
+        public virtual DimReferencedatum PublicationCountryCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? PublicationTypeCode2Navigation { get; set; }
+        public virtual DimReferencedatum PublicationTypeCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? TargetAudienceCodeNavigation { get; set; }
+        public virtual DimReferencedatum ThesisTypeCodeNavigation { get; set; } = null!;
         public virtual ICollection<DimLocallyReportedPubInfo> DimLocallyReportedPubInfos { get; set; }
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }

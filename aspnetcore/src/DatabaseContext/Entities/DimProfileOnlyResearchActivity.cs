@@ -7,6 +7,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
     {
         public DimProfileOnlyResearchActivity()
         {
+            DimWebLinks = new HashSet<DimWebLink>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
 
@@ -38,6 +39,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimGeo? DimGeoIdCountryNavigation { get; set; }
         public virtual DimOrganization DimOrganization { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
 }

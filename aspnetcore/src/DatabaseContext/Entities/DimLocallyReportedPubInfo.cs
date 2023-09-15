@@ -9,8 +9,8 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimPublicationid { get; set; }
         public string? SelfArchivedType { get; set; }
         public string? SelfArchivedUrl { get; set; }
-        public string? SelfArchivedVersionCode { get; set; }
-        public string? SelfArchivedLicenseCode { get; set; }
+        public int SelfArchivedVersionCode { get; set; }
+        public int SelfArchivedLicenseCode { get; set; }
         public DateTime? SelfArchivedEmbargoDate { get; set; }
         public string? SourceId { get; set; }
         public string? SourceDescription { get; set; }
@@ -18,5 +18,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Modified { get; set; }
 
         public virtual DimPublication DimPublication { get; set; } = null!;
+        public virtual DimReferencedatum SelfArchivedLicenseCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum SelfArchivedVersionCodeNavigation { get; set; } = null!;
     }
 }
