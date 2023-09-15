@@ -84,7 +84,14 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
-            PublicationTypeCode = "publicationTypeCode",
+            //PublicationTypeCode = "publicationTypeCode",
+            PublicationTypeCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "publicationTypeCode",
+                NameFi = "publicationTypeCodeFi",
+                NameSv = "publicationTypeCodeSv",
+                NameEn = "publicationTypeCodeEn"
+            },
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
             ConferenceName = "ConferenceName",
@@ -183,7 +190,13 @@ public class PublicationProfileTest
                     }
                 }
             },
-            LanguageCode = "languageCode",
+            LanguageCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "languageCode",
+                NameFi = "languageCodeFi",
+                NameSv = "languageCodeSv",
+                NameEn = "languageCodeEn"
+            },
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
@@ -195,22 +208,52 @@ public class PublicationProfileTest
                 NameSv = "articleTypeCodeNameSv",
             },
             PublicationStatusCode = "publicationStatusCode",
-            LicenseCode = 1337,
+            LicenseCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "1337",
+                NameEn = "licenseCodeNameEn",
+                NameFi = "licenseCodeNameFi",
+                NameSv = "licenseCodeNameSv",
+            },
             DimLocallyReportedPubInfos = new List<DimLocallyReportedPubInfo>
             {
                 new()
                 {
                     SelfArchivedUrl = "selfArchivedUrl",
-                    SelfArchivedLicenseCode = "selfArchivedLicenseCode",
-                    SelfArchivedVersionCode = "selfArchivedVersionCode",
+                    SelfArchivedLicenseCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "selfArchivedLicenseCode",
+                        NameFi = "selfArchivedLicenseCodeFi",
+                        NameSv = "selfArchivedLicenseCodeSv",
+                        NameEn = "selfArchivedLicenseCodeEn"
+                    },
+                    SelfArchivedVersionCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "selfArchivedVersionCode",
+                        NameFi = "selfArchivedVersionCodeFi",
+                        NameSv = "selfArchivedVersionCodeSv",
+                        NameEn = "selfArchivedVersionCodeEn"
+                    },
                     SelfArchivedEmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00),
                     SelfArchivedType = "self_archived"
                 },
                 new()
                 {
                     SelfArchivedUrl = "preprintArchivedUrl",
-                    SelfArchivedLicenseCode = "preprintArchivedLicenseCode",
-                    SelfArchivedVersionCode = "preprintArchivedVersionCode",
+                    SelfArchivedLicenseCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "preprintArchivedLicenseCode",
+                        NameFi = "preprintArchivedLicenseCodeFi",
+                        NameSv = "preprintArchivedLicenseCodeSv",
+                        NameEn = "preprintArchivedLicenseCodeEn"
+                    },
+                    SelfArchivedVersionCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "preprintArchivedVersionCode",
+                        NameFi = "preprintArchivedVersionCodeFi",
+                        NameSv = "preprintArchivedVersionCodeSv",
+                        NameEn = "preprintArchivedVersionCodeEn"
+                    },
                     SelfArchivedEmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00),
                     SelfArchivedType = "preprint"
                 }
@@ -265,7 +308,10 @@ public class PublicationProfileTest
             },
             Type = new ReferenceData
             {
-                Code = "publicationTypeCode"
+                Code = "publicationTypeCode",
+                NameFi = "publicationTypeCodeFi",
+                NameSv = "publicationTypeCodeSv",
+                NameEn = "publicationTypeCodeEn"
             },
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
@@ -346,7 +392,10 @@ public class PublicationProfileTest
             },
             Language = new ReferenceData
             {
-                Code = "languageCode"
+                Code = "languageCode",
+                NameFi = "languageCodeFi",
+                NameSv = "languageCodeSv",
+                NameEn = "languageCodeEn"
             },
             InternationalPublication = false,
             InternationalCollaboration = true,
@@ -365,7 +414,10 @@ public class PublicationProfileTest
             },
             License = new ReferenceData()
             {
-                Code = "1337"
+                Code = "1337",
+                NameEn = "licenseCodeNameEn",
+                NameFi = "licenseCodeNameFi",
+                NameSv = "licenseCodeNameSv",
             },
             Preprint = new List<LocallyReportedPublicationInformation>
             {
@@ -374,11 +426,17 @@ public class PublicationProfileTest
                     Url = "preprintArchivedUrl",
                     License = new ReferenceData
                     {
-                        Code = "preprintArchivedLicenseCode"
+                        Code = "preprintArchivedLicenseCode",
+                        NameFi = "preprintArchivedLicenseCodeFi",
+                        NameSv = "preprintArchivedLicenseCodeSv",
+                        NameEn = "preprintArchivedLicenseCodeEn"
                     },
                     Version = new ReferenceData
                     {
-                        Code = "preprintArchivedVersionCode"
+                        Code = "preprintArchivedVersionCode",
+                        NameFi = "preprintArchivedVersionCodeFi",
+                        NameSv = "preprintArchivedVersionCodeSv",
+                        NameEn = "preprintArchivedVersionCodeEn"
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00)
                 }
@@ -390,11 +448,17 @@ public class PublicationProfileTest
                     Url = "selfArchivedUrl",
                     License = new ReferenceData
                     {
-                        Code = "selfArchivedLicenseCode"
+                        Code = "selfArchivedLicenseCode",
+                        NameFi = "selfArchivedLicenseCodeFi",
+                        NameSv = "selfArchivedLicenseCodeSv",
+                        NameEn = "selfArchivedLicenseCodeEn"
                     },
                     Version = new ReferenceData
                     {
-                        Code = "selfArchivedVersionCode"
+                        Code = "selfArchivedVersionCode",
+                        NameFi = "selfArchivedVersionCodeFi",
+                        NameSv = "selfArchivedVersionCodeSv",
+                        NameEn = "selfArchivedVersionCodeEn"
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }

@@ -31,7 +31,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ParentPublicationType, opt => opt.MapFrom(src => src.ParentPublicationTypeCodeNavigation))
             .ForMember(dst => dst.DatabasePeerReviewed, opt => opt.MapFrom(src => src.PeerReviewed))
             .ForMember(dst => dst.TargetAudience, opt => opt.MapFrom(src => src.TargetAudienceCodeNavigation))
-            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PublicationTypeCode))
+            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PublicationTypeCodeNavigation))
             .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName)) 
             .ForMember(dst => dst.IssueNumber, opt => opt.MapFrom(src => src.IssueNumber))
             .ForMember(dst => dst.ConferenceName, opt => opt.MapFrom(src => src.ConferenceName))
@@ -56,14 +56,14 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.FieldsOfEducation, opt => opt.MapFrom(src => src.DimFieldOfEducations))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords))
             .ForMember(dst => dst.InternationalPublication, opt => opt.MapFrom(src => src.InternationalPublication != 9 ? src.InternationalPublication == 1 : (bool?)null)) // 0 = kotim. 1 ulkom. 9 = ei tietoa.
-            .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.PublicationCountryCode))
-            .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.LanguageCode))
+            .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.PublicationCountryCodeNavigation))
+            .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.LanguageCodeNavigation))
             .ForMember(dst => dst.InternationalCollaboration, opt => opt.MapFrom(src => src.InternationalCollaboration))
             .ForMember(dst => dst.BusinessCollaboration, opt => opt.MapFrom(src => src.BusinessCollaboration))
             .ForMember(dst => dst.ApcFeeEur, opt => opt.MapFrom(src => src.ApcFeeEur))
             .ForMember(dst => dst.ArticleType, opt => opt.MapFrom(src => src.ArticleTypeCodeNavigation))
             .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.PublicationStatusCode))
-            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCode.HasValue && src.LicenseCode.Value != 9 && src.LicenseCode.Value != -1 ? src.LicenseCode : null))
+            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCodeNavigation))
             .ForMember(dst => dst.Preprint, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == PreprintType)))
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
             .ForMember(dst => dst.FieldsOfArts, opt => opt.MapFrom(src => src.DimFieldOfArts))
@@ -90,8 +90,8 @@ public class PublicationProfile : Profile
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Url, opt => opt.MapFrom(src => src.SelfArchivedUrl))
             .ForMember(dst => dst.EmbargoDate, opt => opt.MapFrom(src => src.SelfArchivedEmbargoDate))
-            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.SelfArchivedLicenseCode))
-            .ForMember(dst => dst.Version, opt => opt.MapFrom(src => src.SelfArchivedVersionCode));
+            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.SelfArchivedLicenseCodeNavigation))
+            .ForMember(dst => dst.Version, opt => opt.MapFrom(src => src.SelfArchivedVersionCodeNavigation));
         
         CreateProjection<DimKeyword, Keyword>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

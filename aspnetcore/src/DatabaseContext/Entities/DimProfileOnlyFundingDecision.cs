@@ -8,6 +8,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DimProfileOnlyFundingDecision()
         {
             DimPids = new HashSet<DimPid>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
 
@@ -37,7 +38,15 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Modified { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
 
+        public virtual DimCallProgramme DimCallProgramme { get; set; } = null!;
+        public virtual DimDate DimDateIdApprovalNavigation { get; set; } = null!;
+        public virtual DimDate DimDateIdEndNavigation { get; set; } = null!;
+        public virtual DimDate DimDateIdStartNavigation { get; set; } = null!;
+        public virtual DimOrganization? DimOrganizationIdFunderNavigation { get; set; }
+        public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual DimTypeOfFunding DimTypeOfFunding { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
 }
