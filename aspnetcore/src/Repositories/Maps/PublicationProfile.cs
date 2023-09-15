@@ -63,7 +63,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ApcFeeEur, opt => opt.MapFrom(src => src.ApcFeeEur))
             .ForMember(dst => dst.ArticleType, opt => opt.MapFrom(src => src.ArticleTypeCodeNavigation))
             .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.PublicationStatusCode))
-            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCodeNavigation))
+            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCodeNavigation.Id != -1 ? src.LicenseCodeNavigation : null))
             .ForMember(dst => dst.Preprint, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == PreprintType)))
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
             .ForMember(dst => dst.FieldsOfArts, opt => opt.MapFrom(src => src.DimFieldOfArts))
