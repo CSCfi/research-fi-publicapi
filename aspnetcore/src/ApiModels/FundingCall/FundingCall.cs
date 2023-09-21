@@ -55,7 +55,7 @@ public class FundingCall
     /// <summary>
     /// Continous application
     /// </summary>
-    public bool ContinuosApplication { get; set; }
+    public bool ContinuousApplication { get; set; }
 
     /// <summary>
     /// Call programme open date
