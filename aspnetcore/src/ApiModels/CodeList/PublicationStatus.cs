@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisun tila -koodi
+/// Publication status code
 ///
 /// http://uri.suomi.fi/codelist/research/julkaisuntila
 /// </summary>

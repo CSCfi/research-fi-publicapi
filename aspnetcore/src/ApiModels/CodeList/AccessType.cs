@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Saatavuusluokat
+/// Access types
 /// 
 /// http://uri.suomi.fi/codelist/fairdata/access_type
 /// </summary>

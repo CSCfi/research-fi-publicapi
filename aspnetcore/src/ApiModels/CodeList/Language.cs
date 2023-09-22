@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Kieli
+/// Language
 ///
 /// http://uri.suomi.fi/codelist/research/languages
 /// </summary>

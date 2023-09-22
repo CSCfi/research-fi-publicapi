@@ -10,7 +10,7 @@ public class PaginationQueryParameters
     private int _pageNumber = 1;
 
     /// <summary>
-    /// Haettavan sivun numero. Oletusarvo 1.
+    /// Page number to be searched. Optional. Default value 1.
     /// </summary>
     public int PageNumber
     {
@@ -19,7 +19,7 @@ public class PaginationQueryParameters
     }
 
     /// <summary>
-    /// Tulosten määrä sivulla. Oletusarvo 20. Suurin sallittu arvo 100. Suurin mahdollinen tulosjoukko 10 000 tulosta.
+    /// Number of results on page. Optional. Default value 20. Maximum permissible value 100. Maximum possible result set of 10,000 results.
     /// </summary>
     public int PageSize
     {

@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisutyyppiluokitus
+/// National classification for publications
 ///
 /// http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
 /// </summary>

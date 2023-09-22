@@ -1,17 +1,17 @@
 ﻿namespace ResearchFi;
 
 /// <summary>
-/// Pysyvä tunniste
+/// Persistent identifier
 /// </summary>
 public class PersistentIdentifier
 {
     /// <summary>
-    /// Tunniste
+    /// Persistent identifier
     /// </summary>
     public string? Content { get; set; }
     
     /// <summary>
-    /// Tunnisteen tyyppi
+    /// Type of the persistent identifier
     /// </summary>
     public string? Type { get; set; }
 }

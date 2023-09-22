@@ -3,13 +3,13 @@
 namespace ResearchFi.Query;
 
 /// <summary>
-/// Hakuparametrit rahoituspäätösten hakemiseen.
+/// Query parameters for searching funding decisions.
 /// </summary>
 /// <see cref="FundingDecision"/>
 public class GetFundingDecisionQueryParameters : PaginationQueryParameters
 {
     /// <summary>
-    /// Jokin kentistä nameFi, nameSv, nameEn sisältää koko tekstin.
+    /// One of the fields nameFi, nameSV, nameEn contains the full text.
     /// </summary>
     /// <see cref="FundingDecision.NameFi"/>
     /// <see cref="FundingDecision.NameSv"/>
@@ -17,7 +17,7 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? Name { get; set; }
 
     /// <summary>
-    /// Jokin kentistä DescriptionFi, DescriptionSv, DescriptionEn sisältää koko tekstin.
+    /// One of the fields DescriptionFi, DescriptionSV, DescriptionEn contains the full text.
     /// </summary>
     /// <see cref="FundingDecision.DescriptionFi"/>
     /// <see cref="FundingDecision.DescriptionSv"/>
@@ -25,7 +25,7 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? Description { get; set; }
 
     /// <summary>
-    /// Jokin kentän Funder alikentistä nameFi, nameSv, nameEn sisältää koko tekstin.
+    /// One of the field Funder subfields nameFi, nameSV, nameEn contains the full text.
     /// </summary>
     /// <see cref="FundingDecision.Funder"/>
     /// <see cref="Funder.NameFi"/>
@@ -34,7 +34,7 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? FunderName { get; set; }
 
     /// <summary>
-    /// Kentän Funder alikenttä funder:Ids:Content on täsmälleen sama kuin teksti.
+    /// The Funder field's subfield funder:Ids:Content is exactly equal to the text.
     /// </summary>
     /// <see cref="FundingDecision.Funder"/>
     /// <see cref="Funder.Ids"/>
@@ -42,19 +42,19 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? FunderId { get; set; }
 
     /// <summary>
-    /// Kenttä funderProjectNumber täsmälleen sama kuin teksti.
+    /// The field funderProjectNumber is exactly equal to the text. 
     /// </summary>
     /// <see cref="FundingDecision.FunderProjectNumber"/>
     public string? FunderProjectNumber { get; set; }
 
     /// <summary>
-    /// Kenttä fundingStartYear oltava suurempi tai yhtäsuuri kuin teksti.
+    /// The field fundingStartYear must be equal or greater than the text.
     /// </summary>
     /// <see cref="FundingDecision.FundingStartDate"/>
     public int? FundingStartYearFrom { get; set; }
 
     /// <summary>
-    /// Jokin kentän OrganizationConsortia alakentistä NameFi, NameSv tai NameEn sisältää koko tekstin.
+    /// One of the fields in the OrganizationConsortia subfields NameFi, NameSV or NameEn contains the full text.
     /// </summary>
     /// <see cref="FundingDecision.OrganizationConsortia"/>
     /// <see cref="OrganizationConsortium.NameFi"/>
@@ -63,7 +63,7 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? FundedOrganization { get; set; }
 
     /// <summary>
-    /// Kentän OrganizationConsortia alakenttä Ids sisältää tekstin.
+    /// The field OrganizationConsortia subfield Ids contains text.
     /// </summary>
     /// <see cref="FundingDecision.OrganizationConsortia"/>
     /// <see cref="OrganizationConsortium.Ids"/>
@@ -71,30 +71,30 @@ public class GetFundingDecisionQueryParameters : PaginationQueryParameters
     public string? FundedOrganizationId { get; set; }
 
     /// <summary>
-    /// Kenttä fundingGroupPersonFirstName sama kuin teksti.
+    /// The field fundingGroupPersonFirstName is exactly equal to the text.
     /// </summary>
     /// <see cref="FundingDecision.FundingGroupPerson"/>
     /// <see cref="FundingGroupPerson.FirstNames"/>
     public string? FundedPersonFirstName { get; set; }
 
     /// <summary>
-    /// Kenttä fundingGroupPersonLastName sama kuin teksti.
+    /// The field fundingGroupPersonLastName is exactly equal to the text.
     /// </summary>
     /// <see cref="FundingDecision.FundingGroupPerson"/>
     /// <see cref="FundingGroupPerson.LastName"/>
     public string? FundedPersonLastName { get; set; }
 
     /// <summary>
-    /// Kenttä fundingGroupPersonOrcid sama kuin teksti.
+    /// The field fundingGroupPersonOrcid is exactly equal to the text.
     /// </summary>
     /// <see cref="FundingDecision.FundingGroupPerson"/>
     /// <see cref="FundingGroupPerson.OrcId"/>
     public string? FundedPersonOrcid { get; set; }
 
     /// <summary>
-    /// Kenttä typeOfFunding vastaa haettua tekstiä.
+    /// The field typeOfFunding is exactly equal to the text.
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/rahoitusmuoto
+    /// Code: http://uri.suomi.fi/codelist/research/rahoitusmuoto
     /// </summary>
     /// <see cref="FundingDecision.TypeOfFunding"/>
     public string? TypeOfFunding { get; set; }

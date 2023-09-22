@@ -1,37 +1,37 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Organisaatio
+/// Organization
 /// </summary>
 public class Organization
 {
     /// <summary>
-    /// Organisaation pysyvät tunnisteet
+    /// Persistent identifiers of the organization
     /// </summary>
     public List<PersistentIdentifier>? Pids { get; set; }
 
     /// <summary>
-    /// Organisaation nimi
+    /// Name of the organization in Finnish
     /// </summary>
     public string? NameFi { get; set; }
 
     /// <summary>
-    /// The name of the organization
+    /// Name of the organization in Swedish
+    /// </summary>
+    public string? NameSv { get; set; }
+    
+    /// <summary>
+    /// Name of the organization in English
     /// </summary>
     public string? NameEn { get; set; }
 
     /// <summary>
-    /// Organisations namn
-    /// </summary>
-    public string? NameSv { get; set; }
-
-    /// <summary>
-    /// Organisaation maakoodi
+    /// Coountry code
     /// </summary>
     public string? CountryCode { get; set; }
 
     /// <summary>
-    /// Suomalainen organisaatio
+    /// Is the organization Finnish
     /// </summary>
     public bool IsFinnishOrganization { get; set; }
 }

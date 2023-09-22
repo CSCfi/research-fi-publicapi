@@ -1,27 +1,27 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Rahoittaja
+/// Funder
 /// </summary>
 public class Funder
 {
     /// <summary>
-    /// Rahoittajan nimi
+    /// The name of the funder in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Finansiärens namn
+    /// The name of the funder in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// The name of the financier
+    /// The name of the funder in English
     /// </summary>
     public string? NameEn { get; set; }
     
     /// <summary>
-    /// Rahoittajan tunnisteet
+    /// Persistent identifiers of the funder
     /// </summary>
     public List<PersistentIdentifier>? Pids { get; set; }
 }

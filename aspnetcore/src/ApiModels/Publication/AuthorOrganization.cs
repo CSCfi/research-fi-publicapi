@@ -1,17 +1,17 @@
 namespace ResearchFi.Publication;
 
 /// <summary>
-/// Julkaisun tekijän organisaatio
+/// Organization of the author of the publication
 /// </summary>
 public class AuthorOrganization
 {
     /// <summary>
-    /// Organisaation tunnus
+    /// Organization ID
     /// </summary>
     public string? Id { get; set; }
 
     /// <summary>
-    /// Organisaation yksiköt
+    /// Unit IDs of the organization
     /// </summary>
     public List<string>? UnitIds { get; set; }
 }

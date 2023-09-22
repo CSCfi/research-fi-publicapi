@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Toimijan rooli
+/// Agent roles
 /// 
 /// http://uri.suomi.fi/codelist/fairdata/agentrole
 /// </summary>
