@@ -1,32 +1,32 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Rahoituksen saaja
+/// Receiver of funding
 /// </summary>
 public class FundingReceiver
 {
     /// <summary>
-    /// Rahoituksen saanut henkilö
+    /// Funding receiving person
     /// </summary>
     public Person? Person { get; set; }
 
     /// <summary>
-    /// Rahoituksen saanut organisaatio
+    /// Funding receiving organization 
     /// </summary>
     public Organization Organization { get; set; }
     
     /// <summary>
-    /// Rahoituspäätöksen numero
+    /// Funder project number
     /// </summary>
     public string? FunderProjectNumber { get; set; }
     
     /// <summary>
-    /// Rooli rahoitusryhmässä
+    /// Role in funding group
     /// </summary>
     public string? RoleInFundingGroup { get; set; }
 
     /// <summary>
-    /// Rahoituksen osuus
+    /// Share of funding in euros
     /// </summary>
     public decimal? ShareOfFundingInEur { get; set; }
 }

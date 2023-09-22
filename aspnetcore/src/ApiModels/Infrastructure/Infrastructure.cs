@@ -1,22 +1,22 @@
 ﻿namespace ResearchFi.Infrastructure;
 
 /// <summary>
-/// Infrastruktuuri
+/// Infrastructure
 /// </summary>
 public class Infrastructure
 {
     /// <summary>
-    /// Infrastruktuurin nimi
+    /// Name of the infrastructure in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Namnet på infrastrukturen
+    /// Name of the infrastructure in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// The name of the infrastructure
+    /// Name of the infrastructure in English
     /// </summary>
     public string? NameEn { get; set; }
 }

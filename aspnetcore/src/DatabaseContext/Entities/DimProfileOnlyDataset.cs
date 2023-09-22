@@ -8,6 +8,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DimProfileOnlyDataset()
         {
             DimPids = new HashSet<DimPid>();
+            DimWebLinks = new HashSet<DimWebLink>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
 
@@ -31,7 +32,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Modified { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
 
+        public virtual DimReferencedatum? DimReferencedataIdAvailabilityNavigation { get; set; }
+        public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
+        public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
 }

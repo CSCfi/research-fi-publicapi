@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Tieteenala 2010
+/// Field of science 2010
 ///
 /// http://uri.suomi.fi/codelist/research/Tieteenala2010
 /// </summary>

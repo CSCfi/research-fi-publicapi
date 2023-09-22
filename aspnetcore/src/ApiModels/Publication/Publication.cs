@@ -5,83 +5,83 @@ using OpenAccess = ResearchFi.CodeList.OpenAccess;
 namespace ResearchFi.Publication;
 
 /// <summary>
-/// Julkaisu
+/// Publication
 /// </summary>
 public class Publication
 {
     /// <summary>
-    /// Julkaisun tunnus
+    /// Publication ID
     /// </summary>
     public string? Id { get; set; }
     
     /// <summary>
-    /// Julkaisun nimi
+    /// Name of the publication
     /// </summary>
     public string? Name { get; set; }
 
     /// <summary>
-    /// Julkaisuvuosi
+    /// Publication year
     /// </summary>
     public string? PublicationYear { get; set; }
     
     /// <summary>
-    /// Ilmoitusvuosi 	
+    /// Reporting year
     /// </summary>
     public string? ReportingYear { get; set; }
 
     /// <summary>
-    /// Tekijät
+    /// Authors of the publication as text
     /// </summary>
     public string? AuthorsText { get; set; }
 
     /// <summary>
-    /// Julkaisun organisaatiot
+    /// Publication organizations
     /// </summary>
     public List<Organization>? Organizations { get; set; }    
     
     /// <summary>
-    /// Julkaisun tekij?t
+    /// Authors of the publication
     /// </summary>
     public List<Author>? Authors { get; set; }
 
     /// <summary>
-    /// Julkaisun muoto
+    /// Publication format
     ///
     /// http://uri.suomi.fi/codelist/research/julkaisumuoto
     /// </summary>
     public PublicationFormat? Format { get; set; }
 
     /// <summary>
-    /// Vertaisarvioitu
+    /// Peer reviewed
     /// </summary>
     public PeerReviewed? PeerReviewed { get; set; }
 
     /// <summary>
-    /// Yleisö
+    /// Target audience of the publication
     ///
     /// http://uri.suomi.fi/codelist/research/julkaisunyleiso
     /// </summary>
     public TargetAudience? TargetAudience { get; set; }
 
     /// <summary>
-    /// OKM:n julkaisutyyppiluokitus
+    /// National classification for publications
     ///
     /// http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
     /// </summary>
     public PublicationType? Type { get; set; }
 
     /// <summary>
-    /// Lehti
+    /// Journal name
     /// </summary>
     public string? JournalName { get; set; }
     
     /// <summary>
-    /// Numero
+    /// Issue number
     /// </summary>
     public string? IssueNumber { get; set; }
 
     /// <summary>
-    /// Konferenssi
+    /// Conference name
     /// </summary>
     public string? ConferenceName { get; set; }
 
@@ -96,73 +96,73 @@ public class Publication
     public List<string>? Isbn { get; set; }
 
     /// <summary>
-    /// Volyymi
+    /// Volume
     /// </summary>
     public string? Volume { get; set; }
 
     /// <summary>
-    /// Sivut
+    /// Page number
     /// </summary>
     public string? PageNumberText { get; set; }
 
     /// <summary>
-    /// Artikkelinumero
+    /// Article number
     /// </summary>
     public string? ArticleNumberText { get; set; }
 
     /// <summary>
-    /// Julkaisun avoin saatavuus
+    /// Open access of publication
     ///
     /// http://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
     /// </summary>
     public OpenAccess OpenAccess { get; set; }
 
     /// <summary>
-    /// Julkaisukanavan avoin saatavuus
+    /// Open Access status of a publication channel
     ///
     /// http://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
     /// </summary>
     public PublisherOpenAccess PublisherOpenAccess { get; set; }
 
     /// <summary>
-    /// Emojulkaisu
+    /// Parent publication
     /// </summary>
     public ParentPublication? ParentPublication { get; set; }
 
     /// <summary>
-    /// Kustantaja
+    /// Publisher name
     /// </summary>
     public string? PublisherName { get; set; }
 
     /// <summary>
-    /// Kustannuspaikka
+    /// Publisher location
     /// </summary>
     public string? PublisherLocation { get; set; }
 
     /// <summary>
-    /// Julkaisufoorumi
+    /// Publication forum
     /// </summary>
     public string? JufoCode { get; set; }
 
     /// <summary>
-    /// Julkaisufoorumiluokitus
+    /// Publication forum classification
     ///
     /// http://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
     /// </summary>
     public JufoClass? JufoClass { get; set; }
 
     /// <summary>
-    /// Pysyv? osoite
+    /// DOI
     /// </summary>
     public string? Doi { get; set; }
 
     /// <summary>
-    /// Pysyv? osoite teksti
+    /// DOI handle
     /// </summary>
     public string? DoiHandle { get; set; }
 
     /// <summary>
-    /// Rinnakkaistallenne
+    /// Self archived publication
     /// </summary>
     public List<LocallyReportedPublicationInformation>? SelfArchived { get; set; }
     
@@ -172,110 +172,110 @@ public class Publication
     public List<LocallyReportedPublicationInformation>? Preprint { get; set; }
 
     /// <summary>
-    /// Tieteenalat
+    /// Fields of science
     ///
     /// http://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// OKM:n ohjauksen ala
+    /// Areas of guidance of the MEC
     ///
     /// https://wiki.eduuni.fi/display/cscsuorat/7.2+OKM%3An+ohjauksen+alat+2022
     /// </summary>
     public List<FieldOfEducation>? FieldsOfEducation { get; set; }
 
     /// <summary>
-    /// Avainsanat
+    /// Keywords
     /// </summary>
     public List<Keyword>? Keywords { get; set; }
 
     /// <summary>
-    /// Julkaisun kansainvälisyys
+    /// Is an international publication
     /// </summary>
     public bool? InternationalPublication { get; set; }
 
     /// <summary>
-    /// Julkaisumaa
+    /// Publication country
     ///
     /// http://uri.suomi.fi/codelist/jhs/valtio_1_20120101
     /// </summary>
     public CountryCode? Country { get; set; }
 
     /// <summary>
-    /// Kieli
+    /// Language of the publication
     ///
     /// http://uri.suomi.fi/codelist/research/languages
     /// </summary>
     public Language? Language { get; set; }
 
     /// <summary>
-    /// Kansainvälinen yhteisjulkaisu
+    /// Is an international collaboration
     /// </summary>
     public bool? InternationalCollaboration { get; set; }
 
     /// <summary>
-    /// Yhteisjulkaisu yrityksen kanssa
+    /// Is an business collaboration
     /// </summary>
     public bool? BusinessCollaboration { get; set; }
     
     /// <summary>
-    /// Avoin saatavuus julkaisumaksu
+    /// Publication fee in euro
     /// </summary>
     public decimal? ApcFeeEur { get; set; }
 
     /// <summary>
-    /// Avoin saatavuus julkaisumaksun vuosi 
+    /// Publication fee payment year
     /// </summary>
     public string? ApcPaymentYear { get; set; }
 
     /// <summary>
-    /// Artikkelin tyyppi
+    /// Article type code
     ///
     /// http://uri.suomi.fi/codelist/research/Artikkelintyyppikoodi
     /// </summary>
     public ArticleType? ArticleType { get; set; }
 
     /// <summary>
-    /// Julkaisun tila
+    /// Publication status code
     ///
     /// /// http://uri.suomi.fi/codelist/research/julkaisuntila
     /// </summary>
     public PublicationStatus? Status { get; set; }
 
     /// <summary>
-    /// Lisenssi
+    /// License
     /// 
     /// http://uri.suomi.fi/codelist/fairdata/license
     /// </summary>
     public License? License { get; set; }
 
     /// <summary>
-    /// Taiteenala
+    /// Field of art
     ///
     /// http://uri.suomi.fi/codelist/research/Taiteenala
     /// </summary>
     public List<FieldOfArts>? FieldsOfArts { get; set; }
 
     /// <summary>
-    /// Taidealan tyyppikategoria
+    /// Art publications type category
     ///
     /// http://uri.suomi.fi/codelist/research/TaidejulkaisuTyyppikategoria
     /// </summary>
     public List<ArtPublicationTypeCategory>? ArtPublicationTypeCategory { get; set; }
 
     /// <summary>
-    /// Tiivistelmä
+    /// Abstract
     /// </summary>
     public string? Abstract { get; set; }
 
     /// <summary>
-    /// Luontiaika
+    /// Creation time
     /// </summary>
     public DateTime Created { get; set; }
 
     /// <summary>
-    /// Muokkausaika
+    /// Modification time
     /// </summary>
     public DateTime Modified { get; set; }
 }

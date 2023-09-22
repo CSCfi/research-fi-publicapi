@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// OKM:n ohjauksen alat
+/// Field of education of the MEC
 ///
 /// https://wiki.eduuni.fi/display/cscsuorat/7.2+OKM%3An+ohjauksen+alat+2022
 /// </summary>

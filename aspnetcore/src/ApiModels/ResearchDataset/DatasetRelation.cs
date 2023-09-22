@@ -1,17 +1,17 @@
 ﻿namespace ResearchFi.ResearchDataset;
 
 /// <summary>
-/// Aineistoviite
+/// Dataset reference
 /// </summary>
 public class DatasetRelation
 { 
     /// <summary>
-    /// Viitatun aineiston tunniste
+    /// ID of the referenced dataset
     /// </summary>
     public string? Id { get; set; }
 
     /// <summary>
-    /// Viitteen tyyppi
+    /// Type of the reference
     /// </summary>
     public string? Type { get; set; }
 }

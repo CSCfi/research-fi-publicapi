@@ -1,27 +1,27 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Ohjelman osa
+/// Part of the program
 /// </summary>
 public class CallProgramme
 {
     /// <summary>
-    /// Ohjelman osan tunniste
+    /// ID of the part of the program
     /// </summary>
     public string? CallProgrammeId { get; set; }
     
     /// <summary>
-    /// Rahoitushaun aihe
+    /// The topic of the program in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Föremålet för finansieringsansökan
+    /// The topic of the program in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// The topic of the funding call
+    /// The topic of the program in English
     /// </summary>
     public string? NameEn { get; set; }
 }

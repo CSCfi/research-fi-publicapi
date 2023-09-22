@@ -25,13 +25,20 @@ public class FundingDecisionController : ControllerBase
     }
 
     /// <summary>
-    /// Hae rahoituspäätöksiä
+    /// Endpoint for filtering funding decisions using the specified query parameters.
     /// </summary>
-    /// <param name="queryParameters">Query parameters for filtering the results.</param>
-    /// <returns></returns>
+    /// <returns>Paged search result as a collection of <see cref="FundingDecision"/> objects.</returns>
+    /// <response code="200">Ok.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "GetFundingDecision")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.FundingDecision.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<FundingDecision>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters queryParameters)
     {
         var (fundingDecisions, searchResult) = await _service.GetFundingDecisions(queryParameters);

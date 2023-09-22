@@ -1,22 +1,22 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Puiteohjelma
+/// Framework programme
 /// </summary>
 public class FrameworkProgramme
 {
     /// <summary>
-    /// Puiteohjelman nimi
+    /// The name of the framework programme in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Ramprogrammets namn
+    /// The name of the framework programme in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// The name of the framework program
+    /// The name of the framework programme in English
     /// </summary>
     public string? NameEn { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Lisenssit
+/// Licenses
 /// 
 /// http://uri.suomi.fi/codelist/fairdata/license
 /// </summary>

@@ -25,13 +25,20 @@ public class ResearchDatasetController : ControllerBase
     }
 
     /// <summary>
-    /// Hae aineistoja
+    /// Endpoint for filtering research datasets using the specified query parameters.
     /// </summary>
-    /// <param name="queryParameters"></param>
-    /// <returns></returns>
+    /// <returns>Paged search result as a collection of <see cref="ResearchDataset"/> objects.</returns>
+    /// <response code="200">Ok.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "GetResearchDataset")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.ResearchDataset.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<ResearchDataset>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters queryParameters)
     {
         var (researchDatasets, searchResult) = await _service.GetResearchDatasets(queryParameters);

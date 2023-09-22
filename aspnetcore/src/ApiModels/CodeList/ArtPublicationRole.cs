@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Taidejulkaisut roolikoodisto
+/// Art publications role code
 ///
 /// http://uri.suomi.fi/codelist/research/TaidejulkaisuRooli
 /// </summary>

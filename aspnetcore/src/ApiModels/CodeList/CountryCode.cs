@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Valtiot ja maat
+/// Countriy codes
 ///
 /// http://uri.suomi.fi/codelist/jhs/valtio_1_20120101
 /// </summary>

@@ -3,99 +3,99 @@
 namespace ResearchFi.FundingCall;
 
 /// <summary>
-/// Rahoitushaku
+/// Funding Call
 /// </summary>
 public class FundingCall
 {
     /// <summary>
-    /// Rahoitushaun nimi
+    /// Name of the funding call in Finnish
     /// </summary>
     public string? NameFi { get; set; }
 
     /// <summary>
-    /// Utlysningens namn
+    /// Name of the funding call in Swedish
     /// </summary>
     public string? NameSv { get; set; }
 
     /// <summary>
-    /// Name of the funding call
+    /// Name of the funding call in English
     /// </summary>
     public string? NameEn { get; set; }
 
     /// <summary>
-    /// Rahoitushaun kuvaus
+    /// Description of the funding call in Finnish
     /// </summary>
     public string? DescriptionFi { get; set; }
 
     /// <summary>
-    /// Utlysningens beskrivning
+    ///  Description of the funding call in Swedish
     /// </summary>
     public string? DescriptionSv { get; set; }
 
     /// <summary>
-    /// Description of the funding call
+    /// Description of the funding call in English
     /// </summary>
     public string? DescriptionEn { get; set; }
 
     /// <summary>
-    /// Hakuohjeet
+    /// Application terms in Finnish
     /// </summary>
     public string? ApplicationTermsFi { get; set; }
 
     /// <summary>
-    /// Sökanvisningar
+    /// Application terms in Swedish
     /// </summary>
     public string? ApplicationTermsSv { get; set; }
 
     /// <summary>
-    /// Application guidelines
+    /// Application terms in English
     /// </summary>
     public string? ApplicationTermsEn { get; set; }
 
     /// <summary>
-    /// Jatkuva haku
+    /// Continous application
     /// </summary>
-    public bool ContinuosApplication { get; set; }
+    public bool ContinuousApplication { get; set; }
 
     /// <summary>
-    /// Haku alkaa
+    /// Call programme open date
     /// </summary>
     public DateTime? CallProgrammeOpenDate { get; set; }
 
     /// <summary>
-    /// Haku päättyy
+    /// Call programme due date
     /// </summary>
     public DateTime? CallProgrammeDueDate { get; set; }
 
     /// <summary>
-    /// Rahoitushaun verkkosivu
+    /// Webpage of the funding call in Finnish
     /// </summary>
     public string? ApplicationUrlFi { get; set; }
 
     /// <summary>
-    /// Utlysningens webbsida
+    /// Webpage of the funding call in Swedish
     /// </summary>
     public string? ApplicationUrlSv { get; set; }
 
     /// <summary>
-    /// Webpage of the funding call
+    /// Webpage of the funding call in English
     /// </summary>
     public string? ApplicationUrlEn { get; set; }
 
     /// <summary>
-    /// Rahoittajat
+    /// Funders
     /// </summary>
     public List<Foundation>? Foundations { get; set; }
 
     /// <summary>
-    /// Rahoitushakujen hakualat.
+    /// Categories of the call
     /// 
     /// Koodisto: http://uri.suomi.fi/codelist/research/auroran_alat
     /// </summary>
     public List<Category>? Categories { get; set; }
 
     /// <summary>
-    /// Yhteystiedot
+    /// Contact information
     /// </summary>
     public string? ContactInformation { get; set; }
 }

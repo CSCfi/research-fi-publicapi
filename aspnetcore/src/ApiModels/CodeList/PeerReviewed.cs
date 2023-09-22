@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Vertaisarvioitu
+/// Peer reviewed
 /// </summary>
 public class PeerReviewed : CodeList
 {

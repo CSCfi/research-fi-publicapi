@@ -1,12 +1,12 @@
 ﻿namespace ResearchFi.ResearchDataset;
 
 /// <summary>
-/// Henkilö
+/// Person
 /// </summary>
 public class Person
 {
     /// <summary>
-    /// Henkilön nimi
+    /// Name of the person
     /// </summary>
     public string? Name { get; set; }
 }
