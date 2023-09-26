@@ -24,7 +24,7 @@ public class Publication
     public DateTime? PublicationYear { get; set; }
 
     /// <summary>
-    /// Tekijäteksti
+    /// Tekijï¿½teksti
     /// </summary>
     public string? AuthorsText { get; set; }
     
@@ -34,7 +34,7 @@ public class Publication
     public List<Organization>? Organizations { get; set; }
     
     /// <summary>
-    /// Tekijät
+    /// Tekijï¿½t
     /// </summary>
     public List<Author>? Authors { get; set; }
 
@@ -49,7 +49,7 @@ public class Publication
     public ReferenceData? PeerReviewed { get; set; }
 
     /// <summary>
-    /// Yleisö
+    /// Yleisï¿½
     /// </summary>
     public ReferenceData? TargetAudience { get; set; }
 
@@ -57,6 +57,11 @@ public class Publication
     /// OKM:n julkaisutyyppiluokitus
     /// </summary>
     public ReferenceData? Type { get; set; }
+
+    /// <summary>
+    /// OpinnÃ¤ytetyÃ¶n tyyppi
+    /// </summary>
+    public ReferenceData? ThesisType { get; set; }
 
     /// <summary>
     /// Lehti
@@ -74,7 +79,7 @@ public class Publication
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyvät ISSN tunnisteet 
+    /// Julkaisuun liittyvï¿½t ISSN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Issn { get; set; }
@@ -100,7 +105,7 @@ public class Publication
     public ParentPublication? ParentPublication { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyvät ISBN tunnisteet 
+    /// Julkaisuun liittyvï¿½t ISBN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Isbn { get; set; }
@@ -132,7 +137,7 @@ public class Publication
     public string? Doi { get; set; }
 
     /// <summary>
-    /// Pysyvä osoite
+    /// Pysyvï¿½ osoite
     /// </summary>
     [Keyword]
     public string? DoiHandle { get; set; }
@@ -173,7 +178,7 @@ public class Publication
     public List<Keyword>? Keywords { get; set; }
 
     /// <summary>
-    /// Julkaisun kansainvälisyys
+    /// Julkaisun kansainvï¿½lisyys
     /// </summary>
     public bool? InternationalPublication { get; set; }
 
@@ -188,7 +193,7 @@ public class Publication
     public ReferenceData? Language { get; set; }
 
     /// <summary>
-    /// Kansainvälinen yhteisjulkaisu
+    /// Kansainvï¿½linen yhteisjulkaisu
     /// </summary>
     public bool? InternationalCollaboration { get; set; }
 
@@ -238,7 +243,7 @@ public class Publication
     public List<ReferenceData>? ArtPublicationTypeCategory { get; set; }
 
     /// <summary>
-    /// Tiivistelmä
+    /// Tiivistelmï¿½
     /// </summary>
     public string? Abstract { get; set; }
 

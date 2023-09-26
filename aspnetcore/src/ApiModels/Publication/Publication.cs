@@ -71,6 +71,13 @@ public class Publication
     public PublicationType? Type { get; set; }
 
     /// <summary>
+    /// Thesis type
+    ///
+    /// http://uri.suomi.fi/codelist/research/Opinnaytetyyppi
+    /// </summary>
+    public ThesisType? ThesisType { get; set; }
+
+    /// <summary>
     /// Journal name
     /// </summary>
     public string? JournalName { get; set; }
