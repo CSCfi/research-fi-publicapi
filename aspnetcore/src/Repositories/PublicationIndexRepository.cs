@@ -44,6 +44,19 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
             .Where(publication => publication.Id != -1)
             .ProjectTo<Publication>(_mapper.ConfigurationProvider);
     }
+
+    protected override IQueryable<Publication> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context.DimPublications
+            .OrderBy(publication => publication.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(publication => publication.Id != -1)
+            .ProjectTo<Publication>(_mapper.ConfigurationProvider);
+    }
+
     
     public override List<object> PerformInMemoryOperations(List<object> entities)
     {
@@ -63,6 +76,19 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
 
         });
         return entities;
+    }
+
+    public override object PerformInMemoryOperation(object entity)
+    {
+        Publication publication = (Publication)entity;
+            
+        HandleIssnAndIsbn(publication);
+        HandleEmptyCollections(publication);
+        HandleOrganizations(publication);
+        HandleAuthors(publication);
+        HandleParentPublications(publication);
+        HandlePeerReviewed(publication);
+        return publication;
     }
 
     private static void HandlePeerReviewed(Publication publication)
