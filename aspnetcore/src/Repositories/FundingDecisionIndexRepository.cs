@@ -36,6 +36,24 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider);
     }
 
+    protected override IQueryable<FundingDecision> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context
+            .Set<DimFundingDecision>()
+            .OrderBy(fd => fd.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(fd => fd.Id != -1)
+            .Where(fd =>
+                (fd.SourceDescription == "eu_funding" 
+                && fd.BrFundingConsortiumParticipations.Any(fc => fc.DimOrganization.DimPids.Any(pid => pid.PidType == "PIC"))) 
+                ||
+                fd.SourceDescription != "eu_funding")
+            .ProjectTo<FundingDecision>(_mapper.ConfigurationProvider);
+    }
+
     public override List<object> PerformInMemoryOperations(List<object> objects)
     {
         objects.ForEach(o =>

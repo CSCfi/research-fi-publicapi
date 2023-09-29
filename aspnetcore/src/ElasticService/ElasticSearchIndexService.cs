@@ -8,7 +8,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly IElasticClient _elasticClient;
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
-    private const int BatchSize = 1000;
+    private const int BatchSize = 2000;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
@@ -78,6 +78,8 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
     private async Task IndexEntities<T>(string indexName, List<T> entities, Type modelType) where T : class
     {
+        var indexedCount = 0;
+
         // Split entities into batches to avoid one big request.
         var documentBatches = new List<List<T>>();
         for (var docIndex = 0; docIndex < entities.Count; docIndex += BatchSize)
@@ -93,11 +95,11 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
             if (!indexBatchResponse.IsValid)
             {
-                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType}: Indexing entities to {IndexName} failed", modelType, indexName);
-                throw new InvalidOperationException($"Indexing entities to {indexName} failed.", indexBatchResponse.OriginalException);
+                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType}: Indexing documents to {IndexName} failed", modelType, indexName);
+                throw new InvalidOperationException($"Indexing documents to {indexName} failed.", indexBatchResponse.OriginalException);
             }
-            
-            _logger.LogDebug("{EntityType}: Indexed {BatchSize} documents to {IndexName}", modelType.Name, batchToIndex.Count, indexName);
+            indexedCount = indexedCount + batchToIndex.Count;
+            _logger.LogInformation("{EntityType}: Indexed {BatchSize} documents to {IndexName}. Progress {IndexedCount}/{TotalCount}", modelType.Name, batchToIndex.Count, indexName, indexedCount, entities.Count);
         }
     }
 
@@ -125,5 +127,4 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
         _logger.LogDebug("{EntityType}: Index {IndexName} created", type.Name, indexName);
     }
-
 }
