@@ -11,6 +11,12 @@ public interface IIndexRepository<out T> : IIndexRepository where T : class
     /// </summary>
     /// <returns></returns>
     IQueryable<T> GetAll();
+
+    /// <summary>
+    /// Gets a chunk of database entities for indexing, projected as T.
+    /// </summary>
+    /// <returns></returns>
+    IQueryable<T> GetChunk(int skipAmount, int takeAmount);
 }
 
 /// <summary>
@@ -31,9 +37,22 @@ public interface IIndexRepository
     IAsyncEnumerable<object> GetAllAsync();
 
     /// <summary>
+    /// Returns models of the type ModelType.
+    /// </summary>
+    /// <returns></returns>
+    IAsyncEnumerable<object> GetChunkAsync(int skipAmount, int takeAmount);
+
+    /// <summary>
     /// Perform data manipulations which are hard to do in the db query phase.
     /// </summary>
     /// <param name="objects"></param>
     /// <returns></returns>
     List<object> PerformInMemoryOperations(List<object> objects);
+
+    /// <summary>
+    /// Perform to single entity data manipulations which are hard to do in the db query phase.
+    /// </summary>
+    /// <param name="objects"></param>
+    /// <returns></returns>
+    object PerformInMemoryOperation(object entity);
 }

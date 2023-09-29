@@ -23,4 +23,14 @@ public class OrganizationIndexRepository : IndexRepositoryBase<Organization>
             .Where(organization => organization.Id != -1)
             .ProjectTo<Organization>(_mapper.ConfigurationProvider);
     }
+
+    protected override IQueryable<Organization> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context.DimOrganizations
+            .OrderBy(organization => organization.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .Where(organization => organization.Id != -1)
+            .ProjectTo<Organization>(_mapper.ConfigurationProvider);
+    }
 }

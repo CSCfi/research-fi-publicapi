@@ -23,4 +23,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             .Where(infrastructure => infrastructure.Id != -1)
             .ProjectTo<Infrastructure>(_mapper.ConfigurationProvider);
     }
+
+    protected override IQueryable<Infrastructure> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context.DimInfrastructures
+            .OrderBy(infrastructure => infrastructure.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .Where(infrastructure => infrastructure.Id != -1)
+            .ProjectTo<Infrastructure>(_mapper.ConfigurationProvider);
+    }
 }

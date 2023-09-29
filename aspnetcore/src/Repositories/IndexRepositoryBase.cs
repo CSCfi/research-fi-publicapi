@@ -21,12 +21,22 @@ public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : cla
     /// </summary>
     /// <returns></returns>
     protected abstract IQueryable<T> GetAll();
+
+    /// <summary>
+    /// Method which every IndexRepository must override, provides every T as Queryable.
+    /// </summary>
+    /// <returns></returns>
+    protected abstract IQueryable<T> GetChunk(int skipAmount, int takeAmount);
     
     Type IIndexRepository.ModelType => typeof(T);
 
     IQueryable<T> IIndexRepository<T>.GetAll() => GetAll();
 
+    IQueryable<T> IIndexRepository<T>.GetChunk(int skipAmount, int takeAmount) => GetChunk(skipAmount, takeAmount);
+
     IAsyncEnumerable<object> IIndexRepository.GetAllAsync() => GetAll().AsAsyncEnumerable();
+
+    IAsyncEnumerable<object> IIndexRepository.GetChunkAsync(int skipAmount, int takeAmount) => GetChunk(skipAmount, takeAmount).AsAsyncEnumerable();
 
     /// <summary>
     /// If the data type needs special data manipulations after data has been fetched,
@@ -37,6 +47,18 @@ public abstract class IndexRepositoryBase<T> : IIndexRepository<T> where T : cla
     public virtual List<object> PerformInMemoryOperations(List<object> entities)
     {
         return entities;
+    }
+
+    /// <summary>
+    /// If the data type needs special data manipulations after data has been fetched,
+    /// this can be overriden in derived classes.
+    /// Single entity version.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public virtual object PerformInMemoryOperation(object entity)
+    {
+        return entity;
     }
     
     protected Service.Models.Organization.Organization? GetOrganization(int organizationId)
