@@ -26,6 +26,18 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             .Where(callProgramme => callProgramme.Id != -1)
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
+
+    protected override IQueryable<FundingCall> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context.DimCallProgrammes
+            .OrderBy(callProgramme => callProgramme.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(callProgramme => callProgramme.Id != -1)
+            .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
+    }
     
     public override List<object> PerformInMemoryOperations(List<object> entities)
     {

@@ -3,111 +3,111 @@
 namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Rahoituspäätös
+/// Funding Decision
 /// </summary>
 public class FundingDecision
 {
     /// <summary>
-    /// Hankkeen nimi
+    /// Name of the funding decision in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Projektnamn
+    /// Name of the funding decision in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// Name of the project
+    /// Name of the funding decision in English
     /// </summary>
     public string? NameEn { get; set; }
     
     /// <summary>
-    /// Lyhenne
+    /// Acronym
     /// </summary>
     public string? Acronym { get; set; }
     
     /// <summary>
-    /// Hankkeen kuvaus
+    /// Description of the funding decision in Finnish
     /// </summary>
     public string? DescriptionFi { get; set; }
     
     /// <summary>
-    /// Projekt beskrivning
+    /// Description of the funding decision in Swedish
     /// </summary>
     public string? DescriptionSv { get; set; }
     
     /// <summary>
-    /// Description of the project
+    /// Description of the funding decision in English
     /// </summary>
     public string? DescriptionEn { get; set; }
     
     /// <summary>
-    /// Aloitusvuosi
+    /// Fundging start date
     /// </summary>
     public DateTime? FundingStartDate { get; set; }
     
    /// <summary>
-    /// Päättymispäivämäärä
+    /// Funding end date
     /// </summary>
     public DateTime? FundingEndDate { get; set; }
     
     /// <summary>
-    /// Rahoituksen saajat
+    /// Funding receivers
     /// </summary>
     public List<FundingReceiver> FundingReceivers { get; set; }
 
     /// <summary>
-    /// Myöntösumma
+    /// Funded amount in euros
     /// </summary>
     public decimal? AmountInEur { get; set; }
     
     /// <summary>
-    /// Rahoittaja
+    /// Funder
     /// </summary>
     public Funder? Funder { get; set; }
     
     /// <summary>
-    /// Rahoitusmuoto
+    /// Funding type
     ///
     /// Koodisto: http://uri.suomi.fi/codelist/research/rahoitusmuoto
     /// </summary>
     public FundingType? TypeOfFunding { get; set; }
     
     /// <summary>
-    /// Ohjelman osat
+    /// Parts of the programme
     /// </summary>
     public List<CallProgramme>? CallProgrammes { get; set; }
     
     /// <summary>
-    /// Rahoitushaun aihe
+    /// Topic
     /// </summary>
     public Topic? Topic { get; set; }
 
     /// <summary>
-    /// Puiteohjelma
+    /// Framework programme
     /// </summary>
     public FrameworkProgramme? FrameworkProgramme { get; set; }
     
     /// <summary>
-    /// Rahoituspäätöksen numero
+    /// Funder project number
     /// </summary>
     public string? FunderProjectNumber { get; set; }
     
     /// <summary>
-    /// Tieteenalat
+    /// Fields of science
     ///
     /// Koodisto: http://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     public List<FieldOfScience>? FieldsOfScience { get; set; }
     
     /// <summary>
-    /// Tutkimusalojen avainsanat
+    /// Keywords of the fields of research
     /// </summary>
     public List<Keyword>? Keywords { get; set; }
     
     /// <summary>
-    /// Tunnistetut aiheet
+    /// Identified topics
     /// </summary>
     public List<string>? IdentifiedTopics { get; set; }
 }

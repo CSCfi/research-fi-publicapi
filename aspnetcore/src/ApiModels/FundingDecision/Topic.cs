@@ -1,32 +1,32 @@
 ﻿namespace ResearchFi.FundingDecision;
 
 /// <summary>
-/// Rahoitushaun aihe
+/// Topic of the funding call
 /// </summary>
 public class Topic
 {
     /// <summary>
-    /// Rahoitushaun aiheen tunnus
+    /// Topic ID of the funding call
     /// </summary>
     public string? TopicId { get; set; }
     
     /// <summary>
-    /// Rahoitushaun aihe
+    /// Name of the funding call in Finnish
     /// </summary>
     public string? NameFi { get; set; }
     
     /// <summary>
-    /// Ämnet för ansökan om finansiering
+    /// Name of the funding call in Swedish
     /// </summary>
     public string? NameSv { get; set; }
     
     /// <summary>
-    /// The subject of the funding call
+    /// Name of the funding call in English
     /// </summary>
     public string? NameEn { get; set; }
     
     /// <summary>
-    /// Rahoitushaun tunniste
+    /// European union call programme ID
     /// </summary>
     public string? EuCallId { get; set; }
 }

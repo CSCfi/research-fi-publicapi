@@ -29,6 +29,20 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             .ThenInclude(f => f.DimOrganization)
             .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
     }
+
+    protected override IQueryable<ResearchDataset> GetChunk(int skipAmount, int takeAmount)
+    {
+        return _context.DimResearchDatasets
+            .OrderBy(dataset => dataset.Id)
+            .Skip(skipAmount)
+            .Take(takeAmount)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Where(dataset => dataset.Id != -1)
+            .Include(d => d.FactContributions)
+            .ThenInclude(f => f.DimOrganization)
+            .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
+    }
     
     public override List<object> PerformInMemoryOperations(List<object> entities)
     {

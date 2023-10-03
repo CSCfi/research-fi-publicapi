@@ -52,7 +52,7 @@ public class FundingCall
     /// <summary>
     /// Jatkuva haku
     /// </summary>
-    public bool ContinuosApplication { get; set; }
+    public bool ContinuousApplication { get; set; }
 
     /// <summary>
     /// Haku alkaa

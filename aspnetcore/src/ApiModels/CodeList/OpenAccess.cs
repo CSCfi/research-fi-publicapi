@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Julkaisun avoin saatavuus
+/// Open access of publication
 /// 
 /// http://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
 /// </summary>

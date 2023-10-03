@@ -1,7 +1,7 @@
 ﻿namespace ResearchFi.CodeList;
 
 /// <summary>
-/// Taidejulkaisut tyyppikategoria
+/// Art publications type category
 ///
 /// http://uri.suomi.fi/codelist/research/TaidejulkaisuTyyppikategoria
 /// </summary>

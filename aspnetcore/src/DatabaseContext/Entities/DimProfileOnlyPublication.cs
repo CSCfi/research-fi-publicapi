@@ -43,17 +43,17 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? ArticleNumberText { get; set; }
         public string? IssueNumber { get; set; }
         public string? Volume { get; set; }
-        public string? PublicationCountryCode { get; set; }
+        public int PublicationCountryCode { get; set; }
         public string? PublisherName { get; set; }
         public string? PublisherLocation { get; set; }
         public string? ParentPublicationName { get; set; }
         public string? ParentPublicationEditors { get; set; }
-        public int? LicenseCode { get; set; }
+        public int LicenseCode { get; set; }
         public string? OpenAccessCode { get; set; }
         public string? OriginalPublicationId { get; set; }
         public bool? PeerReviewed { get; set; }
         public bool? Report { get; set; }
-        public int? ThesisTypeCode { get; set; }
+        public int ThesisTypeCode { get; set; }
         public string? DoiHandle { get; set; }
         public string SourceId { get; set; } = null!;
         public string? SourceDescription { get; set; }
@@ -68,9 +68,12 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimProfileOnlyPublication? DimProfileOnlyPublicationNavigation { get; set; }
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimReferencedatum LanguageCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum ParentTypeClassificationCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum PublicationCountryCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum PublicationFormatCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum TargetAudienceCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum ThesisTypeCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum TypeClassificationCodeNavigation { get; set; } = null!;
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }

@@ -1,17 +1,17 @@
 ﻿namespace ResearchFi.ResearchDataset;
 
 /// <summary>
-/// Versioviite
+/// Version reference
 /// </summary>
 public class Version
 {
     /// <summary>
-    /// Viitatun aineiston tunniste
+    /// ID of the referenced data
     /// </summary>
     public string? Identifier { get; set; }
     
     /// <summary>
-    /// Versionumero
+    /// Version of the referenced data
     /// </summary>
     public string? VersionNumber { get; set; }
 }

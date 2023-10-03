@@ -3,31 +3,31 @@ using ResearchFi.CodeList;
 namespace ResearchFi.Publication;
 
 /// <summary>
-/// Rinnakkaistallenne
+/// Parallel publication
 /// </summary>
 public class LocallyReportedPublicationInformation
 {
     /// <summary>
-    /// Linkki
+    /// URL
     /// </summary>
     public string? Url { get; set; }
 
     /// <summary>
-    /// Rinnakkaistallenteen versio
+    /// Self archive version
     ///
     /// http://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
     /// </summary>
     public SelfArchiveVersion? Version { get; set; }
     
     /// <summary>
-    /// Lisenssi
+    /// License
     ///
     /// http://uri.suomi.fi/codelist/research/Lisenssi
     /// </summary>
     public License? License { get; set; }
 
     /// <summary>
-    /// Embargo päivämäärä
+    /// Embargo date
     /// </summary>
     public DateTime? EmbargoDate { get; set; }
 }

@@ -1,17 +1,17 @@
 namespace ResearchFi;
 
 /// <summary>
-/// Avainsana
+/// Keyword
 /// </summary>
 public class Keyword
 {
     /// <summary>
-    /// Avainsana
+    /// Keyword
     /// </summary>
     public string? Value { get; set; }
     
     /// <summary>
-    /// Avainsanan kieli
+    /// Language of the keyword
     /// </summary>
     public string? Language { get; set; }
 }

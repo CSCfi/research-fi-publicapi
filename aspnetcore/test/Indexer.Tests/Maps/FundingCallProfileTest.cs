@@ -150,7 +150,7 @@ public class FundingCallProfileTest
             ContactInformation = "contact info",
             CallProgrammeOpenDate = new DateTime(2020, 1, 1),
             CallProgrammeDueDate = new DateTime(2021, 1, 1),
-            ContinuosApplication = true,
+            ContinuousApplication = true,
             Categories = new List<ReferenceData>
             {
                 new()

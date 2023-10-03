@@ -3,13 +3,13 @@
 namespace ResearchFi.Query;
 
 /// <summary>
-/// Hakuparametrit rahoitushakujen filtteröimiseen.
+/// Query parameters for searching funding calls.
 /// </summary>
 /// <see cref="FundingCall"/>
 public class GetFundingCallQueryParameters : PaginationQueryParameters
 {
     /// <summary>
-    /// Jokin kentistä nameFi, nameSV, nameEn sisältää koko tekstin.
+    /// One of the fields nameFi, nameSV, nameEn contains the full text.
     /// </summary>
     /// <see cref="FundingCall.NameFi"/>
     /// <see cref="FundingCall.NameSv"/>
@@ -17,7 +17,7 @@ public class GetFundingCallQueryParameters : PaginationQueryParameters
     public string? Name { get; set; }
 
     /// <summary>
-    /// Jokin kentän foundation alikentistä nameFi, nameSV, nameEn sisältää koko tekstin.
+    /// One of the field foundation subfields nameFi, nameSV, nameEn contains the full text.
     /// </summary>
     /// <see cref="FundingCall.Foundations"/>
     /// <see cref="Foundation.NameFi"/>
@@ -26,28 +26,28 @@ public class GetFundingCallQueryParameters : PaginationQueryParameters
     public string? FoundationName { get; set; }
 
     /// <summary>
-    /// Kenttä foundation.foundationBusinessId on täsmälleen sama kuin teksti.
+    /// The field foundation.foundationBusinessId is exactly equal to the text.
     /// </summary>
     /// <see cref="FundingCall.Foundations"/>
     /// <see cref="Foundation.BusinessId"/>
     public string? FoundationBusinessId { get; set; }
 
     /// <summary>
-    /// Kenttä categories.codeValue on täsmälleen sama kuin teksti.
+    /// The field categories.codeValue is exactly equal to the text. 
     /// 
-    /// Koodisto: http://uri.suomi.fi/codelist/research/auroran_alat
+    /// Code: http://uri.suomi.fi/codelist/research/auroran_alat
     /// </summary>
     /// <see cref="FundingCall.Categories"/>
     public string? Category { get; set; }
 
     /// <summary>
-    /// Haku alkaa aikaisintaan. CallProgrammeOpenDate oltava sama tai suurempi kuin pvm. Päivämäärä muodossa vvvv-kk-pp.
+    /// The search will start at the earliest. CallProgrammeOpenDate must be the equal or greater than the date. Date format yyyy-mm-dd.
     /// </summary>
     /// <see cref="FundingCall.CallProgrammeOpenDate"/>
     public DateTime? DateFrom { get; set; }
 
     /// <summary>
-    /// Haku päättyy viimeistään. CallProgrammeDueDate oltava sama tai pienempi kuin pvm. Päivämäärä muodossa vvvv-kk-pp.
+    /// The search will end at the latest. CallProgrammeOpenDate must be the equal or less than the date. Date format yyyy-mm-dd.
     /// </summary>
     /// <see cref="FundingCall.CallProgrammeDueDate"/>
     public DateTime? DateTo { get; set; }
