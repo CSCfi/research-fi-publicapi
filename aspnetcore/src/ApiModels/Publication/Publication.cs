@@ -279,10 +279,10 @@ public class Publication
     /// <summary>
     /// Creation time
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime? Created { get; set; }
 
     /// <summary>
     /// Modification time
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTime? Modified { get; set; }
 }

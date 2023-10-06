@@ -250,12 +250,12 @@ public class Publication
     /// <summary>
     /// Luontiaika
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime? Created { get; set; }
 
     /// <summary>
     /// Muokkausaika
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTime? Modified { get; set; }
 
     [Ignore]
     public string? Isbn1 { get; set; }
