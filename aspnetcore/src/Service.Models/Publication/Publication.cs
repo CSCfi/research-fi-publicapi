@@ -24,7 +24,7 @@ public class Publication
     public DateTime? PublicationYear { get; set; }
 
     /// <summary>
-    /// Tekij�teksti
+    /// Tekijäteksti
     /// </summary>
     public string? AuthorsText { get; set; }
     
@@ -34,7 +34,7 @@ public class Publication
     public List<Organization>? Organizations { get; set; }
     
     /// <summary>
-    /// Tekij�t
+    /// Tekijät
     /// </summary>
     public List<Author>? Authors { get; set; }
 
@@ -49,7 +49,7 @@ public class Publication
     public ReferenceData? PeerReviewed { get; set; }
 
     /// <summary>
-    /// Yleis�
+    /// Yleisö
     /// </summary>
     public ReferenceData? TargetAudience { get; set; }
 
@@ -79,7 +79,7 @@ public class Publication
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyv�t ISSN tunnisteet 
+    /// Julkaisuun liittyvät ISSN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Issn { get; set; }
@@ -105,7 +105,7 @@ public class Publication
     public ParentPublication? ParentPublication { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyv�t ISBN tunnisteet 
+    /// Julkaisuun liittyvät ISBN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Isbn { get; set; }
@@ -137,7 +137,7 @@ public class Publication
     public string? Doi { get; set; }
 
     /// <summary>
-    /// Pysyv� osoite
+    /// Pysyvä osoite
     /// </summary>
     [Keyword]
     public string? DoiHandle { get; set; }
@@ -178,7 +178,7 @@ public class Publication
     public List<Keyword>? Keywords { get; set; }
 
     /// <summary>
-    /// Julkaisun kansainv�lisyys
+    /// Julkaisun kansainvälisyys
     /// </summary>
     public bool? InternationalPublication { get; set; }
 
@@ -193,7 +193,7 @@ public class Publication
     public ReferenceData? Language { get; set; }
 
     /// <summary>
-    /// Kansainv�linen yhteisjulkaisu
+    /// Kansainvälinen yhteisjulkaisu
     /// </summary>
     public bool? InternationalCollaboration { get; set; }
 
@@ -243,7 +243,7 @@ public class Publication
     public List<ReferenceData>? ArtPublicationTypeCategory { get; set; }
 
     /// <summary>
-    /// Tiivistelm�
+    /// Tiivistelmä
     /// </summary>
     public string? Abstract { get; set; }
 
