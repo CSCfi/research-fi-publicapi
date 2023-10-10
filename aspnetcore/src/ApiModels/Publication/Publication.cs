@@ -70,6 +70,13 @@ public class Publication
     /// </summary>
     public PublicationType? Type { get; set; }
 
+     /// <summary>
+     /// Thesis type
+     ///
+     /// http://uri.suomi.fi/codelist/research/Opinnaytetyyppi
+     /// </summary>
+     public ThesisType? ThesisType { get; set; }
+
     /// <summary>
     /// Journal name
     /// </summary>
@@ -272,10 +279,10 @@ public class Publication
     /// <summary>
     /// Creation time
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime? Created { get; set; }
 
     /// <summary>
     /// Modification time
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTime? Modified { get; set; }
 }

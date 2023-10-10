@@ -49,6 +49,7 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.ReferenceData, SelfArchiveVersion>();
         CreateMap<Service.Models.ReferenceData, OpenAccess>();
         CreateMap<Service.Models.ReferenceData, PublisherOpenAccess>();
+        CreateMap<Service.Models.ReferenceData, ThesisType>();
         CreateMap<Service.Models.Keyword, Keyword>();
     }
 }

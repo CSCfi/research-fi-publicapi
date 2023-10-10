@@ -32,6 +32,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.DatabasePeerReviewed, opt => opt.MapFrom(src => src.PeerReviewed))
             .ForMember(dst => dst.TargetAudience, opt => opt.MapFrom(src => src.TargetAudienceCodeNavigation))
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PublicationTypeCodeNavigation))
+            .ForMember(dst => dst.ThesisType, opt => opt.MapFrom(src => src.ThesisTypeCodeNavigation))
             .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName)) 
             .ForMember(dst => dst.IssueNumber, opt => opt.MapFrom(src => src.IssueNumber))
             .ForMember(dst => dst.ConferenceName, opt => opt.MapFrom(src => src.ConferenceName))

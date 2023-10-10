@@ -24,7 +24,7 @@ public class Publication
     public DateTime? PublicationYear { get; set; }
 
     /// <summary>
-    /// Tekij‰teksti
+    /// Tekij√§teksti
     /// </summary>
     public string? AuthorsText { get; set; }
     
@@ -34,7 +34,7 @@ public class Publication
     public List<Organization>? Organizations { get; set; }
     
     /// <summary>
-    /// Tekij‰t
+    /// Tekij√§t
     /// </summary>
     public List<Author>? Authors { get; set; }
 
@@ -49,7 +49,7 @@ public class Publication
     public ReferenceData? PeerReviewed { get; set; }
 
     /// <summary>
-    /// Yleisˆ
+    /// Yleis√∂
     /// </summary>
     public ReferenceData? TargetAudience { get; set; }
 
@@ -57,6 +57,11 @@ public class Publication
     /// OKM:n julkaisutyyppiluokitus
     /// </summary>
     public ReferenceData? Type { get; set; }
+
+    /// <summary>
+    /// Opinn√§ytety√∂n tyyppi
+    /// </summary>
+    public ReferenceData? ThesisType { get; set; }
 
     /// <summary>
     /// Lehti
@@ -74,7 +79,7 @@ public class Publication
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyv‰t ISSN tunnisteet 
+    /// Julkaisuun liittyv√§t ISSN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Issn { get; set; }
@@ -100,7 +105,7 @@ public class Publication
     public ParentPublication? ParentPublication { get; set; }
 
     /// <summary>
-    /// Julkaisuun liittyv‰t ISBN tunnisteet 
+    /// Julkaisuun liittyv√§t ISBN tunnisteet 
     /// </summary>
     [Keyword]
     public List<string>? Isbn { get; set; }
@@ -132,7 +137,7 @@ public class Publication
     public string? Doi { get; set; }
 
     /// <summary>
-    /// Pysyv‰ osoite
+    /// Pysyv√§ osoite
     /// </summary>
     [Keyword]
     public string? DoiHandle { get; set; }
@@ -173,7 +178,7 @@ public class Publication
     public List<Keyword>? Keywords { get; set; }
 
     /// <summary>
-    /// Julkaisun kansainv‰lisyys
+    /// Julkaisun kansainv√§lisyys
     /// </summary>
     public bool? InternationalPublication { get; set; }
 
@@ -188,7 +193,7 @@ public class Publication
     public ReferenceData? Language { get; set; }
 
     /// <summary>
-    /// Kansainv‰linen yhteisjulkaisu
+    /// Kansainv√§linen yhteisjulkaisu
     /// </summary>
     public bool? InternationalCollaboration { get; set; }
 
@@ -238,19 +243,19 @@ public class Publication
     public List<ReferenceData>? ArtPublicationTypeCategory { get; set; }
 
     /// <summary>
-    /// Tiivistelm‰
+    /// Tiivistelm√§
     /// </summary>
     public string? Abstract { get; set; }
 
     /// <summary>
     /// Luontiaika
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime? Created { get; set; }
 
     /// <summary>
     /// Muokkausaika
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTime? Modified { get; set; }
 
     [Ignore]
     public string? Isbn1 { get; set; }
