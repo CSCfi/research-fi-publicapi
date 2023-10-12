@@ -110,16 +110,6 @@ public class PublicationProfileTest
             JufoClassCode = "jufoClassCode",
             Doi = "doi",
             DoiHandle = "doiHandle",
-            DimFieldOfEducations = new List<DimFieldOfEducation>
-            {
-                new()
-                {
-                    FieldId = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             DimReferencedata = new List<DimReferencedatum>
             {
                 new()
@@ -256,16 +246,6 @@ public class PublicationProfileTest
                     },
                     SelfArchivedEmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00),
                     SelfArchivedType = "preprint"
-                }
-            },
-            DimFieldOfArts = new List<DimFieldOfArt>
-            {
-                new()
-                {
-                    FieldId = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
                 }
             },
             Abstract = "abstract",
@@ -463,15 +443,12 @@ public class PublicationProfileTest
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            FieldsOfArts = new List<ReferenceData>
+            FieldOfArt = new ReferenceData()
             {
-                new()
-                {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
-                }
+                Code = "123",
+                NameEn = "fieldOfArtCodeNameEn",
+                NameFi = "fieldOfArtCodeNameFi",
+                NameSv = "fieldOfArtCodeNameSv",
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<ReferenceData>

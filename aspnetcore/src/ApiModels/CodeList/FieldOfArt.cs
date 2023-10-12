@@ -5,6 +5,6 @@
 ///
 /// http://uri.suomi.fi/codelist/research/Taiteenala
 /// </summary>
-public class FieldOfArts : CodeList
+public class FieldOfArt : CodeList
 {
 }

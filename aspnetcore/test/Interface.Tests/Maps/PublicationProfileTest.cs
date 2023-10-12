@@ -283,15 +283,12 @@ public class PublicationProfileTest
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            FieldsOfArts = new List<Service.Models.ReferenceData>
+            FieldOfArt = new ReferenceData
             {
-                new()
-                {
                     Code = "fieldOfArtsId",
                     NameFi = "fieldOfArtsNameFi",
                     NameSv = "fieldOfArtsNameSv",
                     NameEn = "fieldOfArtsNameEn"
-                }
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<Service.Models.ReferenceData>
@@ -495,15 +492,12 @@ public class PublicationProfileTest
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            FieldsOfArts = new List<FieldOfArts>
+            FieldOfArt = new FieldOfArt
             {
-                new()
-                {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
-                }
+                Code = "fieldOfArtsId",
+                NameFi = "fieldOfArtsNameFi",
+                NameSv = "fieldOfArtsNameSv",
+                NameEn = "fieldOfArtsNameEn"
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<ArtPublicationTypeCategory>

@@ -193,6 +193,13 @@ public class Publication
     public List<FieldOfEducation>? FieldsOfEducation { get; set; }
 
     /// <summary>
+    /// Field of art
+    ///
+    /// http://uri.suomi.fi/codelist/research/Taiteenala
+    /// </summary>
+    public FieldOfArt? FieldOfArt { get; set; }
+
+    /// <summary>
     /// Keywords
     /// </summary>
     public List<Keyword>? Keywords { get; set; }
@@ -256,13 +263,6 @@ public class Publication
     /// http://uri.suomi.fi/codelist/fairdata/license
     /// </summary>
     public License? License { get; set; }
-
-    /// <summary>
-    /// Field of art
-    ///
-    /// http://uri.suomi.fi/codelist/research/Taiteenala
-    /// </summary>
-    public List<FieldOfArts>? FieldsOfArts { get; set; }
 
     /// <summary>
     /// Art publications type category

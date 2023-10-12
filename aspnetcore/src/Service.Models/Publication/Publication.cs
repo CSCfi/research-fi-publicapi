@@ -173,6 +173,11 @@ public class Publication
     public List<ReferenceData>? FieldsOfEducation { get; set; }
 
     /// <summary>
+    /// Taiteenala
+    /// </summary>
+    public ReferenceData? FieldOfArt { get; set; }
+
+    /// <summary>
     /// Avainsanat
     /// </summary>
     public List<Keyword>? Keywords { get; set; }
@@ -231,11 +236,6 @@ public class Publication
     /// Lisenssi
     /// </summary>
     public ReferenceData? License { get; set; }
-
-    /// <summary>
-    /// Taiteenala
-    /// </summary>
-    public List<ReferenceData>? FieldsOfArts { get; set; }
 
     /// <summary>
     /// TaidealanTyyppiKategoria
