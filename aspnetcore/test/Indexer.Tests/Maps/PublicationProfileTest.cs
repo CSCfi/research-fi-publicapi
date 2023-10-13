@@ -248,6 +248,13 @@ public class PublicationProfileTest
                     SelfArchivedType = "preprint"
                 }
             },
+            FieldOfArtCodeNavigation = new DimReferencedatum()
+            {
+                CodeValue = "123",
+                NameEn = "fieldOfArtCodeNameEn",
+                NameFi = "fieldOfArtCodeNameFi",
+                NameSv = "fieldOfArtCodeNameSv",
+            },
             Abstract = "abstract",
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
@@ -314,16 +321,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<ReferenceData>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Keyword>
             {
                 new()

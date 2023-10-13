@@ -186,13 +186,6 @@ public class Publication
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// Areas of guidance of the MEC
-    ///
-    /// https://wiki.eduuni.fi/display/cscsuorat/7.2+OKM%3An+ohjauksen+alat+2022
-    /// </summary>
-    public List<FieldOfEducation>? FieldsOfEducation { get; set; }
-
-    /// <summary>
     /// Field of art
     ///
     /// http://uri.suomi.fi/codelist/research/Taiteenala

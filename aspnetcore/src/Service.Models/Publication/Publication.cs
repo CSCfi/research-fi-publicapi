@@ -168,11 +168,6 @@ public class Publication
     public List<ReferenceData>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// OKM:n ohjauksen ala
-    /// </summary>
-    public List<ReferenceData>? FieldsOfEducation { get; set; }
-
-    /// <summary>
     /// Taiteenala
     /// </summary>
     public ReferenceData? FieldOfArt { get; set; }

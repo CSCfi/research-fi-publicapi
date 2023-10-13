@@ -142,16 +142,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<Service.Models.ReferenceData>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Service.Models.Keyword>
             {
                 new()
@@ -378,16 +368,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<FieldOfEducation>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Keyword>
             {
                 new()
