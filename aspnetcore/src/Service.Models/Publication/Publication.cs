@@ -168,9 +168,9 @@ public class Publication
     public List<ReferenceData>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// OKM:n ohjauksen ala
+    /// Taiteenalat
     /// </summary>
-    public List<ReferenceData>? FieldsOfEducation { get; set; }
+    public List<ReferenceData>? FieldsOfArt { get; set; }
 
     /// <summary>
     /// Avainsanat
@@ -231,11 +231,6 @@ public class Publication
     /// Lisenssi
     /// </summary>
     public ReferenceData? License { get; set; }
-
-    /// <summary>
-    /// Taiteenala
-    /// </summary>
-    public List<ReferenceData>? FieldsOfArts { get; set; }
 
     /// <summary>
     /// TaidealanTyyppiKategoria

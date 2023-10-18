@@ -186,11 +186,11 @@ public class Publication
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// Areas of guidance of the MEC
+    /// Fields of art
     ///
-    /// https://wiki.eduuni.fi/display/cscsuorat/7.2+OKM%3An+ohjauksen+alat+2022
+    /// http://uri.suomi.fi/codelist/research/Taiteenala
     /// </summary>
-    public List<FieldOfEducation>? FieldsOfEducation { get; set; }
+    public List<FieldOfArt>? FieldsOfArt { get; set; }
 
     /// <summary>
     /// Keywords
@@ -256,13 +256,6 @@ public class Publication
     /// http://uri.suomi.fi/codelist/fairdata/license
     /// </summary>
     public License? License { get; set; }
-
-    /// <summary>
-    /// Field of art
-    ///
-    /// http://uri.suomi.fi/codelist/research/Taiteenala
-    /// </summary>
-    public List<FieldOfArts>? FieldsOfArts { get; set; }
 
     /// <summary>
     /// Art publications type category

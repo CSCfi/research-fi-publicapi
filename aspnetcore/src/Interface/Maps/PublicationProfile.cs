@@ -39,7 +39,7 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.ReferenceData, JufoClass>();
         CreateMap<Service.Models.ReferenceData, FieldOfScience>();
         CreateMap<Service.Models.ReferenceData, FieldOfEducation>();
-        CreateMap<Service.Models.ReferenceData, FieldOfArts>();
+        CreateMap<Service.Models.ReferenceData, FieldOfArt>();
         CreateMap<Service.Models.ReferenceData, ArticleType>();
         CreateMap<Service.Models.ReferenceData, ArtPublicationTypeCategory>();
         CreateMap<Service.Models.ReferenceData, PublicationStatus>();
