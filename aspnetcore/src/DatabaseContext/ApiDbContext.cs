@@ -2818,8 +2818,6 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasMaxLength(4000)
                     .HasColumnName("doi_handle");
 
-                entity.Property(e => e.FieldOfArtCode).HasColumnName("field_of_art_code");
-
                 entity.Property(e => e.GovermentCollaboration).HasColumnName("goverment_collaboration");
 
                 entity.Property(e => e.HospitalDistrictCollaboration).HasColumnName("hospital_district_collaboration");
@@ -2974,12 +2972,6 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasForeignKey(d => d.DimRegisteredDataSourceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FKdim_public896887");
-
-                entity.HasOne(d => d.FieldOfArtCodeNavigation)
-                    .WithMany(p => p.DimPublicationFieldOfArtCodeNavigations)
-                    .HasForeignKey(d => d.FieldOfArtCode)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("field_of_art_code");
 
                 entity.HasOne(d => d.LanguageCodeNavigation)
                     .WithMany(p => p.DimPublicationLanguageCodeNavigations)
@@ -3173,6 +3165,23 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasForeignKey(d => d.DimReferencedataId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dim_referencedata_dim_referencedata");
+
+                entity.HasMany(d => d.DimPublicationsNavigation)
+                    .WithMany(p => p.DimReferencedataNavigation)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "FactDimReferencedataFieldOfArt",
+                        l => l.HasOne<DimPublication>().WithMany().HasForeignKey("DimPublicationId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("field_of_art_code"),
+                        r => r.HasOne<DimReferencedatum>().WithMany().HasForeignKey("DimReferencedataId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FKfact_dim_r130466"),
+                        j =>
+                        {
+                            j.HasKey("DimReferencedataId", "DimPublicationId").HasName("PK__fact_dim__FD761943629A8020");
+
+                            j.ToTable("fact_dim_referencedata_field_of_art");
+
+                            j.IndexerProperty<int>("DimReferencedataId").HasColumnName("dim_referencedata_id");
+
+                            j.IndexerProperty<int>("DimPublicationId").HasColumnName("dim_publication id");
+                        });
             });
 
             modelBuilder.Entity<DimRegisteredDataSource>(entity =>

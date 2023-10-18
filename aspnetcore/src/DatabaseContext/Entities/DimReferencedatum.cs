@@ -23,7 +23,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimProfileOnlyPublicationThesisTypeCodeNavigations = new HashSet<DimProfileOnlyPublication>();
             DimProfileOnlyPublicationTypeClassificationCodeNavigations = new HashSet<DimProfileOnlyPublication>();
             DimPublicationArticleTypeCodeNavigations = new HashSet<DimPublication>();
-            DimPublicationFieldOfArtCodeNavigations = new HashSet<DimPublication>();
             DimPublicationLanguageCodeNavigations = new HashSet<DimPublication>();
             DimPublicationLicenseCodeNavigations = new HashSet<DimPublication>();
             DimPublicationParentPublicationTypeCodeNavigations = new HashSet<DimPublication>();
@@ -43,6 +42,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             InverseDimReferencedata = new HashSet<DimReferencedatum>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
             DimPublications = new HashSet<DimPublication>();
+            DimPublicationsNavigation = new HashSet<DimPublication>();
             DimResearchDatasets = new HashSet<DimResearchDataset>();
         }
 
@@ -77,7 +77,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimProfileOnlyPublication> DimProfileOnlyPublicationThesisTypeCodeNavigations { get; set; }
         public virtual ICollection<DimProfileOnlyPublication> DimProfileOnlyPublicationTypeClassificationCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationArticleTypeCodeNavigations { get; set; }
-        public virtual ICollection<DimPublication> DimPublicationFieldOfArtCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationLanguageCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationLicenseCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationParentPublicationTypeCodeNavigations { get; set; }
@@ -98,6 +97,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; }
         public virtual ICollection<DimPublication> DimPublications { get; set; }
+        public virtual ICollection<DimPublication> DimPublicationsNavigation { get; set; }
         public virtual ICollection<DimResearchDataset> DimResearchDatasets { get; set; }
     }
 }

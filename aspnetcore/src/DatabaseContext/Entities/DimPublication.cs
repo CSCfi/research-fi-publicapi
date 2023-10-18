@@ -14,6 +14,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             FactFieldValues = new HashSet<FactFieldValue>();
             DimKeywords = new HashSet<DimKeyword>();
             DimReferencedata = new HashSet<DimReferencedatum>();
+            DimReferencedataNavigation = new HashSet<DimReferencedatum>();
         }
 
         public int Id { get; set; }
@@ -75,11 +76,9 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? OpenAccess { get; set; }
         public string? PublisherOpenAccessCode { get; set; }
         public string? Abstract { get; set; }
-        public int FieldOfArtCode { get; set; }
 
         public virtual DimReferencedatum? ArticleTypeCodeNavigation { get; set; }
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
-        public virtual DimReferencedatum FieldOfArtCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum LanguageCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? ParentPublicationTypeCodeNavigation { get; set; }
@@ -96,5 +95,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual ICollection<DimKeyword> DimKeywords { get; set; }
         public virtual ICollection<DimReferencedatum> DimReferencedata { get; set; }
+        public virtual ICollection<DimReferencedatum> DimReferencedataNavigation { get; set; }
     }
 }

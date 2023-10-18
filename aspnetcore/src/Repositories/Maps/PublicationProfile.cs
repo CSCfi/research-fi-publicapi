@@ -55,7 +55,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))
-            .ForMember(dst => dst.FieldOfArt, opt => opt.MapFrom(src => src.FieldOfArtCodeNavigation))
+            .ForMember(dst => dst.FieldsOfArt, opt => opt.MapFrom(src => src.DimReferencedataNavigation))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords))
             .ForMember(dst => dst.InternationalPublication, opt => opt.MapFrom(src => src.InternationalPublication != 9 ? src.InternationalPublication == 1 : (bool?)null)) // 0 = kotim. 1 ulkom. 9 = ei tietoa.
             .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.PublicationCountryCodeNavigation))

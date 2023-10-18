@@ -168,9 +168,9 @@ public class Publication
     public List<ReferenceData>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// Taiteenala
+    /// Taiteenalat
     /// </summary>
-    public ReferenceData? FieldOfArt { get; set; }
+    public List<ReferenceData>? FieldsOfArt { get; set; }
 
     /// <summary>
     /// Avainsanat

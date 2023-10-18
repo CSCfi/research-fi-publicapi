@@ -186,11 +186,11 @@ public class Publication
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// Field of art
+    /// Fields of art
     ///
     /// http://uri.suomi.fi/codelist/research/Taiteenala
     /// </summary>
-    public FieldOfArt? FieldOfArt { get; set; }
+    public List<FieldOfArt>? FieldsOfArt { get; set; }
 
     /// <summary>
     /// Keywords

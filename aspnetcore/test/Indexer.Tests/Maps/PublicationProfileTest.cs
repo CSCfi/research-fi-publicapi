@@ -110,16 +110,6 @@ public class PublicationProfileTest
             JufoClassCode = "jufoClassCode",
             Doi = "doi",
             DoiHandle = "doiHandle",
-            DimReferencedata = new List<DimReferencedatum>
-            {
-                new()
-                {
-                    CodeValue = "artPublicationTypeCategory",
-                    NameFi = "artPublicationTypeNameFi",
-                    NameSv = "artPublicationTypeNameSv",
-                    NameEn = "artPublicationTypeNameEn"
-                }
-            },
             DimKeywords = new List<DimKeyword>
             {
                 new()
@@ -178,6 +168,16 @@ public class PublicationProfileTest
                         NameSv = "fieldOfScienceNameSv",
                         NameEn = "fieldOfScienceNameEn"
                     }
+                }
+            },
+            DimReferencedataNavigation = new List<DimReferencedatum> // fields of art 
+            {
+                new()
+                {
+                    CodeValue = "123",
+                    NameEn = "fieldOfArtCodeNameEn",
+                    NameFi = "fieldOfArtCodeNameFi",
+                    NameSv = "fieldOfArtCodeNameSv",
                 }
             },
             LanguageCodeNavigation = new DimReferencedatum
@@ -248,14 +248,17 @@ public class PublicationProfileTest
                     SelfArchivedType = "preprint"
                 }
             },
-            FieldOfArtCodeNavigation = new DimReferencedatum()
-            {
-                CodeValue = "123",
-                NameEn = "fieldOfArtCodeNameEn",
-                NameFi = "fieldOfArtCodeNameFi",
-                NameSv = "fieldOfArtCodeNameSv",
-            },
             Abstract = "abstract",
+            DimReferencedata = new List<DimReferencedatum>
+            {
+                new()
+                {
+                    CodeValue = "artPublicationTypeCategory",
+                    NameFi = "artPublicationTypeNameFi",
+                    NameSv = "artPublicationTypeNameSv",
+                    NameEn = "artPublicationTypeNameEn"
+                }
+            },
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
@@ -367,6 +370,16 @@ public class PublicationProfileTest
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
+            FieldsOfArt = new List<ReferenceData>
+            {
+                new()
+                {
+                    Code = "123",
+                    NameEn = "fieldOfArtCodeNameEn",
+                    NameFi = "fieldOfArtCodeNameFi",
+                    NameSv = "fieldOfArtCodeNameSv",
+                }
+            },
             Language = new ReferenceData
             {
                 Code = "languageCode",
@@ -439,13 +452,6 @@ public class PublicationProfileTest
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
-            },
-            FieldOfArt = new ReferenceData()
-            {
-                Code = "123",
-                NameEn = "fieldOfArtCodeNameEn",
-                NameFi = "fieldOfArtCodeNameFi",
-                NameSv = "fieldOfArtCodeNameSv",
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<ReferenceData>

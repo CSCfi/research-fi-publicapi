@@ -215,6 +215,16 @@ public class PublicationProfileTest
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
+            FieldsOfArt = new List<Service.Models.ReferenceData>
+            {
+                new()
+                {
+                    Code = "fieldOfArtId",
+                    NameFi = "fieldOfArtNameFi",
+                    NameSv = "fieldOfArtNameSv",
+                    NameEn = "fieldOfArtNameEn"
+                }
+            },
             Language = new ReferenceData
             {
                 Code = "languageCode"
@@ -272,13 +282,6 @@ public class PublicationProfileTest
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
-            },
-            FieldOfArt = new ReferenceData
-            {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<Service.Models.ReferenceData>
@@ -414,6 +417,15 @@ public class PublicationProfileTest
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
+            FieldsOfArt = new List<FieldOfArt>
+            {
+                new() {
+                    Code = "fieldOfArtId",
+                    NameFi = "fieldOfArtNameFi",
+                    NameSv = "fieldOfArtNameSv",
+                    NameEn = "fieldOfArtNameEn"
+                }
+            },
             Language = new Language
             {
                 Code = "languageCode"
@@ -471,13 +483,6 @@ public class PublicationProfileTest
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
-            },
-            FieldOfArt = new FieldOfArt
-            {
-                Code = "fieldOfArtsId",
-                NameFi = "fieldOfArtsNameFi",
-                NameSv = "fieldOfArtsNameSv",
-                NameEn = "fieldOfArtsNameEn"
             },
             Abstract = "abstract",
             ArtPublicationTypeCategory = new List<ArtPublicationTypeCategory>
