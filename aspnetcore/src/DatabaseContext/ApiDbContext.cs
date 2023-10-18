@@ -3180,7 +3180,7 @@ namespace CSC.PublicApi.DatabaseContext
 
                             j.IndexerProperty<int>("DimReferencedataId").HasColumnName("dim_referencedata_id");
 
-                            j.IndexerProperty<int>("DimPublicationId").HasColumnName("dim_publication id");
+                            j.IndexerProperty<int>("DimPublicationId").HasColumnName("dim_publication_id");
                         });
             });
 
