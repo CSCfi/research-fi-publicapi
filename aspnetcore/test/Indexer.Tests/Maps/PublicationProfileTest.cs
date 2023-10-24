@@ -110,26 +110,6 @@ public class PublicationProfileTest
             JufoClassCode = "jufoClassCode",
             Doi = "doi",
             DoiHandle = "doiHandle",
-            DimFieldOfEducations = new List<DimFieldOfEducation>
-            {
-                new()
-                {
-                    FieldId = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
-            DimReferencedata = new List<DimReferencedatum>
-            {
-                new()
-                {
-                    CodeValue = "artPublicationTypeCategory",
-                    NameFi = "artPublicationTypeNameFi",
-                    NameSv = "artPublicationTypeNameSv",
-                    NameEn = "artPublicationTypeNameEn"
-                }
-            },
             DimKeywords = new List<DimKeyword>
             {
                 new()
@@ -188,6 +168,16 @@ public class PublicationProfileTest
                         NameSv = "fieldOfScienceNameSv",
                         NameEn = "fieldOfScienceNameEn"
                     }
+                }
+            },
+            DimReferencedataNavigation = new List<DimReferencedatum> // fields of art 
+            {
+                new()
+                {
+                    CodeValue = "123",
+                    NameEn = "fieldOfArtCodeNameEn",
+                    NameFi = "fieldOfArtCodeNameFi",
+                    NameSv = "fieldOfArtCodeNameSv",
                 }
             },
             LanguageCodeNavigation = new DimReferencedatum
@@ -258,17 +248,17 @@ public class PublicationProfileTest
                     SelfArchivedType = "preprint"
                 }
             },
-            DimFieldOfArts = new List<DimFieldOfArt>
+            Abstract = "abstract",
+            DimReferencedata = new List<DimReferencedatum>
             {
                 new()
                 {
-                    FieldId = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
+                    CodeValue = "artPublicationTypeCategory",
+                    NameFi = "artPublicationTypeNameFi",
+                    NameSv = "artPublicationTypeNameSv",
+                    NameEn = "artPublicationTypeNameEn"
                 }
             },
-            Abstract = "abstract",
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
@@ -334,16 +324,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<ReferenceData>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Keyword>
             {
                 new()
@@ -388,6 +368,16 @@ public class PublicationProfileTest
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
+                }
+            },
+            FieldsOfArt = new List<ReferenceData>
+            {
+                new()
+                {
+                    Code = "123",
+                    NameEn = "fieldOfArtCodeNameEn",
+                    NameFi = "fieldOfArtCodeNameFi",
+                    NameSv = "fieldOfArtCodeNameSv",
                 }
             },
             Language = new ReferenceData
@@ -461,16 +451,6 @@ public class PublicationProfileTest
                         NameEn = "selfArchivedVersionCodeEn"
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
-                }
-            },
-            FieldsOfArts = new List<ReferenceData>
-            {
-                new()
-                {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
                 }
             },
             Abstract = "abstract",

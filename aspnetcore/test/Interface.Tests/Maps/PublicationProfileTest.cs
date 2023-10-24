@@ -142,16 +142,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<Service.Models.ReferenceData>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Service.Models.Keyword>
             {
                 new()
@@ -225,6 +215,16 @@ public class PublicationProfileTest
                     NameEn = "fieldOfScienceNameEn"
                 }
             },
+            FieldsOfArt = new List<Service.Models.ReferenceData>
+            {
+                new()
+                {
+                    Code = "fieldOfArtId",
+                    NameFi = "fieldOfArtNameFi",
+                    NameSv = "fieldOfArtNameSv",
+                    NameEn = "fieldOfArtNameEn"
+                }
+            },
             Language = new ReferenceData
             {
                 Code = "languageCode"
@@ -281,16 +281,6 @@ public class PublicationProfileTest
                         Code = "selfArchivedVersionCode"
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
-                }
-            },
-            FieldsOfArts = new List<Service.Models.ReferenceData>
-            {
-                new()
-                {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
                 }
             },
             Abstract = "abstract",
@@ -381,16 +371,6 @@ public class PublicationProfileTest
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
-            FieldsOfEducation = new List<FieldOfEducation>
-            {
-                new()
-                {
-                    Code = "foeFieldId",
-                    NameFi = "foeNameFi",
-                    NameSv = "foeNameSv",
-                    NameEn = "foeNameEn"
-                }
-            },
             Keywords = new List<Keyword>
             {
                 new()
@@ -435,6 +415,15 @@ public class PublicationProfileTest
                     NameFi = "fieldOfScienceNameFi",
                     NameSv = "fieldOfScienceNameSv",
                     NameEn = "fieldOfScienceNameEn"
+                }
+            },
+            FieldsOfArt = new List<FieldOfArt>
+            {
+                new() {
+                    Code = "fieldOfArtId",
+                    NameFi = "fieldOfArtNameFi",
+                    NameSv = "fieldOfArtNameSv",
+                    NameEn = "fieldOfArtNameEn"
                 }
             },
             Language = new Language
@@ -493,16 +482,6 @@ public class PublicationProfileTest
                         Code = "selfArchivedVersionCode"
                     },
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
-                }
-            },
-            FieldsOfArts = new List<FieldOfArts>
-            {
-                new()
-                {
-                    Code = "fieldOfArtsId",
-                    NameFi = "fieldOfArtsNameFi",
-                    NameSv = "fieldOfArtsNameSv",
-                    NameEn = "fieldOfArtsNameEn"
                 }
             },
             Abstract = "abstract",

@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>fb1549e6-e7b1-45b6-91cb-dfebd31eadb8</UserSecretsId>
+		<UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\src\Api</DockerfileContext>
 		<DockerfileFile>..\..\openshift\api\Dockerfile</DockerfileFile>

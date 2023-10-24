@@ -42,6 +42,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             InverseDimReferencedata = new HashSet<DimReferencedatum>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
             DimPublications = new HashSet<DimPublication>();
+            DimPublicationsNavigation = new HashSet<DimPublication>();
             DimResearchDatasets = new HashSet<DimResearchDataset>();
         }
 
@@ -96,6 +97,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; }
         public virtual ICollection<DimPublication> DimPublications { get; set; }
+        public virtual ICollection<DimPublication> DimPublicationsNavigation { get; set; }
         public virtual ICollection<DimResearchDataset> DimResearchDatasets { get; set; }
     }
 }
