@@ -16,7 +16,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
             FactFieldValues = new HashSet<FactFieldValue>();
             InverseDimFundingDecisionIdParentDecisionNavigation = new HashSet<DimFundingDecision>();
-            DimFieldOfArts = new HashSet<DimFieldOfArt>();
             DimFundingDecisionFroms = new HashSet<DimFundingDecision>();
             DimFundingDecisionFromsNavigation = new HashSet<DimFundingDecision>();
             DimFundingDecisionTos = new HashSet<DimFundingDecision>();
@@ -75,7 +74,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
         public virtual ICollection<DimFundingDecision> InverseDimFundingDecisionIdParentDecisionNavigation { get; set; }
 
-        public virtual ICollection<DimFieldOfArt> DimFieldOfArts { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisionFroms { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisionFromsNavigation { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisionTos { get; set; }

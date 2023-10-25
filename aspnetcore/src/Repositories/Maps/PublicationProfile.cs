@@ -1,6 +1,7 @@
 ﻿using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
+using Microsoft.Data.SqlClient;
 using FactContribution = CSC.PublicApi.Service.Models.Publication.FactContribution;
 using Name = CSC.PublicApi.Service.Models.Publication.Name;
 using Profile = AutoMapper.Profile;
@@ -32,6 +33,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.DatabasePeerReviewed, opt => opt.MapFrom(src => src.PeerReviewed))
             .ForMember(dst => dst.TargetAudience, opt => opt.MapFrom(src => src.TargetAudienceCodeNavigation))
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PublicationTypeCodeNavigation))
+            .ForMember(dst => dst.ThesisType, opt => opt.MapFrom(src => src.ThesisTypeCodeNavigation))
             .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName)) 
             .ForMember(dst => dst.IssueNumber, opt => opt.MapFrom(src => src.IssueNumber))
             .ForMember(dst => dst.ConferenceName, opt => opt.MapFrom(src => src.ConferenceName))
@@ -53,7 +55,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))
-            .ForMember(dst => dst.FieldsOfEducation, opt => opt.MapFrom(src => src.DimFieldOfEducations))
+            .ForMember(dst => dst.FieldsOfArt, opt => opt.MapFrom(src => src.DimReferencedataNavigation))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords))
             .ForMember(dst => dst.InternationalPublication, opt => opt.MapFrom(src => src.InternationalPublication != 9 ? src.InternationalPublication == 1 : (bool?)null)) // 0 = kotim. 1 ulkom. 9 = ei tietoa.
             .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.PublicationCountryCodeNavigation))
@@ -66,7 +68,6 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCodeNavigation.Id != -1 ? src.LicenseCodeNavigation : null))
             .ForMember(dst => dst.Preprint, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == PreprintType)))
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
-            .ForMember(dst => dst.FieldsOfArts, opt => opt.MapFrom(src => src.DimFieldOfArts))
             .ForMember(dst => dst.ArtPublicationTypeCategory, opt => opt.MapFrom(src => src.DimReferencedata))
             .ForMember(dst => dst.Abstract, opt => opt.MapFrom(src => src.Abstract))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))

@@ -70,6 +70,13 @@ public class Publication
     /// </summary>
     public PublicationType? Type { get; set; }
 
+     /// <summary>
+     /// Thesis type
+     ///
+     /// http://uri.suomi.fi/codelist/research/Opinnaytetyyppi
+     /// </summary>
+     public ThesisType? ThesisType { get; set; }
+
     /// <summary>
     /// Journal name
     /// </summary>
@@ -179,11 +186,11 @@ public class Publication
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
-    /// Areas of guidance of the MEC
+    /// Fields of art
     ///
-    /// https://wiki.eduuni.fi/display/cscsuorat/7.2+OKM%3An+ohjauksen+alat+2022
+    /// http://uri.suomi.fi/codelist/research/Taiteenala
     /// </summary>
-    public List<FieldOfEducation>? FieldsOfEducation { get; set; }
+    public List<FieldOfArt>? FieldsOfArt { get; set; }
 
     /// <summary>
     /// Keywords
@@ -251,13 +258,6 @@ public class Publication
     public License? License { get; set; }
 
     /// <summary>
-    /// Field of art
-    ///
-    /// http://uri.suomi.fi/codelist/research/Taiteenala
-    /// </summary>
-    public List<FieldOfArts>? FieldsOfArts { get; set; }
-
-    /// <summary>
     /// Art publications type category
     ///
     /// http://uri.suomi.fi/codelist/research/TaidejulkaisuTyyppikategoria
@@ -272,10 +272,10 @@ public class Publication
     /// <summary>
     /// Creation time
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime? Created { get; set; }
 
     /// <summary>
     /// Modification time
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTime? Modified { get; set; }
 }
