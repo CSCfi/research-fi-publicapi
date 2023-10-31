@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Indexer (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "launchSettingsProfile": "ElasticSearchIndexer",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/aspnetcore/src/Indexer/bin/Debug/net6.0/CSC.PublicApi.Indexer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/aspnetcore/src/Indexer",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Interface (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "launchSettingsProfile": "Api",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/aspnetcore/src/Interface/bin/Debug/net6.0/CSC.PublicApi.Interface.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/aspnetcore/src/Interface",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
