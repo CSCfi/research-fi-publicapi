@@ -82,6 +82,7 @@ public class FundingCall
     /// <summary>
     /// Rahoittajat
     /// </summary>
+    [Nested]
     public List<Foundation>? Foundations { get; set; }
 
     /// <summary>
