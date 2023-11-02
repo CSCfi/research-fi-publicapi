@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingCall;
+using CSC.PublicApi.Service.Models.Organization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -49,6 +51,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             }
 
             HandleEmptyCollections(fundingCall);
+            HandleFoundationBusinessID(fundingCall);
         });
         return entities;
     }
@@ -63,6 +66,24 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
         if (fundingCall.Categories != null && !fundingCall.Categories.Any())
         {
             fundingCall.Categories = null;
+        }
+    }
+
+    private void HandleFoundationBusinessID(FundingCall fundingCall)
+    {
+        // Use Finnish business id (Y-tunnus) from DimPid
+        foreach (Foundation foundation in fundingCall.Foundations.ToList()){
+            if (MemoryCache.TryGetValue(MemoryCacheKeys.OrganizationById(foundation.Id),
+                    out Organization organization))
+            {
+                foreach(PersistentIdentifier pid in organization.Pids.ToList())
+                {
+                    if (pid.Type.ToLower() == "businessid") {
+                        foundation.BusinessId = pid.Content;
+                        break;
+                    }
+                }
+            }
         }
     }
 }

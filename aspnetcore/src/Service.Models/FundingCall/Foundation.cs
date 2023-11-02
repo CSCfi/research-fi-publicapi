@@ -4,6 +4,9 @@ namespace CSC.PublicApi.Service.Models.FundingCall;
 
 public class Foundation
 {
+    [Ignore]
+    public int Id { get; set; }
+
     /// <summary>
     /// Rahoittajan nimi
     /// </summary>
