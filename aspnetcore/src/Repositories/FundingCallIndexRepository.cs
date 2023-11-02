@@ -72,15 +72,20 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
     private void HandleFoundationBusinessID(FundingCall fundingCall)
     {
         // Use Finnish business id (Y-tunnus) from DimPid
-        foreach (Foundation foundation in fundingCall.Foundations.ToList()){
-            if (MemoryCache.TryGetValue(MemoryCacheKeys.OrganizationById(foundation.Id),
-                    out Organization organization))
-            {
-                foreach(PersistentIdentifier pid in organization.Pids.ToList())
+        if (fundingCall.Foundations != null) {
+            foreach (Foundation foundation in fundingCall.Foundations.ToList()){
+                if (MemoryCache.TryGetValue(MemoryCacheKeys.OrganizationById(foundation.Id),
+                        out Organization organization))
                 {
-                    if (pid.Type.ToLower() == "businessid") {
-                        foundation.BusinessId = pid.Content;
-                        break;
+                    if (organization.Pids != null)
+                    {
+                        foreach(PersistentIdentifier pid in organization.Pids.ToList())
+                        {
+                            if (pid.Type.ToLower() == "businessid") {
+                                foundation.BusinessId = pid.Content;
+                                break;
+                            }
+                        }
                     }
                 }
             }
