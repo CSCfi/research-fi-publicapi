@@ -29,6 +29,7 @@ public class FundingDecision
 
     public Organization? Funder { get; set; }
     
+    [Keyword]
     public string? FunderProjectNumber { get; set; }
 
     public ReferenceData? TypeOfFunding { get; set; }

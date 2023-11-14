@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingCall;
+using CSC.PublicApi.Service.Models.Organization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -23,7 +25,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
         return _context.DimCallProgrammes
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(callProgramme => callProgramme.Id != -1)
+            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0 && (callProgramme.DimDateIdOpen != -1 && callProgramme.DimDateIdDue != -1 || callProgramme.ContinuousApplicationPeriod == true))
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
 
@@ -35,7 +37,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             .Take(takeAmount)
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(callProgramme => callProgramme.Id != -1)
+            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0 && (callProgramme.DimDateIdOpen != -1 && callProgramme.DimDateIdDue != -1 || callProgramme.ContinuousApplicationPeriod == true))
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
     
@@ -49,6 +51,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             }
 
             HandleEmptyCollections(fundingCall);
+            HandleFoundationBusinessID(fundingCall);
         });
         return entities;
     }
@@ -63,6 +66,29 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
         if (fundingCall.Categories != null && !fundingCall.Categories.Any())
         {
             fundingCall.Categories = null;
+        }
+    }
+
+    private void HandleFoundationBusinessID(FundingCall fundingCall)
+    {
+        // Use Finnish business id (Y-tunnus) from DimPid
+        if (fundingCall.Foundations != null) {
+            foreach (Foundation foundation in fundingCall.Foundations.ToList()){
+                if (MemoryCache.TryGetValue(MemoryCacheKeys.OrganizationById(foundation.Id),
+                        out Organization organization))
+                {
+                    if (organization.Pids != null)
+                    {
+                        foreach(PersistentIdentifier pid in organization.Pids.ToList())
+                        {
+                            if (pid.Type.ToLower() == "businessid") {
+                                foundation.BusinessId = pid.Content;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
