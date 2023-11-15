@@ -40,28 +40,35 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
         // When searching with Name, search from Fi,Sv,En names.
         if (!string.IsNullOrWhiteSpace(parameters.Name))
         {
-            subQueries.Add(t => t.MultiMatch(query => query
-                .Type(TextQueryType.PhrasePrefix)
-                .Fields(r => r
-                    .Field(f => f.NameFi)
-                    .Field(f => f.NameSv)
-                    .Field(f => f.NameEn))
-                .Query(parameters.Name)));
+            subQueries.Add(
+                t => t.MultiMatch(
+                    query => query
+                        .Type(TextQueryType.PhrasePrefix)
+                        .Fields(r => r
+                            .Field(f => f.NameFi)
+                            .Field(f => f.NameSv)
+                            .Field(f => f.NameEn)
+                        )
+                        .Query(parameters.Name)));
         }
 
         // When searching with FoundationName, search from Fi,Sv,En names.
         if (!string.IsNullOrWhiteSpace(parameters.FoundationName))
         {
-            subQueries.Add(t => t.Nested(query => query
-                .Path(f => f.Foundations)
-                .Query(q => q.MultiMatch(multi => multi
-                    .Type(TextQueryType.PhrasePrefix)
-                    .Fields(r => r
-                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameFi)))
-                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameSv)))
-                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameEn))))
-                    .Query(parameters.FoundationName)
-                ))));
+            subQueries.Add(
+                t => t.Nested(
+                    query => query
+                        .Path(f => f.Foundations)
+                        .Query(
+                            q => q.MultiMatch(
+                                multi => multi
+                                    .Type(TextQueryType.PhrasePrefix)
+                                    .Fields(r => r
+                                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameFi)))
+                                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameSv)))
+                                        .Field(f => f.Foundations.Suffix(nameof(Foundation.NameEn)))
+                                    )
+                                    .Query(parameters.FoundationName)))));
         }
 
         return subQueries;
@@ -75,12 +82,16 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
         // Searching with business id requires exact match.
         if (!string.IsNullOrWhiteSpace(parameters.FoundationBusinessId))
         {
-            filters.Add(x => x
-                .Bool(b => b
-                    .Should(s =>
-                        s.Term(r => r
-                            .Field(f => f.Foundations.Suffix(nameof(Foundation.BusinessId)))
-                            .Value(parameters.FoundationBusinessId)))));
+            filters.Add(
+                x => x.Nested(
+                    query => query
+                        .Path(f => f.Foundations)
+                        .Query(q => q
+                            .Bool(b => b
+                                .Should(s =>
+                                    s.Term(r => r
+                                        .Field(f => f.Foundations.Suffix(nameof(Foundation.BusinessId)))
+                                        .Value(parameters.FoundationBusinessId)))))));
         }
 
         // Searching with category code requires exact match.
