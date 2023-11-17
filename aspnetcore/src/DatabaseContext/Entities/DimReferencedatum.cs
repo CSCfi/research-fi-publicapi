@@ -29,6 +29,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimPublicationPublicationCountryCodeNavigations = new HashSet<DimPublication>();
             DimPublicationPublicationTypeCode2Navigations = new HashSet<DimPublication>();
             DimPublicationPublicationTypeCodeNavigations = new HashSet<DimPublication>();
+            DimPublicationPublisherOpenAccessCodeNavigations = new HashSet<DimPublication>();
             DimPublicationTargetAudienceCodeNavigations = new HashSet<DimPublication>();
             DimPublicationThesisTypeCodeNavigations = new HashSet<DimPublication>();
             DimResearchDatasetDimReferencedataAvailabilityNavigations = new HashSet<DimResearchDataset>();
@@ -83,6 +84,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimPublication> DimPublicationPublicationCountryCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationPublicationTypeCode2Navigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationPublicationTypeCodeNavigations { get; set; }
+        public virtual ICollection<DimPublication> DimPublicationPublisherOpenAccessCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationTargetAudienceCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationThesisTypeCodeNavigations { get; set; }
         public virtual ICollection<DimResearchDataset> DimResearchDatasetDimReferencedataAvailabilityNavigations { get; set; }

@@ -29,8 +29,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? ArticleNumberText { get; set; }
         public string? Isbn { get; set; }
         public string? Isbn2 { get; set; }
-        public string? JufoCode { get; set; }
-        public string? JufoClassCode { get; set; }
         public int PublicationCountryCode { get; set; }
         public string? JournalName { get; set; }
         public string? Issn { get; set; }
@@ -49,7 +47,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public bool GovermentCollaboration { get; set; }
         public bool OtherCollaboration { get; set; }
         public int LanguageCode { get; set; }
-        public string? OpenAccessCode { get; set; }
         public bool SpecialStateSubsidy { get; set; }
         public bool? BusinessCollaboration { get; set; }
         public string? DoiHandle { get; set; }
@@ -74,10 +71,12 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Modified { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
         public string? OpenAccess { get; set; }
-        public string? PublisherOpenAccessCode { get; set; }
+        public int PublisherOpenAccessCode { get; set; }
         public string? Abstract { get; set; }
+        public int DimPublicationChannelId { get; set; }
 
         public virtual DimReferencedatum? ArticleTypeCodeNavigation { get; set; }
+        public virtual DimPublicationChannel DimPublicationChannel { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual DimReferencedatum LanguageCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
@@ -85,6 +84,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimReferencedatum PublicationCountryCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? PublicationTypeCode2Navigation { get; set; }
         public virtual DimReferencedatum PublicationTypeCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum PublisherOpenAccessCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? TargetAudienceCodeNavigation { get; set; }
         public virtual DimReferencedatum ThesisTypeCodeNavigation { get; set; } = null!;
         public virtual ICollection<DimLocallyReportedPubInfo> DimLocallyReportedPubInfos { get; set; }

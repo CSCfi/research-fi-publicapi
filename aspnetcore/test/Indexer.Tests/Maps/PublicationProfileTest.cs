@@ -53,7 +53,7 @@ public class PublicationProfileTest
 
     private static DimPublication GetEntity()
     {
-        return new DimPublication
+        DimPublication dimPublication = new()
         {
             Id = 1,
             PublicationId = "publicationId",
@@ -106,8 +106,13 @@ public class PublicationProfileTest
             Isbn2 = "isbn2",
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
-            JufoCode = "jufoCode",
-            JufoClassCode = "jufoClassCode",
+            DimPublicationChannel = new DimPublicationChannel
+            {
+                JufoCode = "jufoCode",
+                ChannelNameAnylang = "channelNameAnylang",
+                PublisherNameText = "publisherNameText",
+                FactJufoClassCodesForPubChannels = new List<FactJufoClassCodesForPubChannel>()
+            },
             Doi = "doi",
             DoiHandle = "doiHandle",
             DimKeywords = new List<DimKeyword>
@@ -262,6 +267,23 @@ public class PublicationProfileTest
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
+
+        FactJufoClassCodesForPubChannel factJufoClassCodesForPubChannel = new()
+        {
+            DimPublicationChannel = dimPublication.DimPublicationChannel,
+            JufoClassesNavigation = new DimReferencedatum
+            {
+                CodeValue = "jufoClassCode2",
+                NameFi = "jufoClassNameFi2",
+                NameEn = "jufoClassNameEn2",
+                NameSv = "jufoClassNameSv2"
+            },
+            Year = 2023
+        };
+
+        dimPublication.DimPublicationChannel.FactJufoClassCodesForPubChannels.Add(factJufoClassCodesForPubChannel);
+                
+        return dimPublication;
     }
 
     private Publication GetModel()
@@ -320,7 +342,10 @@ public class PublicationProfileTest
             JufoCode = "jufoCode",
             JufoClass = new ReferenceData
             {
-                Code = "jufoClassCode"
+                Code = "jufoClassCode",
+                NameFi = "jufoClassNameFi",
+                NameEn = "jufoClassNameEn",
+                NameSv = "jufoClassNameSv"
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
