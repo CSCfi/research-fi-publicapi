@@ -126,8 +126,7 @@ public class FundingCallProfileTest
                 }
             },
             ContactInformation = "contact info",
-            ContinuousApplicationPeriod = true
-
+            ContinuousApplicationPeriod = null
         };
     }
 
@@ -150,7 +149,7 @@ public class FundingCallProfileTest
             ContactInformation = "contact info",
             CallProgrammeOpenDate = new DateTime(2020, 1, 1),
             CallProgrammeDueDate = new DateTime(2021, 1, 1),
-            ContinuousApplication = true,
+            ContinuousApplication = false,
             Categories = new List<ReferenceData>
             {
                 new()
