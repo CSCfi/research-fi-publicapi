@@ -29,7 +29,7 @@ public class FundingCallProfile : Profile
             .ForMember(dst => dst.ContactInformation, opt => opt.MapFrom(src => src.ContactInformation))
             .ForMember(dst => dst.Categories, opt => opt.MapFrom(src => src.DimReferencedata))
             .ForMember(dst => dst.Foundations, opt => opt.MapFrom(src => src.DimOrganizations))
-            .ForMember(dst => dst.ContinuousApplication, opt => opt.MapFrom(src => src.ContinuousApplicationPeriod))
+            .ForMember(dst => dst.ContinuousApplication, opt => opt.MapFrom(src => src.DimDateIdOpen == -1 && src.DimDateIdDue == -1)) // src.ContinuousApplicationPeriod is not populated in DB!
             .ForMember(dst => dst.ApplicationUrlFi, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "fi")))
             .ForMember(dst => dst.ApplicationUrlSv, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "sv")))
             .ForMember(dst => dst.ApplicationUrlEn, opt => opt.MapFrom(src => src.DimWebLinks.SingleOrDefault(webLink => webLink.LinkType == "ApplicationURL" && webLink.LanguageVariant == "en")))
