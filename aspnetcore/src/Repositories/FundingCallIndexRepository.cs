@@ -25,7 +25,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
         return _context.DimCallProgrammes
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0)
+            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0 && callProgramme.IsOpenCall==true)
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
 
@@ -37,7 +37,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
             .Take(takeAmount)
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0)
+            .Where(callProgramme => callProgramme.Id != -1 && callProgramme.DimOrganizations.Count > 0 && callProgramme.IsOpenCall==true)
             .ProjectTo<FundingCall>(_mapper.ConfigurationProvider);
     }
     
