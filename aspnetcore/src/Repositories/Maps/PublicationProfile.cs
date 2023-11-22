@@ -1,7 +1,6 @@
 ﻿using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
-using Microsoft.Data.SqlClient;
 using FactContribution = CSC.PublicApi.Service.Models.Publication.FactContribution;
 using Name = CSC.PublicApi.Service.Models.Publication.Name;
 using Profile = AutoMapper.Profile;
@@ -45,7 +44,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ParentPublicationName, opt => opt.MapFrom(src => src.ParentPublicationName))
             .ForMember(dst => dst.ParentPublicationPublisher, opt => opt.MapFrom(src => src.ParentPublicationPublisher))
             .ForMember(dst => dst.OpenAccess, opt => opt.MapFrom(src => src.OpenAccess != "9" ? src.OpenAccess : null))
-            .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublicationCountryCodeNavigation.CodeValue != "9" ? src.PublicationCountryCodeNavigation.CodeValue : null))
+            .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublisherOpenAccessCodeNavigation.CodeValue != "9" ? src.PublisherOpenAccessCodeNavigation : null))
             .ForMember(dst => dst.Isbn1, opt => opt.MapFrom(src => src.Isbn))
             .ForMember(dst => dst.Isbn2, opt => opt.MapFrom(src => src.Isbn2))
             .ForMember(dst => dst.PublisherName, opt => opt.MapFrom(src => src.PublisherName))

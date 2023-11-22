@@ -53,6 +53,27 @@ public class PublicationProfileTest
 
     private static DimPublication GetEntity()
     {
+        DimPublicationChannel dimPublicationChannel = new()
+        {
+            JufoCode = "jufoCode",
+            ChannelNameAnylang = "channelNameAnylang",
+            PublisherNameText = "publisherNameText",
+        };
+
+        FactJufoClassCodesForPubChannel factJufoClassCodesForPubChannel = new()
+        {
+            DimPublicationChannel = dimPublicationChannel,
+            JufoClassesNavigation = new DimReferencedatum
+            {
+                CodeValue = "jufoClassCode",
+                NameFi = "jufoClassNameFi",
+                NameEn = "jufoClassNameEn",
+                NameSv = "jufoClassNameSv"
+            },
+            Year = 2023
+        };
+        dimPublicationChannel.FactJufoClassCodesForPubChannels.Add(factJufoClassCodesForPubChannel);
+
         DimPublication dimPublication = new()
         {
             Id = 1,
@@ -84,7 +105,6 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
-            //PublicationTypeCode = "publicationTypeCode",
             PublicationTypeCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "publicationTypeCode",
@@ -106,12 +126,13 @@ public class PublicationProfileTest
             Isbn2 = "isbn2",
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
-            DimPublicationChannel = new DimPublicationChannel
+            DimPublicationChannel = dimPublicationChannel,
+            PublisherOpenAccessCodeNavigation = new DimReferencedatum
             {
-                JufoCode = "jufoCode",
-                ChannelNameAnylang = "channelNameAnylang",
-                PublisherNameText = "publisherNameText",
-                FactJufoClassCodesForPubChannels = new List<FactJufoClassCodesForPubChannel>()
+                CodeValue = "publisherOpenAccessCode",
+                NameFi = "publisherOpenAccessCodeFi",
+                NameSv = "publisherOpenAccessCodeSv",
+                NameEn = "publisherOpenAccessCodeEn"
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
@@ -192,6 +213,7 @@ public class PublicationProfileTest
                 NameSv = "languageCodeSv",
                 NameEn = "languageCodeEn"
             },
+            InternationalPublication = 1,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
@@ -267,22 +289,7 @@ public class PublicationProfileTest
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
-
-        FactJufoClassCodesForPubChannel factJufoClassCodesForPubChannel = new()
-        {
-            DimPublicationChannel = dimPublication.DimPublicationChannel,
-            JufoClassesNavigation = new DimReferencedatum
-            {
-                CodeValue = "jufoClassCode2",
-                NameFi = "jufoClassNameFi2",
-                NameEn = "jufoClassNameEn2",
-                NameSv = "jufoClassNameSv2"
-            },
-            Year = 2023
-        };
-
-        dimPublication.DimPublicationChannel.FactJufoClassCodesForPubChannels.Add(factJufoClassCodesForPubChannel);
-                
+     
         return dimPublication;
     }
 
@@ -412,7 +419,7 @@ public class PublicationProfileTest
                 NameSv = "languageCodeSv",
                 NameEn = "languageCodeEn"
             },
-            InternationalPublication = false,
+            InternationalPublication = true,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
@@ -488,6 +495,13 @@ public class PublicationProfileTest
                     NameSv = "artPublicationTypeNameSv",
                     NameEn = "artPublicationTypeNameEn"
                 }
+            },
+            PublisherOpenAccess = new ReferenceData
+            {
+                Code = "publisherOpenAccessCode",
+                NameFi = "publisherOpenAccessCodeFi",
+                NameSv = "publisherOpenAccessCodeSv",
+                NameEn = "publisherOpenAccessCodeEn"
             },
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
