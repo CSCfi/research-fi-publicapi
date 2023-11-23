@@ -17,6 +17,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? JufoCode { get; set; }
         public string? ChannelNameAnylang { get; set; }
         public string? PublisherNameText { get; set; }
+        public string SourceId { get; set; } = null!;
+        public string? SourceDescription { get; set; }
+        public DateTime? Created { get; set; }
+        public DateTime? Modified { get; set; }
 
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimPublication> DimPublications { get; set; }
