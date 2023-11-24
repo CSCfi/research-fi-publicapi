@@ -1,7 +1,6 @@
 ﻿using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
-using Microsoft.Data.SqlClient;
 using FactContribution = CSC.PublicApi.Service.Models.Publication.FactContribution;
 using Name = CSC.PublicApi.Service.Models.Publication.Name;
 using Profile = AutoMapper.Profile;
@@ -45,13 +44,13 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ParentPublicationName, opt => opt.MapFrom(src => src.ParentPublicationName))
             .ForMember(dst => dst.ParentPublicationPublisher, opt => opt.MapFrom(src => src.ParentPublicationPublisher))
             .ForMember(dst => dst.OpenAccess, opt => opt.MapFrom(src => src.OpenAccess != "9" ? src.OpenAccess : null))
-            .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublisherOpenAccessCode != "9" ? src.PublisherOpenAccessCode : null))
+            .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublisherOpenAccessCodeNavigation.CodeValue != "9" ? src.PublisherOpenAccessCodeNavigation : null))
             .ForMember(dst => dst.Isbn1, opt => opt.MapFrom(src => src.Isbn))
             .ForMember(dst => dst.Isbn2, opt => opt.MapFrom(src => src.Isbn2))
             .ForMember(dst => dst.PublisherName, opt => opt.MapFrom(src => src.PublisherName))
             .ForMember(dst => dst.PublisherLocation, opt => opt.MapFrom(src => src.PublisherLocation))
-            .ForMember(dst => dst.JufoCode, opt => opt.MapFrom(src => src.JufoCode))
-            .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.JufoClassCode))
+            .ForMember(dst => dst.JufoCode, opt => opt.MapFrom(src => src.DimPublicationChannel.JufoCode))
+            .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.DimPublicationChannel.FactJufoClassCodesForPubChannels.First().JufoClassesNavigation))
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))

@@ -2808,6 +2808,8 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasColumnType("datetime")
                     .HasColumnName("created");
 
+                entity.Property(e => e.DimPublicationChannelId).HasColumnName("dim_publication_channel_id");
+
                 entity.Property(e => e.DimRegisteredDataSourceId).HasColumnName("dim_registered_data_source_id");
 
                 entity.Property(e => e.Doi)
@@ -2850,14 +2852,6 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasMaxLength(4000)
                     .HasColumnName("journal_name");
 
-                entity.Property(e => e.JufoClassCode)
-                    .HasMaxLength(255)
-                    .HasColumnName("jufo_class_code");
-
-                entity.Property(e => e.JufoCode)
-                    .HasMaxLength(255)
-                    .HasColumnName("jufo_code");
-
                 entity.Property(e => e.JuuliAddress)
                     .HasMaxLength(4000)
                     .HasColumnName("juuli_address");
@@ -2875,10 +2869,6 @@ namespace CSC.PublicApi.DatabaseContext
                 entity.Property(e => e.OpenAccess)
                     .HasMaxLength(255)
                     .HasColumnName("open_access");
-
-                entity.Property(e => e.OpenAccessCode)
-                    .HasMaxLength(255)
-                    .HasColumnName("open_access_code");
 
                 entity.Property(e => e.OriginalPublicationId)
                     .HasMaxLength(255)
@@ -2934,9 +2924,7 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasMaxLength(4000)
                     .HasColumnName("publisher_name");
 
-                entity.Property(e => e.PublisherOpenAccessCode)
-                    .HasMaxLength(255)
-                    .HasColumnName("publisher_open_access_code");
+                entity.Property(e => e.PublisherOpenAccessCode).HasColumnName("publisher_open_access_code");
 
                 entity.Property(e => e.Report).HasColumnName("report");
 
@@ -2966,6 +2954,12 @@ namespace CSC.PublicApi.DatabaseContext
                     .WithMany(p => p.DimPublicationArticleTypeCodeNavigations)
                     .HasForeignKey(d => d.ArticleTypeCode)
                     .HasConstraintName("article_type_code");
+
+                entity.HasOne(d => d.DimPublicationChannel)
+                    .WithMany(p => p.DimPublications)
+                    .HasForeignKey(d => d.DimPublicationChannelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("publication_channel");
 
                 entity.HasOne(d => d.DimRegisteredDataSource)
                     .WithMany(p => p.DimPublications)
@@ -3007,6 +3001,12 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasForeignKey(d => d.PublicationTypeCode2)
                     .HasConstraintName("publication_type_code2");
 
+                entity.HasOne(d => d.PublisherOpenAccessCodeNavigation)
+                    .WithMany(p => p.DimPublicationPublisherOpenAccessCodeNavigations)
+                    .HasForeignKey(d => d.PublisherOpenAccessCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("publisher_open_access");
+
                 entity.HasOne(d => d.TargetAudienceCodeNavigation)
                     .WithMany(p => p.DimPublicationTargetAudienceCodeNavigations)
                     .HasForeignKey(d => d.TargetAudienceCode)
@@ -3046,13 +3046,29 @@ namespace CSC.PublicApi.DatabaseContext
                     .HasMaxLength(4000)
                     .HasColumnName("channel_name_anylang");
 
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created");
+
                 entity.Property(e => e.JufoCode)
                     .HasMaxLength(255)
                     .HasColumnName("jufo_code");
 
+                entity.Property(e => e.Modified)
+                    .HasColumnType("datetime")
+                    .HasColumnName("modified");
+
                 entity.Property(e => e.PublisherNameText)
                     .HasMaxLength(4000)
                     .HasColumnName("publisher_name_text");
+
+                entity.Property(e => e.SourceDescription)
+                    .HasMaxLength(255)
+                    .HasColumnName("source_description");
+
+                entity.Property(e => e.SourceId)
+                    .HasMaxLength(255)
+                    .HasColumnName("source_id");
             });
 
             modelBuilder.Entity<DimPurpose>(entity =>
@@ -4767,16 +4783,32 @@ namespace CSC.PublicApi.DatabaseContext
 
             modelBuilder.Entity<FactJufoClassCodesForPubChannel>(entity =>
             {
-                entity.HasKey(e => new { e.DimPublicationChannelId, e.DimReferencedataId, e.Year })
-                    .HasName("PK__fact_juf__0E099E4B39813744");
+                entity.HasKey(e => new { e.DimPublicationChannelId, e.JufoClasses, e.Year })
+                    .HasName("PK__fact_juf__5280C574D130FC62");
 
                 entity.ToTable("fact_jufo_class_codes_for_pub_channels");
 
                 entity.Property(e => e.DimPublicationChannelId).HasColumnName("dim_publication_channel_id");
 
-                entity.Property(e => e.DimReferencedataId).HasColumnName("dim_referencedata_id");
+                entity.Property(e => e.JufoClasses).HasColumnName("jufo_classes");
 
                 entity.Property(e => e.Year).HasColumnName("year");
+
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime")
+                    .HasColumnName("created");
+
+                entity.Property(e => e.Modified)
+                    .HasColumnType("datetime")
+                    .HasColumnName("modified");
+
+                entity.Property(e => e.SourceDescription)
+                    .HasMaxLength(255)
+                    .HasColumnName("source_description");
+
+                entity.Property(e => e.SourceId)
+                    .HasMaxLength(255)
+                    .HasColumnName("source_id");
 
                 entity.HasOne(d => d.DimPublicationChannel)
                     .WithMany(p => p.FactJufoClassCodesForPubChannels)
@@ -4784,11 +4816,11 @@ namespace CSC.PublicApi.DatabaseContext
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("jufo_classes");
 
-                entity.HasOne(d => d.DimReferencedata)
+                entity.HasOne(d => d.JufoClassesNavigation)
                     .WithMany(p => p.FactJufoClassCodesForPubChannels)
-                    .HasForeignKey(d => d.DimReferencedataId)
+                    .HasForeignKey(d => d.JufoClasses)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FKfact_jufo_876058");
+                    .HasConstraintName("FKfact_jufo_216849");
             });
 
             modelBuilder.Entity<FactUpkeep>(entity =>
