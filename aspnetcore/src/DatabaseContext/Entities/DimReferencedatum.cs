@@ -23,6 +23,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimProfileOnlyPublicationThesisTypeCodeNavigations = new HashSet<DimProfileOnlyPublication>();
             DimProfileOnlyPublicationTypeClassificationCodeNavigations = new HashSet<DimProfileOnlyPublication>();
             DimPublicationArticleTypeCodeNavigations = new HashSet<DimPublication>();
+            DimPublicationJufoClassNavigations = new HashSet<DimPublication>();
             DimPublicationLanguageCodeNavigations = new HashSet<DimPublication>();
             DimPublicationLicenseCodeNavigations = new HashSet<DimPublication>();
             DimPublicationParentPublicationTypeCodeNavigations = new HashSet<DimPublication>();
@@ -39,7 +40,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
             FactFieldValueDimReferencedataActorRoles = new HashSet<FactFieldValue>();
             FactFieldValueDimReferencedataFieldOfSciences = new HashSet<FactFieldValue>();
-            FactJufoClassCodesForPubChannels = new HashSet<FactJufoClassCodesForPubChannel>();
             InverseDimReferencedata = new HashSet<DimReferencedatum>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
             DimPublications = new HashSet<DimPublication>();
@@ -78,6 +78,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimProfileOnlyPublication> DimProfileOnlyPublicationThesisTypeCodeNavigations { get; set; }
         public virtual ICollection<DimProfileOnlyPublication> DimProfileOnlyPublicationTypeClassificationCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationArticleTypeCodeNavigations { get; set; }
+        public virtual ICollection<DimPublication> DimPublicationJufoClassNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationLanguageCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationLicenseCodeNavigations { get; set; }
         public virtual ICollection<DimPublication> DimPublicationParentPublicationTypeCodeNavigations { get; set; }
@@ -94,7 +95,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValueDimReferencedataActorRoles { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValueDimReferencedataFieldOfSciences { get; set; }
-        public virtual ICollection<FactJufoClassCodesForPubChannel> FactJufoClassCodesForPubChannels { get; set; }
         public virtual ICollection<DimReferencedatum> InverseDimReferencedata { get; set; }
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; }

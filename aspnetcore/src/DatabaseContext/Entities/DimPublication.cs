@@ -74,10 +74,12 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int PublisherOpenAccessCode { get; set; }
         public string? Abstract { get; set; }
         public int DimPublicationChannelId { get; set; }
+        public int JufoClass { get; set; }
 
         public virtual DimReferencedatum? ArticleTypeCodeNavigation { get; set; }
         public virtual DimPublicationChannel DimPublicationChannel { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual DimReferencedatum JufoClassNavigation { get; set; } = null!;
         public virtual DimReferencedatum LanguageCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? ParentPublicationTypeCodeNavigation { get; set; }

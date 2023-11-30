@@ -50,7 +50,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.PublisherName, opt => opt.MapFrom(src => src.PublisherName))
             .ForMember(dst => dst.PublisherLocation, opt => opt.MapFrom(src => src.PublisherLocation))
             .ForMember(dst => dst.JufoCode, opt => opt.MapFrom(src => src.DimPublicationChannel.JufoCode))
-            .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.DimPublicationChannel.FactJufoClassCodesForPubChannels.First().JufoClassesNavigation))
+            .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.JufoClassNavigation))
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))

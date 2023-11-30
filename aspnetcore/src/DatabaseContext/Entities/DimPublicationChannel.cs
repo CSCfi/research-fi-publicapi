@@ -10,7 +10,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimPids = new HashSet<DimPid>();
             DimPublications = new HashSet<DimPublication>();
             DimResearchActivities = new HashSet<DimResearchActivity>();
-            FactJufoClassCodesForPubChannels = new HashSet<FactJufoClassCodesForPubChannel>();
         }
 
         public int Id { get; set; }
@@ -25,6 +24,5 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimPublication> DimPublications { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }
-        public virtual ICollection<FactJufoClassCodesForPubChannel> FactJufoClassCodesForPubChannels { get; set; }
     }
 }

@@ -53,27 +53,6 @@ public class PublicationProfileTest
 
     private static DimPublication GetEntity()
     {
-        DimPublicationChannel dimPublicationChannel = new()
-        {
-            JufoCode = "jufoCode",
-            ChannelNameAnylang = "channelNameAnylang",
-            PublisherNameText = "publisherNameText",
-        };
-
-        FactJufoClassCodesForPubChannel factJufoClassCodesForPubChannel = new()
-        {
-            DimPublicationChannel = dimPublicationChannel,
-            JufoClassesNavigation = new DimReferencedatum
-            {
-                CodeValue = "jufoClassCode",
-                NameFi = "jufoClassNameFi",
-                NameEn = "jufoClassNameEn",
-                NameSv = "jufoClassNameSv"
-            },
-            Year = 2023
-        };
-        dimPublicationChannel.FactJufoClassCodesForPubChannels.Add(factJufoClassCodesForPubChannel);
-
         DimPublication dimPublication = new()
         {
             Id = 1,
@@ -126,7 +105,19 @@ public class PublicationProfileTest
             Isbn2 = "isbn2",
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
-            DimPublicationChannel = dimPublicationChannel,
+            JufoClassNavigation = new DimReferencedatum
+            {
+                CodeValue = "jufoClassCode",
+                NameFi = "jufoClassNameFi",
+                NameEn = "jufoClassNameEn",
+                NameSv = "jufoClassNameSv"
+            },
+            DimPublicationChannel = new()
+            {
+                JufoCode = "jufoCode",
+                ChannelNameAnylang = "channelNameAnylang",
+                PublisherNameText = "publisherNameText",
+            },
             PublisherOpenAccessCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "publisherOpenAccessCode",
