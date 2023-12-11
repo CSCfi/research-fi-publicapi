@@ -53,7 +53,7 @@ public class PublicationProfileTest
 
     private static DimPublication GetEntity()
     {
-        return new DimPublication
+        DimPublication dimPublication = new()
         {
             Id = 1,
             PublicationId = "publicationId",
@@ -84,7 +84,6 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
-            //PublicationTypeCode = "publicationTypeCode",
             PublicationTypeCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "publicationTypeCode",
@@ -106,8 +105,26 @@ public class PublicationProfileTest
             Isbn2 = "isbn2",
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
-            JufoCode = "jufoCode",
-            JufoClassCode = "jufoClassCode",
+            JufoClassNavigation = new DimReferencedatum
+            {
+                CodeValue = "jufoClassCode",
+                NameFi = "jufoClassNameFi",
+                NameEn = "jufoClassNameEn",
+                NameSv = "jufoClassNameSv"
+            },
+            DimPublicationChannel = new()
+            {
+                JufoCode = "jufoCode",
+                ChannelNameAnylang = "channelNameAnylang",
+                PublisherNameText = "publisherNameText",
+            },
+            PublisherOpenAccessCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "publisherOpenAccessCode",
+                NameFi = "publisherOpenAccessCodeFi",
+                NameSv = "publisherOpenAccessCodeSv",
+                NameEn = "publisherOpenAccessCodeEn"
+            },
             Doi = "doi",
             DoiHandle = "doiHandle",
             DimKeywords = new List<DimKeyword>
@@ -187,6 +204,7 @@ public class PublicationProfileTest
                 NameSv = "languageCodeSv",
                 NameEn = "languageCodeEn"
             },
+            InternationalPublication = 1,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
@@ -262,6 +280,8 @@ public class PublicationProfileTest
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
+     
+        return dimPublication;
     }
 
     private Publication GetModel()
@@ -320,7 +340,10 @@ public class PublicationProfileTest
             JufoCode = "jufoCode",
             JufoClass = new ReferenceData
             {
-                Code = "jufoClassCode"
+                Code = "jufoClassCode",
+                NameFi = "jufoClassNameFi",
+                NameEn = "jufoClassNameEn",
+                NameSv = "jufoClassNameSv"
             },
             Doi = "doi",
             DoiHandle = "doiHandle",
@@ -387,7 +410,7 @@ public class PublicationProfileTest
                 NameSv = "languageCodeSv",
                 NameEn = "languageCodeEn"
             },
-            InternationalPublication = false,
+            InternationalPublication = true,
             InternationalCollaboration = true,
             BusinessCollaboration = true,
             ApcFeeEur = 123.4m,
@@ -463,6 +486,13 @@ public class PublicationProfileTest
                     NameSv = "artPublicationTypeNameSv",
                     NameEn = "artPublicationTypeNameEn"
                 }
+            },
+            PublisherOpenAccess = new ReferenceData
+            {
+                Code = "publisherOpenAccessCode",
+                NameFi = "publisherOpenAccessCodeFi",
+                NameSv = "publisherOpenAccessCodeSv",
+                NameEn = "publisherOpenAccessCodeEn"
             },
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
