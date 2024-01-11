@@ -20,7 +20,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int Id { get; set; }
         public int? ReportingYear { get; set; }
         public string PublicationId { get; set; } = null!;
-        public string? PublicationStatusCode { get; set; }
+        public int PublicationStatusCode { get; set; }
         public string PublicationOrgId { get; set; } = null!;
         public string PublicationName { get; set; } = null!;
         public string AuthorsText { get; set; } = null!;
@@ -84,6 +84,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimReferencedatum LicenseCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? ParentPublicationTypeCodeNavigation { get; set; }
         public virtual DimReferencedatum PublicationCountryCodeNavigation { get; set; } = null!;
+        public virtual DimReferencedatum PublicationStatusCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum? PublicationTypeCode2Navigation { get; set; }
         public virtual DimReferencedatum PublicationTypeCodeNavigation { get; set; } = null!;
         public virtual DimReferencedatum PublisherOpenAccessCodeNavigation { get; set; } = null!;
