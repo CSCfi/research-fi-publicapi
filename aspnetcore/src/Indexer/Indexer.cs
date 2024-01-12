@@ -136,6 +136,7 @@ public class Indexer
 
             if (indexName.Contains("publication")) {
 
+                // Create new index
                 var (indexToCreate, indexToDelete) = await _indexService.GetIndexNames(indexName);
                 await _indexService.CreateIndex(indexToCreate, type);
 
@@ -166,11 +167,12 @@ public class Indexer
                         await _indexService.IndexChunkAsync(indexToCreate, finalized, type);
                     }
                     skipAmount = skipAmount + takeAmount;
-                    finalized = new();
                     processedCount = processedCount + numOfResults;
-                    _logger.LogInformation("{EntityType}: Total indexed count = {processedCount}", type.Name, processedCount);
+                    finalized = new();
+                    _logger.LogInformation("{EntityType}: Total documents indexed = {processedCount}", type.Name, processedCount);
                 } while(numOfResults >= takeAmount-1);
 
+                // Activate new index and delete old
                 await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
             }
             else

@@ -31,22 +31,8 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         // Add entities to the new index.
         await IndexEntities(indexToCreate, entities, modelType);
 
-        // Wait for new index to be operational.
-        await _elasticClient.Cluster
-            .HealthAsync(selector: s => s
-                .WaitForStatus(Elasticsearch.Net.WaitForStatus.Yellow)
-                .WaitForActiveShards("1")
-                .Index(indexToCreate));
-
-        // Add new alias from index_new to index
-        await _elasticClient.Indices.BulkAliasAsync(r => r
-            // Remove alias "index_old => index"
-            .Remove(remove => remove.Alias(indexName).Index("*"))
-            // Add alias "index_new => index"
-            .Add(add => add.Alias(indexName).Index(indexToCreate)));
-
-        // Delete the old index if it exists.
-        await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
+        // Switch indexes
+        await SwitchIndexes(indexName, indexToCreate, indexToDelete);
 
         _logger.LogDebug("{EntityType}: Indexing to {IndexName} complete", modelType.Name, indexName);
     }
