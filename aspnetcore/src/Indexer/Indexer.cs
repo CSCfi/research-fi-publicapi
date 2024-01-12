@@ -135,6 +135,10 @@ public class Indexer
             List<object> finalized = new();
 
             if (indexName.Contains("publication")) {
+
+                var (indexToCreate, indexToDelete) = await _indexService.GetIndexNames(indexName);
+                await _indexService.CreateIndex(indexToCreate, type);
+
                 /*
                 * Process database result in smaller chunks to keep memory requirement low.
                 * Chunking is based on skip/take query.
@@ -143,8 +147,9 @@ public class Indexer
                 */
                 
                 int skipAmount = 0;
-                int takeAmount = 200000;
+                int takeAmount = 2;
                 int numOfResults = 0;
+                int processedCount = 0;
 
                 do
                 {
@@ -155,14 +160,18 @@ public class Indexer
                     
                     if (numOfResults > 0)
                     {
-                        _logger.LogInformation("{EntityType}: In-memory operations start", type.Name);
                         foreach (object entity in indexModels) {
                             finalized.Add(repository.PerformInMemoryOperation(entity));
                         }
-                        _logger.LogInformation("{EntityType}: In-memory operations complete", type.Name);
+                        await _indexService.IndexChunkAsync(indexToCreate, finalized, type);
                     }
                     skipAmount = skipAmount + takeAmount;
+                    finalized = new();
+                    processedCount = processedCount + numOfResults;
+                    _logger.LogInformation("{EntityType}: Total indexed count = {processedCount}", type.Name, processedCount);
                 } while(numOfResults >= takeAmount-1);
+
+                await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
             }
             else
             {
@@ -180,20 +189,21 @@ public class Indexer
                     _logger.LogInformation("{EntityType}: Start in-memory operations", type.Name);
                     finalized = repository.PerformInMemoryOperations(indexModels);
                 }
-            }
-            var inMemoryElapsed = stopWatch.Elapsed;
 
-            if (finalized.Count > 0)
-            {
-                _logger.LogInformation("{EntityType}: Retrieved and performed in-memory operations to {FinalizedCount} entities in {Elapsed}. Start indexing.",  type.Name, finalized.Count, inMemoryElapsed);
-                await _indexService.IndexAsync(indexName, finalized, type);
-                var indexingElapsed = stopWatch.Elapsed;
-                _logger.LogInformation("{EntityType}: Indexed total of {IndexCount} documents in {ElapsedIndexing}...", type.Name, finalized.Count,  indexingElapsed - inMemoryElapsed);
-                _logger.LogInformation("{EntityType}: Index '{IndexName}' recreated successfully in {ElapsedTotal}", type.Name, indexName, stopWatch.Elapsed);
-            }
-            else
-            {
-                _logger.LogInformation("{EntityType}: Nothing to index", type.Name);
+                var inMemoryElapsed = stopWatch.Elapsed;
+
+                if (finalized.Count > 0)
+                {
+                    _logger.LogInformation("{EntityType}: Retrieved and performed in-memory operations to {FinalizedCount} entities in {Elapsed}. Start indexing.",  type.Name, finalized.Count, inMemoryElapsed);
+                    await _indexService.IndexAsync(indexName, finalized, type);
+                    var indexingElapsed = stopWatch.Elapsed;
+                    _logger.LogInformation("{EntityType}: Indexed total of {IndexCount} documents in {ElapsedIndexing}...", type.Name, finalized.Count,  indexingElapsed - inMemoryElapsed);
+                    _logger.LogInformation("{EntityType}: Index '{IndexName}' recreated successfully in {ElapsedTotal}", type.Name, indexName, stopWatch.Elapsed);
+                }
+                else
+                {
+                    _logger.LogInformation("{EntityType}: Nothing to index", type.Name);
+                }
             }
         }
         catch (Exception ex)

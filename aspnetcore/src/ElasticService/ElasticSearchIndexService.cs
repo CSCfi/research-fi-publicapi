@@ -49,10 +49,35 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
 
         _logger.LogDebug("{EntityType}: Indexing to {IndexName} complete", modelType.Name, indexName);
-
+    }
+    
+    public async Task IndexChunkAsync(string indexToCreate, List<object> entities, Type modelType)
+    {
+        // Add entities to the index.
+        await IndexEntities(indexToCreate, entities, modelType);
     }
 
-    private async Task<(string indexToCreate, string indexToDelete)> GetIndexNames(string indexName)
+    public async Task SwitchIndexes(string indexName, string indexToCreate, string indexToDelete)
+    {
+        // Wait for new index to be operational.
+        await _elasticClient.Cluster
+            .HealthAsync(selector: s => s
+                .WaitForStatus(Elasticsearch.Net.WaitForStatus.Yellow)
+                .WaitForActiveShards("1")
+                .Index(indexToCreate));
+
+        // Add new alias from index_new to index
+        await _elasticClient.Indices.BulkAliasAsync(r => r
+            // Remove alias "index_old => index"
+            .Remove(remove => remove.Alias(indexName).Index("*"))
+            // Add alias "index_new => index"
+            .Add(add => add.Alias(indexName).Index(indexToCreate)));
+
+        // Delete the old index if it exists.
+        await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
+    }
+
+    public async Task<(string indexToCreate, string indexToDelete)> GetIndexNames(string indexName)
     {
         var indexNameV1 = $"{indexName}_v1";
         var indexNameV2 = $"{indexName}_v2";
@@ -99,7 +124,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
                 throw new InvalidOperationException($"Indexing documents to {indexName} failed.", indexBatchResponse.OriginalException);
             }
             indexedCount = indexedCount + batchToIndex.Count;
-            _logger.LogInformation("{EntityType}: Indexed {BatchSize} documents to {IndexName}. Progress {IndexedCount}/{TotalCount}", modelType.Name, batchToIndex.Count, indexName, indexedCount, entities.Count);
+            _logger.LogInformation("{EntityType}: Indexed {BatchSize} documents to {IndexName}", modelType.Name, batchToIndex.Count, indexName);
         }
     }
 
@@ -111,7 +136,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    private async Task CreateIndex(string indexName, Type type)
+    public async Task CreateIndex(string indexName, Type type)
     {
         await _elasticClient.Indices.DeleteAsync(indexName,
             d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
