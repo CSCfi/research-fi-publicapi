@@ -215,7 +215,13 @@ public class PublicationProfileTest
                 NameFi = "articleTypeCodeNameFi",
                 NameSv = "articleTypeCodeNameSv",
             },
-            PublicationStatusCode = "publicationStatusCode",
+            PublicationStatusCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "publicationStatusCode",
+                NameEn = "publicationStatusCodeNameEn",
+                NameFi = "publicationStatusCodeNameFi",
+                NameSv = "publicationStatusCodeNameSv",
+            },
             LicenseCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "1337",
@@ -419,11 +425,14 @@ public class PublicationProfileTest
                 Code = "articleTypeCode",
                 NameEn = "articleTypeCodeNameEn",
                 NameFi = "articleTypeCodeNameFi",
-                NameSv = "articleTypeCodeNameSv",
+                NameSv = "articleTypeCodeNameSv"
             },
             Status = new ReferenceData
             {
-                Code = "publicationStatusCode"
+                Code = "publicationStatusCode",
+                NameEn = "publicationStatusCodeNameEn",
+                NameFi = "publicationStatusCodeNameFi",
+                NameSv = "publicationStatusCodeNameSv"
             },
             License = new ReferenceData()
             {
