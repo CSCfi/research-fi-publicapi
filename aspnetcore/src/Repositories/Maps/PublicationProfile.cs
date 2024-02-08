@@ -21,6 +21,7 @@ public class PublicationProfile : Profile
         CreateProjection<DimPublication, Publication>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.PublicationId))
+            .ForMember(dst => dst.OriginalPublicationId, opt => opt.MapFrom(src => src.OriginalPublicationId))
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.PublicationName))
             .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src => (DateTime?)(src.PublicationYear.HasValue ? new DateTime(src.PublicationYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
             .ForMember(dst => dst.ReportingYear, opt =>opt.MapFrom(src => (DateTime?)(src.ReportingYear.HasValue ? new DateTime(src.ReportingYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
