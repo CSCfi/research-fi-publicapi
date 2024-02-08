@@ -2,6 +2,8 @@
 
 public class PublicationSearchParameters
 {
+    public string? OriginalPublicationId { get; set; }
+    
     public string? Name { get; set; }
 
     public string? PublicationYear { get; set; }
