@@ -57,6 +57,7 @@ public class PublicationProfileTest
         {
             Id = 1,
             PublicationId = "publicationId",
+            OriginalPublicationId = "abc123",
             PublicationName = "nameFi",
             PublicationYear = 2021,
             ReportingYear = 2022,
@@ -295,6 +296,7 @@ public class PublicationProfileTest
         return new Publication
         {
             Id = "publicationId",
+            OriginalPublicationId = "abc123",
             Name = "nameFi",
             PublicationYear = new DateTime(2021, 1, 1),
             ReportingYear = new DateTime(2022, 1, 1),

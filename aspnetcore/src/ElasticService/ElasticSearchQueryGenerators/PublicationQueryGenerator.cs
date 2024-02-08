@@ -33,6 +33,13 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                 t.Match(query => query.Field(f => f.Name)
                     .Query(parameters.Name)));
         }
+
+        if (!string.IsNullOrWhiteSpace(parameters.OriginalPublicationId))
+        {
+            subQueries.Add(t => 
+                t.Match(query => query.Field(f => f.OriginalPublicationId)
+                    .Query(parameters.OriginalPublicationId)));
+        }
         
         if (!string.IsNullOrWhiteSpace(parameters.AuthorsText))
         {

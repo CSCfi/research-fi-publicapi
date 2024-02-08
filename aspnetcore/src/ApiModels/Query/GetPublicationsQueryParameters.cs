@@ -15,6 +15,12 @@ public class GetPublicationsQueryParameters : PaginationQueryParameters
     public string? Name { get; set; }
 
     /// <summary>
+    /// The field originalPublicationId is exactly equal to the text.
+    /// </summary>
+    /// <see cref="Publication.OriginalPublicationId"/>
+    public string? OriginalPublicationId { get; set; }
+
+    /// <summary>
     /// The field publicationYear is exactly equal to the text.
     /// </summary>
     /// <see cref="Publication.PublicationYear"/>

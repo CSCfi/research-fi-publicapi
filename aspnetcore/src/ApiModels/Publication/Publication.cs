@@ -13,6 +13,11 @@ public class Publication
     /// Publication ID
     /// </summary>
     public string? Id { get; set; }
+
+    /// <summary>
+    /// Julkaisun organisaatiotunnus
+    /// </summary>
+    public string? OriginalPublicationId { get; set; }
     
     /// <summary>
     /// Name of the publication
