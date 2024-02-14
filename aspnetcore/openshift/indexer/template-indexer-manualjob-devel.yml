@@ -1,6 +1,6 @@
 # This file is part of the research.fi api
 #
-# Copyright 2022 Ministry of Education and Culture, Finland
+# Copyright 2024 Ministry of Education and Culture, Finland
 #
 # :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
 # :license: MIT
@@ -90,6 +90,21 @@ objects:
                     configMapKeyRef:
                       name: publicapi-api-config-devel
                       key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                - name: "Serilog__Properties__WoodLogProjectNumber"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-devel
+                      key: "Serilog__Properties__WoodLogProjectNumber"
+                - name: "Serilog__Properties__WoodLogRetentionMonths"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-devel
+                      key: "Serilog__Properties__WoodLogRetentionMonths"
+                - name: "Serilog__Properties__WoodLogUsecase"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-devel
+                      key: "Serilog__Properties__WoodLogUsecase"
                 - name: "QueryTimeout"
                   valueFrom:
                     configMapKeyRef:

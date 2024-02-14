@@ -90,6 +90,21 @@ objects:
                     configMapKeyRef:
                       name: publicapi-api-config-qa
                       key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                - name: "Serilog__Properties__WoodLogProjectNumber"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-qa
+                      key: "Serilog__Properties__WoodLogProjectNumber"
+                - name: "Serilog__Properties__WoodLogRetentionMonths"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-qa
+                      key: "Serilog__Properties__WoodLogRetentionMonths"
+                - name: "Serilog__Properties__WoodLogUsecase"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-qa
+                      key: "Serilog__Properties__WoodLogUsecase"
                 - name: "QueryTimeout"
                   valueFrom:
                     configMapKeyRef:
