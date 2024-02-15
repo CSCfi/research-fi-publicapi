@@ -54,7 +54,7 @@ public class Indexer
 
             if (repositoryForType is null)
             {
-                _logger.LogError("{EntityType:l}: Unable to find database repository for index '{IndexName:l}'", modelType.Name, indexName);
+                _logger.LogError("{EntityType:l}: Unable to find database repository for index {IndexName:l}", modelType.Name, indexName);
                 continue;
             }
 
@@ -129,7 +129,7 @@ public class Indexer
         IIndexRepository repository,
         Type type)
     {
-        _logger.LogInformation("{EntityType:l}: Recreating '{IndexName:l}' index", type.Name, indexName);
+        _logger.LogInformation("{EntityType:l}: Recreating {IndexName:l} index", type.Name, indexName);
 
         Stopwatch stopWatch = new();
         
@@ -182,7 +182,7 @@ public class Indexer
 
                 // Activate new index and delete old
                 await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
-                _logger.LogInformation("{EntityType:l}: Recreated '{IndexName:l}', {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
+                _logger.LogInformation("{EntityType:l}: Recreated {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
             }
             else
             {
@@ -205,13 +205,13 @@ public class Indexer
                 {
                     await _indexService.IndexAsync(indexName, finalized, type);
                     var indexingElapsed = stopWatch.Elapsed;
-                    _logger.LogInformation("{EntityType:l}: Recreated '{IndexName:l}', {ElasticsearchDocumentCount} documents", type.Name, indexName, finalized.Count);
+                    _logger.LogInformation("{EntityType:l}: Recreated {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, finalized.Count);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "{EntityType:l}: Exception occurred while indexing '{IndexName:l}' index after {Elapsed},", type.Name, indexName, stopWatch.Elapsed);
+            _logger.LogError(ex, "{EntityType:l}: Exception occurred while indexing {IndexName:l} index after {Elapsed},", type.Name, indexName, stopWatch.Elapsed);
         }
     }
 }
