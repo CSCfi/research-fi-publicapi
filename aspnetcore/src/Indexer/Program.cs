@@ -38,6 +38,9 @@ public class Program
 
         // Start indexing.
         await indexer.Start();
+
+        // Flush logs
+        Log.CloseAndFlush();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) => Host
