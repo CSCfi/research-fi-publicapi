@@ -58,7 +58,7 @@ public class Indexer
                 continue;
             }
 
-            _logger.LogInformation("{EntityType:l}: Recreating {IndexName:l} index", modelType.Name, indexName);
+            _logger.LogInformation("{EntityType:l}: Recreating index {IndexName:l}", modelType.Name, indexName);
             await Task.Delay(1); // Force at least 1 ms separation to log timestamps to preserve log message order in OpenSearch.
             await IndexEntities(indexName, repositoryForType, modelType);
             await Task.Delay(1);
@@ -178,7 +178,7 @@ public class Indexer
 
                 // Activate new index and delete old
                 await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
-                _logger.LogInformation("{EntityType:l}: Recreated {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
+                _logger.LogInformation("{EntityType:l}: Recreated index {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
             }
             else
             {
@@ -201,13 +201,13 @@ public class Indexer
                 {
                     await _indexService.IndexAsync(indexName, finalized, type);
                     var indexingElapsed = stopWatch.Elapsed;
-                    _logger.LogInformation("{EntityType:l}: Recreated {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, finalized.Count);
+                    _logger.LogInformation("{EntityType:l}: Recreated index {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, finalized.Count);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "{EntityType:l}: Exception occurred while indexing {IndexName:l} index after {Elapsed},", type.Name, indexName, stopWatch.Elapsed);
+            _logger.LogError("{EntityType:l}: Exception occurred while indexing {IndexName:l}: {IndexerException} index after {Elapsed},", type.Name, indexName, stopWatch.Elapsed, ex.ToString());
         }
     }
 }

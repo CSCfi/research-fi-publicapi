@@ -36,7 +36,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
         _logger.LogDebug("{EntityType:l}: Indexing to {IndexName:l} complete", modelType.Name, indexName);
     }
-    
+
     public async Task IndexChunkAsync(string indexToCreate, List<object> entities, Type modelType)
     {
         // Add entities to the index.
@@ -89,19 +89,17 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
     private async Task IndexEntities<T>(string indexName, List<T> entities, Type modelType) where T : class
     {
-        var indexedCount = 0;
-
         // Split entities into batches to avoid one big request.
         var documentBatches = new List<List<T>>();
         for (var docIndex = 0; docIndex < entities.Count; docIndex += BatchSize)
         {
             documentBatches.Add(entities.GetRange(docIndex, Math.Min(BatchSize, entities.Count - docIndex)));
         }
-        
+
         int batchCounter = 0;
         foreach (var batchToIndex in documentBatches)
         {
-            ++ batchCounter;
+            ++batchCounter;
             _logger.LogInformation("{EntityType:l}: Indexing {ElasticsearchBatchSize} documents. Batch {ElasticsearchBatchCurrent}/{ElasticsearchBatchCount}", modelType.Name, batchToIndex.Count, batchCounter, documentBatches.Count);
             var indexBatchResponse = await _elasticClient.BulkAsync(b => b
                 .Index(indexName)
@@ -109,7 +107,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
             if (!indexBatchResponse.IsValid)
             {
-                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType:l}: Indexing documents to {IndexName:l} failed", modelType, indexName);
+                _logger.LogError("{EntityType:l}: Indexing documents to {IndexName:l} failed: {IndexerException}", modelType, indexName, indexBatchResponse.OriginalException.ToString());
                 throw new InvalidOperationException($"Indexing documents to {indexName} failed.", indexBatchResponse.OriginalException);
             }
         }
