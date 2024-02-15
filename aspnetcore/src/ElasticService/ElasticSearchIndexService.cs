@@ -106,11 +106,11 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
             if (!indexBatchResponse.IsValid)
             {
-                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType:l}: Indexing documents to {IndexName:l} failed", modelType, indexName);
+                _logger.LogError(indexBatchResponse.OriginalException, "{EntityType:l}: Indexing documents to '{IndexName:l}' failed", modelType, indexName);
                 throw new InvalidOperationException($"Indexing documents to {indexName} failed.", indexBatchResponse.OriginalException);
             }
             indexedCount = indexedCount + batchToIndex.Count;
-            _logger.LogInformation("{EntityType:l}: Indexed {BatchSize} documents to {IndexName:l}", modelType.Name, batchToIndex.Count, indexName);
+            _logger.LogInformation("{EntityType:l}: Indexed {BatchSize} documents to '{IndexName:l}'", modelType.Name, batchToIndex.Count, indexName);
         }
     }
 
@@ -136,6 +136,6 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
             throw new InvalidOperationException($"Creating index {indexName} failed.", createResponse.OriginalException);
         }
 
-        _logger.LogDebug("{EntityType:l}: Index {IndexName:l} created", type.Name, indexName);
+        _logger.LogDebug("{EntityType:l}: Index '{IndexName:l}' created", type.Name, indexName);
     }
 }
