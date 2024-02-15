@@ -38,11 +38,6 @@ namespace Serilog.Sinks.Http.TextFormatters;
 public class WoodLogMetadataFormatter : ITextFormatter
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the message is rendered into JSON.
-    /// </summary>
-    protected bool IsRenderingMessage { get; set; }
-
-    /// <summary>
     /// Format the log event into the output.
     /// </summary>
     /// <param name="logEvent">The event to format.</param>
@@ -77,13 +72,9 @@ public class WoodLogMetadataFormatter : ITextFormatter
         output.Write("\",\"MessageTemplate\":");
         JsonValueFormatter.WriteQuotedJsonString(logEvent.MessageTemplate.Text, output);
 
-        if (IsRenderingMessage)
-        {
-            output.Write(",\"RenderedMessage\":");
-
-            var message = logEvent.MessageTemplate.Render(logEvent.Properties);
-            JsonValueFormatter.WriteQuotedJsonString(message, output);
-        }
+        output.Write(",\"RenderedMessage\":");
+        var message = logEvent.MessageTemplate.Render(logEvent.Properties);
+        JsonValueFormatter.WriteQuotedJsonString(message, output);
 
         if (logEvent.Exception != null)
         {

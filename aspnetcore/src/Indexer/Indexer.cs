@@ -41,7 +41,7 @@ public class Indexer
         stopWatch.Start();
 
         _logger.LogInformation("Starting indexing...");
-        _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress}'", _configuration["ELASTICSEARCH:URL"]);
+        _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress:l}'", _configuration["ELASTICSEARCH:URL"]);
 
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
 
@@ -54,7 +54,7 @@ public class Indexer
 
             if (repositoryForType is null)
             {
-                _logger.LogError("{EntityType}: Unable to find database repository for index {IndexName}", modelType.Name, indexName);      
+                _logger.LogError("{EntityType:l}: Unable to find database repository for index {IndexName:l}", modelType.Name, indexName);      
                 continue;
             }
 
@@ -125,7 +125,7 @@ public class Indexer
         IIndexRepository repository,
         Type type)
     {
-        _logger.LogInformation("{EntityType}: Recreating '{IndexName}' index...", type.Name, indexName);
+        _logger.LogInformation("{EntityType:l}: Recreating '{IndexName:l}' index...", type.Name, indexName);
 
         Stopwatch stopWatch = new();
         stopWatch.Start();
@@ -154,10 +154,10 @@ public class Indexer
 
                 do
                 {
-                    _logger.LogInformation("{EntityType}: Requested {takeAmount} entities from database...", type.Name, takeAmount);
+                    _logger.LogInformation("{EntityType:l}: Requested {takeAmount} entities from database...", type.Name, takeAmount);
                     var indexModels = await repository.GetChunkAsync(skipAmount: skipAmount, takeAmount: takeAmount).ToListAsync();
                     numOfResults = indexModels.Count;
-                    _logger.LogInformation("{EntityType}: ...received {numOfResults} entities", type.Name, numOfResults);
+                    _logger.LogInformation("{EntityType:l}: ...received {numOfResults} entities", type.Name, numOfResults);
                     
                     if (numOfResults > 0)
                     {
@@ -169,7 +169,7 @@ public class Indexer
                     skipAmount = skipAmount + takeAmount;
                     processedCount = processedCount + numOfResults;
                     finalized = new();
-                    _logger.LogInformation("{EntityType}: Total documents indexed = {processedCount}", type.Name, processedCount);
+                    _logger.LogInformation("{EntityType:l}: Total documents indexed = {processedCount}", type.Name, processedCount);
                 } while(numOfResults >= takeAmount-1);
 
                 // Activate new index and delete old
@@ -181,14 +181,14 @@ public class Indexer
                 * Process complete database result at once.
                 * Suitable for small result sets.
                 */
-                _logger.LogInformation("{EntityType}: Requested all entities from database...", type.Name);
+                _logger.LogInformation("{EntityType:l}: Requested all entities from database...", type.Name);
                 var indexModels = await repository.GetAllAsync().ToListAsync();
                 var databaseElapsed = stopWatch.Elapsed;
-                _logger.LogInformation("{EntityType}: ..received {DatabaseCount} entities in {ElapsedDatabase}",  type.Name, indexModels.Count, databaseElapsed);
+                _logger.LogInformation("{EntityType:l}: ..received {DatabaseCount} entities in {ElapsedDatabase}",  type.Name, indexModels.Count, databaseElapsed);
                 
                 if (indexModels.Count > 0)
                 {
-                    _logger.LogInformation("{EntityType}: Start in-memory operations", type.Name);
+                    _logger.LogInformation("{EntityType:l}: Start in-memory operations", type.Name);
                     finalized = repository.PerformInMemoryOperations(indexModels);
                 }
 
@@ -196,21 +196,21 @@ public class Indexer
 
                 if (finalized.Count > 0)
                 {
-                    _logger.LogInformation("{EntityType}: Retrieved and performed in-memory operations to {FinalizedCount} entities in {Elapsed}. Start indexing.",  type.Name, finalized.Count, inMemoryElapsed);
+                    _logger.LogInformation("{EntityType:l}: Retrieved and performed in-memory operations to {FinalizedCount} entities in {Elapsed}. Start indexing.",  type.Name, finalized.Count, inMemoryElapsed);
                     await _indexService.IndexAsync(indexName, finalized, type);
                     var indexingElapsed = stopWatch.Elapsed;
-                    _logger.LogInformation("{EntityType}: Indexed total of {IndexCount} documents in {ElapsedIndexing}...", type.Name, finalized.Count,  indexingElapsed - inMemoryElapsed);
-                    _logger.LogInformation("{EntityType}: Index '{IndexName}' recreated successfully in {ElapsedTotal}", type.Name, indexName, stopWatch.Elapsed);
+                    _logger.LogInformation("{EntityType:l}: Indexed total of {IndexCount} documents in {ElapsedIndexing}...", type.Name, finalized.Count,  indexingElapsed - inMemoryElapsed);
+                    _logger.LogInformation("{EntityType:l}: Index '{IndexName:l}' recreated successfully in {ElapsedTotal}", type.Name, indexName, stopWatch.Elapsed);
                 }
                 else
                 {
-                    _logger.LogInformation("{EntityType}: Nothing to index", type.Name);
+                    _logger.LogInformation("{EntityType:l}: Nothing to index", type.Name);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "{EntityType}: Exception occurred while indexing '{IndexName}' index after {ElapsedException},", type.Name, indexName, stopWatch.Elapsed);
+            _logger.LogError(ex, "{EntityType:l}: Exception occurred while indexing '{IndexName:l}' index after {ElapsedException},", type.Name, indexName, stopWatch.Elapsed);
         }
     }
 }
