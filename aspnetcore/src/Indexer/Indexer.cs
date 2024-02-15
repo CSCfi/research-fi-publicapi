@@ -58,9 +58,10 @@ public class Indexer
                 continue;
             }
 
+            _logger.LogInformation("{EntityType:l}: Recreating {IndexName:l} index", modelType.Name, indexName);
+            await Task.Delay(1); // Force at least 1 ms separation to log timestamps to preserve log message order in OpenSearch.
             await IndexEntities(indexName, repositoryForType, modelType);
-
-            await Task.Delay(1); // Force at least 1 ms separation to log timestamps to preserve log message order in OpenSearch logging.
+            await Task.Delay(1);
         }
 
         var totalTime = stopWatchMain.Elapsed;
@@ -125,21 +126,16 @@ public class Indexer
         _logger.LogInformation("Populated Funding Call cache in {Elapsed}", stopWatchPopulateCache.Elapsed);
     }
 
-    private async Task IndexEntities(string indexName,
-        IIndexRepository repository,
-        Type type)
+    private async Task IndexEntities(string indexName, IIndexRepository repository, Type type)
     {
-        _logger.LogInformation("{EntityType:l}: Recreating {IndexName:l} index", type.Name, indexName);
-
         Stopwatch stopWatch = new();
-        
+
         try
         {
             List<object> finalized = new();
 
             if (indexName.Contains("publication"))
             {
-
                 // Create new index
                 var (indexToCreate, indexToDelete) = await _indexService.GetIndexNames(indexName);
                 await _indexService.CreateIndex(indexToCreate, type);
