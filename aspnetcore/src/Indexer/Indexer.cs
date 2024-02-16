@@ -41,7 +41,7 @@ public class Indexer
         stopWatchMain.Start();
 
         _logger.LogInformation("Indexing started");
-        _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress:l}'", _configuration["ELASTICSEARCH:URL"]);
+        _logger.LogInformation("Using Elasticsearch at {ElasticsearchAddress:l}", _configuration["ELASTICSEARCH:URL"]);
 
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
 

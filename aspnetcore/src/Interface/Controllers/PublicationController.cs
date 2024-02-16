@@ -36,7 +36,7 @@ public class PublicationController : ControllerBase
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters queryParameters)
     {
         var (publications, searchResult) = await _service.GetPublications(queryParameters);
@@ -55,13 +55,13 @@ public class PublicationController : ControllerBase
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
     /// <response code="404">Not found.</response>
-    [HttpGet("{publicationId}",Name = "GetPublication")]
+    [HttpGet("{publicationId}", Name = "GetPublication")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(Publication), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void),StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(typeof(void),StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public async Task<IResult> Get(string publicationId)
     {
         var publication = await _service.GetPublication(publicationId);

@@ -35,8 +35,18 @@ namespace Serilog.Sinks.Http.TextFormatters;
 /// <seealso cref="CompactRenderedTextFormatter" />
 /// <seealso cref="NamespacedTextFormatter" />
 /// <seealso cref="ITextFormatter" />
-public class WoodLogMetadataFormatter : ITextFormatter
+public class WoodLogMetadataFormatterBase : ITextFormatter
 {
+    /// <summary>
+    /// Gets or sets a value indicating whether the message template is included into JSON.
+    /// </summary>
+    protected bool IncludeMessageTemplate { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the message is rendered into JSON.
+    /// </summary>
+    protected bool IncludeRenderedMessage { get; set; }
+
     /// <summary>
     /// Format the log event into the output.
     /// </summary>
@@ -68,13 +78,21 @@ public class WoodLogMetadataFormatter : ITextFormatter
 
         output.Write("\",\"Level\":\"");
         output.Write(logEvent.Level);
+        output.Write("\"");
 
-        output.Write("\",\"MessageTemplate\":");
-        JsonValueFormatter.WriteQuotedJsonString(logEvent.MessageTemplate.Text, output);
+        if (IncludeMessageTemplate)
+        {
+            output.Write(",\"MessageTemplate\":");
+            JsonValueFormatter.WriteQuotedJsonString(logEvent.MessageTemplate.Text, output);
+        }
+        
+        if (IncludeRenderedMessage)
+        {
+            output.Write(",\"RenderedMessage\":");
 
-        output.Write(",\"RenderedMessage\":");
-        var message = logEvent.MessageTemplate.Render(logEvent.Properties);
-        JsonValueFormatter.WriteQuotedJsonString(message, output);
+            var message = logEvent.MessageTemplate.Render(logEvent.Properties);
+            JsonValueFormatter.WriteQuotedJsonString(message, output);
+        }
 
         if (logEvent.Exception != null)
         {
