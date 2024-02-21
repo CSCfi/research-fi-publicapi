@@ -6,5 +6,6 @@ public class WoodLogMetadataFormatterForInterface : WoodLogMetadataFormatterBase
     {
         IncludeMessageTemplate = false;
         IncludeRenderedMessage = false;
+        ApplicationType = "Interface";
     }
 }

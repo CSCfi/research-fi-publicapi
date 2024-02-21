@@ -48,6 +48,12 @@ public class WoodLogMetadataFormatterBase : ITextFormatter
     protected bool IncludeRenderedMessage { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating which application is being logged (Indexer or Interface).
+    /// </summary>
+    protected string ApplicationType { get; set; }
+
+
+    /// <summary>
     /// Format the log event into the output.
     /// </summary>
     /// <param name="logEvent">The event to format.</param>
@@ -102,7 +108,7 @@ public class WoodLogMetadataFormatterBase : ITextFormatter
 
         if (logEvent.Properties.Count != 0)
         {
-            WriteProperties(logEvent.Properties, output);
+            WriteProperties(logEvent.Properties, output, ApplicationType);
         }
 
         // Better not to allocate an array in the 99.9% of cases where this is false
@@ -122,7 +128,8 @@ public class WoodLogMetadataFormatterBase : ITextFormatter
 
     private static void WriteProperties(
         IReadOnlyDictionary<string, LogEventPropertyValue> properties,
-        TextWriter output)
+        TextWriter output,
+        string ApplicationType)
     {
         output.Write(",\"Properties\":{");
 
@@ -137,9 +144,11 @@ public class WoodLogMetadataFormatterBase : ITextFormatter
          * Wood project number:
          *     Serilog.Properties.WoodLogProjectNumber
          * Wood use case:
-         *     Serilog.Properties.WoodLogUseCase
+         *     Serilog.Properties.WoodLogUseCaseIndexer
+         *     Serilog.Properties.WoodLogUseCaseInterface
          * Wood retention months:
-         *     Serilog.Properties.WoodLogRetentionMonths
+         *     Serilog.Properties.WoodLogRetentionMonthsIndexer
+         *     Serilog.Properties.WoodLogRetentionMonthsInterface
          * 
          * Properties are excluded from the "Properties" section of
          * outgoing JSON log message. Instead, a new top level
@@ -172,11 +181,19 @@ public class WoodLogMetadataFormatterBase : ITextFormatter
             {
                 woodProjectNumber = property;
             }
-            else if (property.Key.ToLower() == "woodlogusecase")
+            else if (ApplicationType == "Indexer" && property.Key.ToLower() == "woodlogusecaseindexer")
             {
                 woodUseCase = property;
             }
-            else if (property.Key.ToLower() == "woodlogretentionmonths")
+            else if (ApplicationType == "Interface" && property.Key.ToLower() == "woodlogusecaseinterface")
+            {
+                woodUseCase = property;
+            }
+            else if (ApplicationType == "Indexer" && property.Key.ToLower() == "woodlogretentionmonthsindexer")
+            {
+                woodRetentionMonths = property;
+            }
+            else if (ApplicationType == "Interface" && property.Key.ToLower() == "woodlogretentionmonthsinterface")
             {
                 woodRetentionMonths = property;
             }

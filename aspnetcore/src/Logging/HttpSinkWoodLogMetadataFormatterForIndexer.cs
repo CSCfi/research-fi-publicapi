@@ -6,5 +6,6 @@ public class WoodLogMetadataFormatterForIndexer : WoodLogMetadataFormatterBase
     {
         IncludeMessageTemplate = false;
         IncludeRenderedMessage = true;
+        ApplicationType = "Indexer";
     }
 }

@@ -100,16 +100,16 @@ objects:
                         configMapKeyRef:
                           name: publicapi-api-config-devel
                           key: "Serilog__Properties__WoodLogProjectNumber"
-                    - name: "Serilog__Properties__WoodLogRetentionMonths"
+                    - name: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
                       valueFrom:
                         configMapKeyRef:
                           name: publicapi-api-config-devel
-                          key: "Serilog__Properties__WoodLogRetentionMonths"
-                    - name: "Serilog__Properties__WoodLogUsecase"
+                          key: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
+                    - name: "Serilog__Properties__WoodLogUsecaseIndexer"
                       valueFrom:
                         configMapKeyRef:
                           name: publicapi-api-config-devel
-                          key: "Serilog__Properties__WoodLogUsecase"
+                          key: "Serilog__Properties__WoodLogUsecaseIndexer"
                     - name: "QueryTimeout"
                       valueFrom:
                         configMapKeyRef:
