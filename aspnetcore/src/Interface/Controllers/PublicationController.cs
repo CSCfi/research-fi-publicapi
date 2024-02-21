@@ -3,6 +3,7 @@ using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResearchFi.Query;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -14,13 +15,17 @@ public class PublicationController : ControllerBase
 {
     private readonly ILogger<PublicationController> _logger;
     private IPublicationService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public PublicationController(
         ILogger<PublicationController> logger,
-        IPublicationService service)
+        IPublicationService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Publication);
     }
 
     /// <summary>

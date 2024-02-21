@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResearchFi.FundingDecision;
 using ResearchFi.Query;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -15,13 +16,17 @@ public class FundingDecisionController : ControllerBase
     private const string ApiVersion = "1.0";
     private readonly ILogger<FundingDecisionController> _logger;
     private readonly IFundingDecisionService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public FundingDecisionController(
         ILogger<FundingDecisionController> logger,
-        IFundingDecisionService service)
+        IFundingDecisionService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_FundingDecision);
     }
 
     /// <summary>
