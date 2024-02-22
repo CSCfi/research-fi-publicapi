@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResearchFi.Query;
 using Infrastructure =ResearchFi.Infrastructure.Infrastructure;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -15,13 +16,17 @@ public class InfrastructureController : ControllerBase
 
     private readonly ILogger<InfrastructureController> _logger;
     private IInfrastructureService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public InfrastructureController(
         ILogger<InfrastructureController> logger,
-        IInfrastructureService service)
+        IInfrastructureService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Infrastructure);
     }
 
     /// <summary>

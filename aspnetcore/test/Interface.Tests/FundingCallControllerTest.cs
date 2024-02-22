@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using ResearchFi.Query;
 using Xunit;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Tests;
 
@@ -19,6 +20,7 @@ public class FundingCallControllerTest : IDisposable
     private readonly FundingCallController _controller;
     private readonly Mock<ISearchService<FundingCallSearchParameters, FundingCall>> _mockSearchService;
     private readonly IFundingCallService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public FundingCallControllerTest()
     {
@@ -29,8 +31,9 @@ public class FundingCallControllerTest : IDisposable
         _mockSearchService = new Mock<ISearchService<FundingCallSearchParameters, FundingCall>>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<FundingCallProfile>()).CreateMapper();
         _service = new FundingCallService(serviceLogger, mapper, _mockSearchService.Object);
+        _diagnosticContext = new Mock<IDiagnosticContext>().Object;;
 
-        _controller = new FundingCallController(controllerLogger, _service);
+        _controller = new FundingCallController(controllerLogger, _service, _diagnosticContext);
     }
 
     [Fact]

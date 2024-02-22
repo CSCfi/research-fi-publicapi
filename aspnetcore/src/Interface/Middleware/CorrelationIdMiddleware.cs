@@ -41,7 +41,7 @@ public class CorrelationIdMiddleware
 
         var clientId = context.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
         var organizationId = context.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid")?.Value;
-        _logger.LogDebug("Correlation id '{correlationId}' generated for '{clientId}' '{organizationId}'.", correlationId, clientId, organizationId);
+        _logger.LogDebug("Correlation Id '{CorrelationId:l}' generated for '{ClientId:l}' '{OrganizationId:l}'.", correlationId, clientId, organizationId);
 
         await _next(context);
     }
