@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResearchFi.Query;
 using ResearchDataset = ResearchFi.ResearchDataset.ResearchDataset;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -15,13 +16,17 @@ public class ResearchDatasetController : ControllerBase
 
     private readonly ILogger<ResearchDatasetController> _logger;
     private IResearchDatasetService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public ResearchDatasetController(
         ILogger<ResearchDatasetController> logger,
-        IResearchDatasetService service)
+        IResearchDatasetService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_ResearchDataset);
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ public class Indexer
         IElasticSearchIndexService indexService,
         IConfiguration configuration,
         IndexNameSettings indexNameSettings,
-        IEnumerable<IIndexRepository> indexRepositories, 
+        IEnumerable<IIndexRepository> indexRepositories,
         IMemoryCache memoryCache)
     {
         _logger = logger;
@@ -37,11 +37,11 @@ public class Indexer
 
     public async Task Start()
     {
-        Stopwatch stopWatch = new();
-        stopWatch.Start();
+        Stopwatch stopWatchMain = new();
+        stopWatchMain.Start();
 
-        _logger.LogInformation("Starting indexing...");
-        _logger.LogInformation("Using ElasticSearch at '{ElasticSearchAddress}'", _configuration["ELASTICSEARCH:URL"]);
+        _logger.LogInformation("Indexing started");
+        _logger.LogInformation("Using Elasticsearch at {ElasticsearchAddress:l}", _configuration["ELASTICSEARCH:URL"]);
 
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
 
@@ -54,17 +54,20 @@ public class Indexer
 
             if (repositoryForType is null)
             {
-                _logger.LogError("{EntityType}: Unable to find database repository for index {IndexName}", modelType.Name, indexName);      
+                _logger.LogError("{EntityType:l}: Unable to find database repository for index {IndexName:l}", modelType.Name, indexName);
                 continue;
             }
 
+            _logger.LogInformation("{EntityType:l}: Recreating index {IndexName:l}", modelType.Name, indexName);
+            await Task.Delay(1); // Force at least 1 ms separation to log timestamps to preserve log message order in OpenSearch.
             await IndexEntities(indexName, repositoryForType, modelType);
+            await Task.Delay(1);
         }
 
-        var totalTime = stopWatch.Elapsed;
+        var totalTime = stopWatchMain.Elapsed;
 
-        _logger.LogInformation("Indexing completed in {Elapsed}, finishing process", totalTime);
-        stopWatch.Stop();
+        _logger.LogInformation("Indexing complete in {Elapsed}", totalTime);
+        stopWatchMain.Stop();
     }
 
     /// <summary>
@@ -73,7 +76,8 @@ public class Indexer
     private async Task PopulateOrganizationCache()
     {
         _logger.LogInformation("Populating Organization cache");
-
+        Stopwatch stopWatchPopulateCache = new();
+        stopWatchPopulateCache.Start();
         var organizationRepository = _indexRepositories.SingleOrDefault(repo => repo.ModelType == typeof(Organization));
         if (organizationRepository != null)
         {
@@ -83,17 +87,18 @@ public class Indexer
                 _memoryCache.Set(MemoryCacheKeys.OrganizationById(organization.Id), organization);
             }
         }
-
-        _logger.LogInformation("Populated Organization cache");
+        stopWatchPopulateCache.Stop();
+        _logger.LogInformation("Populated Organization cache in {Elapsed}", stopWatchPopulateCache.Elapsed);
     }
-    
+
     /// <summary>
     /// Gets all call programmes from the database to an in-memory cache to simplify SQL queries by automapper.
     /// </summary>
     private async Task PopulateFundingCallCache()
     {
         _logger.LogInformation("Populating Funding Call cache");
-
+        Stopwatch stopWatchPopulateCache = new();
+        stopWatchPopulateCache.Start();
         var fundingCallRepository = _indexRepositories.SingleOrDefault(repo => repo.ModelType == typeof(FundingCall));
         if (fundingCallRepository != null)
         {
@@ -106,36 +111,31 @@ public class Indexer
                 {
                     continue;
                 }
-                
+
                 if (_memoryCache.TryGetValue(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), out List<string?> foundFundingCalls))
                 {
                     foundFundingCalls.Add(fundingCall.SourceProgrammeId);
                 }
                 else
                 {
-                    _memoryCache.Set(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), new List<string?> { fundingCall.SourceProgrammeId });    
+                    _memoryCache.Set(MemoryCacheKeys.FundingCallByAbbreviationAndEuCallId(fundingCall.Abbreviation, fundingCall.EuCallId), new List<string?> { fundingCall.SourceProgrammeId });
                 }
             }
         }
-
-        _logger.LogInformation("Populated Funding Call cache");
+        stopWatchPopulateCache.Stop();
+        _logger.LogInformation("Populated Funding Call cache in {Elapsed}", stopWatchPopulateCache.Elapsed);
     }
 
-    private async Task IndexEntities(string indexName,
-        IIndexRepository repository,
-        Type type)
+    private async Task IndexEntities(string indexName, IIndexRepository repository, Type type)
     {
-        _logger.LogInformation("{EntityType}: Recreating '{IndexName}' index...", type.Name, indexName);
-
         Stopwatch stopWatch = new();
-        stopWatch.Start();
 
         try
         {
             List<object> finalized = new();
 
-            if (indexName.Contains("publication")) {
-
+            if (indexName.Contains("publication"))
+            {
                 // Create new index
                 var (indexToCreate, indexToDelete) = await _indexService.GetIndexNames(indexName);
                 await _indexService.CreateIndex(indexToCreate, type);
@@ -146,7 +146,7 @@ public class Indexer
                 * Currently this is done only for publications, because their dataset is much
                 * larger than others.
                 */
-                
+
                 int skipAmount = 0;
                 int takeAmount = 50000;
                 int numOfResults = 0;
@@ -154,14 +154,18 @@ public class Indexer
 
                 do
                 {
-                    _logger.LogInformation("{EntityType}: Requested {takeAmount} entities from database...", type.Name, takeAmount);
+                    _logger.LogInformation("{EntityType:l}: Requesting {TakeAmount} entities from database", type.Name, takeAmount);
+                    stopWatch.Start();
                     var indexModels = await repository.GetChunkAsync(skipAmount: skipAmount, takeAmount: takeAmount).ToListAsync();
+                    stopWatch.Stop();
                     numOfResults = indexModels.Count;
-                    _logger.LogInformation("{EntityType}: ...received {numOfResults} entities", type.Name, numOfResults);
-                    
+                    _logger.LogInformation("{EntityType:l}: Received {DatabaseResultCount} entities in {Elapsed}", type.Name, numOfResults, stopWatch.Elapsed);
+                    stopWatch.Reset();
+
                     if (numOfResults > 0)
                     {
-                        foreach (object entity in indexModels) {
+                        foreach (object entity in indexModels)
+                        {
                             finalized.Add(repository.PerformInMemoryOperation(entity));
                         }
                         await _indexService.IndexChunkAsync(indexToCreate, finalized, type);
@@ -169,11 +173,12 @@ public class Indexer
                     skipAmount = skipAmount + takeAmount;
                     processedCount = processedCount + numOfResults;
                     finalized = new();
-                    _logger.LogInformation("{EntityType}: Total documents indexed = {processedCount}", type.Name, processedCount);
-                } while(numOfResults >= takeAmount-1);
+                    _logger.LogInformation("{EntityType:l}: Total documents indexed = {processedCount}", type.Name, processedCount);
+                } while (numOfResults >= takeAmount - 1);
 
                 // Activate new index and delete old
                 await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
+                _logger.LogInformation("{EntityType:l}: Recreated index {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
             }
             else
             {
@@ -181,36 +186,28 @@ public class Indexer
                 * Process complete database result at once.
                 * Suitable for small result sets.
                 */
-                _logger.LogInformation("{EntityType}: Requested all entities from database...", type.Name);
+                _logger.LogInformation("{EntityType:l}: Requested all entities from database", type.Name);
+                stopWatch.Start();
                 var indexModels = await repository.GetAllAsync().ToListAsync();
-                var databaseElapsed = stopWatch.Elapsed;
-                _logger.LogInformation("{EntityType}: ..received {DatabaseCount} entities in {ElapsedDatabase}",  type.Name, indexModels.Count, databaseElapsed);
-                
+                stopWatch.Stop();
+                _logger.LogInformation("{EntityType:l}: Received {DatabaseResultCount} entities in {Elapsed}", type.Name, indexModels.Count, stopWatch.Elapsed);
+
                 if (indexModels.Count > 0)
                 {
-                    _logger.LogInformation("{EntityType}: Start in-memory operations", type.Name);
                     finalized = repository.PerformInMemoryOperations(indexModels);
                 }
 
-                var inMemoryElapsed = stopWatch.Elapsed;
-
                 if (finalized.Count > 0)
                 {
-                    _logger.LogInformation("{EntityType}: Retrieved and performed in-memory operations to {FinalizedCount} entities in {Elapsed}. Start indexing.",  type.Name, finalized.Count, inMemoryElapsed);
                     await _indexService.IndexAsync(indexName, finalized, type);
                     var indexingElapsed = stopWatch.Elapsed;
-                    _logger.LogInformation("{EntityType}: Indexed total of {IndexCount} documents in {ElapsedIndexing}...", type.Name, finalized.Count,  indexingElapsed - inMemoryElapsed);
-                    _logger.LogInformation("{EntityType}: Index '{IndexName}' recreated successfully in {ElapsedTotal}", type.Name, indexName, stopWatch.Elapsed);
-                }
-                else
-                {
-                    _logger.LogInformation("{EntityType}: Nothing to index", type.Name);
+                    _logger.LogInformation("{EntityType:l}: Recreated index {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, finalized.Count);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "{EntityType}: Exception occurred while indexing '{IndexName}' index after {ElapsedException},", type.Name, indexName, stopWatch.Elapsed);
+            _logger.LogError("{EntityType:l}: Exception occurred while indexing {IndexName:l}: {IndexerException} index after {Elapsed},", type.Name, indexName, stopWatch.Elapsed, ex.ToString());
         }
     }
 }

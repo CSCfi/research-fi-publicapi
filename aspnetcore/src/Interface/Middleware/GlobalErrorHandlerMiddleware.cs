@@ -30,11 +30,11 @@ public class GlobalErrorHandlerMiddleware
                 ? id
                 : "N/A";
 
-            _logger.LogError(exception, "Global error handler caught an exception. CorrelationId: '{correlationID}'.", correlationId);
+            _logger.LogError(exception, "Global error handler caught an exception. CorrelationId: '{CorrelationID}'.", correlationId);
 
             var error = JsonSerializer.Serialize(new
             {
-                message = $"Error. Correlation id: {correlationId}"
+                message = $"Error. Correlation Id: {correlationId}"
             });
 
             await response.WriteAsync(error);
