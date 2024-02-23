@@ -1,6 +1,6 @@
 # This file is part of the research.fi api
 #
-# Copyright 2023 Ministry of Education and Culture, Finland
+# Copyright 2024 Ministry of Education and Culture, Finland
 #
 # :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
 # :license: MIT
@@ -9,8 +9,8 @@ kind: Template
 metadata:
   labels:
     app: publicapi-indexer-production
-    template: publicapi-indexer-production
-  name: publicapi-indexer-production
+    template: publicapi-indexer-cronjob-production
+  name: publicapi-indexer-cronjob-production
 objects:
   # Recurring CronJob (production)
   # Indexes db entities to ElasticSearch.
@@ -116,36 +116,3 @@ objects:
                           name: publicapi-api-config-production
                           key: "QueryTimeout"
               restartPolicy: Never
-  # ImageStream (production)
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: publicapi-indexer-production
-      labels:
-        app: publicapi-indexer-production
-    spec:
-      lookupPolicy:
-        local: true
-
-  # BuildConfig using Docker build strategy
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: publicapi-indexer-build-production
-      labels:
-        app: publicapi-indexer-production
-    spec:
-      source:
-        git:
-          uri: https://github.com/CSCfi/research-fi-publicapi.git
-          ref: main
-        contextDir: .
-      strategy:
-        dockerStrategy:
-          dockerfilePath: aspnetcore/openshift/indexer/Dockerfile
-      output:
-        to:
-          kind: ImageStreamTag
-          name: publicapi-indexer-production:latest
-      successfulBuildsHistoryLimit: 4
-      failedBuildsHistoryLimit: 4

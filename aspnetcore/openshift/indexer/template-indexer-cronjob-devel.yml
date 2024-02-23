@@ -1,6 +1,6 @@
 # This file is part of the research.fi api
 #
-# Copyright 2023 Ministry of Education and Culture, Finland
+# Copyright 2024 Ministry of Education and Culture, Finland
 #
 # :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
 # :license: MIT
@@ -8,20 +8,20 @@ apiVersion: v1
 kind: Template
 metadata:
   labels:
-    app: publicapi-indexer-qa
-    template: publicapi-indexer-qa
-  name: publicapi-indexer-qa
+    app: publicapi-indexer-devel
+    template: publicapi-indexer-cronjob-devel
+  name: publicapi-indexer-cronjob-devel
 objects:
-  # Recurring CronJob (qa)
+  # Recurring CronJob (devel)
   # Indexes db entities to ElasticSearch.
   - apiVersion: batch/v1beta1
     kind: CronJob
     metadata:
-      name: publicapi-indexer-cronjob-qa
+      name: publicapi-indexer-cronjob-devel
     spec:
-      schedule: "0 2 * * *" # every day at 02:00 UTC
+      schedule: "0 1 * * *" # every day at 01:00 UTC
       concurrencyPolicy: "Forbid"
-      startingDeadlineSeconds: 300 # Can start 5 minutes after the schedule  
+      startingDeadlineSeconds: 300 # Can start 5 minutes after the schedule
       suspend: false
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
@@ -31,121 +31,88 @@ objects:
           template:
             spec:
               containers:
-                - name: publicapi-indexer-container-qa
-                  image: publicapi-indexer-qa
+                - name: publicapi-indexer-container-devel
+                  image: publicapi-indexer-devel
                   imagePullPolicy: Always
                   env:
                     - name: "ELASTICSEARCH__PASSWORD"
                       valueFrom:
                         secretKeyRef:
-                          name: publicapi-api-secret-qa
+                          name: publicapi-api-secret-devel
                           key: "ELASTICSEARCH__PASSWORD"
                     - name: "dbconnectionstring"
                       valueFrom:
                         secretKeyRef:
-                          name: publicapi-api-secret-qa
+                          name: publicapi-api-secret-devel
                           key: dbconnectionstring
                     - name: "ELASTICSEARCH__URL"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "ELASTICSEARCH__URL"
                     - name: "ELASTICSEARCH__USERNAME"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "ELASTICSEARCH__USERNAME"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
                     - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
                     - name: "Serilog__MinimumLevel__Default"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "Serilog__MinimumLevel__Default"
                     - name: "Serilog__WriteTo__HttpSink__Args__requestUri"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "Serilog__WriteTo__HttpSink__Args__requestUri"
                     - name: "Serilog__Properties__WoodLogProjectNumber"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "Serilog__Properties__WoodLogProjectNumber"
                     - name: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
                     - name: "Serilog__Properties__WoodLogUsecaseIndexer"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "Serilog__Properties__WoodLogUsecaseIndexer"
                     - name: "QueryTimeout"
                       valueFrom:
                         configMapKeyRef:
-                          name: publicapi-api-config-qa
+                          name: publicapi-api-config-devel
                           key: "QueryTimeout"
               restartPolicy: Never
-  # ImageStream (qa)
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: publicapi-indexer-qa
-      labels:
-        app: publicapi-indexer-qa
-    spec:
-      lookupPolicy:
-        local: true
-
-  # BuildConfig using Docker build strategy
-  - apiVersion: v1
-    kind: BuildConfig
-    metadata:
-      name: publicapi-indexer-build-qa
-      labels:
-        app: publicapi-indexer-qa
-    spec:
-      source:
-        git:
-          uri: https://github.com/CSCfi/research-fi-publicapi.git
-          ref: qa
-        contextDir: .
-      strategy:
-        dockerStrategy:
-          dockerfilePath: aspnetcore/openshift/indexer/Dockerfile
-      output:
-        to:
-          kind: ImageStreamTag
-          name: publicapi-indexer-qa:latest
-      successfulBuildsHistoryLimit: 4
-      failedBuildsHistoryLimit: 4
