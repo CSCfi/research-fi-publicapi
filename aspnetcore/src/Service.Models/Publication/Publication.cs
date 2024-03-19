@@ -42,6 +42,7 @@ public class Publication
     /// <summary>
     /// Tekijät
     /// </summary>
+    [Nested]
     public List<Author>? Authors { get; set; }
 
     /// <summary>
