@@ -48,18 +48,45 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Query(parameters.AuthorsText)));
         }
         
-        if (!string.IsNullOrWhiteSpace(parameters.AuthorFirstNames))
+        if (!string.IsNullOrWhiteSpace(parameters.AuthorFirstNames) && string.IsNullOrWhiteSpace(parameters.AuthorLastName))
         {
-            subQueries.Add(t => 
-                t.Match(query => query.Field(f => f.Authors.Suffix(nameof(Author.FirstNames)))
-                    .Query(parameters.AuthorFirstNames)));
+            // Only first names
+            subQueries.Add(
+                q => q.Nested(
+                    query => query
+                        .Path(p => p.Authors)
+                        .Query(
+                            q => q.Match(m => m
+                                .Field(f => f.Authors.Suffix(nameof(Author.FirstNames)))
+                                .Query(parameters.AuthorFirstNames)))));
         }
-        
-        if (!string.IsNullOrWhiteSpace(parameters.AuthorLastName))
+        else if (string.IsNullOrWhiteSpace(parameters.AuthorFirstNames) && !string.IsNullOrWhiteSpace(parameters.AuthorLastName))
         {
-            subQueries.Add(t => 
-                t.Match(query => query.Field(f => f.Authors.Suffix(nameof(Author.LastName)))
-                    .Query(parameters.AuthorLastName)));
+            // Only last name
+            subQueries.Add(
+                q => q.Nested(
+                    query => query
+                        .Path(p => p.Authors)
+                        .Query(
+                            q => q.Match(m => m
+                                .Field(f => f.Authors.Suffix(nameof(Author.LastName)))
+                                .Query(parameters.AuthorLastName)))));
+        }
+        else if (!string.IsNullOrWhiteSpace(parameters.AuthorFirstNames) && !string.IsNullOrWhiteSpace(parameters.AuthorLastName))
+        {
+            // Both first names and last name
+            subQueries.Add(
+                q => q.Nested(
+                    query => query
+                        .Path(p => p.Authors)
+                        .Query(
+                            q => q.Bool(b => b
+                                .Must(mu => mu
+                                    .Match(m => m
+                                        .Field(f => f.Authors.Suffix(nameof(Author.FirstNames))).Query(parameters.AuthorFirstNames)
+                                    ), mu => mu
+                                    .Match(m => m
+                                        .Field(f => f.Authors.Suffix(nameof(Author.LastName))).Query(parameters.AuthorLastName)))))));
         }
         
         if (!string.IsNullOrWhiteSpace(parameters.ConferenceName))
