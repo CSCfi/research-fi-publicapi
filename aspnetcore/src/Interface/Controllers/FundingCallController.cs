@@ -14,13 +14,17 @@ public class FundingCallController : ControllerBase
 {
     private readonly ILogger<FundingCallController> _logger;
     private readonly IFundingCallService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public FundingCallController(
         ILogger<FundingCallController> logger,
-        IFundingCallService service)
+        IFundingCallService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_FundingCall);
     }
 
     /// <summary>

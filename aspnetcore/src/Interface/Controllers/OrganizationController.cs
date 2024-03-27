@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResearchFi.Query;
 using Organization = ResearchFi.Organization.Organization;
+using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
@@ -15,13 +16,17 @@ public class OrganizationController : ControllerBase
 
     private readonly ILogger<OrganizationController> _logger;
     private IOrganizationService _service;
+    private readonly IDiagnosticContext _diagnosticContext;
 
     public OrganizationController(
         ILogger<OrganizationController> logger,
-        IOrganizationService service)
+        IOrganizationService service,
+        IDiagnosticContext diagnosticContext)
     {
         _logger = logger;
         _service = service;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Organization);
     }
 
     /// <summary>

@@ -76,15 +76,17 @@ app.UseHeaderPropagation();
 app.UseMiddleware<CorrelationIdMiddleware>();
 
 // Add properties from the HTTP request to the logging.
-app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (context, httpContext) =>
+app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (IDiagnosticContext context, HttpContext httpContext) =>
 {
     var correlationId = httpContext.Items[CorrelationIdMiddleware.CorrelationIdHeaderName];
     var clientId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
     var organizationId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid")?.Value;
+    var queryString = httpContext.Request.QueryString.HasValue ? httpContext.Request.QueryString.Value : "";
     
-    context.Set("correlationId", correlationId);
-    context.Set("clientId", clientId);
-    context.Set("organizationId", organizationId);
+    context.Set("CorrelationId", correlationId);
+    context.Set("ClientId", clientId);
+    context.Set("OrganizationId", organizationId);
+    context.Set("QueryString", queryString);
 });
 
 app.UseAuthentication();
