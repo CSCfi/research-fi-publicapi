@@ -29,6 +29,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DatabaseContext\DatabaseContext.csproj" />
     <ProjectReference Include="..\..\src\Repositories\Repositories.csproj" />
+    <ProjectReference Include="..\..\src\Indexer\Indexer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Preflight/" />
   </ItemGroup>
 
 </Project>
