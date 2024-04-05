@@ -42,7 +42,6 @@ public class OrganizationQueryGenerator : QueryGeneratorBase<OrganizationSearchP
     protected override Func<SortDescriptor<Organization>, IPromise<IList<ISort>>> GenerateSortForSearch(OrganizationSearchParameters parameters)
     {
         // Sort organizations
-        return sortDescriptor => sortDescriptor
-            .Field(f => f.NameFi, SortOrder.Ascending);
+        return sortDescriptor => sortDescriptor;
     }
 }

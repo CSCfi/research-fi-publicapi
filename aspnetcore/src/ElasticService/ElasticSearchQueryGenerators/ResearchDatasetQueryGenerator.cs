@@ -207,6 +207,6 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
     {
         // Sort research datasets
         return sortDescriptor => sortDescriptor
-            .Field(f => f.NameFi, SortOrder.Ascending);
+            .Field(f => f.Created, SortOrder.Descending);
     }
 }
