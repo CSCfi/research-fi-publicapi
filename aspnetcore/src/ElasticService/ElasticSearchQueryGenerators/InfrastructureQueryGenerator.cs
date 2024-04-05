@@ -38,4 +38,11 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
     {
         throw new NotImplementedException();
     }
+
+    protected override Func<SortDescriptor<Infrastructure>, IPromise<IList<ISort>>> GenerateSortForSearch(InfrastructureSearchParameters parameters)
+    {
+        // Sort infrastructures
+        return sortDescriptor => sortDescriptor
+            .Field(f => f.NameFi, SortOrder.Ascending);
+    }
 }

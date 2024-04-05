@@ -288,4 +288,11 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
     {
         return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.Id).Value(id));
     }
+
+    protected override Func<SortDescriptor<Publication>, IPromise<IList<ISort>>> GenerateSortForSearch(PublicationSearchParameters parameters)
+    {
+        // Sort publications
+        return sortDescriptor => sortDescriptor
+            .Field(f => f.PublicationYear, SortOrder.Descending);
+    }
 }
