@@ -243,7 +243,7 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
         if (parameters.PublisherOpenAccess is not null)
         {
             filters.Add(t =>
-                t.Term(s => s.Field(f => f.PublisherOpenAccess)
+                t.Term(s => s.Field(f => f.PublisherOpenAccess.Code)
                     .Value(parameters.PublisherOpenAccess)));
         }
         
