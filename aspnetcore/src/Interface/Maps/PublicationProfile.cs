@@ -17,7 +17,7 @@ public class PublicationProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateMap<GetPublicationsQueryParameters, PublicationSearchParameters>()
-            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.Type!.ToLower()));
+            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.Type!));
         
         CreateMap<Service.Models.Publication.Publication, Publication>()
             .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src =>  src.PublicationYear.HasValue ? src.PublicationYear.Value.ToString(DateTimeYearFormat) : null))
