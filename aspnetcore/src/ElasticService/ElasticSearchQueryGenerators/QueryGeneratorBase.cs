@@ -18,6 +18,7 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Index(indexName)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Sort(GenerateSortForSearch(searchParameters))
             .Query(GenerateQueryForSearch(searchParameters));
     }
 
@@ -30,6 +31,8 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
     }
 
     protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForSearch(TIn parameters);
-    
+
     protected abstract Func<QueryContainerDescriptor<TOut>,QueryContainer> GenerateQueryForSingle(string id);
+
+    protected abstract Func<SortDescriptor<TOut>, IPromise<IList<ISort>>> GenerateSortForSearch(TIn parameters);
 }

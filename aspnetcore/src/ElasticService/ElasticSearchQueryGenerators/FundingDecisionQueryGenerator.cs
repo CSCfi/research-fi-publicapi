@@ -174,4 +174,11 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
 
         return filters;
     }
+
+    protected override Func<SortDescriptor<FundingDecision>, IPromise<IList<ISort>>> GenerateSortForSearch(FundingDecisionSearchParameters parameters)
+    {
+        // Sort funding decisions
+        return sortDescriptor => sortDescriptor
+            .Field(f => f.FundingStartDate, SortOrder.Descending);
+    }
 }
