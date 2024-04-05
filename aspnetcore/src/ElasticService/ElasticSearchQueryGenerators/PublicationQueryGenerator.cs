@@ -233,9 +233,11 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
         
         if (parameters.TypeCode is not null)
         {
+            #pragma warning disable CS8602 // Disable warning of possible null reference.
             filters.Add(t =>
-                t.Term(s => s.Field(f => f.Type)
+                t.Term(s => s.Field(f => f.Type.Code)
                     .Value(parameters.TypeCode)));
+            #pragma warning restore CS8602
         }
         
         if (parameters.PublisherOpenAccess is not null)
@@ -276,9 +278,11 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
 
         if (parameters.Status is not null)
         {
+            #pragma warning disable CS8602 // Disable warning of possible null reference.
             filters.Add(t =>
-                t.Term(s => s.Field(f => f.Status)
+                t.Term(s => s.Field(f => f.Status.Code)
                     .Value(parameters.Status)));
+            #pragma warning restore CS8602
         }
 
         return filters;
