@@ -231,18 +231,22 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Value(parameters.AuthorOrcId)));
         }
         
-        if (parameters.TypeCode is not null)
+        // Searching with type code requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.TypeCode))
         {
-            filters.Add(t =>
-                t.Term(s => s.Field(f => f.Type)
-                    .Value(parameters.TypeCode)));
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.Type!.Code)
+                .Value(parameters.TypeCode)
+            ));
         }
-        
-        if (parameters.PublisherOpenAccess is not null)
+
+        // Searching with publisher open access code requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.PublisherOpenAccess))
         {
-            filters.Add(t =>
-                t.Term(s => s.Field(f => f.PublisherOpenAccess)
-                    .Value(parameters.PublisherOpenAccess)));
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.PublisherOpenAccess!.Code)
+                .Value(parameters.PublisherOpenAccess)
+            ));
         }
         
         if (parameters.Issn is not null)
@@ -274,11 +278,13 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Value(parameters.Doi)));
         }
 
-        if (parameters.Status is not null)
+        // Searching with status requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.Status))
         {
-            filters.Add(t =>
-                t.Term(s => s.Field(f => f.Status)
-                    .Value(parameters.Status)));
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.Status!.Code)
+                .Value(parameters.Status)
+            ));
         }
 
         return filters;
