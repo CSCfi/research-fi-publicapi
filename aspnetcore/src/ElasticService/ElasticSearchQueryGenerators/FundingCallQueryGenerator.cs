@@ -131,4 +131,11 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
 
         return filters;
     }
+
+    protected override Func<SortDescriptor<FundingCall>, IPromise<IList<ISort>>> GenerateSortForSearch(FundingCallSearchParameters parameters)
+    {
+        // Sort funding calls
+        return sortDescriptor => sortDescriptor
+            .Field(f => f.CallProgrammeDueDate, SortOrder.Ascending);
+    }
 }

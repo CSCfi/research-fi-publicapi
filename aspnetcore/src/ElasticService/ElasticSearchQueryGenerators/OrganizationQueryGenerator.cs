@@ -38,4 +38,10 @@ public class OrganizationQueryGenerator : QueryGeneratorBase<OrganizationSearchP
     {
         throw new NotImplementedException();
     }
+
+    protected override Func<SortDescriptor<Organization>, IPromise<IList<ISort>>> GenerateSortForSearch(OrganizationSearchParameters parameters)
+    {
+        // Sort organizations
+        return sortDescriptor => sortDescriptor;
+    }
 }
