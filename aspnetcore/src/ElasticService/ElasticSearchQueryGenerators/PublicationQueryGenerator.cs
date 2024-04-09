@@ -30,7 +30,7 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
         if (!string.IsNullOrWhiteSpace(parameters.Name))
         {
             subQueries.Add(t => 
-                t.Match(query => query.Field(f => f.Name)
+                t.MatchPhrase(query => query.Field(f => f.Name)
                     .Query(parameters.Name)));
         }
 
