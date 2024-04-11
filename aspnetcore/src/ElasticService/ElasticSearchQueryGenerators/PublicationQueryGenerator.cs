@@ -89,6 +89,18 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                                         .Field(f => f.Authors.Suffix(nameof(Author.LastName))).Query(parameters.AuthorLastName)))))));
         }
         
+        if (!string.IsNullOrWhiteSpace(parameters.AuthorOrcId))
+        {
+            subQueries.Add(
+                q => q.Nested(
+                    query => query
+                        .Path(p => p.Authors)
+                        .Query(
+                            q => q.Match(m => m
+                                .Field(f => f.Authors.Suffix(nameof(Author.Orcid)))
+                                .Query(parameters.AuthorOrcId)))));
+        }
+
         if (!string.IsNullOrWhiteSpace(parameters.ConferenceName))
         {
             subQueries.Add(t => 
@@ -224,13 +236,6 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Value(parameters.OrganizationUnitId))); 
         }
 
-        if (parameters.AuthorOrcId is not null)
-        {
-            filters.Add(t =>
-                t.Term(s => s.Field(f => f.Authors.Suffix(nameof(Author.Orcid)))
-                    .Value(parameters.AuthorOrcId)));
-        }
-        
         // Searching with type code requires exact match.
         if (!string.IsNullOrWhiteSpace(parameters.TypeCode))
         {
