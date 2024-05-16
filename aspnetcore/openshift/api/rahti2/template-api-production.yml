@@ -33,26 +33,6 @@ objects:
       selector:
         app: publicapi-api-production
 
-  # Route
-  - apiVersion: route.openshift.io/v1
-    kind: Route
-    metadata:
-      name: publicapi-api-production
-      labels:
-        app: ppublicapi-api-production
-    spec:
-      host: publicapi-production.2.rahtiapp.fi
-      to:
-        kind: Service
-        name: publicapi-api-production
-        weight: 100
-      port:
-        targetPort: dotnet
-      tls:
-        termination: edge
-        insecureEdgeTerminationPolicy: Redirect
-      wildcardPolicy: None
-
   # ImageStream
   - apiVersion: image.openshift.io/v1
     kind: ImageStream
