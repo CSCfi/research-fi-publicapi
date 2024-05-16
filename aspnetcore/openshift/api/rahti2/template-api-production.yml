@@ -1,0 +1,110 @@
+# This file is part of the research.fi api
+#
+# Copyright 2024 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-api-production
+    template: publicapi-api-production
+  name: publicapi-api-production
+  annotations:
+    description: "Public API production"
+    iconClass: icon-dotnet
+objects:
+
+  # Service
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: publicapi-api-production
+      labels:
+        app: publicapi-api-production
+      annotations:
+        description: Public API production
+    spec:
+      ports:
+        - name: dotnet
+          port: 8080
+          targetPort: 8080
+      selector:
+        app: publicapi-api-production
+
+  # ImageStream
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: publicapi-api-production
+      labels:
+        app: publicapi-api-production
+
+  # BuildConfig using Docker build strategy
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      name: publicapi-api-build-production
+      labels:
+        app: publicapi-api-production
+    spec:
+      source:
+        git:
+          uri: https://github.com/CSCfi/research-fi-publicapi.git
+          ref: main
+        contextDir: .
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: aspnetcore/openshift/api/rahti2/Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: publicapi-api-production:latest
+      successfulBuildsHistoryLimit: 2
+      failedBuildsHistoryLimit: 2
+
+  # Deployment config
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: publicapi-api-production
+      labels:
+        app: publicapi-api-production
+    spec:
+      selector:
+        matchLabels:
+          app: publicapi-api-production
+      template:
+        metadata:
+          labels:
+            app: publicapi-api-production
+        spec:
+          containers:
+            - name: publicapi-api-container-production
+              image: image-registry.openshift-image-registry.svc:5000/researchfi-production/publicapi-api-production:latest
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+      replicas: 1
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - publicapi-api-container-production
+            from:
+              kind: ImageStreamTag
+              name: publicapi-api-production:latest
+      strategy:
+        type: RollingUpdate
