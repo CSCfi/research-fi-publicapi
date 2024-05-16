@@ -33,6 +33,26 @@ objects:
       selector:
         app: publicapi-api-qa
 
+  # Route
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: publicapi-api-qa
+      labels:
+        app: publicapi-api-qa
+    spec:
+      host: publicapi-qa.2.rahtiapp.fi
+      to:
+        kind: Service
+        name: publicapi-api-qa
+        weight: 100
+      port:
+        targetPort: dotnet
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+      wildcardPolicy: None
+
   # ImageStream
   - apiVersion: image.openshift.io/v1
     kind: ImageStream
@@ -83,7 +103,7 @@ objects:
         spec:
           containers:
             - name: publicapi-api-container-qa
-              image: publicapi/publicapi-api-qa
+              image: image-registry.openshift-image-registry.svc:5000/researchfi-qa/publicapi-api-qa:latest
               imagePullPolicy: Always
               ports:
                 - containerPort: 8080
