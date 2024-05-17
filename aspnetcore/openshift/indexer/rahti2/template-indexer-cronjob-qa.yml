@@ -1,0 +1,53 @@
+# This file is part of the research.fi api
+#
+# Copyright 2024 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-indexer-qa
+    template: publicapi-indexer-cronjob-qa
+  name: publicapi-indexer-cronjob-qa
+  annotations:
+    description: "Public API indexer QA - CronJob"
+    iconClass: icon-dotnet
+objects:
+  # Recurring CronJob (qa)
+  # Indexes db entities to ElasticSearch.
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: publicapi-indexer-cronjob-qa
+    spec:
+      schedule: "0 2 * * *" # every day at 02:00 UTC
+      concurrencyPolicy: "Forbid"
+      startingDeadlineSeconds: 300 # Can start 5 minutes after the schedule  
+      suspend: false
+      successfulJobsHistoryLimit: 2
+      failedJobsHistoryLimit: 2
+      jobTemplate:
+        spec:
+          activeDeadlineSeconds: 2400 # Can run for 40 minutes
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+                - name: publicapi-indexer-container-qa
+                  image: publicapi-indexer-qa
+                  imagePullPolicy: Always
+                  envFrom:
+                    - secretRef:
+                      name: publicapi-api-secret-qa
+                    - configMapRef:
+                      name: publicapi-api-config-qa
+                  resources:
+                    limits:
+                      cpu: 500m
+                      memory: 3Gi
+                    requests:
+                      cpu: 100m
+                      memory: 1Gi
+                      
