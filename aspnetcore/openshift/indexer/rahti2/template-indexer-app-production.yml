@@ -1,0 +1,52 @@
+# This file is part of the research.fi api
+#
+# Copyright 2024 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-indexer-production
+    template: publicapi-indexer-production
+  name: publicapi-indexer-production
+  annotations:
+    description: "Public API indexer production - Build and ImageStream"
+    iconClass: icon-dotnet
+objects:
+
+  # ImageStream
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: publicapi-indexer-production
+      labels:
+        app: publicapi-indexer-production
+    spec:
+      lookupPolicy:
+        local: true
+
+  # BuildConfig using Docker build strategy
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      name: publicapi-indexer-build-production
+      labels:
+        app: publicapi-indexer-production
+    spec:
+      source:
+        git:
+          uri: https://github.com/CSCfi/research-fi-publicapi.git
+          ref: main
+        contextDir: .
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: aspnetcore/openshift/indexer/rahti2/Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: publicapi-indexer-production:latest
+      successfulBuildsHistoryLimit: 2
+      failedBuildsHistoryLimit: 2
