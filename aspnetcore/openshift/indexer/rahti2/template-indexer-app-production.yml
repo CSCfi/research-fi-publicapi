@@ -12,7 +12,7 @@ metadata:
     template: publicapi-indexer-production
   name: publicapi-indexer-production
   annotations:
-    description: "Public API indexer production"
+    description: "Public API indexer production - Build and ImageStream"
     iconClass: icon-dotnet
 objects:
 

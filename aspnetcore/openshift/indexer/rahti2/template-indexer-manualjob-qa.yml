@@ -9,105 +9,39 @@ kind: Template
 metadata:
   labels:
     app: publicapi-indexer-qa
-    template: publicapi-indexer-qa
-  name: publicapi-indexer-qa
+    template: publicapi-indexer-manualjob-qa
+  name: publicapi-indexer-manualjob-qa
+  annotations:
+    description: "Public API indexer QA - single-run Job"
+    iconClass: icon-dotnet
 objects:
   # Single-run Job (qa)
   # Use this job to index entities to ElasticSearch manually when needed.
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: publicapi-indexer-job-qa
+      name: publicapi-indexer-manualjob-qa
       labels:
         app: publicapi-indexer-qa
       annotations:
-        description: ElasticSearch indexer for Public qa branch
+        description: Public API indexer QA - single-run Job
     spec:
       template:
         spec:
           restartPolicy: Never
           containers:
-            - name: publicapi-indexer-container-qa
+            - name: publicapi-indexer-manualjob-container-qa
               image: publicapi-indexer-qa
               imagePullPolicy: Always
-              env:
-                - name: "ELASTICSEARCH__PASSWORD"
-                  valueFrom:
-                    secretKeyRef:
-                      name: publicapi-api-secret-qa
-                      key: "ELASTICSEARCH__PASSWORD"
-                - name: "dbconnectionstring"
-                  valueFrom:
-                    secretKeyRef:
-                      name: publicapi-api-secret-qa
-                      key: dbconnectionstring
-                - name: "ELASTICSEARCH__URL"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "ELASTICSEARCH__URL"
-                - name: "ELASTICSEARCH__USERNAME"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "ELASTICSEARCH__USERNAME"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
-                - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
-                - name: "Serilog__MinimumLevel__Default"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "Serilog__MinimumLevel__Default"
-                - name: "Serilog__WriteTo__HttpSink__Args__requestUri"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "Serilog__WriteTo__HttpSink__Args__requestUri"
-                - name: "Serilog__Properties__WoodLogProjectNumber"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "Serilog__Properties__WoodLogProjectNumber"
-                - name: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
-                - name: "Serilog__Properties__WoodLogUsecaseIndexer"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "Serilog__Properties__WoodLogUsecaseIndexer"
-                - name: "QueryTimeout"
-                  valueFrom:
-                    configMapKeyRef:
-                      name: publicapi-api-config-qa
-                      key: "QueryTimeout"
+              envFrom:
+                - secretRef:
+                    name: publicapi-api-secret-qa
+                - configMapRef:
+                    name: publicapi-api-config-qa
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 3Gi
+                requests:
+                  cpu: 100m
+                  memory: 1Gi
