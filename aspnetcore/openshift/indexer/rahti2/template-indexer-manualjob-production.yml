@@ -1,0 +1,47 @@
+# This file is part of the research.fi api
+#
+# Copyright 2023 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-indexer-production
+    template: publicapi-indexer-manualjob-production
+  name: publicapi-indexer-manualjob-production
+  annotations:
+    description: "Public API indexer production - single-run Job"
+    iconClass: icon-dotnet
+objects:
+  # Single-run Job (production)
+  # Use this job to index entities to ElasticSearch manually when needed.
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: publicapi-indexer-manualjob-production
+      labels:
+        app: publicapi-indexer-production
+      annotations:
+        description: Public API indexer production - single-run Job
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: publicapi-indexer-manualjob-container-production
+              image: publicapi-indexer-production
+              imagePullPolicy: Always
+              envFrom:
+                - secretRef:
+                    name: publicapi-api-secret-production
+                - configMapRef:
+                    name: publicapi-api-config-production
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 3Gi
+                requests:
+                  cpu: 100m
+                  memory: 1Gi
