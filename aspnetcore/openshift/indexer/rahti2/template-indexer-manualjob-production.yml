@@ -1,0 +1,113 @@
+# This file is part of the research.fi api
+#
+# Copyright 2023 Ministry of Education and Culture, Finland
+#
+# :author: CSC - IT Center for Science Ltd., Espoo Finland servicedesk@csc.fi
+# :license: MIT
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: publicapi-indexer-production
+    template: publicapi-indexer-production
+  name: publicapi-indexer-production
+objects:
+  # Single-run Job (production)
+  # Use this job to index entities to ElasticSearch manually when needed.
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: publicapi-indexer-job-production
+      labels:
+        app: publicapi-indexer-production
+      annotations:
+        description: ElasticSearch indexer for Public production branch
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: publicapi-indexer-container-production
+              image: publicapi-indexer-production
+              imagePullPolicy: Always
+              env:
+                - name: "ELASTICSEARCH__PASSWORD"
+                  valueFrom:
+                    secretKeyRef:
+                      name: publicapi-api-secret-production
+                      key: "ELASTICSEARCH__PASSWORD"
+                - name: "dbconnectionstring"
+                  valueFrom:
+                    secretKeyRef:
+                      name: publicapi-api-secret-production
+                      key: dbconnectionstring
+                - name: "ELASTICSEARCH__URL"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "ELASTICSEARCH__URL"
+                - name: "ELASTICSEARCH__USERNAME"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "ELASTICSEARCH__USERNAME"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingCall.FundingCall"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.FundingDecision.FundingDecision"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Infrastructure.Infrastructure"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Organization.Organization"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset"
+                - name: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "IndexNames__CSC.PublicApi.Service.Models.Publication.Publication"
+                - name: "Serilog__MinimumLevel__Default"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "Serilog__MinimumLevel__Default"
+                - name: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "Serilog__WriteTo__HttpSink__Args__requestUri"
+                - name: "Serilog__Properties__WoodLogProjectNumber"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "Serilog__Properties__WoodLogProjectNumber"
+                - name: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "Serilog__Properties__WoodLogRetentionMonthsIndexer"
+                - name: "Serilog__Properties__WoodLogUsecaseIndexer"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "Serilog__Properties__WoodLogUsecaseIndexer"
+                - name: "QueryTimeout"
+                  valueFrom:
+                    configMapKeyRef:
+                      name: publicapi-api-config-production
+                      key: "QueryTimeout"
