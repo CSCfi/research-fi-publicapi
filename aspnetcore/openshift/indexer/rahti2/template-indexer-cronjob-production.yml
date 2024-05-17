@@ -40,9 +40,9 @@ objects:
                   imagePullPolicy: Always
                   envFrom:
                     - secretRef:
-                      name: publicapi-api-secret-production
+                        name: publicapi-api-secret-production
                     - configMapRef:
-                      name: publicapi-api-config-production
+                        name: publicapi-api-config-production
                   resources:
                     limits:
                       cpu: 500m
