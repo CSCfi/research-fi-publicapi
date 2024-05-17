@@ -35,6 +35,13 @@ objects:
                 - name: publicapi-indexer-container-devel
                   image: publicapi-indexer-devel
                   imagePullPolicy: Always
+                  resources:
+                    limits:
+                      cpu: 1
+                      memory: 4Gi
+                    requests:
+                      cpu: 100m
+                      memory: 2Gi
                   env:
                     - name: "ELASTICSEARCH__PASSWORD"
                       valueFrom:
