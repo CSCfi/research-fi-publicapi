@@ -9,6 +9,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         {
             DimAffiliationEndDateNavigations = new HashSet<DimAffiliation>();
             DimAffiliationStartDateNavigations = new HashSet<DimAffiliation>();
+            DimCallDecisions = new HashSet<DimCallDecision>();
             DimCallProgrammeDimDateIdDueNavigations = new HashSet<DimCallProgramme>();
             DimCallProgrammeDimDateIdOpenNavigations = new HashSet<DimCallProgramme>();
             DimEducationDimEndDateNavigations = new HashSet<DimEducation>();
@@ -25,6 +26,8 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimProfileOnlyResearchActivityDimDateIdStartNavigations = new HashSet<DimProfileOnlyResearchActivity>();
             DimResearchActivityDimEndDateNavigations = new HashSet<DimResearchActivity>();
             DimResearchActivityDimStartDateNavigations = new HashSet<DimResearchActivity>();
+            DimResearchProjectEndDateNavigations = new HashSet<DimResearchProject>();
+            DimResearchProjectStartDateNavigations = new HashSet<DimResearchProject>();
             DimResearcherToResearchCommunityEndDateNavigations = new HashSet<DimResearcherToResearchCommunity>();
             DimResearcherToResearchCommunityStartDateNavigations = new HashSet<DimResearcherToResearchCommunity>();
             FactContributions = new HashSet<FactContribution>();
@@ -43,6 +46,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
 
         public virtual ICollection<DimAffiliation> DimAffiliationEndDateNavigations { get; set; }
         public virtual ICollection<DimAffiliation> DimAffiliationStartDateNavigations { get; set; }
+        public virtual ICollection<DimCallDecision> DimCallDecisions { get; set; }
         public virtual ICollection<DimCallProgramme> DimCallProgrammeDimDateIdDueNavigations { get; set; }
         public virtual ICollection<DimCallProgramme> DimCallProgrammeDimDateIdOpenNavigations { get; set; }
         public virtual ICollection<DimEducation> DimEducationDimEndDateNavigations { get; set; }
@@ -59,6 +63,8 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimProfileOnlyResearchActivity> DimProfileOnlyResearchActivityDimDateIdStartNavigations { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivityDimEndDateNavigations { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivityDimStartDateNavigations { get; set; }
+        public virtual ICollection<DimResearchProject> DimResearchProjectEndDateNavigations { get; set; }
+        public virtual ICollection<DimResearchProject> DimResearchProjectStartDateNavigations { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunityEndDateNavigations { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunityStartDateNavigations { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }

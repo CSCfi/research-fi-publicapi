@@ -26,6 +26,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimResearchActivities = new HashSet<DimResearchActivity>();
             DimResearchCommunities = new HashSet<DimResearchCommunity>();
             DimResearchDatasets = new HashSet<DimResearchDataset>();
+            DimResearchProjects = new HashSet<DimResearchProject>();
             DimResearcherDescriptions = new HashSet<DimResearcherDescription>();
             DimResearcherToResearchCommunities = new HashSet<DimResearcherToResearchCommunity>();
             DimTelephoneNumbers = new HashSet<DimTelephoneNumber>();
@@ -62,6 +63,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }
         public virtual ICollection<DimResearchCommunity> DimResearchCommunities { get; set; }
         public virtual ICollection<DimResearchDataset> DimResearchDatasets { get; set; }
+        public virtual ICollection<DimResearchProject> DimResearchProjects { get; set; }
         public virtual ICollection<DimResearcherDescription> DimResearcherDescriptions { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunities { get; set; }
         public virtual ICollection<DimTelephoneNumber> DimTelephoneNumbers { get; set; }
