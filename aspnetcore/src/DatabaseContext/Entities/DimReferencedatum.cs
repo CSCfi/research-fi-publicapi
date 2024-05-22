@@ -9,7 +9,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         {
             BrGrantedPermissions = new HashSet<BrGrantedPermission>();
             DimAffiliations = new HashSet<DimAffiliation>();
+            DimCallDecisions = new HashSet<DimCallDecision>();
+            DimCallProgrammesNavigation = new HashSet<DimCallProgramme>();
             DimEducations = new HashSet<DimEducation>();
+            DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimLocallyReportedPubInfoSelfArchivedLicenseCodeNavigations = new HashSet<DimLocallyReportedPubInfo>();
             DimLocallyReportedPubInfoSelfArchivedVersionCodeNavigations = new HashSet<DimLocallyReportedPubInfo>();
             DimProfileOnlyDatasets = new HashSet<DimProfileOnlyDataset>();
@@ -65,7 +68,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimReferencedatum DimReferencedata { get; set; } = null!;
         public virtual ICollection<BrGrantedPermission> BrGrantedPermissions { get; set; }
         public virtual ICollection<DimAffiliation> DimAffiliations { get; set; }
+        public virtual ICollection<DimCallDecision> DimCallDecisions { get; set; }
+        public virtual ICollection<DimCallProgramme> DimCallProgrammesNavigation { get; set; }
         public virtual ICollection<DimEducation> DimEducations { get; set; }
+        public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimLocallyReportedPubInfo> DimLocallyReportedPubInfoSelfArchivedLicenseCodeNavigations { get; set; }
         public virtual ICollection<DimLocallyReportedPubInfo> DimLocallyReportedPubInfoSelfArchivedVersionCodeNavigations { get; set; }
         public virtual ICollection<DimProfileOnlyDataset> DimProfileOnlyDatasets { get; set; }

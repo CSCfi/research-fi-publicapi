@@ -7,6 +7,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
     {
         public DimResearchCommunity()
         {
+            DimPids = new HashSet<DimPid>();
             DimResearcherToResearchCommunities = new HashSet<DimResearcherToResearchCommunity>();
             DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
@@ -29,6 +30,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimRegisteredDataSourceId { get; set; }
 
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimResearcherToResearchCommunity> DimResearcherToResearchCommunities { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }

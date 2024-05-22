@@ -27,6 +27,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? OrcidId { get; set; }
         public int? Statuscode { get; set; }
         public bool Hidden { get; set; }
+        public bool PublishNewOrcidData { get; set; }
 
         public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
         public virtual ICollection<BrGrantedPermission> BrGrantedPermissions { get; set; }
