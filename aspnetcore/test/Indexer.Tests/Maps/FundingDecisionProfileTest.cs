@@ -164,12 +164,12 @@ public class FundingDecisionProfileTest
                 }
             },
             DimOrganizationIdFunder = 3,
-            DimTypeOfFunding = new DimTypeOfFunding
+            DimTypeOfFunding = new DimReferencedatum
             {
                 NameFi = "type fi",
                 NameSv = "type sv",
                 NameEn = "type en",
-                TypeId = "type id"
+                CodeValue = "type id"
             },
             DimCallProgramme = new DimCallProgramme
             {

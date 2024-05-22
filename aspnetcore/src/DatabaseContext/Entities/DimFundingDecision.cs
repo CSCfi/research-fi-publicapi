@@ -10,16 +10,13 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             BrFundingConsortiumParticipations = new HashSet<BrFundingConsortiumParticipation>();
             BrParticipatesInFundingGroups = new HashSet<BrParticipatesInFundingGroup>();
             BrWordClusterDimFundingDecisions = new HashSet<BrWordClusterDimFundingDecision>();
-            DimPids = new HashSet<DimPid>();
             DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
             FactDimReferencedataFieldOfSciences = new HashSet<FactDimReferencedataFieldOfScience>();
             FactFieldValues = new HashSet<FactFieldValue>();
             InverseDimFundingDecisionIdParentDecisionNavigation = new HashSet<DimFundingDecision>();
             DimFundingDecisionFroms = new HashSet<DimFundingDecision>();
-            DimFundingDecisionFromsNavigation = new HashSet<DimFundingDecision>();
             DimFundingDecisionTos = new HashSet<DimFundingDecision>();
-            DimFundingDecisionTosNavigation = new HashSet<DimFundingDecision>();
             DimKeywords = new HashSet<DimKeyword>();
         }
 
@@ -34,6 +31,9 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int? DimOrganizationIdFunder { get; set; }
         public string? DimPidPidContent { get; set; }
         public int DimFundingDecisionIdParentDecision { get; set; }
+        /// <summary>
+        /// Päätöksen paikallinen tunniste (tiedon toimittajan)
+        /// </summary>
         public string? FunderProjectNumber { get; set; }
         public string? Acronym { get; set; }
         public string? NameFi { get; set; }
@@ -53,7 +53,12 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
         public int DimRegisteredDataSourceId { get; set; }
+        /// <summary>
+        /// Rahoituspäätös - Päätöspaneeli
+        /// </summary>
+        public int? DimCallDecisionsId { get; set; }
 
+        public virtual DimCallDecision? DimCallDecisions { get; set; }
         public virtual DimCallProgramme DimCallProgramme { get; set; } = null!;
         public virtual DimDate DimDateIdApprovalNavigation { get; set; } = null!;
         public virtual DimDate DimDateIdEndNavigation { get; set; } = null!;
@@ -63,11 +68,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimName DimNameIdContactPersonNavigation { get; set; } = null!;
         public virtual DimOrganization? DimOrganizationIdFunderNavigation { get; set; }
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
-        public virtual DimTypeOfFunding DimTypeOfFunding { get; set; } = null!;
+        public virtual DimReferencedatum DimTypeOfFunding { get; set; } = null!;
         public virtual ICollection<BrFundingConsortiumParticipation> BrFundingConsortiumParticipations { get; set; }
         public virtual ICollection<BrParticipatesInFundingGroup> BrParticipatesInFundingGroups { get; set; }
         public virtual ICollection<BrWordClusterDimFundingDecision> BrWordClusterDimFundingDecisions { get; set; }
-        public virtual ICollection<DimPid> DimPids { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactDimReferencedataFieldOfScience> FactDimReferencedataFieldOfSciences { get; set; }
@@ -75,9 +79,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimFundingDecision> InverseDimFundingDecisionIdParentDecisionNavigation { get; set; }
 
         public virtual ICollection<DimFundingDecision> DimFundingDecisionFroms { get; set; }
-        public virtual ICollection<DimFundingDecision> DimFundingDecisionFromsNavigation { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisionTos { get; set; }
-        public virtual ICollection<DimFundingDecision> DimFundingDecisionTosNavigation { get; set; }
         public virtual ICollection<DimKeyword> DimKeywords { get; set; }
     }
 }

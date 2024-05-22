@@ -7,9 +7,11 @@ namespace CSC.PublicApi.DatabaseContext.Entities
     {
         public DimCallProgramme()
         {
+            DimCallDecisions = new HashSet<DimCallDecision>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimProfileOnlyFundingDecisions = new HashSet<DimProfileOnlyFundingDecision>();
             DimWebLinks = new HashSet<DimWebLink>();
+            InverseDimCallProgrammeNavigation = new HashSet<DimCallProgramme>();
             DimCallProgrammeId2s = new HashSet<DimCallProgramme>();
             DimCallProgrammes = new HashSet<DimCallProgramme>();
             DimOrganizations = new HashSet<DimOrganization>();
@@ -45,13 +47,19 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? CallNameDetailsFi { get; set; }
         public string? CallNameDetailsEn { get; set; }
         public string? CallNameDetailsSv { get; set; }
+        public string? LocalIdentifier { get; set; }
+        public int? TypeOfFunding { get; set; }
 
+        public virtual DimCallProgramme? DimCallProgrammeNavigation { get; set; }
         public virtual DimDate DimDateIdDueNavigation { get; set; } = null!;
         public virtual DimDate DimDateIdOpenNavigation { get; set; } = null!;
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+        public virtual DimReferencedatum? TypeOfFundingNavigation { get; set; }
+        public virtual ICollection<DimCallDecision> DimCallDecisions { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimProfileOnlyFundingDecision> DimProfileOnlyFundingDecisions { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
+        public virtual ICollection<DimCallProgramme> InverseDimCallProgrammeNavigation { get; set; }
 
         public virtual ICollection<DimCallProgramme> DimCallProgrammeId2s { get; set; }
         public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; }
