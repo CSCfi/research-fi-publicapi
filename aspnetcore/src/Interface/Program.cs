@@ -7,6 +7,7 @@ using CSC.PublicApi.Interface;
 using CSC.PublicApi.Interface.Configuration;
 using CSC.PublicApi.Interface.Middleware;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,10 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom
     .Configuration(builder.Configuration)
     .CreateLogger();
+
+builder.Services.AddDbContext<VirtaJtpDbContext>(options =>
+    options.UseSqlServer("name=dbconnectionstringvirta"));
+
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
