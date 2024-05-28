@@ -4,7 +4,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\src\Api</DockerfileContext>
 		<DockerfileFile>..\..\openshift\api\Dockerfile</DockerfileFile>
@@ -14,7 +13,8 @@
 		<nowarn>$(NoWarn);1591</nowarn>
 		<RootNamespace>CSC.PublicApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<AssemblyName>CSC.PublicApi.$(MSBuildProjectName)</AssemblyName>
-	</PropertyGroup>
+	  <UserSecretsId>4f740bea-0188-43cc-ae56-7b5017862261</UserSecretsId>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
