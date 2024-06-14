@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ElasticService\ElasticService.csproj" />
+    <ProjectReference Include="..\Interface\Interface.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
+    <RootNamespace>CSC.PublicApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyName>CSC.PublicApi.$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+
+</Project>
