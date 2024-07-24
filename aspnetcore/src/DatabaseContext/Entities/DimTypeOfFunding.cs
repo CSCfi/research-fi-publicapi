@@ -7,7 +7,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
     {
         public DimTypeOfFunding()
         {
-            DimFundingDecisions = new HashSet<DimFundingDecision>();
             DimProfileOnlyFundingDecisions = new HashSet<DimProfileOnlyFundingDecision>();
             InverseDimTypeOfFundingNavigation = new HashSet<DimTypeOfFunding>();
         }
@@ -24,7 +23,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimTypeOfFundingId { get; set; }
 
         public virtual DimTypeOfFunding DimTypeOfFundingNavigation { get; set; } = null!;
-        public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
         public virtual ICollection<DimProfileOnlyFundingDecision> DimProfileOnlyFundingDecisions { get; set; }
         public virtual ICollection<DimTypeOfFunding> InverseDimTypeOfFundingNavigation { get; set; }
     }

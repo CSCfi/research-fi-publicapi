@@ -21,7 +21,6 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int DimInfrastructureId { get; set; }
         public int DimPublicationChannelId { get; set; }
         public int DimResearchDatasetId { get; set; }
-        public int DimFundingDecisionId { get; set; }
         public int DimResearchDataCatalogId { get; set; }
         public int DimResearchActivityId { get; set; }
         public int DimEventId { get; set; }
@@ -32,9 +31,10 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public DateTime? Modified { get; set; }
         public int? DimProfileOnlyDatasetId { get; set; }
         public int? DimProfileOnlyFundingDecisionId { get; set; }
+        public int? DimResearchProjectId { get; set; }
+        public int? DimResearchCommunityId { get; set; }
 
         public virtual DimEvent DimEvent { get; set; } = null!;
-        public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
         public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
         public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
         public virtual DimOrganization DimOrganization { get; set; } = null!;
@@ -44,6 +44,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimPublication DimPublication { get; set; } = null!;
         public virtual DimPublicationChannel DimPublicationChannel { get; set; } = null!;
         public virtual DimResearchActivity DimResearchActivity { get; set; } = null!;
+        public virtual DimResearchCommunity? DimResearchCommunity { get; set; }
         public virtual DimResearchDataCatalog DimResearchDataCatalog { get; set; } = null!;
         public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
         public virtual DimService DimService { get; set; } = null!;

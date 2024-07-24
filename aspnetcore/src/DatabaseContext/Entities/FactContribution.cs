@@ -24,6 +24,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public string? SourceDescription { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Modified { get; set; }
+        public int DimResearchProjectId { get; set; }
 
         public virtual DimDate DimDate { get; set; } = null!;
         public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;

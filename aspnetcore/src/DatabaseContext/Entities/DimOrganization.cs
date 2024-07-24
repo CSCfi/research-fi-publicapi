@@ -18,6 +18,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
             DimPurposes = new HashSet<DimPurpose>();
             DimRegisteredDataSources = new HashSet<DimRegisteredDataSource>();
             DimResearchActivities = new HashSet<DimResearchActivity>();
+            DimResearchProjects = new HashSet<DimResearchProject>();
             DimWebLinks = new HashSet<DimWebLink>();
             FactContributions = new HashSet<FactContribution>();
             FactUpkeeps = new HashSet<FactUpkeep>();
@@ -72,6 +73,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual ICollection<DimPurpose> DimPurposes { get; set; }
         public virtual ICollection<DimRegisteredDataSource> DimRegisteredDataSources { get; set; }
         public virtual ICollection<DimResearchActivity> DimResearchActivities { get; set; }
+        public virtual ICollection<DimResearchProject> DimResearchProjects { get; set; }
         public virtual ICollection<DimWebLink> DimWebLinks { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactUpkeep> FactUpkeeps { get; set; }

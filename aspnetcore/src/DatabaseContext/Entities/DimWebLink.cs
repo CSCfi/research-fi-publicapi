@@ -31,6 +31,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public int? DimProfileOnlyResearchActivityId { get; set; }
         public int? DimProfileOnlyDatasetId { get; set; }
         public int? DimProfileOnlyFundingDecisionId { get; set; }
+        public int? DimResearchProjectId { get; set; }
 
         public virtual DimCallProgramme? DimCallProgramme { get; set; }
         public virtual DimFundingDecision? DimFundingDecision { get; set; }

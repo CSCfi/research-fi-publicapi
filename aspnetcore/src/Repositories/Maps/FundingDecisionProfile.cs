@@ -53,6 +53,13 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.FundingReceivers, opt => opt.Ignore()) // GrantedFunding will be populated during the in memory operations;
             .ForMember(dst => dst.Funder, opt => opt.Ignore()) // Funder will be populated during the in memory operations;
             ;
+
+        CreateProjection<DimReferencedatum, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
         
         CreateProjection<DimDate, DateTime?>()
             .ConvertUsing(dimDate => dimDate.Id == -1 ? null : new DateTime(dimDate.Year, dimDate.Month, dimDate.Day));
@@ -105,14 +112,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.EuCallId, opt => opt.MapFrom(src => src.EuCallId))
             .ForMember(dst => dst.TopicId, opt => opt.MapFrom(src => src.Abbreviation));
-
-        CreateProjection<DimTypeOfFunding, ReferenceData>()
-            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.TypeId));
-        
+   
         CreateProjection<FactDimReferencedataFieldOfScience, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))

@@ -9,6 +9,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         {
             BrParticipatesInFundingGroups = new HashSet<BrParticipatesInFundingGroup>();
             DimFundingDecisions = new HashSet<DimFundingDecision>();
+            DimResearchProjects = new HashSet<DimResearchProject>();
             FactContributions = new HashSet<FactContribution>();
             FactFieldValues = new HashSet<FactFieldValue>();
         }
@@ -29,6 +30,7 @@ namespace CSC.PublicApi.DatabaseContext.Entities
         public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
         public virtual ICollection<BrParticipatesInFundingGroup> BrParticipatesInFundingGroups { get; set; }
         public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; }
+        public virtual ICollection<DimResearchProject> DimResearchProjects { get; set; }
         public virtual ICollection<FactContribution> FactContributions { get; set; }
         public virtual ICollection<FactFieldValue> FactFieldValues { get; set; }
     }
