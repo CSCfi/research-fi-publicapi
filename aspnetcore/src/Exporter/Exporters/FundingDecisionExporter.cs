@@ -24,24 +24,39 @@ public class FundingDecisionExporter
 
     public void Export(JsonSerializerOptions serializerOptions)
     {   
-        Console.WriteLine("Start exporting funding decisions");
-        //string type = "CSC.PublicApi.Service.Models.FundingDecision.FundingDecision";
-        //var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
+        Console.WriteLine("Funding decision export: started");
+        string fundingDecisionIndexName = "";
 
-        // First test using "select all", this needs to be converted to "search after" type search
-        var searchResponse = _elasticClient.Search<FundingDecision> (s => s.MatchAll().Index("api-dev-funding-decision"));
-        var docs = searchResponse.Documents;
-
-        foreach (var doc in docs)
+        var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
+        foreach (var (indexName, modelType) in configuredTypesAndIndexNames)
         {
-            FundingDecisionApiModel fundingDecision = _mapper.Map<FundingDecisionApiModel>(doc);
-
-            string jsonString = JsonSerializer.Serialize(fundingDecision, serializerOptions);
-            File.WriteAllText("/tmp/funding-decision-test-export.json", jsonString);
-
-            Console.WriteLine(jsonString);
+            if (modelType.FullName == "CSC.PublicApi.Service.Models.FundingDecision.FundingDecision")
+            {
+                fundingDecisionIndexName = indexName;
+                break;
+            }
         }
-        
-        Console.WriteLine($"Done exporting funding calls: {searchResponse.Documents.Count}");
+
+        if (fundingDecisionIndexName != "")
+        {
+            // First test using "select all", this needs to be converted to "search after" type search
+            var searchResponse = _elasticClient.Search<FundingDecision> (s => s.MatchAll().Index(fundingDecisionIndexName));
+            var docs = searchResponse.Documents;
+
+            foreach (var doc in docs)
+            {
+                FundingDecisionApiModel fundingDecision = _mapper.Map<FundingDecisionApiModel>(doc);
+
+                string jsonString = JsonSerializer.Serialize(fundingDecision, serializerOptions);
+                File.WriteAllText("/tmp/funding-decision-test-export.json", jsonString);
+
+                Console.WriteLine(jsonString);
+            }
+            
+            Console.WriteLine($"Funding decision export: complete, export count {searchResponse.Documents.Count}");
+        }
+        else {
+            Console.WriteLine($"Funding decision export: failed, index name not found from configuration");
+        }
     }
 }
