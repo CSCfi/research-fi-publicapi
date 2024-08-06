@@ -12,7 +12,7 @@ public class FundingDecisionExporter
     private IElasticClient _elasticClient;
     private readonly IMapper _mapper;
     private readonly IndexNameSettings _indexNameSettings;
-
+    private const int SingleQueryResultLimit = 250;
 
     public FundingDecisionExporter(IElasticClient elasticClient, IMapper mapper, IndexNameSettings indexNameSettings)
     {
@@ -24,39 +24,87 @@ public class FundingDecisionExporter
 
     public void Export(JsonSerializerOptions serializerOptions)
     {   
-        Console.WriteLine("Funding decision export: started");
-        string fundingDecisionIndexName = "";
-
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
         foreach (var (indexName, modelType) in configuredTypesAndIndexNames)
         {
-            if (modelType.FullName == "CSC.PublicApi.Service.Models.FundingDecision.FundingDecision")
+            switch (modelType.FullName)
             {
-                fundingDecisionIndexName = indexName;
-                break;
+                case "CSC.PublicApi.Service.Models.FundingDecision.FundingDecision":
+                    long numberOfDocumentsInIndex = 0;
+                    long numberOfQueryResults = -1;
+                    long exportFileNumber = 0;
+                    IHit<FundingDecision>? lastHit = null;
+                    ISearchResponse<FundingDecision>? fundingDecisionSearchResponse = null;
+
+                    // Number of documents in index
+                    var countResponse = _elasticClient.Count<FundingDecision>(c => c.Index(indexName));
+                    numberOfDocumentsInIndex = countResponse.Count;
+                    Console.WriteLine($"Export: FundingDecision: started from index {indexName} containing {numberOfDocumentsInIndex} documents");
+
+                    while (numberOfQueryResults == -1 || numberOfQueryResults >= SingleQueryResultLimit) {
+                        // Get batch of documents
+                        if (lastHit != null) {
+                            fundingDecisionSearchResponse = _elasticClient.Search<FundingDecision> (s => s
+                                .Index(indexName)
+                                .Size(SingleQueryResultLimit)
+                                .Query(q => q.MatchAll())
+                                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                                .SearchAfter(lastHit.Sorts)
+                            );
+                        } else {
+                            fundingDecisionSearchResponse = _elasticClient.Search<FundingDecision> (s => s
+                                .Index(indexName)
+                                .Size(SingleQueryResultLimit)
+                                .Query(q => q.MatchAll())
+                                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                            );
+                        }
+                        
+                        numberOfQueryResults = fundingDecisionSearchResponse.Documents.Count;
+                        if (numberOfQueryResults == 0)
+                        {
+                            break;
+                        } 
+                        lastHit = fundingDecisionSearchResponse.Hits.Last();
+
+                        // Process documents: Map from Elastic index model to API model, write into text file
+                        foreach (var doc in fundingDecisionSearchResponse.Documents)
+                        {
+                            ++exportFileNumber;
+                            FundingDecisionApiModel fundingDecision = _mapper.Map<FundingDecisionApiModel>(doc);
+                            string jsonString = JsonSerializer.Serialize(fundingDecision, serializerOptions);
+                            //File.WriteAllText("/tmp/funding-call-test-export.json", jsonString);
+                        }
+                        Console.WriteLine($"Export: FundingDecision: in progress {exportFileNumber}/{numberOfDocumentsInIndex}");
+                    }
+
+                    Console.WriteLine($"Export: FundingDecision: complete, exported {exportFileNumber}/{numberOfDocumentsInIndex}");
+                    break;
+
+                case "CSC.PublicApi.Service.Models.FundingCall.FundingCall":
+                    break;
+
+                case "CSC.PublicApi.Service.Models.Infrastructure.Infrastructure":
+                    Console.WriteLine($"Export: Infrastucture: TODO");
+                    break;
+
+                case "CSC.PublicApi.Service.Models.Organization.Organization":
+                    Console.WriteLine($"Export: Organization: TODO");
+                    break;
+
+                case "CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset":
+                    Console.WriteLine($"Export: Research dataset: TODO");
+                    break;
+    
+                case "CSC.PublicApi.Service.Models.Publication.Publication":
+                    Console.WriteLine($"Export: Publication: TODO");
+                    break;
+
+                default:
+                    break;
             }
         }
 
-        if (fundingDecisionIndexName != "")
-        {
-            // First test using "select all", this needs to be converted to "search after" type search
-            var searchResponse = _elasticClient.Search<FundingDecision> (s => s.MatchAll().Index(fundingDecisionIndexName));
-            var docs = searchResponse.Documents;
-
-            foreach (var doc in docs)
-            {
-                FundingDecisionApiModel fundingDecision = _mapper.Map<FundingDecisionApiModel>(doc);
-
-                string jsonString = JsonSerializer.Serialize(fundingDecision, serializerOptions);
-                File.WriteAllText("/tmp/funding-decision-test-export.json", jsonString);
-
-                Console.WriteLine(jsonString);
-            }
-            
-            Console.WriteLine($"Funding decision export: complete, export count {searchResponse.Documents.Count}");
-        }
-        else {
-            Console.WriteLine($"Funding decision export: failed, index name not found from configuration");
-        }
+        Console.WriteLine("Export: completed");
     }
 }
