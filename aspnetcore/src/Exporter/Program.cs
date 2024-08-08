@@ -17,8 +17,8 @@ public class Program
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            //.AddJsonFile("appsettings.json")
-            //.AddJsonFile($"appsettings.{environment}.json", true)
+            .AddJsonFile("appsettings.json", true)
+            .AddJsonFile($"appsettings.{environment}.json", true)
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables()
             .Build();
@@ -38,29 +38,20 @@ public class Program
             WriteIndented = true,
         };
 
-        // Export funding decisions
-        var fundingDecisionExporter = consoleHost.Services.GetRequiredService<FundingDecisionExporter>();
-        fundingDecisionExporter.Export(jsonSerializerOptions);
+        // Start export
+        var exporter = consoleHost.Services.GetRequiredService<Exporter>();
+        exporter.Export(jsonSerializerOptions);
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) => Host
         .CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-            services.AddTransient<FundingDecisionExporter>();
+            services.AddTransient<Exporter>();
             services.AddSettings(hostContext.Configuration);
             services.AddElasticSearch(hostContext.Configuration);
             services.AddAutoMapper(typeof(ApiPolicies).Assembly);
-
-            // Add ElasticSearchIndexingService.
             services.AddScoped<IElasticSearchIndexService, ElasticSearchIndexService>();
-
-            services.AddMemoryCache();
-
-            if (!int.TryParse(hostContext.Configuration["QueryTimeout"], out var queryTimeout))
-            {
-                queryTimeout = DefaultQueryTimeout;
-            }
         })
         .ConfigureHostConfiguration(configurationBuilder => configurationBuilder
             // Most of the configuration comes from environment variables.
