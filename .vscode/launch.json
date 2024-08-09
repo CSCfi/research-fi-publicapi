@@ -28,6 +28,20 @@
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
+        },
+        {
+            "name": "Exporter (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "launchSettingsProfile": "Api",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/aspnetcore/src/Exporter/bin/Debug/net6.0/CSC.PublicApi.Exporter.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/aspnetcore/src/Exporter",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
         }
     ]
 }
