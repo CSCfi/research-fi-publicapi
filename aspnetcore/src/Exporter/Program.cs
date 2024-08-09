@@ -9,6 +9,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+/*
+ * This application exports all documents from Elasticsearch index into json files. Data is converted from Elasticsearch model to API model.
+ * The purpose of this application is to enable bulk export of all data. Application is not intended to be executed automatically in production.
+ * Instead, it should be considered as a tool, which a developer can use when a full data dump is needed in json file format.
+ *
+ * The application uses the same configuration as Indexer and Interface applications, except that it requires an added parameter:
+ *   EXPORTER:BASEDIRECTORY - sets the base directory where the json files are written. It must be defined without trailing slash, for example, "/tmp"
+ */
+
 public class Program
 {
     private const int DefaultQueryTimeout = 300;
@@ -22,8 +31,6 @@ public class Program
             .AddUserSecrets<Program>()
             .AddEnvironmentVariables()
             .Build();
-
-        // Create and configure the host to support dependency injection, configuration, etc.
         var consoleHost = CreateHostBuilder(args).Build();
 
         // Define json serializer options
@@ -54,9 +61,7 @@ public class Program
             services.AddScoped<IElasticSearchIndexService, ElasticSearchIndexService>();
         })
         .ConfigureHostConfiguration(configurationBuilder => configurationBuilder
-            // Most of the configuration comes from environment variables.
             .AddEnvironmentVariables()
-            // For local dev we get configuration from user secrets.
             .AddUserSecrets(typeof(Program).Assembly, true)
             .Build());
 }

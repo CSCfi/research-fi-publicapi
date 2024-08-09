@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Nest;
 using CSC.PublicApi.ElasticService;
+using Microsoft.Extensions.Configuration;
 using CSC.PublicApi.Service.Models.FundingCall;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using CSC.PublicApi.Service.Models.ResearchDataset;
@@ -19,19 +20,32 @@ public class Exporter
     private IElasticClient _elasticClient;
     private readonly IMapper _mapper;
     private readonly IndexNameSettings _indexNameSettings;
+    private readonly IConfiguration _configuration;
     private const int SingleQueryResultLimit = 1000;
-    private const string ExportBaseDirectory = "/tmp";
+    private string? ExportBaseDirectory = "";
 
-    public Exporter(IElasticClient elasticClient, IMapper mapper, IndexNameSettings indexNameSettings)
+    public Exporter(IElasticClient elasticClient, IConfiguration configuration, IMapper mapper, IndexNameSettings indexNameSettings)
     {
         _elasticClient = elasticClient;
+        _configuration = configuration;
         _mapper = mapper;
         _indexNameSettings = indexNameSettings;
-        
+
+        // Get export base directory from configuration
+        ExportBaseDirectory = _configuration["EXPORTER:BASEDIRECTORY"];
+        if (ExportBaseDirectory == null)
+        {
+            string errorMessage = $"Export: Failed: could not set export target directory from configuration (EXPORTER:BASEDIRECTORY)";
+            Console.WriteLine(errorMessage);
+            throw new InvalidOperationException(errorMessage);
+        }
+        else {
+            Console.WriteLine($"Export: target directory set to '{ExportBaseDirectory}' from configuration (EXPORTER:BASEDIRECTORY)");
+        }
     }
 
 
-
+    // Construct export file name including full path
     private string GetFilename(string modelTypeFullName, long exportFileNumber)
     {
         string exportFileNumberPaddedString = exportFileNumber.ToString("D10");
@@ -51,14 +65,28 @@ public class Exporter
                     fileTypeString = "publication";
                     break;
             }
-        return $"{ExportBaseDirectory}/{fileTypeString}-{exportFileNumberPaddedString}.json";
+        return $"{ExportBaseDirectory}{Path.DirectorySeparatorChar}{fileTypeString}-{exportFileNumberPaddedString}.json";
     }
 
 
+    /*
+     * Export data from Elasticsearch index into json text files
+     * - Get list of configured Elasticsearch indexes
+     * - For each index, get all documents and
+     *     - Convert them from Elasticsearch model to API model, which ensures the json files will contain the same fields as the Public API endpoint
+     *     - Construct export file name and path
+     *     - Write data to json file
+     * - To bypass Elasticsearch limitation of 10000 result set, the "search after" feature is utilized
+     *     - https://www.elastic.co/guide/en/elasticsearch/reference/7.17/paginate-search-results.html#search-after
+     *     - Data is queried in smaller chunks, sorted by DocumentIndexOrder
+     *         - This is the most efficient way to sort documents
+     *     - Last hit of previous query is stored
+     *     - New query will always contain "search after" section containing the last hit from previous query    
+     */
     public void Export(JsonSerializerOptions serializerOptions)
     {   
+        // Get Elasticsearch indexes and process them
         var configuredTypesAndIndexNames = _indexNameSettings.GetTypesAndIndexNames();
-
         foreach (var (indexName, modelType) in configuredTypesAndIndexNames)
         {
             long numberOfDocumentsInIndex = 0;
