@@ -8,7 +8,7 @@
             "preLaunchTask": "build",
             "launchSettingsProfile": "ElasticSearchIndexer",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/aspnetcore/src/Indexer/bin/Debug/net6.0/CSC.PublicApi.Indexer.dll",
+            "program": "${workspaceFolder}/aspnetcore/src/Indexer/bin/Debug/net8.0/CSC.PublicApi.Indexer.dll",
             "args": [],
             "cwd": "${workspaceFolder}/aspnetcore/src/Indexer",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
@@ -22,7 +22,7 @@
             "preLaunchTask": "build",
             "launchSettingsProfile": "Api",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/aspnetcore/src/Interface/bin/Debug/net6.0/CSC.PublicApi.Interface.dll",
+            "program": "${workspaceFolder}/aspnetcore/src/Interface/bin/Debug/net8.0/CSC.PublicApi.Interface.dll",
             "args": [],
             "cwd": "${workspaceFolder}/aspnetcore/src/Interface",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
@@ -36,7 +36,7 @@
             "preLaunchTask": "build",
             "launchSettingsProfile": "Api",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/aspnetcore/src/Exporter/bin/Debug/net6.0/CSC.PublicApi.Exporter.dll",
+            "program": "${workspaceFolder}/aspnetcore/src/Exporter/bin/Debug/net8.0/CSC.PublicApi.Exporter.dll",
             "args": [],
             "cwd": "${workspaceFolder}/aspnetcore/src/Exporter",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
