@@ -26,6 +26,15 @@ public class PublicationService : IPublicationService
         return (_mapper.Map<IEnumerable<Publication>>(result), searchResult);
     }
 
+    public async Task<(IEnumerable<Publication>, long? searchAfter)> GetPublicationsSearchAfter(SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<PublicationSearchParameters>(searchAfterQueryParameters);
+
+        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<Publication>>(result), searchAfter);
+    }
+
     public async Task<Publication?> GetPublication(string publicationId)
     {
         var result = await _searchService.GetSingle(publicationId);

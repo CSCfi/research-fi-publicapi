@@ -32,6 +32,27 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
         return (searchResult.Documents, new SearchResult(pageNumber, pageSize, searchResult.HitsMetadata?.Total.Value));
     }
 
+    public async Task<(IEnumerable<TOut>, long? searchAfter)> SearchAfter(TIn parameters, int pageSize, long? searchAfter)
+    {
+        var query = _queryGenerator.GenerateQuerySearchAfter(parameters, pageSize, searchAfter);
+
+        var searchResult = await _elasticClient.SearchAsync(query);
+
+        if (Debugger.IsAttached)
+        {
+            // Enables seeing the query sent to elastic and the response in the log when debugging.
+            Console.WriteLine(searchResult.DebugInformation);            
+        }
+        
+        long? searchAfterResult = null;
+        var lastHitSort = searchResult.Hits.Last().Sorts.First();
+        if (lastHitSort != null) {
+            searchAfterResult = (long)lastHitSort;
+        }
+
+        return (searchResult.Documents, searchAfterResult);
+    }
+
     public async Task<TOut?> GetSingle(string id)
     {
         var query = _queryGenerator.GenerateSingleQuery(id);
