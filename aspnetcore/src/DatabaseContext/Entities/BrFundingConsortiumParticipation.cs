@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CSC.PublicApi.DatabaseContext.Entities
-{
-    public partial class BrFundingConsortiumParticipation
-    {
-        public int DimFundingDecisionId { get; set; }
-        public int DimOrganizationid { get; set; }
-        public string? RoleInConsortium { get; set; }
-        public decimal? ShareOfFundingInEur { get; set; }
-        public bool? EndOfParticipation { get; set; }
+namespace CSC.PublicApi.DatabaseContext.Entities;
 
-        public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
-        public virtual DimOrganization DimOrganization { get; set; } = null!;
-    }
+public partial class BrFundingConsortiumParticipation
+{
+    public int DimFundingDecisionId { get; set; }
+
+    public int DimOrganizationid { get; set; }
+
+    public string? RoleInConsortium { get; set; }
+
+    public decimal? ShareOfFundingInEur { get; set; }
+
+    public bool? EndOfParticipation { get; set; }
+
+    public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
+
+    public virtual DimOrganization DimOrganization { get; set; } = null!;
 }
