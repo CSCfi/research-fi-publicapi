@@ -42,9 +42,9 @@ public class PublicationController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters queryParameters)
+    public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters publicationsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (publications, searchResult) = await _service.GetPublications(queryParameters);
+        var (publications, searchResult) = await _service.GetPublications(publicationsQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 

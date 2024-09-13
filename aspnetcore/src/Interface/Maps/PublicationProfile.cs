@@ -18,9 +18,6 @@ public class PublicationProfile : Profile
         
         CreateMap<GetPublicationsQueryParameters, PublicationSearchParameters>()
             .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.Type!));
-
-        CreateMap<GetPublicationsQueryParameters2, PublicationSearchParameters>()
-            .ForMember(dst => dst.TypeCode, opt => opt.MapFrom(src =>  src.Type!));
         
         CreateMap<Service.Models.Publication.Publication, Publication>()
             .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src =>  src.PublicationYear.HasValue ? src.PublicationYear.Value.ToString(DateTimeYearFormat) : null))

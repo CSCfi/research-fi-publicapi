@@ -6,5 +6,5 @@ namespace CSC.PublicApi.Interface.Services;
 
 public interface IFundingDecisionService
 {
-    Task<(IEnumerable<FundingDecision>, SearchResult)> GetFundingDecisions(GetFundingDecisionQueryParameters queryParameters);
+    Task<(IEnumerable<FundingDecision>, SearchResult)> GetFundingDecisions(GetFundingDecisionQueryParameters fundingDecisionQueryParameters, PaginationQueryParameters paginationQueryParameters);
 }
