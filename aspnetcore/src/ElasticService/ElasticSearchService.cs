@@ -45,9 +45,9 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
         }
         
         long? searchAfterResult = null;
-        var lastHitSort = searchResult.Hits.Last().Sorts.First();
-        if (lastHitSort != null) {
-            searchAfterResult = (long)lastHitSort;
+        
+        if (searchResult.Hits.Count > 0) {
+            searchAfterResult = (long)searchResult.Hits.Last().Sorts.First();
         }
 
         return (searchResult.Documents, searchAfterResult);
