@@ -6,7 +6,7 @@ namespace ResearchFi.Query;
 /// Query parameters for searching funding decisions.
 /// </summary>
 /// <see cref="FundingDecision"/>
-public class GetFundingDecisionQueryParameters : PaginationQueryParameters
+public class GetFundingDecisionQueryParameters
 {
     /// <summary>
     /// One of the fields nameFi, nameSV, nameEn contains the full text.

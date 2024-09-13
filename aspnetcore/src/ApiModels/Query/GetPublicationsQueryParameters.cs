@@ -6,7 +6,7 @@ namespace ResearchFi.Query;
 /// Query parameters for searching publications.
 /// </summary>
 /// <see cref="Publication"/>
-public class GetPublicationsQueryParameters : PaginationQueryParameters
+public class GetPublicationsQueryParameters
 {
     /// <summary>
     /// The field name contains text.
