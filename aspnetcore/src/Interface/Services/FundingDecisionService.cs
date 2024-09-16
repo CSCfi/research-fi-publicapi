@@ -27,4 +27,13 @@ public class FundingDecisionService : IFundingDecisionService
 
         return (_mapper.Map<IEnumerable<FundingDecision>>(result), searchResult);
     }
+
+    public async Task<(IEnumerable<FundingDecision>, long? searchAfter)> GetFundingDecisionsSearchAfter(GetFundingDecisionQueryParameters fundingDecisionQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<FundingDecisionSearchParameters>(fundingDecisionQueryParameters);
+
+        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<FundingDecision>>(result), searchAfter);
+    }
 }
