@@ -70,11 +70,11 @@ public class ExportController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<FundingDecision>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters fundingDecisionQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters fundingDecisionQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (fundingDecisions, searchResult) = await _fundingDecisionService.GetFundingDecisions(fundingDecisionQueryParameters, paginationQueryParameters);
+        var (fundingDecisions, searchAfter) = await _fundingDecisionService.GetFundingDecisionsSearchAfter(fundingDecisionQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfter);
 
         return fundingDecisions;
     }
