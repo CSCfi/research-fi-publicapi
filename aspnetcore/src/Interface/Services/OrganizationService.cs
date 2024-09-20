@@ -19,12 +19,22 @@ public class OrganizationService : IOrganizationService
         _searchService = searchService;
     }
 
-    public async Task<(IEnumerable<Organization>, SearchResult)> GetOrganizations(GetOrganizationsQueryParameters queryParameters)
+    public async Task<(IEnumerable<Organization>, SearchResult)> GetOrganizations(GetOrganizationsQueryParameters organizationsQueryParameters, PaginationQueryParameters paginationQueryParameters)
     {
-        var searchParameters = _mapper.Map<OrganizationSearchParameters>(queryParameters);
+        var searchParameters = _mapper.Map<OrganizationSearchParameters>(organizationsQueryParameters);
 
-        var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
+        var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
         return (_mapper.Map<IEnumerable<Organization>>(result), searchResult);
+    }
+
+
+    public async Task<(IEnumerable<Organization>, long? searchAfter)> GetOrganizationsSearchAfter(GetOrganizationsQueryParameters organizationsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<OrganizationSearchParameters>(organizationsQueryParameters);
+
+        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<Organization>>(result), searchAfter);
     }
 }
