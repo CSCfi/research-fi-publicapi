@@ -42,10 +42,11 @@ public class FundingCallControllerTest : IDisposable
         // Arrange
         const int pageNumber = 7;
         const int pageSize = 50;
-        var queryParameters = new GetFundingCallQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
+        var queryParameters = new GetFundingCallQueryParameters {};
+        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
 
         // Act
-        var result = _controller.Get(queryParameters);
+        var result = _controller.Get(queryParameters, paginationQueryParameters);
 
         // Assert
         result.Should().NotBeNull();
@@ -58,10 +59,11 @@ public class FundingCallControllerTest : IDisposable
         // Arrange
         const int pageNumber = -1;
         const int pageSize = -5;
-        var queryParameters = new GetFundingCallQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
+        var queryParameters = new GetFundingCallQueryParameters {};
+        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
 
         // Act
-        var result = _controller.Get(queryParameters);
+        var result = _controller.Get(queryParameters, paginationQueryParameters);
 
         // Assert
         result.Should().NotBeNull();
@@ -76,7 +78,9 @@ public class FundingCallControllerTest : IDisposable
         const int defaultSize = 20;
 
         // Act
-        var result = _controller.Get(new GetFundingCallQueryParameters());
+        var result = _controller.Get(
+            new GetFundingCallQueryParameters(),
+            new PaginationQueryParameters());
 
         // Assert
         result.Should().NotBeNull();
@@ -90,10 +94,11 @@ public class FundingCallControllerTest : IDisposable
         const int maximumPageSize = 100;
         const int pageNumber = 7;
         const int pageSize = 150;
-        var queryParameters = new GetFundingCallQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
+        var queryParameters = new GetFundingCallQueryParameters {};
+        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
 
         // Act
-        var result = _controller.Get(queryParameters);
+        var result = _controller.Get(queryParameters, paginationQueryParameters);
 
         // Assert
         result.Should().NotBeNull();

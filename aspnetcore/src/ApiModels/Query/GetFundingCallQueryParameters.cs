@@ -6,7 +6,7 @@ namespace ResearchFi.Query;
 /// Query parameters for searching funding calls.
 /// </summary>
 /// <see cref="FundingCall"/>
-public class GetFundingCallQueryParameters : PaginationQueryParameters
+public class GetFundingCallQueryParameters
 {
     /// <summary>
     /// One of the fields nameFi, nameSV, nameEn contains the full text.

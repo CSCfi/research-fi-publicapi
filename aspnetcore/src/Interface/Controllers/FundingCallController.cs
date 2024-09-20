@@ -43,9 +43,9 @@ public class FundingCallController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<FundingCall>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters queryParameters)
+    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters queryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (fundingCalls, searchResult) = await _service.GetFundingCalls(queryParameters);
+        var (fundingCalls, searchResult) = await _service.GetFundingCalls(queryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 

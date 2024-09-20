@@ -44,9 +44,9 @@ public class ResearchDatasetController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ResearchDataset>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters queryParameters)
+    public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (researchDatasets, searchResult) = await _service.GetResearchDatasets(queryParameters);
+        var (researchDatasets, searchResult) = await _service.GetResearchDatasets(researchDatasetsQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 

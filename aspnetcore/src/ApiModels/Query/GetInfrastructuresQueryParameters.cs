@@ -3,7 +3,7 @@
 /// <summary>
 /// Hakuparametrit infrastruktuurien hakemiseen.
 /// </summary>
-public class GetInfrastructuresQueryParameters : PaginationQueryParameters
+public class GetInfrastructuresQueryParameters
 {
     /// <summary>
     /// Infrastruktuurin nimi.
