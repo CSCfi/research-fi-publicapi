@@ -2408,6 +2408,7 @@ public partial class ApiDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DimPublicationChannelId).HasColumnName("dim_publication_channel_id");
+            entity.Property(e => e.DimPublicationId).HasColumnName("dim_publication_id");
             entity.Property(e => e.DimRegisteredDataSourceId).HasColumnName("dim_registered_data_source_id");
             entity.Property(e => e.Doi)
                 .HasMaxLength(4000)
@@ -2510,6 +2511,10 @@ public partial class ApiDbContext : DbContext
                 .HasForeignKey(d => d.DimPublicationChannelId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("publication_channel");
+
+            entity.HasOne(d => d.DimPublicationNavigation).WithMany(p => p.InverseDimPublicationNavigation)
+                .HasForeignKey(d => d.DimPublicationId)
+                .HasConstraintName("parent_publication");
 
             entity.HasOne(d => d.DimRegisteredDataSource).WithMany(p => p.DimPublications)
                 .HasForeignKey(d => d.DimRegisteredDataSourceId)
