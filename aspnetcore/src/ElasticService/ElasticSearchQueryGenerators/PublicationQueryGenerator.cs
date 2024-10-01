@@ -150,6 +150,13 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
     {
         var filters = new List<Func<QueryContainerDescriptor<Publication>, QueryContainer>>();
         
+        if (parameters.ShowCoPublications is null || (bool)parameters.ShowCoPublications == false)
+        {
+            filters.Add(t =>
+                t.Term(s => s.Field(f => f.IsCoPublication)
+                    .Value(false)));
+        }
+
         if (parameters.CreatedFrom is not null)
         {
             filters.Add(x => x

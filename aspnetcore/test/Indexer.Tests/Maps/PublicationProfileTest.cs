@@ -39,6 +39,95 @@ public class PublicationProfileTest
         result.Should().BeEquivalentTo(model, options => options);
     }
 
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_CoPublication_When_DimPublicationId_Null()
+    {
+        // Arrange
+        var entity = GetEntity();
+        entity.DimPublicationId = null;
+        var model = GetModel();
+        model.IsCoPublication = false;
+
+        // Act
+        var result = Act_Map(entity);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_CoPublication_When_DimPublicationId_MinusOne()
+    {
+        // Arrange
+        var entity = GetEntity();
+        entity.DimPublicationId = -1;
+        var model = GetModel();
+        model.IsCoPublication = false;
+
+        // Act
+        var result = Act_Map(entity);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Is_CoPublication()
+    {
+        // Arrange
+        // Yhteisjulkaisu
+        var entity_mainPublication = GetEntity();
+        entity_mainPublication.PublicationId = "yhteisjulkaisu";
+        entity_mainPublication.Id = 1;
+        // Osajulkaisu
+        var entity_coPublication = GetEntity();
+        entity_coPublication.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication.DimPublicationId = 1;
+
+        var model = GetModel();
+        model.IsCoPublication = true;
+        model.Yhteisjulkaisu = "yhteisjulkaisu";
+
+        // Act
+        var result = Act_Map(entity_coPublication);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_MainPublication_Lists_CoPublications()
+    {
+        // Arrange
+        // Yhteisjulkaisu
+        var entity_mainPublication = GetEntity();
+        entity_mainPublication.PublicationId = "yhteisjulkaisu";
+        entity_mainPublication.Id = 1;
+        // Osajulkaisu 1
+        var entity_coPublication1 = GetEntity();
+        entity_coPublication1.PublicationId = "osajulkaisu1";
+        entity_coPublication1.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication1.DimPublicationId = 1;
+        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication1);
+        // Osajulkaisu 2
+        var entity_coPublication2 = GetEntity();
+        entity_coPublication2.PublicationId = "osajulkaisu2";
+        entity_coPublication2.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication2.DimPublicationId = 1;
+        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication2);
+
+        var model = GetModel();
+        model.Id = "yhteisjulkaisu";
+        model.IsCoPublication = false;
+        model.Osajulkaisut = new List<string> { "osajulkaisu1", "osajulkaisu2" };
+
+        // Act
+        var result = Act_Map(entity_mainPublication);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
     private Publication Act_Map(DimPublication dbEntity)
     {
         var entityQueryable = new List<DimPublication>
@@ -505,6 +594,7 @@ public class PublicationProfileTest
                 NameSv = "publisherOpenAccessCodeSv",
                 NameEn = "publisherOpenAccessCodeEn"
             },
+            Osajulkaisut = new List<string> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };

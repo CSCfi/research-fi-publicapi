@@ -184,4 +184,10 @@ public class GetPublicationsQueryParameters : PaginationQueryParameters
     /// </summary>
     /// <see cref="Publication.Modified"/>
     public string? ModifiedTo { get; set; }
+
+    /// <summary>
+    /// If the selection is true, co-publications will be returned.
+    /// </summary>
+    /// <see cref="Publication.ShowCoPublications"/>
+    public bool? ShowCoPublications { get; set; }
 }

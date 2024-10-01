@@ -294,6 +294,7 @@ public class PublicationProfileTest
                     NameEn = "artPublicationTypeNameEn"
                 }
             },
+            Osajulkaisut = new List<string> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };
@@ -495,6 +496,7 @@ public class PublicationProfileTest
                     NameEn = "artPublicationTypeNameEn"
                 }
             },
+            Osajulkaisut = new(),
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
         };

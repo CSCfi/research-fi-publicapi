@@ -259,6 +259,21 @@ public class Publication
     /// </summary>
     public DateTime? Modified { get; set; }
 
+    /// <summary>
+    /// Onko julkaisu osajulkaisu - TEMPORARY NAME
+    /// </summary>
+    public bool IsCoPublication { get; set; }
+
+    /// <summary>
+    /// Osajulkaisun yhteisjulkaisu - TEMPORARY NAME
+    /// </summary>
+    public string? Yhteisjulkaisu { get; set; }
+
+    /// <summary>
+    /// Yhteisjulkaisuun liittyvät osajulkaisut - TEMPORARY NAME
+    /// </summary>
+    public List<String>? Osajulkaisut { get; set; }   
+
     [Ignore]
     public string? Isbn1 { get; set; }
 

@@ -283,4 +283,14 @@ public class Publication
     /// Modification time
     /// </summary>
     public DateTime? Modified { get; set; }
+
+    /// <summary>
+    /// Osajulkaisun yhteisjulkaisu - TEMPORARY NAME
+    /// </summary>
+    public string? Yhteisjulkaisu { get; set; }
+
+    /// <summary>
+    /// Yhteisjulkaisuun liittyvät osajulkaisut - TEMPORARY NAME
+    /// </summary>
+    public List<String>? Osajulkaisut { get; set; }   
 }
