@@ -265,6 +265,11 @@ public class Publication
     public bool IsCoPublication { get; set; }
 
     /// <summary>
+    /// Onko julkaisu yhteisjulkaisu - TEMPORARY NAME
+    /// </summary>
+    public bool IsMainPublication { get; set; }
+
+    /// <summary>
     /// Osajulkaisun yhteisjulkaisu - TEMPORARY NAME
     /// </summary>
     public string? Yhteisjulkaisu { get; set; }

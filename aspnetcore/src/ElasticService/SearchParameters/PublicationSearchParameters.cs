@@ -57,4 +57,6 @@ public class PublicationSearchParameters
     public string? ModifiedTo { get; set; }
 
     public bool? ShowCoPublications { get; set; }
+
+    public bool? HideMainPublications { get; set; }
 }

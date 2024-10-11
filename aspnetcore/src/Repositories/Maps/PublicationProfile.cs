@@ -78,7 +78,8 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Authors, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.PeerReviewed, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.ParentPublication, opt => opt.Ignore())  // Handled during in memory operations in the index repository
-            .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0)) // Publication is a co-publication, when DimPublicationId references main publication
+            .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0)) // Publication is a co-publication, when DimPublicationId references main publication. This property is used in query filter.
+            .ForMember(dst => dst.IsMainPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Count > 0)) // Publication is main publication, when InverseDimPublicationNavigation references one or more co-publications. This property is used in query filter.
             .ForMember(dst => dst.Yhteisjulkaisu, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0  ? src.DimPublicationNavigation.PublicationId : null))
             .ForMember(dst => dst.Osajulkaisut, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t => t.PublicationId)));
         

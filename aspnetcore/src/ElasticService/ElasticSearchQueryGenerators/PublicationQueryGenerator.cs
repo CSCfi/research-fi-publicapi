@@ -157,6 +157,13 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                     .Value(false)));
         }
 
+        if (parameters.HideMainPublications is not null && (bool)parameters.HideMainPublications == true)
+        {
+            filters.Add(t =>
+                t.Term(s => s.Field(f => f.IsMainPublication)
+                    .Value(false)));
+        }
+
         if (parameters.CreatedFrom is not null)
         {
             filters.Add(x => x

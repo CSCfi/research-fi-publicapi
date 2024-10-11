@@ -190,4 +190,10 @@ public class GetPublicationsQueryParameters : PaginationQueryParameters
     /// </summary>
     /// <see cref="Publication.ShowCoPublications"/>
     public bool? ShowCoPublications { get; set; }
+
+    /// <summary>
+    /// If the selection is true, main publications will be filtered out.
+    /// </summary>
+    /// <see cref="Publication.HideMainPublications"/>
+    public bool? HideMainPublications { get; set; }
 }

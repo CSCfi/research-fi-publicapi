@@ -40,7 +40,7 @@ public class PublicationProfileTest
     }
 
     [Fact]
-    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_CoPublication_When_DimPublicationId_Null()
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_IsCoPublication_When_DimPublicationId_Null()
     {
         // Arrange
         var entity = GetEntity();
@@ -56,7 +56,7 @@ public class PublicationProfileTest
     }
 
     [Fact]
-    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_CoPublication_When_DimPublicationId_MinusOne()
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_IsCoPublication_When_DimPublicationId_MinusOne()
     {
         // Arrange
         var entity = GetEntity();
@@ -72,27 +72,54 @@ public class PublicationProfileTest
     }
 
     [Fact]
-    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Is_CoPublication()
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_IsMainPublication()
     {
         // Arrange
-        // Yhteisjulkaisu
-        var entity_mainPublication = GetEntity();
-        entity_mainPublication.PublicationId = "yhteisjulkaisu";
-        entity_mainPublication.Id = 1;
-        // Osajulkaisu
-        var entity_coPublication = GetEntity();
-        entity_coPublication.DimPublicationNavigation = entity_mainPublication;
-        entity_coPublication.DimPublicationId = 1;
-
+        var entity = GetEntity();
         var model = GetModel();
-        model.IsCoPublication = true;
-        model.Yhteisjulkaisu = "yhteisjulkaisu";
+        model.IsMainPublication = false;
 
         // Act
-        var result = Act_Map(entity_coPublication);
+        var result = Act_Map(entity);
 
         // Assert
         result.Should().BeEquivalentTo(model, options => options);
+    }
+
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_IsCoPublication_IsMainPublication()
+    {
+        // Arrange
+        var entity_mainPublication = GetEntity();
+        var entity_coPublication = GetEntity();
+        // Entity - Yhteisjulkaisu
+        entity_mainPublication.PublicationId = "main publication id";
+        entity_mainPublication.Id = 1;
+        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication);
+        // Entity - Osajulkaisu
+        entity_coPublication.PublicationId = "co publication id";
+        entity_coPublication.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication.DimPublicationId = entity_mainPublication.Id;
+        // Model - Yhteisjulkaisu
+        var model_mainPublication = GetModel();
+        model_mainPublication.Id = "main publication id";
+        model_mainPublication.IsMainPublication = true;
+        model_mainPublication.IsCoPublication = false;
+        model_mainPublication.Osajulkaisut = new List<string> { "co publication id" };
+        // Model - Osajulkaisu
+        var model_coPublication = GetModel();
+        model_coPublication.Id = "co publication id";
+        model_coPublication.IsMainPublication = false;
+        model_coPublication.IsCoPublication = true;
+        model_coPublication.Yhteisjulkaisu = "main publication id";
+
+        // Act
+        var resultCoPublication = Act_Map(entity_coPublication);
+        var resultMainPublication = Act_Map(entity_mainPublication);
+
+        // Assert
+        resultMainPublication.Should().BeEquivalentTo(model_mainPublication, options => options);
+        resultCoPublication.Should().BeEquivalentTo(model_coPublication, options => options);
     }
 
     [Fact]
@@ -118,6 +145,7 @@ public class PublicationProfileTest
 
         var model = GetModel();
         model.Id = "yhteisjulkaisu";
+        model.IsMainPublication = true;
         model.IsCoPublication = false;
         model.Osajulkaisut = new List<string> { "osajulkaisu1", "osajulkaisu2" };
 
@@ -594,6 +622,7 @@ public class PublicationProfileTest
                 NameSv = "publisherOpenAccessCodeSv",
                 NameEn = "publisherOpenAccessCodeEn"
             },
+            Yhteisjulkaisu = null,
             Osajulkaisut = new List<string> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00)
