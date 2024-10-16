@@ -186,14 +186,14 @@ public class GetPublicationsQueryParameters : PaginationQueryParameters
     public string? ModifiedTo { get; set; }
 
     /// <summary>
-    /// If the selection is true, co-publications will be returned.
+    /// If the selection is true, publication information sent by individual organisations related to co-publications as part of national publication data collection will be returned. Not returned by default.
     /// </summary>
-    /// <see cref="Publication.ShowCoPublications"/>
-    public bool? ShowCoPublications { get; set; }
+    /// <see cref="Publication.ShowOrganisationPartofCoPublication"/>
+    public bool? ShowOrganisationPartofCoPublication { get; set; }
 
     /// <summary>
-    /// If the selection is true, main publications will be filtered out.
+    /// If the selection is true, combined information of co-publications based on national publication data collection will be filtered out. Returned by default.
     /// </summary>
-    /// <see cref="Publication.HideMainPublications"/>
-    public bool? HideMainPublications { get; set; }
+    /// <see cref="Publication.HideCoPublications"/>
+    public bool? HideCoPublications { get; set; }
 }

@@ -81,6 +81,14 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
     public override object PerformInMemoryOperation(object entity)
     {
         Publication publication = (Publication)entity;
+
+        if (publication.orgPublicationDTOs != null && publication.orgPublicationDTOs.Count > 0)
+        {
+            foreach (OrgPublicationDTO op in publication.orgPublicationDTOs.AsEnumerable().ToList())
+            {
+                publication.DatabaseContributions.AddRange(op.DatabaseContributions);
+            }
+        }
             
         HandleIssnAndIsbn(publication);
         HandleEmptyCollections(publication);

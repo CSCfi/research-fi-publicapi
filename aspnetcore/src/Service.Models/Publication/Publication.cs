@@ -260,24 +260,24 @@ public class Publication
     public DateTime? Modified { get; set; }
 
     /// <summary>
-    /// Onko julkaisu osajulkaisu - TEMPORARY NAME
+    /// Onko julkaisu yhteisjulkaisu
     /// </summary>
     public bool IsCoPublication { get; set; }
 
     /// <summary>
-    /// Onko julkaisu yhteisjulkaisu - TEMPORARY NAME
+    /// Onko julkaisu osajulkaisu
     /// </summary>
-    public bool IsMainPublication { get; set; }
+    public bool IsOrgPublication { get; set; }
 
     /// <summary>
-    /// Osajulkaisun yhteisjulkaisu - TEMPORARY NAME
+    /// Osajulkaisun yhteisjulkaisu
     /// </summary>
-    public string? Yhteisjulkaisu { get; set; }
+    public string? CoPublicationID { get; set; }
 
     /// <summary>
-    /// Yhteisjulkaisuun liittyvät osajulkaisut - TEMPORARY NAME
+    /// Yhteisjulkaisuun liittyvät osajulkaisut
     /// </summary>
-    public List<String>? Osajulkaisut { get; set; }   
+    public List<String>? OrgPublicationIDs { get; set; }   
 
     [Ignore]
     public string? Isbn1 { get; set; }
@@ -293,6 +293,9 @@ public class Publication
     
     [Ignore]
     public List<FactContribution>? DatabaseContributions { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationDTO>? orgPublicationDTOs { get; set; }
 
     [Ignore]
     public bool? DatabasePeerReviewed { get; set; }

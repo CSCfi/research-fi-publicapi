@@ -285,12 +285,12 @@ public class Publication
     public DateTime? Modified { get; set; }
 
     /// <summary>
-    /// Osajulkaisun yhteisjulkaisu - TEMPORARY NAME
+    /// Combined information of co-publications based on national publication data collection 
     /// </summary>
-    public string? Yhteisjulkaisu { get; set; }
+    public string? CoPublicationID { get; set; }
 
     /// <summary>
-    /// Yhteisjulkaisuun liittyvät osajulkaisut - TEMPORARY NAME
+    /// Publication information sent by individual organisations related to co-publications as part of national publication data collection
     /// </summary>
-    public List<String>? Osajulkaisut { get; set; }   
+    public List<String>? OrgPublicationIDs { get; set; }   
 }
