@@ -39,6 +39,148 @@ public class PublicationProfileTest
         result.Should().BeEquivalentTo(model, options => options);
     }
 
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_IsOrgPublication_When_DimPublicationId_Null()
+    {
+        // Arrange
+        var entity = GetEntity();
+        entity.DimPublicationId = null;
+        var model = GetModel();
+        model.IsOrgPublication = false;
+
+        // Act
+        var result = Act_Map(entity);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_Not_IsOrgPublication_When_DimPublicationId_MinusOne()
+    {
+        // Arrange
+        var entity = GetEntity();
+        entity.DimPublicationId = -1;
+        var model = GetModel();
+        model.IsOrgPublication = false;
+
+        // Act
+        var result = Act_Map(entity);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+
+/*
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_IsOrgPublication_IsCoPublication()
+    {
+        // Arrange
+        var entity_coPublication = GetEntity();
+        var entity_orgPublication = GetEntity();
+        // Entity - Yhteisjulkaisu
+        entity_coPublication.PublicationId = "co-publication id";
+        entity_coPublication.Id = 1;
+        entity_coPublication.InverseDimPublicationNavigation.Add(entity_orgPublication);
+        // Entity - Osajulkaisu
+        entity_orgPublication.PublicationId = "org publication id";
+        entity_orgPublication.DimPublicationNavigation = entity_coPublication;
+        entity_orgPublication.DimPublicationId = entity_coPublication.Id;
+        // Model - Yhteisjulkaisu
+        var model_coPublication = GetModel();
+        model_coPublication.Id = "co-publication id";
+        model_coPublication.IsCoPublication = true;
+        model_coPublication.IsOrgPublication = false;
+        model_coPublication.OrgPublicationIDs = new List<string> { "org publication id" };
+        model_coPublication.orgPublicationDTOs = new List<OrgPublicationDTO> {
+            new OrgPublicationDTO {
+                Id = "org publication id",
+                DatabaseContributions = new () {
+                    new CSC.PublicApi.Service.Models.Publication.FactContribution() {
+                        ArtPublicationRole = new () {    
+                            Code = 
+                            "roleCode", 
+                            NameEn = 
+                            "roleNameEn", 
+                            NameFi = 
+                            "roleNameFi", 
+                            NameSv = 
+                            "roleNameSv"
+                        },
+                        ContributionType = "publication_author_organization",
+                        Name = new()
+                        {
+                            FirstNames = 
+                            "personFirstName", 
+                            LastName = 
+                            "personLastName", 
+                            NameId = 23, 
+                            Orcid = 
+                            "pidContent"
+                        },
+                        OrganizationId = 42
+                    },
+                    new CSC.PublicApi.Service.Models.Publication.FactContribution() {
+                        ArtPublicationRole = null, 
+                        ContributionType = 
+                        "publication_organization", 
+                        Name = null, 
+                        OrganizationId = 41
+                    },
+                }
+            }
+        };
+        // Model - Osajulkaisu
+        var model_orgPublication = GetModel();
+        model_orgPublication.Id = "org publication id";
+        model_orgPublication.IsCoPublication = false;
+        model_orgPublication.IsOrgPublication = true;
+        model_orgPublication.CoPublicationID = "co-publication id";
+
+        // Act
+        var resultCoPublication = Act_Map(entity_coPublication);
+        var resultOrgPublication = Act_Map(entity_orgPublication);
+
+        // Assert
+        resultCoPublication.Should().BeEquivalentTo(model_coPublication, options => options);
+        resultOrgPublication.Should().BeEquivalentTo(model_orgPublication, options => options);
+    }
+*/
+/*
+    [Fact]
+    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_MainPublication_Lists_CoPublications()
+    {
+        // Arrange
+        // Yhteisjulkaisu
+        var entity_mainPublication = GetEntity();
+        entity_mainPublication.PublicationId = "yhteisjulkaisu";
+        entity_mainPublication.Id = 1;
+        // Osajulkaisu 1
+        var entity_coPublication1 = GetEntity();
+        entity_coPublication1.PublicationId = "osajulkaisu1";
+        entity_coPublication1.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication1.DimPublicationId = 1;
+        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication1);
+        // Osajulkaisu 2
+        var entity_coPublication2 = GetEntity();
+        entity_coPublication2.PublicationId = "osajulkaisu2";
+        entity_coPublication2.DimPublicationNavigation = entity_mainPublication;
+        entity_coPublication2.DimPublicationId = 1;
+        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication2);
+
+        var model = GetModel();
+        model.Id = "yhteisjulkaisu";
+        model.IsMainPublication = true;
+        model.IsCoPublication = false;
+        model.OrgPublicationIDs = new List<string> { "osajulkaisu1", "osajulkaisu2" };
+
+        // Act
+        var result = Act_Map(entity_mainPublication);
+
+        // Assert
+        result.Should().BeEquivalentTo(model, options => options);
+    }
+*/
     private Publication Act_Map(DimPublication dbEntity)
     {
         var entityQueryable = new List<DimPublication>
@@ -505,8 +647,11 @@ public class PublicationProfileTest
                 NameSv = "publisherOpenAccessCodeSv",
                 NameEn = "publisherOpenAccessCodeEn"
             },
+            CoPublicationID = null,
+            OrgPublicationIDs = new List<string> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
-            Modified = new DateTime(2023, 3, 10, 10, 44, 00)
+            Modified = new DateTime(2023, 3, 10, 10, 44, 00),
+            orgPublicationDTOs = new()
         };
     }
 }

@@ -283,4 +283,14 @@ public class Publication
     /// Modification time
     /// </summary>
     public DateTime? Modified { get; set; }
+
+    /// <summary>
+    /// Combined information of co-publications based on national publication data collection 
+    /// </summary>
+    public string? CoPublicationID { get; set; }
+
+    /// <summary>
+    /// Publication information sent by individual organisations related to co-publications as part of national publication data collection
+    /// </summary>
+    public List<String>? OrgPublicationIDs { get; set; }   
 }
