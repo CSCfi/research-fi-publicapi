@@ -28,6 +28,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ApcPaymentYear, opt =>opt.MapFrom(src => (DateTime?)(src.ApcPaymentYear.HasValue ? new DateTime(src.ApcPaymentYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
             .ForMember(dst => dst.AuthorsText, opt => opt.MapFrom(src => src.AuthorsText))
             .ForMember(dst => dst.DatabaseContributions, opt => opt.MapFrom(src => src.FactContributions))
+            .ForMember(dst => dst.orgPublicationDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.Format, opt => opt.MapFrom(src => src.PublicationTypeCode2Navigation))
             .ForMember(dst => dst.ParentPublicationType, opt => opt.MapFrom(src => src.ParentPublicationTypeCodeNavigation))
             .ForMember(dst => dst.DatabasePeerReviewed, opt => opt.MapFrom(src => src.PeerReviewed))
@@ -78,7 +79,10 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Authors, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.PeerReviewed, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.ParentPublication, opt => opt.Ignore())  // Handled during in memory operations in the index repository
-            ;
+            .ForMember(dst => dst.IsOrgPublication, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0)) // Publication is an organization publication, when DimPublicationId references co-publication. This property is used in query filter.
+            .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Count > 0)) // Publication is a co-publication, when InverseDimPublicationNavigation references one or more organization publications. This property is used in query filter.
+            .ForMember(dst => dst.CoPublicationID, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0  ? src.DimPublicationNavigation.PublicationId : null))
+            .ForMember(dst => dst.OrgPublicationIDs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t => t.PublicationId)));
         
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
@@ -132,6 +136,10 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.DimName))
             .ForMember(dst => dst.ArtPublicationRole, opt => opt.MapFrom(src => src.DimReferencedataActorRole))
             .ForMember(dst => dst.ContributionType, opt => opt.MapFrom(src => src.ContributionType));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.DatabaseContributions, opt => opt.MapFrom(src => src.FactContributions));
 
         CreateProjection<DimName, Name>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

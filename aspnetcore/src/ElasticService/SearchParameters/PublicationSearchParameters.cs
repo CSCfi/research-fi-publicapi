@@ -55,4 +55,8 @@ public class PublicationSearchParameters
     public string? ModifiedFrom { get; set; }
 
     public string? ModifiedTo { get; set; }
+
+    public bool? ShowOrganisationPartofCoPublication { get; set; }
+
+    public bool? HideCoPublications { get; set; }
 }
