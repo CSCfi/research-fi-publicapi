@@ -295,7 +295,19 @@ public class Publication
     public List<FactContribution>? DatabaseContributions { get; set; }
 
     [Ignore]
-    public List<OrgPublicationDTO>? orgPublicationDTOs { get; set; }
+    public List<OrgPublicationDatabaseContributionDTO>? OrgPublicationDatabaseContributionDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationKeywordDTO>? OrgPublicationKeywordDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationArtPublicatonTypeCategoryDTO>? OrgPublicationArtPublicatonTypeCategoryDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationFieldsOfScienceDTO>? OrgPublicationFieldsOfScienceDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationFieldsOfArtDTO>? OrgPublicationFieldsOfArtDTOs { get; set; }
 
     [Ignore]
     public bool? DatabasePeerReviewed { get; set; }
