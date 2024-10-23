@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
-using Elasticsearch.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Publication = CSC.PublicApi.Service.Models.Publication.Publication;
@@ -82,14 +81,43 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
     {
         Publication publication = (Publication)entity;
 
-        if (publication.orgPublicationDTOs != null && publication.orgPublicationDTOs.Count > 0)
+        // Add data from OrgPublication DTOs, which hold data collected from publications related to a co-publication (yhteisjulkaisu/osajulkaisu)
+        if (publication.OrgPublicationDatabaseContributionDTOs != null && publication.OrgPublicationDatabaseContributionDTOs.Count > 0)
         {
-            foreach (OrgPublicationDTO op in publication.orgPublicationDTOs.AsEnumerable().ToList())
+            foreach (OrgPublicationDatabaseContributionDTO op in publication.OrgPublicationDatabaseContributionDTOs.AsEnumerable().ToList())
             {
                 publication.DatabaseContributions.AddRange(op.DatabaseContributions);
             }
         }
-            
+        if (publication.OrgPublicationKeywordDTOs != null && publication.OrgPublicationKeywordDTOs.Count > 0)
+        {
+            foreach (OrgPublicationKeywordDTO kw in publication.OrgPublicationKeywordDTOs.AsEnumerable().ToList())
+            {
+                publication.Keywords.AddRange(kw.Keywords);
+            }
+        }
+        if (publication.OrgPublicationArtPublicatonTypeCategoryDTOs != null && publication.OrgPublicationArtPublicatonTypeCategoryDTOs.Count > 0)
+        {
+            foreach (OrgPublicationArtPublicatonTypeCategoryDTO ap in publication.OrgPublicationArtPublicatonTypeCategoryDTOs.AsEnumerable().ToList())
+            {
+                publication.ArtPublicationTypeCategory.AddRange(ap.ArtPublicationTypeCategories);
+            }
+        }
+        if (publication.OrgPublicationFieldsOfScienceDTOs != null && publication.OrgPublicationFieldsOfScienceDTOs.Count > 0)
+        {
+            foreach (OrgPublicationFieldsOfScienceDTO fs in publication.OrgPublicationFieldsOfScienceDTOs.AsEnumerable().ToList())
+            {
+                publication.FieldsOfScience.AddRange(fs.FieldsOfScience);
+            }
+        }
+        if (publication.OrgPublicationFieldsOfArtDTOs != null && publication.OrgPublicationFieldsOfArtDTOs.Count > 0)
+        {
+            foreach (OrgPublicationFieldsOfArtDTO fa in publication.OrgPublicationFieldsOfArtDTOs.AsEnumerable().ToList())
+            {
+                publication.FieldsOfArt.AddRange(fa.FieldsOfArt);
+            }
+        }
+         
         HandleIssnAndIsbn(publication);
         HandleEmptyCollections(publication);
         HandleOrganizations(publication);
