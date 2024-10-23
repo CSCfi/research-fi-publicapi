@@ -92,7 +92,7 @@ public class PublicationProfileTest
         model_coPublication.IsCoPublication = true;
         model_coPublication.IsOrgPublication = false;
         model_coPublication.OrgPublicationIDs = new List<string> { "org publication id" };
-        model_coPublication.orgPublicationDTOs = new List<OrgPublicationDTO> {
+        model_coPublication.OrgPublicationDTOs = new List<OrgPublicationDTO> {
             new OrgPublicationDTO {
                 Id = "org publication id",
                 DatabaseContributions = new () {
@@ -651,7 +651,11 @@ public class PublicationProfileTest
             OrgPublicationIDs = new List<string> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00),
-            orgPublicationDTOs = new()
+            OrgPublicationDatabaseContributionDTOs = new(),
+            OrgPublicationArtPublicatonTypeCategoryDTOs = new(),
+            OrgPublicationFieldsOfArtDTOs = new(),
+            OrgPublicationFieldsOfScienceDTOs = new(),
+            OrgPublicationKeywordDTOs = new()
         };
     }
 }
