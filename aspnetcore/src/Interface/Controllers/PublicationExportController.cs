@@ -29,13 +29,13 @@ public class PublicationExportController : ControllerBase
     }
 
     /// <summary>
-    /// Experimental endpoint for getting more than 10000 publications.
+    /// Endpoint for bypassing the limit of 10000 records for publications.
     /// </summary>
     /// <returns>Paged search result as a collection of <see cref="Publication"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "SearchPublications2")]
+    [HttpGet(Name = "GetPublicationsExport")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]

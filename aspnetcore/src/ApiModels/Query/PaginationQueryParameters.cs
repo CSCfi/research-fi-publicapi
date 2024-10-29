@@ -19,7 +19,7 @@ public class PaginationQueryParameters
     }
 
     /// <summary>
-    /// Number of results on page. Optional. Default value 20. Maximum permissible value 100. Maximum possible result set of 10,000 results.
+    /// Number of results on page. Optional. Default value 20. Maximum permissible value 100. Maximum possible result set of 10000 results.
     /// </summary>
     public int PageSize
     {

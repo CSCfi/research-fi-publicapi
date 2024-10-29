@@ -35,7 +35,7 @@ public class PublicationController : ControllerBase
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "SearchPublications")]
+    [HttpGet(Name = "GetPublications")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
