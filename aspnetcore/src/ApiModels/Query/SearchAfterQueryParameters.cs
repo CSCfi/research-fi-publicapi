@@ -5,17 +5,18 @@
 /// </summary>
 public class SearchAfterQueryParameters
 {
-    private const int MaximumPageSize = 500;
-    private int _pageSize = 20;
+    private const int DefaultPageSize = 50;
+    private const int MaximumPageSize = 1000;
+    private int _pageSize = DefaultPageSize;
     private long? _nextPageToken = null;
 
     /// <summary>
-    /// Number of results on page. Optional. Default value 20. Maximum permissible value 500.
+    /// Number of results on page. Optional. Default value 50. Maximum permissible value 1000.
     /// </summary>
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value < 1 ? 20 : (value > MaximumPageSize ? MaximumPageSize : value);
+        set => _pageSize = value < 1 ? DefaultPageSize : (value > MaximumPageSize ? MaximumPageSize : value);
     }
 
     /// <summary>
