@@ -28,7 +28,6 @@ public static class ResponseHelper
     public static void AddPaginationResponseHeadersSearchAfter(HttpContext httpContext, SearchAfterResult searchAfterResult)
     {
         httpContext.Response.Headers.Add("x-page-size", searchAfterResult.PageSize.ToString());
-        httpContext.Response.Headers.Add("x-total", searchAfterResult.TotalResults.ToString());
         if (searchAfterResult.SearchAfter != null)
         {
             httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter.ToString());

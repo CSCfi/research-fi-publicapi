@@ -50,7 +50,7 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
             searchAfterValue = (long)searchResult.Hits.Last().Sorts.First();
         }
 
-        return (searchResult.Documents, new SearchAfterResult(searchAfterValue, pageSize, searchResult.HitsMetadata?.Total.Value));
+        return (searchResult.Documents, new SearchAfterResult(searchAfterValue, pageSize));
     }
 
     public async Task<TOut?> GetSingle(string id)

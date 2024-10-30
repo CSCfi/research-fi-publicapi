@@ -33,12 +33,12 @@ public class Program
         // Create and configure the host to support dependency injection, configuration, etc.
         var consoleHost = CreateHostBuilder(args).Build();
 
-        // // Check if the database is ready for indexing.
-        // var databasePreflightCheck = consoleHost.Services.GetRequiredService<DatabasePreflightCheck>();
-        // if (!databasePreflightCheck.IsGood())
-        // {
-        //     return;
-        // }
+        // Check if the database is ready for indexing.
+        var databasePreflightCheck = consoleHost.Services.GetRequiredService<DatabasePreflightCheck>();
+        if (!databasePreflightCheck.IsGood())
+        {
+            return;
+        }
 
         // Get the "Main" service which handles the indexing.
         var indexer = consoleHost.Services.GetRequiredService<Indexer>();
