@@ -32,6 +32,7 @@ public class InfrastructureController : ControllerBase
     /// <summary>
     /// Search Infrastructures
     /// </summary>
+    /// <param name="infrastructuresQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Infrastructure"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>

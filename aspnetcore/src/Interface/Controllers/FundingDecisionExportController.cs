@@ -32,6 +32,7 @@ public class FundingDecisionExportController : ControllerBase
     /// <summary>
     /// Endpoint for bypassing the limit of 10000 records for funding decisions.
     /// </summary>
+    /// <param name="fundingDecisionQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="FundingDecision"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
@@ -46,9 +47,9 @@ public class FundingDecisionExportController : ControllerBase
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters fundingDecisionQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (fundingDecisions, searchAfter) = await _service.GetFundingDecisionsSearchAfter(fundingDecisionQueryParameters, searchAfterQueryParameters);
+        var (fundingDecisions, searchAfterResult) = await _service.GetFundingDecisionsSearchAfter(fundingDecisionQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfter);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return fundingDecisions;
     }

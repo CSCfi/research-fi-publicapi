@@ -30,13 +30,13 @@ public class FundingCallService : IFundingCallService
         return (_mapper.Map<IEnumerable<FundingCall>>(result), searchResult);
     }
 
-    public async Task<(IEnumerable<FundingCall>, long? searchAfter)> GetFundingCallsSearchAfter(GetFundingCallQueryParameters fundingCallQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    public async Task<(IEnumerable<FundingCall>, SearchAfterResult)> GetFundingCallsSearchAfter(GetFundingCallQueryParameters fundingCallQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
     {
         var searchParameters = _mapper.Map<FundingCallSearchParameters>(fundingCallQueryParameters);
 
-        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
-        return (_mapper.Map<IEnumerable<FundingCall>>(result), searchAfter);
+        return (_mapper.Map<IEnumerable<FundingCall>>(result), searchAfterResult);
     }
 
     public async Task PostFundCall(FundingCall fundingCall)

@@ -32,6 +32,7 @@ public class ResearchDatasetExportController : ControllerBase
     /// <summary>
     /// Endpoint for bypassing the limit of 10000 records for research datasets.
     /// </summary>
+    /// <param name="researchDatasetsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="ResearchDataset"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
@@ -46,9 +47,9 @@ public class ResearchDatasetExportController : ControllerBase
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (researchDatasets, searchAfter) = await _service.GetResearchDatasetsSearchAfter(researchDatasetsQueryParameters, searchAfterQueryParameters);
+        var (researchDatasets, searchAfterResult) = await _service.GetResearchDatasetsSearchAfter(researchDatasetsQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfter);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return researchDatasets;
     }

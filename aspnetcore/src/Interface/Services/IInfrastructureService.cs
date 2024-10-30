@@ -7,5 +7,5 @@ namespace CSC.PublicApi.Interface.Services;
 public interface IInfrastructureService
 {
     Task<(IEnumerable<Infrastructure>, SearchResult)> GetInfrastructures(GetInfrastructuresQueryParameters infrastructuresQueryParameters, PaginationQueryParameters paginationQueryParameters);
-    Task<(IEnumerable<Infrastructure>, long? searchAfter)> GetInfrastructuresSearchAfter(GetInfrastructuresQueryParameters infrastructuresQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
+    Task<(IEnumerable<Infrastructure>, SearchAfterResult)> GetInfrastructuresSearchAfter(GetInfrastructuresQueryParameters infrastructuresQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
 }

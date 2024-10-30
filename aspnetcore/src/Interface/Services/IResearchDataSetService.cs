@@ -7,5 +7,5 @@ namespace CSC.PublicApi.Interface.Services;
 public interface IResearchDatasetService
 {
     Task<(IEnumerable<ResearchDataset>, SearchResult)> GetResearchDatasets(GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, PaginationQueryParameters paginationQueryParameters);
-    Task<(IEnumerable<ResearchDataset>, long? searchAfter)> GetResearchDatasetsSearchAfter(GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
+    Task<(IEnumerable<ResearchDataset>, SearchAfterResult)> GetResearchDatasetsSearchAfter(GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
 }

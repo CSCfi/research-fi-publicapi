@@ -25,12 +25,14 @@ public static class ResponseHelper
         httpContext.Response.Headers.Add("link", GetLinks(httpContext.Request, results.PageNumber, results.TotalPages));
     }
 
-    public static void AddPaginationResponseHeadersSearchAfter(HttpContext httpContext, long? searchAfter)
+    public static void AddPaginationResponseHeadersSearchAfter(HttpContext httpContext, SearchAfterResult searchAfterResult)
     {
-        if (searchAfter != null)
+        httpContext.Response.Headers.Add("x-page-size", searchAfterResult.PageSize.ToString());
+        httpContext.Response.Headers.Add("x-total", searchAfterResult.TotalResults.ToString());
+        if (searchAfterResult.SearchAfter != null)
         {
-            httpContext.Response.Headers.Add("x-next-page-token", searchAfter.ToString());
-            httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfter));
+            httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter.ToString());
+            httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfterResult.SearchAfter));
         }
     }
 

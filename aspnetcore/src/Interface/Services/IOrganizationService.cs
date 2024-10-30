@@ -7,5 +7,5 @@ namespace CSC.PublicApi.Interface.Services;
 public interface IOrganizationService
 {
     Task<(IEnumerable<Organization>, SearchResult)> GetOrganizations(GetOrganizationsQueryParameters organizationsQueryParameters, PaginationQueryParameters paginationQueryParameters);
-    Task<(IEnumerable<Organization>, long? searchAfter)> GetOrganizationsSearchAfter(GetOrganizationsQueryParameters organizationsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
+    Task<(IEnumerable<Organization>, SearchAfterResult)> GetOrganizationsSearchAfter(GetOrganizationsQueryParameters organizationsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
 }

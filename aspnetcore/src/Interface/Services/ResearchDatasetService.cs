@@ -28,12 +28,12 @@ public class ResearchDatasetService : IResearchDatasetService
         return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchResult);
     }
 
-    public async Task<(IEnumerable<ResearchDataset>, long? searchAfter)> GetResearchDatasetsSearchAfter(GetResearchDatasetsQueryParameters queryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    public async Task<(IEnumerable<ResearchDataset>, SearchAfterResult)> GetResearchDatasetsSearchAfter(GetResearchDatasetsQueryParameters queryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
     {
         var searchParameters = _mapper.Map<ResearchDatasetSearchParameters>(queryParameters);
 
-        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
-        return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchAfter);
+        return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchAfterResult);
     }
 }

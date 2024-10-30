@@ -31,6 +31,7 @@ public class PublicationExportController : ControllerBase
     /// <summary>
     /// Endpoint for bypassing the limit of 10000 records for publications.
     /// </summary>
+    /// <param name="publicationsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Publication"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
@@ -44,9 +45,9 @@ public class PublicationExportController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters publicationsQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (publications, searchAfter) = await _service.GetPublicationsSearchAfter(publicationsQueryParameters, searchAfterQueryParameters);
+        var (publications, searchAfterResult) = await _service.GetPublicationsSearchAfter(publicationsQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfter);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return publications;
     }

@@ -32,6 +32,7 @@ public class FundingDecisionController : ControllerBase
     /// <summary>
     /// Endpoint for filtering funding decisions using the specified query parameters.
     /// </summary>
+    /// <param name="fundingDecisionQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="FundingDecision"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>

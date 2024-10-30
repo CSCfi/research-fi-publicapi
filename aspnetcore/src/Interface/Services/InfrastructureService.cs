@@ -29,12 +29,12 @@ public class InfrastructureService : IInfrastructureService
     }
 
 
-    public async Task<(IEnumerable<Infrastructure>, long? searchAfter)> GetInfrastructuresSearchAfter(GetInfrastructuresQueryParameters infrastructuresQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    public async Task<(IEnumerable<Infrastructure>, SearchAfterResult)> GetInfrastructuresSearchAfter(GetInfrastructuresQueryParameters infrastructuresQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
     {
         var searchParameters = _mapper.Map<InfrastructureSearchParameters>(infrastructuresQueryParameters);
 
-        var (result, searchAfter) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
-        return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchAfter);
+        return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchAfterResult);
     }
 }

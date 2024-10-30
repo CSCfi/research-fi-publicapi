@@ -30,7 +30,7 @@ public class FundingCallController : ControllerBase
     /// <summary>
     /// Endpoint for filtering funding calls using the specified query parameters.
     /// </summary>
-    /// <param name="queryParameters">The query parameters for filtering the results.</param>
+    /// <param name="fundingCallQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="FundingCall"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
@@ -43,9 +43,9 @@ public class FundingCallController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<FundingCall>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters queryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters fundingCallQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (fundingCalls, searchResult) = await _service.GetFundingCalls(queryParameters, paginationQueryParameters);
+        var (fundingCalls, searchResult) = await _service.GetFundingCalls(fundingCallQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 

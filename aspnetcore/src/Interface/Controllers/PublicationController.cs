@@ -31,6 +31,7 @@ public class PublicationController : ControllerBase
     /// <summary>
     /// Endpoint for filtering publications using the specified query parameters.
     /// </summary>
+    /// <param name="publicationsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Publication"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>

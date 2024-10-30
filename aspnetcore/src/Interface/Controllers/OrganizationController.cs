@@ -32,6 +32,7 @@ public class OrganizationController : ControllerBase
     /// <summary>
     /// Hae organisaatioita
     /// </summary>
+    /// <param name="organizationsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Organization"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>

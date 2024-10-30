@@ -32,6 +32,7 @@ public class ResearchDatasetController : ControllerBase
     /// <summary>
     /// Endpoint for filtering research datasets using the specified query parameters.
     /// </summary>
+    /// <param name="researchDatasetsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="ResearchDataset"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
