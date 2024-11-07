@@ -148,7 +148,7 @@ public class Indexer
                 */
 
                 int skipAmount = 0;
-                int takeAmount = 50000;
+                int takeAmount = 30000;
                 int numOfResults = 0;
                 int processedCount = 0;
 
