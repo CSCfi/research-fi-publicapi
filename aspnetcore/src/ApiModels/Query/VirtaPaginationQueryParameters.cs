@@ -1,0 +1,29 @@
+﻿namespace ResearchFi.Query;
+
+/// <summary>
+/// Sivutusta koskevat hakuehdot.
+/// </summary>
+public class VirtaPaginationQueryParameters
+{
+    private const int MaximumPageSize = 1000;
+    private int _pageSize = 20;
+    private int _pageNumber = 0;
+
+    /// <summary>
+    /// Page number to be searched. Optional. Default value 1.
+    /// </summary>
+    public int PageNumber
+    {
+        get => _pageNumber;
+        set => _pageNumber = value < 0 ? 0 : value;
+    }
+
+    /// <summary>
+    /// Number of results on page. Optional. Default value 20. Maximum permissible value 100. 
+    /// </summary>
+    public int PageSize
+    {
+        get => _pageSize;
+        set => _pageSize = value < 1 ? 1 : value > MaximumPageSize ? MaximumPageSize : value;
+    }
+}
