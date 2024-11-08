@@ -15,8 +15,7 @@ namespace CSC.PublicApi.Interface.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class VirheraporttiController : ControllerBase
-{
-    private const string ApiVersion = "1.0";
+{    private const string ApiVersion = "1.0";
     private readonly VirtaJtpDbContext _virtaJtpDbContext;
    
 
@@ -31,29 +30,17 @@ public class VirheraporttiController : ControllerBase
     [HttpGet(Name = "GetVirheraportti")]
     [MapToApiVersion(ApiVersion)]
    // [Route("/[controller]/etunimet/{etunimi}")]
-    public async Task<List<Virheraportti>> Get()
+    public async Task<List<Virheraportti>> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
+        
 
-        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.ToListAsync();
-       /* List <DisplayTest> displayTests = new(); 
-        foreach(TableTest t in tableTests)
-        {
-            displayTests.Add(
-                new DisplayTest(){
-                    Etunimi = t.Etunimi, 
-                    Sukunimi = t.Sukunimi
-                }
-            );
-        }*/
+        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.Skip(queryParameters.PageNumber)
+            .Take(queryParameters.PageSize)
+           .ToListAsync();
 
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+     
 
         return virheraportti;
-      /*  return Enumerable.Range(1, 5).Select(index => new Virheraportti
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = 21, //Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })  
-        .ToArray(); */
     }
 }
