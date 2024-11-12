@@ -259,6 +259,26 @@ public class Publication
     /// </summary>
     public DateTime? Modified { get; set; }
 
+    /// <summary>
+    /// Onko julkaisu yhteisjulkaisu
+    /// </summary>
+    public bool IsCoPublication { get; set; }
+
+    /// <summary>
+    /// Onko julkaisu osajulkaisu
+    /// </summary>
+    public bool IsOrgPublication { get; set; }
+
+    /// <summary>
+    /// Osajulkaisun yhteisjulkaisu
+    /// </summary>
+    public string? CoPublicationID { get; set; }
+
+    /// <summary>
+    /// Yhteisjulkaisuun liittyvät osajulkaisut
+    /// </summary>
+    public List<String>? OrgPublicationIDs { get; set; }   
+
     [Ignore]
     public string? Isbn1 { get; set; }
 
@@ -273,6 +293,21 @@ public class Publication
     
     [Ignore]
     public List<FactContribution>? DatabaseContributions { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationDatabaseContributionDTO>? OrgPublicationDatabaseContributionDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationKeywordDTO>? OrgPublicationKeywordDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationArtPublicatonTypeCategoryDTO>? OrgPublicationArtPublicatonTypeCategoryDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationFieldsOfScienceDTO>? OrgPublicationFieldsOfScienceDTOs { get; set; }
+
+    [Ignore]
+    public List<OrgPublicationFieldsOfArtDTO>? OrgPublicationFieldsOfArtDTOs { get; set; }
 
     [Ignore]
     public bool? DatabasePeerReviewed { get; set; }

@@ -36,8 +36,10 @@ public static class ElasticSearchExtensions
     {
         var elasticSearchClusterUrl = configuration["ElasticSearch:Url"] ?? throw new InvalidOperationException("ElasticSearch url missing.");
 
+        // https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.17/configuration-options.html
         var connectionSettings = new ConnectionSettings(new Uri(elasticSearchClusterUrl))
-            .DefaultFieldNameInferrer(i => i); // This forces elastic to store .Net objects using type names, instead of camel casing. This enables using nameof when referring to fields.
+            .DefaultFieldNameInferrer(i => i) // This forces elastic to store .Net objects using type names, instead of camel casing. This enables using nameof when referring to fields.
+            .MaximumRetries(5);
 
         if (Debugger.IsAttached)
         {

@@ -28,6 +28,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ApcPaymentYear, opt =>opt.MapFrom(src => (DateTime?)(src.ApcPaymentYear.HasValue ? new DateTime(src.ApcPaymentYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
             .ForMember(dst => dst.AuthorsText, opt => opt.MapFrom(src => src.AuthorsText))
             .ForMember(dst => dst.DatabaseContributions, opt => opt.MapFrom(src => src.FactContributions))
+            .ForMember(dst => dst.OrgPublicationDatabaseContributionDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.Format, opt => opt.MapFrom(src => src.PublicationTypeCode2Navigation))
             .ForMember(dst => dst.ParentPublicationType, opt => opt.MapFrom(src => src.ParentPublicationTypeCodeNavigation))
             .ForMember(dst => dst.DatabasePeerReviewed, opt => opt.MapFrom(src => src.PeerReviewed))
@@ -55,8 +56,11 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))
+            .ForMember(dst => dst.OrgPublicationFieldsOfScienceDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.FieldsOfArt, opt => opt.MapFrom(src => src.DimReferencedataNavigation))
+            .ForMember(dst => dst.OrgPublicationFieldsOfArtDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords))
+            .ForMember(dst => dst.OrgPublicationKeywordDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.InternationalPublication, opt => opt.MapFrom(src => src.InternationalPublication != 9 ? src.InternationalPublication == 1 : (bool?)null)) // 0 = kotim. 1 ulkom. 9 = ei tietoa.
             .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.PublicationCountryCodeNavigation))
             .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.LanguageCodeNavigation))
@@ -69,6 +73,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Preprint, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == PreprintType)))
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
             .ForMember(dst => dst.ArtPublicationTypeCategory, opt => opt.MapFrom(src => src.DimReferencedata))
+            .ForMember(dst => dst.OrgPublicationArtPublicatonTypeCategoryDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
             .ForMember(dst => dst.Abstract, opt => opt.MapFrom(src => src.Abstract))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
             .ForMember(dst => dst.Modified, opt => opt.MapFrom(src => src.Modified))
@@ -78,7 +83,10 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Authors, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.PeerReviewed, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.ParentPublication, opt => opt.Ignore())  // Handled during in memory operations in the index repository
-            ;
+            .ForMember(dst => dst.IsOrgPublication, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0)) // Publication is an organization publication, when DimPublicationId references co-publication. This property is used in query filter.
+            .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Count > 0)) // Publication is a co-publication, when InverseDimPublicationNavigation references one or more organization publications. This property is used in query filter.
+            .ForMember(dst => dst.CoPublicationID, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0  ? src.DimPublicationNavigation.PublicationId : null))
+            .ForMember(dst => dst.OrgPublicationIDs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t => t.PublicationId)));
         
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
@@ -132,6 +140,26 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.DimName))
             .ForMember(dst => dst.ArtPublicationRole, opt => opt.MapFrom(src => src.DimReferencedataActorRole))
             .ForMember(dst => dst.ContributionType, opt => opt.MapFrom(src => src.ContributionType));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationDatabaseContributionDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.DatabaseContributions, opt => opt.MapFrom(src => src.FactContributions));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationKeywordDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationArtPublicatonTypeCategoryDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.ArtPublicationTypeCategories, opt => opt.MapFrom(src => src.DimReferencedata));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationFieldsOfScienceDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)));
+
+        CreateProjection<DatabaseContext.Entities.DimPublication, OrgPublicationFieldsOfArtDTO>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.FieldsOfArt, opt => opt.MapFrom(src => src.DimReferencedataNavigation));
 
         CreateProjection<DimName, Name>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

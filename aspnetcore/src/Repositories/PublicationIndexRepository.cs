@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.Publication;
-using Elasticsearch.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Publication = CSC.PublicApi.Service.Models.Publication.Publication;
@@ -81,7 +80,54 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
     public override object PerformInMemoryOperation(object entity)
     {
         Publication publication = (Publication)entity;
-            
+
+        // Add data from OrgPublication DTOs, which hold data collected from publications related to a co-publication (yhteisjulkaisu/osajulkaisu)
+        if (publication.OrgPublicationDatabaseContributionDTOs != null && publication.OrgPublicationDatabaseContributionDTOs.Count > 0)
+        {
+            List<FactContribution> databaseContributions = new();
+            foreach (OrgPublicationDatabaseContributionDTO op in publication.OrgPublicationDatabaseContributionDTOs.AsEnumerable().ToList())
+            {
+                databaseContributions.AddRange(op.DatabaseContributions);
+            }
+            publication.DatabaseContributions.AddRange(databaseContributions.DistinctBy(x => x.Name));
+        }
+        if (publication.OrgPublicationKeywordDTOs != null && publication.OrgPublicationKeywordDTOs.Count > 0)
+        {
+            List<Keyword> keywords = new();
+            foreach (OrgPublicationKeywordDTO kw in publication.OrgPublicationKeywordDTOs.AsEnumerable().ToList())
+            {
+                keywords.AddRange(kw.Keywords);
+            }
+            publication.Keywords.AddRange(keywords.DistinctBy(x => x.Value));
+        }
+        if (publication.OrgPublicationArtPublicatonTypeCategoryDTOs != null && publication.OrgPublicationArtPublicatonTypeCategoryDTOs.Count > 0)
+        {
+            List<ReferenceData> artPublicationTypeCategories = new();
+            foreach (OrgPublicationArtPublicatonTypeCategoryDTO ap in publication.OrgPublicationArtPublicatonTypeCategoryDTOs.AsEnumerable().ToList())
+            {
+                artPublicationTypeCategories.AddRange(ap.ArtPublicationTypeCategories);
+            }
+            publication.ArtPublicationTypeCategory.AddRange(artPublicationTypeCategories.DistinctBy(x => x.Code));
+        }
+        if (publication.OrgPublicationFieldsOfScienceDTOs != null && publication.OrgPublicationFieldsOfScienceDTOs.Count > 0)
+        {
+            List<ReferenceData> fieldsOfScience = new();
+            foreach (OrgPublicationFieldsOfScienceDTO fs in publication.OrgPublicationFieldsOfScienceDTOs.AsEnumerable().ToList())
+            {
+                fieldsOfScience.AddRange(fs.FieldsOfScience);
+            }
+            publication.FieldsOfScience.AddRange(fieldsOfScience.DistinctBy(x => x.Code));
+        }
+        if (publication.OrgPublicationFieldsOfArtDTOs != null && publication.OrgPublicationFieldsOfArtDTOs.Count > 0)
+        {
+            List<ReferenceData> fieldsOfArt = new();
+            foreach (OrgPublicationFieldsOfArtDTO fa in publication.OrgPublicationFieldsOfArtDTOs.AsEnumerable().ToList())
+            {
+                fieldsOfArt.AddRange(fa.FieldsOfArt);
+            }
+            publication.FieldsOfArt.AddRange(fieldsOfArt.DistinctBy(x => x.Code));
+        }
+         
         HandleIssnAndIsbn(publication);
         HandleEmptyCollections(publication);
         HandleOrganizations(publication);

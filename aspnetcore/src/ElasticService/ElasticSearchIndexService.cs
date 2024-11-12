@@ -8,7 +8,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly IElasticClient _elasticClient;
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
-    private const int BatchSize = 2000;
+    private const int BatchSize = 1500;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
