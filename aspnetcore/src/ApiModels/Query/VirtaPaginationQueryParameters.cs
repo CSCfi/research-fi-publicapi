@@ -7,7 +7,7 @@ public class VirtaPaginationQueryParameters
 {
     private const int MaximumPageSize = 1000;
     private int _pageSize = 20;
-    private int _pageNumber = 0;
+    private int _pageNumber = 1;
 
     /// <summary>
     /// Page number to be searched. Optional. Default value 1.
@@ -15,11 +15,11 @@ public class VirtaPaginationQueryParameters
     public int PageNumber
     {
         get => _pageNumber;
-        set => _pageNumber = value < 0 ? 0 : value;
+        set => _pageNumber = value < 1 ? 1 : value;
     }
 
     /// <summary>
-    /// Number of results on page. Optional. Default value 20. Maximum permissible value 100. 
+    /// Number of results on page. Optional. Default value 20. Maximum permissible value 1000. 
     /// </summary>
     public int PageSize
     {

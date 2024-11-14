@@ -34,9 +34,10 @@ public class VirheraporttiController : ControllerBase
     {
         
 
-        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.Skip(queryParameters.PageNumber)
+        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.OrderBy(b => b.VirheraporttiId)
+            .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
             .Take(queryParameters.PageSize)
-           .ToListAsync();
+            .ToListAsync();
 
         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
      
