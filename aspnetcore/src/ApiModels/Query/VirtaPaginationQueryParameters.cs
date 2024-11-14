@@ -5,8 +5,8 @@
 /// </summary>
 public class VirtaPaginationQueryParameters
 {
-    private const int MaximumPageSize = 1000;
-    private int _pageSize = 20;
+    private const int MaximumPageSize = 10;
+    private int _pageSize = 10000000;
     private int _pageNumber = 1;
 
     /// <summary>
@@ -24,6 +24,6 @@ public class VirtaPaginationQueryParameters
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value < 1 ? 1 : value > MaximumPageSize ? MaximumPageSize : value;
+        set => _pageSize = value < 1 ? 1 : value ;
     }
 }
