@@ -19,12 +19,21 @@ public class FundingDecisionService : IFundingDecisionService
         _searchService = searchService;
     }
 
-    public async Task<(IEnumerable<FundingDecision>, SearchResult)> GetFundingDecisions(GetFundingDecisionQueryParameters queryParameters)
+    public async Task<(IEnumerable<FundingDecision>, SearchResult)> GetFundingDecisions(GetFundingDecisionQueryParameters fundingDecisionQueryParameters, PaginationQueryParameters paginationQueryParameters)
     {
-        var searchParameters = _mapper.Map<FundingDecisionSearchParameters>(queryParameters);
+        var searchParameters = _mapper.Map<FundingDecisionSearchParameters>(fundingDecisionQueryParameters);
 
-        var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
+        var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
         return (_mapper.Map<IEnumerable<FundingDecision>>(result), searchResult);
+    }
+
+    public async Task<(IEnumerable<FundingDecision>, SearchAfterResult)> GetFundingDecisionsSearchAfter(GetFundingDecisionQueryParameters fundingDecisionQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<FundingDecisionSearchParameters>(fundingDecisionQueryParameters);
+
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<FundingDecision>>(result), searchAfterResult);
     }
 }

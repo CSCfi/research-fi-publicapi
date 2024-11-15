@@ -17,13 +17,22 @@ public class PublicationService : IPublicationService
         _searchService = searchService;
     }
 
-    public async Task<(IEnumerable<Publication>, SearchResult)> GetPublications(GetPublicationsQueryParameters queryParameters)
+    public async Task<(IEnumerable<Publication>, SearchResult)> GetPublications(GetPublicationsQueryParameters publicationsQueryParameters, PaginationQueryParameters paginationQueryParameters)
     {
-        var searchParameters = _mapper.Map<PublicationSearchParameters>(queryParameters);
+        var searchParameters = _mapper.Map<PublicationSearchParameters>(publicationsQueryParameters);
 
-        var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
+        var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
         return (_mapper.Map<IEnumerable<Publication>>(result), searchResult);
+    }
+
+    public async Task<(IEnumerable<Publication>, SearchAfterResult)> GetPublicationsSearchAfter(GetPublicationsQueryParameters publicationsQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<PublicationSearchParameters>(publicationsQueryParameters);
+
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<Publication>>(result), searchAfterResult);
     }
 
     public async Task<Publication?> GetPublication(string publicationId)

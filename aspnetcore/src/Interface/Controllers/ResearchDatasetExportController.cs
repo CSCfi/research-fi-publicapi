@@ -9,17 +9,17 @@ namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
 [ApiVersion(ApiVersion)]
-[Route("v{version:apiVersion}/research-datasets")]
-public class ResearchDatasetController : ControllerBase
+[Route("v{version:apiVersion}/research-datasets-export")]
+public class ResearchDatasetExportController : ControllerBase
 {
     private const string ApiVersion = "1.0";
 
-    private readonly ILogger<ResearchDatasetController> _logger;
+    private readonly ILogger<ResearchDatasetExportController> _logger;
     private IResearchDatasetService _service;
     private readonly IDiagnosticContext _diagnosticContext;
 
-    public ResearchDatasetController(
-        ILogger<ResearchDatasetController> logger,
+    public ResearchDatasetExportController(
+        ILogger<ResearchDatasetExportController> logger,
         IResearchDatasetService service,
         IDiagnosticContext diagnosticContext)
     {
@@ -30,14 +30,14 @@ public class ResearchDatasetController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint for filtering research datasets using the specified query parameters.
+    /// Endpoint for bypassing the limit of 10000 records for research datasets.
     /// </summary>
     /// <param name="researchDatasetsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="ResearchDataset"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "GetResearchDataset")]
+    [HttpGet(Name = "GetResearchDatasetExport")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.ResearchDataset.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
@@ -45,11 +45,11 @@ public class ResearchDatasetController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ResearchDataset>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<ResearchDataset>> Get([FromQuery] GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (researchDatasets, searchResult) = await _service.GetResearchDatasets(researchDatasetsQueryParameters, paginationQueryParameters);
+        var (researchDatasets, searchAfterResult) = await _service.GetResearchDatasetsSearchAfter(researchDatasetsQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return researchDatasets;
     }

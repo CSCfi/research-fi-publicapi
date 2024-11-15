@@ -25,33 +25,51 @@ public static class ResponseHelper
         httpContext.Response.Headers.Add("link", GetLinks(httpContext.Request, results.PageNumber, results.TotalPages));
     }
 
+    public static void AddPaginationResponseHeadersSearchAfter(HttpContext httpContext, SearchAfterResult searchAfterResult)
+    {
+        httpContext.Response.Headers.Add("x-page-size", searchAfterResult.PageSize.ToString());
+        if (searchAfterResult.SearchAfter != null)
+        {
+            httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter.ToString());
+            httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfterResult.SearchAfter));
+        }
+    }
+
     private static string GetLinks(HttpRequest httpRequest, int pageNumber, int totalPages)
     {
         var url = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.Path}";
-
         var queryValues = QueryHelpers.ParseQuery(httpRequest.QueryString.Value);
-
         var result = string.Empty;
-
         if (pageNumber < totalPages)
         {
             result += $"{CreateLink(url, queryValues, pageNumber + 1, Next)}, ";
         }
-
         result += $"{CreateLink(url, queryValues, totalPages, Last)}, {CreateLink(url, queryValues, 1, First)}";
-
         if (pageNumber > 1)
         {
             result += $", {CreateLink(url, queryValues, pageNumber - 1, Previous)}";
         }
-
+        return result;
+    }
+    private static string GetLinksSearchAfter(HttpRequest httpRequest, long? searchAfter)
+    {
+        var url = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.Path}";
+        var queryValues = QueryHelpers.ParseQuery(httpRequest.QueryString.Value);
+        var result = string.Empty;
+        if (searchAfter != null) {
+            result += $"{CreateLinkSearchAfter(url, queryValues, searchAfter, Next)}";
+        }
         return result;
     }
 
     private static string CreateLink(string url, Dictionary<string, StringValues> query, int pageNumber, string rel)
     {
         query["pageNumber"] = pageNumber.ToString();
-
+        return $"<{QueryHelpers.AddQueryString(url, query)}>; rel=\"{rel}\"";
+    }
+    private static string CreateLinkSearchAfter(string url, Dictionary<string, StringValues> query, long? searchAfter, string rel)
+    {
+        query["NextPageToken"] = searchAfter.ToString();
         return $"<{QueryHelpers.AddQueryString(url, query)}>; rel=\"{rel}\"";
     }
 }

@@ -19,12 +19,21 @@ public class ResearchDatasetService : IResearchDatasetService
         _searchService = searchService;
     }
 
-    public async Task<(IEnumerable<ResearchDataset>, SearchResult)> GetResearchDatasets(GetResearchDatasetsQueryParameters queryParameters)
+    public async Task<(IEnumerable<ResearchDataset>, SearchResult)> GetResearchDatasets(GetResearchDatasetsQueryParameters researchDatasetsQueryParameters, PaginationQueryParameters paginationQueryParameters)
+    {
+        var searchParameters = _mapper.Map<ResearchDatasetSearchParameters>(researchDatasetsQueryParameters);
+
+        var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
+
+        return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchResult);
+    }
+
+    public async Task<(IEnumerable<ResearchDataset>, SearchAfterResult)> GetResearchDatasetsSearchAfter(GetResearchDatasetsQueryParameters queryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
     {
         var searchParameters = _mapper.Map<ResearchDatasetSearchParameters>(queryParameters);
 
-        var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
-        return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchResult);
+        return (_mapper.Map<IEnumerable<ResearchDataset>>(result), searchAfterResult);
     }
 }
