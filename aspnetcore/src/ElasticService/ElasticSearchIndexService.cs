@@ -32,7 +32,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         await IndexEntities(indexToCreate, entities, modelType);
 
         // Switch indexes
-        await SwitchIndexes(indexName, indexToCreate, indexToDelete);
+        await SwitchIndexes(indexName, indexToCreate, indexToDelete, modelType.Name);
 
         _logger.LogDebug("{EntityType:l}: Indexing to {IndexName:l} complete", modelType.Name, indexName);
     }
@@ -43,8 +43,9 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
         await IndexEntities(indexToCreate, entities, modelType);
     }
 
-    public async Task SwitchIndexes(string indexName, string indexToCreate, string indexToDelete)
+    public async Task SwitchIndexes(string indexName, string indexToCreate, string indexToDelete, string modelTypeName)
     {
+        _logger.LogInformation($"{modelTypeName}: Switch indexes start: indexName={indexName}, indexToCreate={indexToCreate}, indexToDelete={indexToDelete}");
         // Wait for new index to be operational.
         await _elasticClient.Cluster
             .HealthAsync(selector: s => s
@@ -61,6 +62,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
         // Delete the old index if it exists.
         await _elasticClient.Indices.DeleteAsync(indexToDelete, d => d.RequestConfiguration(x => x.AllowedStatusCodes(404)));
+        _logger.LogInformation($"{modelTypeName}: Switch indexes complete");
     }
 
     public async Task<(string indexToCreate, string indexToDelete)> GetIndexNames(string indexName)

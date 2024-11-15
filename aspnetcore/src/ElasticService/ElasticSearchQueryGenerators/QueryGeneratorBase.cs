@@ -22,6 +22,27 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Query(GenerateQueryForSearch(searchParameters));
     }
 
+    public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuerySearchAfter(TIn searchParameters, int pageSize, long? searchAfter)
+    {
+        var indexName = _configuration.GetIndexNameForType(typeof(TOut));
+
+        if (searchAfter == null) {
+            return descriptor => descriptor
+                .Index(indexName)
+                .Take(pageSize)
+                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                .Query(GenerateQueryForSearch(searchParameters));
+        }
+        else {
+            return descriptor => descriptor
+                .Index(indexName)
+                .Take(pageSize)
+                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                .Query(GenerateQueryForSearch(searchParameters))
+                .SearchAfter(searchAfter);
+        }
+    }
+
     public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateSingleQuery(string id)
     {
         var indexName = _configuration.GetIndexNameForType(typeof(TOut));

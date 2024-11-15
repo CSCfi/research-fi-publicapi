@@ -30,7 +30,7 @@ objects:
       failedJobsHistoryLimit: 2
       jobTemplate:
         spec:
-          activeDeadlineSeconds: 2400 # Can run for 40 minutes
+          activeDeadlineSeconds: 5400 # Can run for 90 minutes
           template:
             spec:
               restartPolicy: Never

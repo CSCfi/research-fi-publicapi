@@ -76,6 +76,7 @@ public static class SwaggerExtensions
             foreach (var description in app.Services.GetRequiredService<IApiVersionDescriptionProvider>().ApiVersionDescriptions)
             {
                 options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             }
         });
     }

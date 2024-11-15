@@ -177,7 +177,7 @@ public class Indexer
                 } while (numOfResults >= takeAmount - 1);
 
                 // Activate new index and delete old
-                await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete);
+                await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete, type.Name);
                 _logger.LogInformation("{EntityType:l}: Recreated index {IndexName:l}, {ElasticsearchDocumentCount} documents", type.Name, indexName, processedCount);
             }
             else

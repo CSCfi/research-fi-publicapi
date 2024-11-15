@@ -32,17 +32,25 @@ public class InfrastructureController : ControllerBase
     /// <summary>
     /// Search Infrastructures
     /// </summary>
-    /// <param name="queryParameters">Query parameters for filtering the results.</param>
-    /// <returns></returns>
-    /*[HttpGet(Name = "GetInfrastructure")]
+    /// <param name="infrastructuresQueryParameters">The query parameters for filtering the results.</param>
+    /// <returns>Paged search result as a collection of <see cref="Infrastructure"/> objects.</returns>
+    /// <response code="200">Ok.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
+    [HttpGet(Name = "GetInfrastructure")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.Infrastructure.Read)]
-    public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters queryParameters)
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<Infrastructure>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters infrastructuresQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (infrastructures, searchResult) = await _service.GetInfrastructures(queryParameters);
+        var (infrastructures, searchResult) = await _service.GetInfrastructures(infrastructuresQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 
         return infrastructures;
-    }*/
+    }
 }
