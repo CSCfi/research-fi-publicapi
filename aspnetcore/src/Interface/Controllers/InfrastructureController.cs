@@ -45,6 +45,7 @@ public class InfrastructureController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Infrastructure>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    [ApiExplorerSettings(IgnoreApi = true)] // Hidden
     public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters infrastructuresQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
         var (infrastructures, searchResult) = await _service.GetInfrastructures(infrastructuresQueryParameters, paginationQueryParameters);

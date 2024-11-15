@@ -45,6 +45,7 @@ public class OrganizationController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Organization>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    [ApiExplorerSettings(IgnoreApi = true)] // Hidden
     public async Task<IEnumerable<Organization>> Get([FromQuery] GetOrganizationsQueryParameters organizationsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
         var (organizations, searchResult) = await _service.GetOrganizations(organizationsQueryParameters, paginationQueryParameters);
