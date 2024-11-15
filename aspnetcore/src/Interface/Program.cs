@@ -29,8 +29,14 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddDbContext<VirtaJtpDbContext>(options =>
-    options.UseSqlServer("name=dbconnectionstringvirta"));
-
+   // options.UseSqlServer("name=dbconnectionstringvirta"));
+     {
+        options.UseSqlServer("name=dbconnectionstringvirta", opt =>
+            {
+                opt.CommandTimeout(300);
+            });
+        //options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+            });
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
