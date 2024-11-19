@@ -32,17 +32,26 @@ public class OrganizationController : ControllerBase
     /// <summary>
     /// Hae organisaatioita
     /// </summary>
-    /// <param name="queryParameters"></param>
-    /// <returns></returns>
-    /*[HttpGet(Name = "GetOrganization")]
+    /// <param name="organizationsQueryParameters">The query parameters for filtering the results.</param>
+    /// <returns>Paged search result as a collection of <see cref="Organization"/> objects.</returns>
+    /// <response code="200">Ok.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="403">Forbidden.</response>
+    [HttpGet(Name = "GetOrganization")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.Organization.Read)]
-    public async Task<IEnumerable<Organization>> Get([FromQuery] GetOrganizationsQueryParameters queryParameters)
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<Organization>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
+    [ApiExplorerSettings(IgnoreApi = true)] // Hidden
+    public async Task<IEnumerable<Organization>> Get([FromQuery] GetOrganizationsQueryParameters organizationsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (organizations, searchResult) = await _service.GetOrganizations(queryParameters);
+        var (organizations, searchResult) = await _service.GetOrganizations(organizationsQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 
         return organizations;
-    }*/
+    }
 }

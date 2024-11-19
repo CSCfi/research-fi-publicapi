@@ -31,20 +31,21 @@ public class PublicationController : ControllerBase
     /// <summary>
     /// Endpoint for filtering publications using the specified query parameters.
     /// </summary>
+    /// <param name="publicationsQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Publication"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "SearchPublications")]
+    [HttpGet(Name = "GetPublications")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters queryParameters)
+    public async Task<IEnumerable<Publication>> Get([FromQuery] GetPublicationsQueryParameters publicationsQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
     {
-        var (publications, searchResult) = await _service.GetPublications(queryParameters);
+        var (publications, searchResult) = await _service.GetPublications(publicationsQueryParameters, paginationQueryParameters);
 
         ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
 

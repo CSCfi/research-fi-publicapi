@@ -9,17 +9,17 @@ namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
 [ApiVersion(ApiVersion)]
-[Route("v{version:apiVersion}/funding-decisions")]
+[Route("v{version:apiVersion}/funding-decisions-export")]
 
-public class FundingDecisionController : ControllerBase
+public class FundingDecisionExportController : ControllerBase
 {
     private const string ApiVersion = "1.0";
-    private readonly ILogger<FundingDecisionController> _logger;
+    private readonly ILogger<FundingDecisionExportController> _logger;
     private readonly IFundingDecisionService _service;
     private readonly IDiagnosticContext _diagnosticContext;
 
-    public FundingDecisionController(
-        ILogger<FundingDecisionController> logger,
+    public FundingDecisionExportController(
+        ILogger<FundingDecisionExportController> logger,
         IFundingDecisionService service,
         IDiagnosticContext diagnosticContext)
     {
@@ -30,14 +30,14 @@ public class FundingDecisionController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint for filtering funding decisions using the specified query parameters.
+    /// Endpoint for bypassing the limit of 10000 records for funding decisions.
     /// </summary>
     /// <param name="fundingDecisionQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="FundingDecision"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "GetFundingDecision")]
+    [HttpGet(Name = "GetFundingDecisionExport")]
     [MapToApiVersion(ApiVersion)]
     [Authorize(Policy = ApiPolicies.FundingDecision.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
@@ -45,11 +45,11 @@ public class FundingDecisionController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<FundingDecision>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters fundingDecisionQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<FundingDecision>> Get([FromQuery] GetFundingDecisionQueryParameters fundingDecisionQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (fundingDecisions, searchResult) = await _service.GetFundingDecisions(fundingDecisionQueryParameters, paginationQueryParameters);
+        var (fundingDecisions, searchAfterResult) = await _service.GetFundingDecisionsSearchAfter(fundingDecisionQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return fundingDecisions;
     }

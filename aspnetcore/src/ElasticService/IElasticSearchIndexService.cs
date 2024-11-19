@@ -48,6 +48,7 @@ public interface IElasticSearchIndexService
     /// <param name="indexName"></param>
     /// <param name="indexToCreate"></param>
     /// <param name="indexToDelete"></param>
+    /// <param name="modelTypeName"></param>
     /// <returns></returns>
-    Task SwitchIndexes(string indexName, string indexToCreate, string indexToDelete);
+    Task SwitchIndexes(string indexName, string indexToCreate, string indexToDelete, string modelTypeName);
 }

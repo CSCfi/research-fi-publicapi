@@ -19,12 +19,22 @@ public class InfrastructureService : IInfrastructureService
         _searchService = searchService;
     }
 
-    public async Task<(IEnumerable<Infrastructure>, SearchResult)> GetInfrastructures(GetInfrastructuresQueryParameters queryParameters)
+    public async Task<(IEnumerable<Infrastructure>, SearchResult)> GetInfrastructures(GetInfrastructuresQueryParameters infrastructuresQueryParameters, PaginationQueryParameters paginationQueryParameters)
     {
-        var searchParameters = _mapper.Map<InfrastructureSearchParameters>(queryParameters);
+        var searchParameters = _mapper.Map<InfrastructureSearchParameters>(infrastructuresQueryParameters);
 
-        var (result, searchResult) = await _searchService.Search(searchParameters, queryParameters.PageNumber, queryParameters.PageSize);
+        var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
         return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchResult);
+    }
+
+
+    public async Task<(IEnumerable<Infrastructure>, SearchAfterResult)> GetInfrastructuresSearchAfter(GetInfrastructuresQueryParameters infrastructuresQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
+    {
+        var searchParameters = _mapper.Map<InfrastructureSearchParameters>(infrastructuresQueryParameters);
+
+        var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
+
+        return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchAfterResult);
     }
 }

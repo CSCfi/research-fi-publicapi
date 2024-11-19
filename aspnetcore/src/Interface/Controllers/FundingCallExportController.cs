@@ -9,15 +9,15 @@ namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
 [ApiVersion(ApiConstants.ApiVersion1)]
-[Route("v{version:apiVersion}/funding-calls")]
-public class FundingCallController : ControllerBase
+[Route("v{version:apiVersion}/funding-calls-export")]
+public class FundingCallExportController : ControllerBase
 {
-    private readonly ILogger<FundingCallController> _logger;
+    private readonly ILogger<FundingCallExportController> _logger;
     private readonly IFundingCallService _service;
     private readonly IDiagnosticContext _diagnosticContext;
 
-    public FundingCallController(
-        ILogger<FundingCallController> logger,
+    public FundingCallExportController(
+        ILogger<FundingCallExportController> logger,
         IFundingCallService service,
         IDiagnosticContext diagnosticContext)
     {
@@ -28,14 +28,14 @@ public class FundingCallController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint for filtering funding calls using the specified query parameters.
+    /// Endpoint for bypassing the limit of 10000 records for funding calls.
     /// </summary>
     /// <param name="fundingCallQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="FundingCall"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "GetFundingCall")]
+    [HttpGet(Name = "GetFundingCallExport")]
     [MapToApiVersion(ApiConstants.ApiVersion1)]
     [Authorize(Policy = ApiPolicies.FundingCall.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
@@ -43,26 +43,12 @@ public class FundingCallController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<FundingCall>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
-    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters fundingCallQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<FundingCall>> Get([FromQuery] GetFundingCallQueryParameters fundingCallQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (fundingCalls, searchResult) = await _service.GetFundingCalls(fundingCallQueryParameters, paginationQueryParameters);
+        var (fundingCalls, searchAfterResult) = await _service.GetFundingCallsSearchAfter(fundingCallQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return fundingCalls;
-    }
-
-    /// <summary>
-    /// Lisää uusi rahoitushaku
-    /// </summary>
-    /// <param name="fundingCall"></param>
-    /// <returns></returns>
-    [HttpPost(Name = "PostFundingCall")]
-    [MapToApiVersion(ApiConstants.ApiVersion1)]
-    [Authorize(Policy = ApiPolicies.FundingCall.Write)]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task Post(FundingCall fundingCall)
-    {
-        await _service.PostFundCall(fundingCall);
     }
 }
