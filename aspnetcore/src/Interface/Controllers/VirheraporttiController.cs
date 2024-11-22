@@ -35,6 +35,7 @@ public class VirheraporttiController : ControllerBase
         
 
         List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.OrderBy(b => b.VirheraporttiId)
+            .AsNoTracking()
             .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
             .Take(queryParameters.PageSize)
             .ToListAsync();
