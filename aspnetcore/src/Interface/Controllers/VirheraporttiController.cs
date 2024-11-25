@@ -8,6 +8,7 @@ using ResearchFi.Query;
 //using Organization = ResearchFi.Organization.Organization;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 
 namespace CSC.PublicApi.Interface.Controllers;
@@ -30,19 +31,26 @@ public class VirheraporttiController : ControllerBase
     [HttpGet(Name = "GetVirheraportti")]
     [MapToApiVersion(ApiVersion)]
    // [Route("/[controller]/etunimet/{etunimi}")]
-    public async Task<List<Virheraportti>> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
+    public async IAsyncEnumerable<Virheraportti> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
         
 
-        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.OrderBy(b => b.VirheraporttiId)
+/*        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.OrderBy(b => b.VirheraporttiId)
             .AsNoTracking()
             .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
             .Take(queryParameters.PageSize)
-            .ToListAsync();
+            .AsAsyncEnumerable();
+*/
+            var virheraporttis =  _virtaJtpDbContext.Virheraporttis
+            .AsAsyncEnumerable();
 
-        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+            await foreach (var virheraportti in virheraporttis)
+            {
+                yield return virheraportti;
+            }
+        //ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
      
 
-        return virheraportti;
+        //return virheraportti;
     }
 }
