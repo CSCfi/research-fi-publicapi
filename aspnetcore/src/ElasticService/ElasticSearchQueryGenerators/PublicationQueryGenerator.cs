@@ -289,6 +289,13 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                 t.Term(s => s.Field(f => f.JufoCode)
                     .Value(parameters.JufoCode)));
         }
+
+        if (parameters.JufoCodeRecorded is not null)
+        {
+            filters.Add(t =>
+                t.Term(s => s.Field(f => f.JufoCodeRecorded)
+                    .Value(parameters.JufoCodeRecorded)));
+        }
         
         if (parameters.Doi is not null)
         {

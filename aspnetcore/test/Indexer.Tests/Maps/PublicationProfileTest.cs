@@ -261,6 +261,19 @@ public class PublicationProfileTest
                 ChannelNameAnylang = "channelNameAnylang",
                 PublisherNameText = "publisherNameText",
             },
+            JufoClassCodeFrozenNavigation = new DimReferencedatum
+            {
+                CodeValue = "jufoClassCodeFrozen",
+                NameFi = "jufoClassCodeFrozenNameFi",
+                NameEn = "jufoClassCodeFrozenNameEn",
+                NameSv = "jufoClassCodeFrozenNameSv"
+            },
+            DimPublicationChannelIdFrozenNavigation = new()
+            {
+                JufoCode = "jufoCodeFrozen",
+                ChannelNameAnylang = "channelNameAnylang2",
+                PublisherNameText = "publisherNameText2",
+            },
             PublisherOpenAccessCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "publisherOpenAccessCode",
@@ -494,6 +507,14 @@ public class PublicationProfileTest
                 NameFi = "jufoClassNameFi",
                 NameEn = "jufoClassNameEn",
                 NameSv = "jufoClassNameSv"
+            },
+            JufoCodeRecorded = "jufoCodeFrozen",
+            JufoClassRecorded = new ReferenceData
+            {
+                Code = "jufoClassCodeFrozen",
+                NameFi = "jufoClassCodeFrozenNameFi",
+                NameEn = "jufoClassCodeFrozenNameEn",
+                NameSv = "jufoClassCodeFrozenNameSv"
             },
             Doi = "doi",
             DoiHandle = "doiHandle",

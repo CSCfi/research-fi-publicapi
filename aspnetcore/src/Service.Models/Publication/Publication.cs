@@ -138,6 +138,16 @@ public class Publication
     public ReferenceData? JufoClass { get; set; }
 
     /// <summary>
+    /// Julkaisufoorumi (jäädytetty)
+    /// </summary>
+    public string? JufoCodeRecorded { get; set; }
+
+    /// <summary>
+    /// Julkaisufoorumitaso (jäädytetty)
+    /// </summary>
+    public ReferenceData? JufoClassRecorded { get; set; }
+
+    /// <summary>
     /// Linkit
     /// </summary>
     [Keyword]
