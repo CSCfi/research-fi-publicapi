@@ -53,6 +53,8 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.PublisherLocation, opt => opt.MapFrom(src => src.PublisherLocation))
             .ForMember(dst => dst.JufoCode, opt => opt.MapFrom(src => src.DimPublicationChannel.JufoCode))
             .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.JufoClassNavigation))
+            .ForMember(dst => dst.JufoCodeRecorded, opt => opt.MapFrom(src => src.DimPublicationChannelIdFrozenNavigation.JufoCode))
+            .ForMember(dst => dst.JufoClassRecorded, opt => opt.MapFrom(src => src.JufoClassCodeFrozenNavigation))
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))
