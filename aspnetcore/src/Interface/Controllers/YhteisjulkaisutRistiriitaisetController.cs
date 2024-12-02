@@ -31,10 +31,25 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
     [HttpGet(Name = "GetYhteisjulkaisutRistiriitaiset")]
     [MapToApiVersion(ApiVersion)]
    // [Route("/[controller]/etunimet/{etunimi}")]
-    public async Task<List<YhteisjulkaisutRistiriitaiset>> Get()
+    //public async Task<List<YhteisjulkaisutRistiriitaiset>> Get()
+    public async IAsyncEnumerable<YhteisjulkaisutRistiriitaiset> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
+    
     {
+        var YhteisjulkaisutRistiriitaisets =  _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
+        //List <YhteisjulkaisutRistiriitaiset> yhteisjulkaisutRistiriitaiset = await _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets.
+         .OrderBy(b => b.RrId)
+           // .AsNoTracking()
+         .Where(b => b.RrId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
+         .Take(queryParameters.PageSize)
+         .AsAsyncEnumerable();
 
-        List <YhteisjulkaisutRistiriitaiset> yhteisjulkaisutRistiriitaiset = await _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets.ToListAsync();
+            await foreach (var YhteisjulkaisutRistiriitaiset in YhteisjulkaisutRistiriitaisets)
+            {
+                yield return YhteisjulkaisutRistiriitaiset;
+            }
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+             
+        //ToListAsync();
        /* List <DisplayTest> displayTests = new(); 
         foreach(TableTest t in tableTests)
         {
@@ -45,15 +60,6 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
                 }
             );
         }*/
-
-
-        return yhteisjulkaisutRistiriitaiset;
-      /*  return Enumerable.Range(1, 5).Select(index => new Virheraportti
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = 21, //Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })  
-        .ToArray(); */
+       // return yhteisjulkaisutRistiriitaiset;
     }
 }

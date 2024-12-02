@@ -19,7 +19,7 @@ public class VirtaPaginationQueryParameters
     }
 
     /// <summary>
-    /// Number of results on page. Optional. Default value 20. Maximum permissible value 1000. 
+    /// Number of results on page. Optional. Default value 1000000.  
     /// </summary>
     public int PageSize
     {
