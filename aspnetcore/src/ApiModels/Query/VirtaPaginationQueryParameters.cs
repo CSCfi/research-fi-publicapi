@@ -6,7 +6,7 @@
 public class VirtaPaginationQueryParameters
 {
    // private const int MaximumPageSize = 10;
-    private int _pageSize = 10000000;
+    private int _pageSize = 100;
     private int _pageNumber = 1;
 
     /// <summary>
@@ -19,7 +19,7 @@ public class VirtaPaginationQueryParameters
     }
 
     /// <summary>
-    /// Number of results on page. Optional. Default value 1000000.  
+    /// Number of results on page. Optional. Default value 100.  
     /// </summary>
     public int PageSize
     {
