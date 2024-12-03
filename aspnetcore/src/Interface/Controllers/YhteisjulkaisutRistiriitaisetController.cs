@@ -38,7 +38,7 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
         var YhteisjulkaisutRistiriitaisets =  _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
         //List <YhteisjulkaisutRistiriitaiset> yhteisjulkaisutRistiriitaiset = await _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets.
          .OrderBy(b => b.RrId)
-           // .AsNoTracking()
+         .AsNoTracking()
          .Where(b => b.RrId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
          .Take(queryParameters.PageSize)
          .AsAsyncEnumerable();
