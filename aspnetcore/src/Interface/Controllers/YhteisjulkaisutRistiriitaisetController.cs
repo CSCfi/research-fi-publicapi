@@ -8,7 +8,7 @@ using ResearchFi.Query;
 //using Organization = ResearchFi.Organization.Organization;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
-
+using System.Collections;
 
 namespace CSC.PublicApi.Interface.Controllers;
 

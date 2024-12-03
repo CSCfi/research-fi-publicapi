@@ -52,7 +52,7 @@ public class VirheraporttiController : ControllerBase
             {
                 yield return virheraportti;
             }
-        //ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
      
 
         //return virheraportti;
