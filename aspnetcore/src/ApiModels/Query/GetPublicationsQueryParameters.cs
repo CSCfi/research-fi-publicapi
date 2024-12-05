@@ -121,10 +121,16 @@ public class GetPublicationsQueryParameters
     public string? PublisherName { get; set; }
 
     /// <summary>
-    /// The field jufocode contains text.
+    /// The field jufoCode contains text.
     /// </summary>
     /// <see cref="Publication.JufoCode"/>
     public string? JufoCode { get; set; }
+
+    /// <summary>
+    /// The field jufoCodeRecorded contains text.
+    /// </summary>
+    /// <see cref="Publication.JufoCodeRecorded"/>
+    public string? JufoCodeRecorded { get; set; }
 
     /// <summary>
     /// The field doi is exactly equal to the text.
