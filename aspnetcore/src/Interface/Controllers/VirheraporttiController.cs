@@ -1,7 +1,6 @@
 using CSC.PublicApi.Interface;
 using Microsoft.AspNetCore.Mvc;
 using CSC.PublicApi.Interface.Models;
-
 using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using ResearchFi.Query;
@@ -10,7 +9,6 @@ using Serilog;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
-
 namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
@@ -18,8 +16,6 @@ namespace CSC.PublicApi.Interface.Controllers;
 public class VirheraporttiController : ControllerBase
 {    private const string ApiVersion = "1.0";
     private readonly VirtaJtpDbContext _virtaJtpDbContext;
-   
-
     private readonly ILogger<VirheraporttiController> _logger;
 
     public VirheraporttiController(ILogger<VirheraporttiController> logger,VirtaJtpDbContext virtaJtpDbContext)
@@ -30,31 +26,19 @@ public class VirheraporttiController : ControllerBase
 
     [HttpGet(Name = "GetVirheraportti")]
     [MapToApiVersion(ApiVersion)]
-   // [Route("/[controller]/etunimet/{etunimi}")]
     public async IAsyncEnumerable<Virheraportti> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
-        
-
-/*        List <Virheraportti> virheraportti = await _virtaJtpDbContext.Virheraporttis.OrderBy(b => b.VirheraporttiId)
-            .AsNoTracking()
-            .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-            .Take(queryParameters.PageSize)
-            .AsAsyncEnumerable();
-*/
-            var virheraporttis =  _virtaJtpDbContext.Virheraporttis
-            .OrderBy(b => b.VirheraporttiId)
-            .AsNoTracking()
-            .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-            .Take(queryParameters.PageSize)
-            .AsAsyncEnumerable();
+         var virheraporttis =  _virtaJtpDbContext.Virheraporttis
+         .OrderBy(b => b.VirheraporttiId)
+         .AsNoTracking()
+         .Where(b => b.VirheraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
+         .Take(queryParameters.PageSize)
+         .AsAsyncEnumerable();
 
             await foreach (var virheraportti in virheraporttis)
             {
                 yield return virheraportti;
             }
-        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
-     
-
-        //return virheraportti;
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);     
     }
 }
