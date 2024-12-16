@@ -258,15 +258,6 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
                 .Value(parameters.TypeCode)
             ));
         }
-
-        // Searching with publisher open access code requires exact match.
-        if (!string.IsNullOrWhiteSpace(parameters.PublisherOpenAccess))
-        {
-            filters.Add(t => t.Term(term => term
-                .Field(f => f.PublisherOpenAccess!.Code)
-                .Value(parameters.PublisherOpenAccess)
-            ));
-        }
         
         if (parameters.Issn is not null)
         {
@@ -302,6 +293,33 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
             filters.Add(t =>
                 t.Term(s => s.Field(f => f.Doi)
                     .Value(parameters.Doi)));
+        }
+
+        // Searching with jufo class requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.JufoClass))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.JufoClass!.Code)
+                .Value(parameters.JufoClass)
+            ));
+        }
+
+        // Searching with jufo class recorded requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.JufoClassRecorded))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.JufoClassRecorded!.Code)
+                .Value(parameters.JufoClassRecorded)
+            ));
+        }
+
+        // Searching with publisher open access code requires exact match.
+        if (!string.IsNullOrWhiteSpace(parameters.PublisherOpenAccess))
+        {
+            filters.Add(t => t.Term(term => term
+                .Field(f => f.PublisherOpenAccess!.Code)
+                .Value(parameters.PublisherOpenAccess)
+            ));
         }
 
         // Searching with status requires exact match.

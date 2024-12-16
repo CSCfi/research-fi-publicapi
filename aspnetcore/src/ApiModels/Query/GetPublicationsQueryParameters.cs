@@ -71,7 +71,7 @@ public class GetPublicationsQueryParameters
     /// <summary>
     /// The field type:code is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
+    /// Code: https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=Julkaisutyyppiluokitus
     /// </summary>
     /// <see cref="Publication.Type"/>
     public string? Type { get; set; }
@@ -127,10 +127,26 @@ public class GetPublicationsQueryParameters
     public string? JufoCode { get; set; }
 
     /// <summary>
-    /// The field jufoCodeRecorded contains text.
+    /// The field jufoCodeRecorded contains text. Recorded as part of national publication data collection.
     /// </summary>
     /// <see cref="Publication.JufoCodeRecorded"/>
     public string? JufoCodeRecorded { get; set; }
+
+    /// <summary>
+    /// The field jufoClass is exactly equal to text.
+    /// 
+    /// Code: https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=Julkaisufoorumiluokitus
+    /// </summary>
+    /// <see cref="Publication.JufoClass"/>
+    public string? JufoClass { get; set; }
+
+    /// <summary>
+    /// The field jufoClassRecorded is exactly equal to text. Recorded as part of national publication data collection.
+    /// 
+    /// Code: https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=Julkaisufoorumiluokitus
+    /// </summary>
+    /// <see cref="Publication.JufoClassRecorded"/>
+    public string? JufoClassRecorded { get; set; }
 
     /// <summary>
     /// The field doi is exactly equal to the text.
@@ -148,7 +164,7 @@ public class GetPublicationsQueryParameters
     /// <summary>
     /// The field publisherOpenAccess:code is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
+    /// Code: https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=JulkaisuKanavaOA
     /// </summary>
     /// <see cref="Publication.PublisherOpenAccess"/>
     public string? PublisherOpenAccess { get; set; }
@@ -162,7 +178,7 @@ public class GetPublicationsQueryParameters
     /// <summary>
     /// The field status is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/research/julkaisuntila
+    /// Code: https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=julkaisuntila
     /// </summary>
     /// <see cref="Publication.Status"/>
     public string? Status { get; set; }
