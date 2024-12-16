@@ -164,6 +164,18 @@ public class Publication
     public JufoClass? JufoClass { get; set; }
 
     /// <summary>
+    /// Publication forum (recorded)
+    /// </summary>
+    public string? JufoCodeRecorded { get; set; }
+
+    /// <summary>
+    /// Publication forum classification (recorded)
+    ///
+    /// http://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
+    /// </summary>
+    public JufoClass? jufoClassRecorded { get; set; }
+
+    /// <summary>
     /// DOI
     /// </summary>
     public string? Doi { get; set; }

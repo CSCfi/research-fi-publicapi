@@ -40,6 +40,12 @@ public class PublicationSearchParameters
     
     public string? JufoCode { get; set; }
 
+    public string? JufoCodeRecorded { get; set; }
+    
+    public string? JufoClass { get; set; }
+
+    public string? JufoClassRecorded { get; set; }
+
     public string? Doi { get; set; }
     
     public string? Keywords { get; set; }
