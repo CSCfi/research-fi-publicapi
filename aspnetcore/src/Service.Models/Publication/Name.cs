@@ -2,7 +2,7 @@
 
 public class Name
 {
-    public int NameId { get; set; }
+    public long NameId { get; set; }
     
     public string? FirstNames { get; set; }
     
