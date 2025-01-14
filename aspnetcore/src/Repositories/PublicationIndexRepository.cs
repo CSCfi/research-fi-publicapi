@@ -216,7 +216,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
                         {
                             if (organizationUnits.TryGetValue(organization.ParentId.Value, out var list))
                             {
-                                list.Add(organization.Id.ToString());
+                                list.Add(organization.LocalOrganizationUnitId.ToString());
                             }
                             else
                             {
