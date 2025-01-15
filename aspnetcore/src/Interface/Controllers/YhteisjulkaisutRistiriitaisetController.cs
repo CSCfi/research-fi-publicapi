@@ -29,6 +29,7 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
     [MapToApiVersion(ApiVersion)]
     public async IAsyncEnumerable<YhteisjulkaisutRistiriitaiset> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
+         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);            
          var YhteisjulkaisutRistiriitaisets =  _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
          .OrderBy(b => b.RrId)
          .AsNoTracking()
@@ -40,6 +41,6 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
             {
                 yield return YhteisjulkaisutRistiriitaiset;
             }
-        //ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);            
+        
     }
 }
