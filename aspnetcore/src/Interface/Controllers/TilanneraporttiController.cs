@@ -27,32 +27,30 @@ public class TilanneraporttiController : ControllerBase
     }
 
     [HttpGet(Name = "GetTilanneraportti")]
+    [Authorize(Policy = ApiPolicies.Publication.Read)]
     [MapToApiVersion(ApiVersion)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<Duplikaatit>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+
     public async IAsyncEnumerable<Tilanneraportti> Get([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
          ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext,  queryParameters.PageNumber, queryParameters.PageSize);     
          var tilanneraporttis =  _virtaJtpDbContext.Tilanneraporttis
          .OrderBy(a => a.TilanneraporttiId)
-         .AsNoTracking()
-         .Where(a => a.TilanneraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-         //.Where(b => b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus)
-         .Take(queryParameters.PageSize)
-         .AsAsyncEnumerable();
+         .AsNoTracking();
 
-         if (virtaQueryParameters.organisaatiotunnus != null)
+        if (virtaQueryParameters.organisaatiotunnus != null)
          {
-         tilanneraporttis =  _virtaJtpDbContext.Tilanneraporttis
-         .OrderBy(b => b.TilanneraporttiId)
-         .AsNoTracking()
-         .Where(b => b.TilanneraporttiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-         .Where(b => b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus)
-         .Take(queryParameters.PageSize)
-         .AsAsyncEnumerable();
+            tilanneraporttis = tilanneraporttis.Where(b =>
+            // b.DuplikaattiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize && 
+             b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus);
          }
-         
-        //var tilanneraporttis = query;
+         tilanneraporttis = tilanneraporttis.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
 
-            await foreach (var tilanneraportti in tilanneraporttis)
+            await foreach (var tilanneraportti in tilanneraporttis.AsAsyncEnumerable())
             {
                 yield return tilanneraportti;
             }
