@@ -26,21 +26,26 @@ public class YhteisjulkaisutRistiriitaisetController : ControllerBase
     }
 
     [HttpGet(Name = "GetYhteisjulkaisutRistiriitaiset")]
+    [Authorize(Policy = ApiPolicies.Publication.Read)]
     [MapToApiVersion(ApiVersion)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
+    [ProducesResponseType(typeof(IEnumerable<Duplikaatit>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+
     public async IAsyncEnumerable<YhteisjulkaisutRistiriitaiset> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
          ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);            
          var YhteisjulkaisutRistiriitaisets =  _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
          .OrderBy(b => b.RrId)
-         .AsNoTracking()
-         .Where(b => b.RrId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-         .Take(queryParameters.PageSize)
-         .AsAsyncEnumerable();
+         .AsNoTracking();
+ 
+         YhteisjulkaisutRistiriitaisets = YhteisjulkaisutRistiriitaisets.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
 
-            await foreach (var YhteisjulkaisutRistiriitaiset in YhteisjulkaisutRistiriitaisets)
+            await foreach (var YhteisjulkaisutRistiriitaiset in YhteisjulkaisutRistiriitaisets.AsAsyncEnumerable())
             {
                 yield return YhteisjulkaisutRistiriitaiset;
             }
-        
     }
 }
