@@ -32,6 +32,7 @@ public class VirheraporttiController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Virheraportti>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async IAsyncEnumerable<Virheraportti> Get([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
          ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);     
