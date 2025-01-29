@@ -10,7 +10,7 @@ public class VirtaPaginationQueryParameters
     private int _pageNumber = 1;
 
     /// <summary>
-    /// Sivunumero. Valinnainen. Määrittää ohitettavien sivujen määrän. Oletusarvo on 1 (näytetään ensimmäinen sivu).
+    /// Sivunumero. Määrittää haussa ohitettavien sivujen määrän. Oletusarvo 1 (näytetään ensimmäinen sivu).
     /// </summary>
     public int PageNumber
     {
@@ -19,7 +19,7 @@ public class VirtaPaginationQueryParameters
     }
 
     /// <summary>
-    /// Sivukoko. Valinnainen. Määrittää kuinka monta tulosta vastauksessa palautetaan. Oletusarvo on 100.  
+    /// Sivun koko. Määrittää kuinka monta tulosta vastauksessa palautetaan. Oletusarvo 100.  
     /// </summary>
     public int PageSize
     {

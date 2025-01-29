@@ -6,7 +6,7 @@
 public class GetVirtaQueryParameters 
 {
     /// <summary>
-    /// Organisaation tunnus. Valinnainen. Oppilaitosnumero/virastotunnus. Jos ei löydy kumpaakaan niin y-tunnus ilman väliviivaa
+    /// Organisaation tunnus. Oppilaitosnumero tai virastotunnus. Jos organisaatiolla ei ole edellämainittuja, käytä y-tunnusta ilman väliviivaa (y-tunnus 1234567-1 muodossa 12345671)
     /// </summary>
     public string? organisaatiotunnus { get; set; }
 }
