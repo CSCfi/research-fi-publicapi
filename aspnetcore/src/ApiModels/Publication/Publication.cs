@@ -186,6 +186,11 @@ public class Publication
     public string? DoiHandle { get; set; }
 
     /// <summary>
+    /// Self archived code
+    /// </summary>
+    public bool? SelfArchivedCode { get; set; }
+
+    /// <summary>
     /// Self archived publication
     /// </summary>
     public List<LocallyReportedPublicationInformation>? SelfArchived { get; set; }
