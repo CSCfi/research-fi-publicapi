@@ -186,7 +186,7 @@ public class Publication
     public string? DoiHandle { get; set; }
 
     /// <summary>
-    /// LOREM IPSUM
+    /// Self archived code
     /// </summary>
     public bool? SelfArchivedCode { get; set; }
 

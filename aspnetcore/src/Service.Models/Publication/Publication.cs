@@ -160,7 +160,7 @@ public class Publication
     public string? DoiHandle { get; set; }
 
     /// <summary>
-    /// LOREM IPSUM
+    /// Rinnakkaistallennettu
     /// </summary>
     public bool? SelfArchivedCode { get; set; }
 
