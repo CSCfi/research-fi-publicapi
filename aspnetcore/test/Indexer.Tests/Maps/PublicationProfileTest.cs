@@ -385,6 +385,7 @@ public class PublicationProfileTest
                 NameFi = "licenseCodeNameFi",
                 NameSv = "licenseCodeNameSv",
             },
+            SelfArchivedCode = true,
             DimLocallyReportedPubInfos = new List<DimLocallyReportedPubInfo>
             {
                 new()
@@ -628,6 +629,7 @@ public class PublicationProfileTest
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 41, 00)
                 }
             },
+            SelfArchivedCode = true,
             SelfArchived = new List<LocallyReportedPublicationInformation>
             {
                 new()

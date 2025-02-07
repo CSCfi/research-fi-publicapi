@@ -73,6 +73,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Status, opt => opt.MapFrom(src => src.PublicationStatusCodeNavigation))
             .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.LicenseCodeNavigation.Id != -1 ? src.LicenseCodeNavigation : null))
             .ForMember(dst => dst.Preprint, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == PreprintType)))
+            .ForMember(dst => dst.SelfArchivedCode, opt => opt.MapFrom(src => src.SelfArchivedCode))
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
             .ForMember(dst => dst.ArtPublicationTypeCategory, opt => opt.MapFrom(src => src.DimReferencedata))
             .ForMember(dst => dst.OrgPublicationArtPublicatonTypeCategoryDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
