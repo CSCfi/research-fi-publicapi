@@ -160,6 +160,11 @@ public class Publication
     public string? DoiHandle { get; set; }
 
     /// <summary>
+    /// Rinnakkaistallennettu
+    /// </summary>
+    public bool? SelfArchivedCode { get; set; }
+
+    /// <summary>
     /// Rinnakkaistallenne
     /// </summary>
     public List<LocallyReportedPublicationInformation>? SelfArchived { get; set; }
