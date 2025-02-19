@@ -34,6 +34,11 @@ public static class ResponseHelper
             httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfterResult.SearchAfter));
         }
     }
+    public static void AddVirtaPaginationResponseHeaders(HttpContext httpContext, int pageNumber, int pageSize)
+    {
+        httpContext.Response.Headers.Add("x-current-page", pageNumber.ToString());
+        httpContext.Response.Headers.Add("x-page-size", pageSize.ToString());
+    }
 
     private static string GetLinks(HttpRequest httpRequest, int pageNumber, int totalPages)
     {
