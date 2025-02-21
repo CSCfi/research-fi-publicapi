@@ -119,4 +119,10 @@ public class FundingDecision
     [Ignore]
     public List<OrganizationConsortium>? OrganizationConsortia { get; set; }
 
+    /// <summary>
+    /// Linkki Tutkimustietovarantoon
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
+
+    public int Id { get; set; }
 }

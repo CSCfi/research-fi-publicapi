@@ -19,4 +19,9 @@ public class Organization
     /// Name of the Organization in English
     /// </summary>
     public string? NameEn { get; set; }
+
+    /// <summary>
+    /// Researchfi portal URL
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }

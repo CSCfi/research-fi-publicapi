@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -163,5 +164,10 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
 
         researchDataset.IsLatestVersion = researchDataset.VersionSet == null || researchDataset.VersionSet.Any(s =>
             s.DatabaseId == researchDataset.DatabaseId && s.VersionNumber == researchDataset.VersionSet.Max(m => m.VersionNumber));
+    }
+
+    private static void HandleResearchfiUrl(ResearchDataset researchDataset)
+    {
+        researchDataset.ResearchfiUrl = new ResearchfiUrl(resourceType: "research-dataset", id: researchDataset.LocalIdentifier);
     }
 }

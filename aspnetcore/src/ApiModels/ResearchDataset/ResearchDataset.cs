@@ -115,4 +115,8 @@ public class ResearchDataset
     /// </summary>
     public bool IsLatestVersion { get; set; }
 
+    /// <summary>
+    /// Researchfi portal URL
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }

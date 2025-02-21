@@ -17,6 +17,7 @@ public class ResearchDatasetProfile : Profile
         
         CreateProjection<DimResearchDataset, ResearchDataset>()
             .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.LocalIdentifier, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
@@ -38,7 +39,7 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.DatasetRelations, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.VersionSet, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.IsLatestVersion, opt => opt.Ignore()) // Handled during in memory operations in the index repository
-            ;
+            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
 
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

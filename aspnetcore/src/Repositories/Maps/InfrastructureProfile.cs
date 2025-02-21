@@ -8,6 +8,7 @@ public class InfrastructureProfile : Profile
 {
     public InfrastructureProfile()
     {
-        CreateProjection<DimInfrastructure, Infrastructure>();
+        CreateProjection<DimInfrastructure, Infrastructure>()
+            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
     }
 }

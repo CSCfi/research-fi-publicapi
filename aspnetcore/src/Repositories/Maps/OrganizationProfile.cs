@@ -21,7 +21,8 @@ public class OrganizationProfile : Profile
             .ForMember(dst => dst.NameVariants, opt => opt.MapFrom(src => src.NameVariants))
             .ForMember(dst => dst.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
             .ForMember(dst => dst.LocalOrganizationUnitId, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.LocalOrganizationUnitId) || string.Equals(src.LocalOrganizationUnitId, "-1") ? null : src.LocalOrganizationUnitId ))
-            .ForMember(dst => dst.ParentId, opt => opt.MapFrom(src => src.DimOrganizationBroader == null || src.DimOrganizationBroader == -1 ? null : src.DimOrganizationBroader));
+            .ForMember(dst => dst.ParentId, opt => opt.MapFrom(src => src.DimOrganizationBroader == null || src.DimOrganizationBroader == -1 ? null : src.DimOrganizationBroader))
+            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
         
         CreateProjection<DimPid, Service.Models.PersistentIdentifier>()
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent))

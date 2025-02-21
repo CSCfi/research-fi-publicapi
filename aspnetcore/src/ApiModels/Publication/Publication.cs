@@ -309,5 +309,10 @@ public class Publication
     /// <summary>
     /// Publication information sent by individual organisations related to co-publications as part of national publication data collection
     /// </summary>
-    public List<String>? OrgPublicationIDs { get; set; }   
+    public List<String>? OrgPublicationIDs { get; set; }
+
+    /// <summary>
+    /// Researchfi portal URL
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }
