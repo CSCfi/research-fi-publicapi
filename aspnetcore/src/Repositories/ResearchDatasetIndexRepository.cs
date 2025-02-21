@@ -57,6 +57,7 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             HandleEmptyContributors(researchDataset);
             HandleDatasetRelations(researchDataset);
             HandleEmptyCollections(researchDataset);
+            HandleResearchfiUrl(researchDataset);
         });
         return entities;
     }
