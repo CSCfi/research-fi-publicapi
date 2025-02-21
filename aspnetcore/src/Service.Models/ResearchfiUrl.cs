@@ -2,9 +2,9 @@ namespace CSC.PublicApi.Service.Models;
 
 public class ResearchfiUrl
 {
-    private const string ResearchfiBaseUrlFi = "https://researchfi-devel.2.rahtiapp.fi/fi/results/"; // "https://tiedejatutkimus.fi/fi/results/";
-    private const string ResearchfiBaseUrlEn = "https://researchfi-devel-en.2.rahtiapp.fi/en/results/"; // "https://research.fi/en/results/";
-    private const string ResearchfiBaseUrlSv ="https://researchfi-devel-sv.2.rahtiapp.fi/sv/results/"; // "https://forskning.fi/sv/results/";
+    private const string ResearchfiBaseUrlFi = "https://tiedejatutkimus.fi/fi/results/";
+    private const string ResearchfiBaseUrlEn = "https://research.fi/en/results/";
+    private const string ResearchfiBaseUrlSv = "https://forskning.fi/sv/results/";
   
     public ResearchfiUrl(string resourceType, string? id)
     {
