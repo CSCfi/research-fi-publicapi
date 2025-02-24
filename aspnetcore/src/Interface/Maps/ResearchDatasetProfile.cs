@@ -45,6 +45,6 @@ public class ResearchDatasetProfile : Profile
         CreateMap<Service.Models.ReferenceData, AccessType>();
         CreateMap<Service.Models.ReferenceData, License>();
         CreateMap<Service.Models.Keyword, Keyword>();
-        CreateMap<Service.Models.ResearchfiUrl, ResearchfiUrl>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }

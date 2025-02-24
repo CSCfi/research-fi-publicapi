@@ -74,6 +74,4 @@ public class ResearchDataset
     /// Linkki Tutkimustietovarantoon
     /// </summary>
     public ResearchfiUrl? ResearchfiUrl { get; set; }
-
-    public string? LocalIdentifier { get; set; }
 }

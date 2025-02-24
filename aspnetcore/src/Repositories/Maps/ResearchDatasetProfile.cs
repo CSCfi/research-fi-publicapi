@@ -17,7 +17,6 @@ public class ResearchDatasetProfile : Profile
         
         CreateProjection<DimResearchDataset, ResearchDataset>()
             .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dst => dst.LocalIdentifier, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))

@@ -169,6 +169,6 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
 
     private static void HandleResearchfiUrl(ResearchDataset researchDataset)
     {
-        researchDataset.ResearchfiUrl = new ResearchfiUrl(resourceType: "research-dataset", id: researchDataset.LocalIdentifier);
+        researchDataset.ResearchfiUrl = new ResearchfiUrl(resourceType: "research-dataset", id: researchDataset.Id);
     }
 }

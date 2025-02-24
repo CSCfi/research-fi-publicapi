@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Service.Models;
 using ResearchFi.CodeList;
 using ResearchFi.FundingCall;
 using ResearchFi.Query;
@@ -18,6 +17,6 @@ public class FundingCallProfile : Profile
         CreateMap<Service.Models.FundingCall.FundingCall, FundingCall>();
         CreateMap<Service.Models.FundingCall.Foundation, Foundation>();
         CreateMap<Service.Models.ReferenceData, Category>();
-        CreateMap<Service.Models.ResearchfiUrl, ResearchfiUrl>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }

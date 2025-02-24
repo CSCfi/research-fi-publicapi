@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using CSC.PublicApi.Service.Models;
 using ResearchFi.Infrastructure;
 using ResearchFi.Query;
 
@@ -15,6 +14,6 @@ public class InfrastructureProfileProfile : Profile
         
         CreateMap<GetInfrastructuresQueryParameters, InfrastructureSearchParameters>();
         CreateMap<Service.Models.Infrastructure.Infrastructure, Infrastructure>();
-        CreateMap<Service.Models.ResearchfiUrl, ResearchfiUrl>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }
