@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -67,6 +68,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             SetFundingReceivers(fundingDecision);
             SetFrameworkProgramme(fundingDecision);
             SetCallProgrammes(fundingDecision);
+            SetResearchfiUrl(fundingDecision);
         });
 
         return objects;
@@ -241,5 +243,10 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             ?? fundingDecision.CallProgrammeParent3
             ?? fundingDecision.CallProgrammeParent2?.ToFrameworkProgramme()
             ?? fundingDecision.CallProgrammeParent1?.ToFrameworkProgramme();
+    }
+
+    private static void SetResearchfiUrl(FundingDecision fundingDecision)
+    {
+        fundingDecision.ResearchfiUrl = new ResearchfiUrl(resourceType: "funding-decision", id: fundingDecision.Id.ToString());
     }
 }

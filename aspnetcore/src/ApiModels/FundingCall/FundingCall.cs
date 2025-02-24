@@ -98,4 +98,9 @@ public class FundingCall
     /// Contact information
     /// </summary>
     public string? ContactInformation { get; set; }
+
+    /// <summary>
+    /// Researchfi portal URL
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }

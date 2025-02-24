@@ -14,5 +14,6 @@ public class InfrastructureProfileProfile : Profile
         
         CreateMap<GetInfrastructuresQueryParameters, InfrastructureSearchParameters>();
         CreateMap<Service.Models.Infrastructure.Infrastructure, Infrastructure>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }

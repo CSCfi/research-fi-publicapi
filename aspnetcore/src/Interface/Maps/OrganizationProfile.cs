@@ -14,5 +14,6 @@ public class OrganizationProfile : Profile
         
         CreateMap<GetOrganizationsQueryParameters, OrganizationSearchParameters>();
         CreateMap<Service.Models.Organization.Organization, Organization>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }

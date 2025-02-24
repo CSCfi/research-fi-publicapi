@@ -17,5 +17,6 @@ public class FundingCallProfile : Profile
         CreateMap<Service.Models.FundingCall.FundingCall, FundingCall>();
         CreateMap<Service.Models.FundingCall.Foundation, Foundation>();
         CreateMap<Service.Models.ReferenceData, Category>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
 }

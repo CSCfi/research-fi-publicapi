@@ -38,7 +38,7 @@ public class FundingCallProfile : Profile
             .ForMember(dst => dst.SourceProgrammeId, opt => opt.MapFrom(src => src.SourceProgrammeId))
             .ForMember(dst => dst.Abbreviation, opt => opt.MapFrom(src => src.Abbreviation))
             .ForMember(dst => dst.EuCallId, opt => opt.MapFrom(src => src.EuCallId))
-            ;
+            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
 
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
