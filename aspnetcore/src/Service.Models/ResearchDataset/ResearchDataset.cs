@@ -69,4 +69,9 @@ public class ResearchDataset
     /// Filled in the in memory operations of the index repository.
     /// </remarks>
     public bool? IsLatestVersion { get; set; }
+
+    /// <summary>
+    /// Linkki Tutkimustietovarantoon
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }

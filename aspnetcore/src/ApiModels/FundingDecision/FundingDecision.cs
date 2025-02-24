@@ -110,4 +110,9 @@ public class FundingDecision
     /// Identified topics
     /// </summary>
     public List<string>? IdentifiedTopics { get; set; }
+
+    /// <summary>
+    /// Researchfi portal URL
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }

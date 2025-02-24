@@ -34,5 +34,6 @@ public class FundingDecisionProfile : Profile
         CreateMap<Service.Models.ReferenceData, FundingType>();
         CreateMap<Service.Models.ReferenceData, FieldOfScience>();
         CreateMap<Service.Models.Keyword, Keyword>();
+        CreateMap<Service.Models.ResearchfiUrl, ResearchfiUrl>();
     }
 }

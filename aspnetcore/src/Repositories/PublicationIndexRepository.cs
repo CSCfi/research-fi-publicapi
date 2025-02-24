@@ -134,6 +134,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         HandleAuthors(publication);
         HandleParentPublications(publication);
         HandlePeerReviewed(publication);
+        HandleResearchfiUrl(publication);
         return publication;
     }
 
@@ -344,5 +345,10 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
 
             publication.Issn = issn.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
             publication.Isbn = isbn.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
+    }
+
+    private static void HandleResearchfiUrl(Publication publication)
+    {
+        publication.ResearchfiUrl = new ResearchfiUrl(resourceType: "publication", id: publication.Id);
     }
 }
