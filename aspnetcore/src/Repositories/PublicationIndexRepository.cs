@@ -349,6 +349,10 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
 
     private static void HandleResearchfiUrl(Publication publication)
     {
-        publication.ResearchfiUrl = new ResearchfiUrl(resourceType: "publication", id: publication.Id);
+        // Organization part of a copublication (osajulkaisu) does not have a ResearchfiUrl
+        if (!publication.IsOrgPublication)
+        {
+            publication.ResearchfiUrl = new ResearchfiUrl(resourceType: "publication", id: publication.Id);
+        }
     }
 }
