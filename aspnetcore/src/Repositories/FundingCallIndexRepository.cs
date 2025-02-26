@@ -52,6 +52,7 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
 
             HandleEmptyCollections(fundingCall);
             HandleFoundationBusinessID(fundingCall);
+            HandleResearchfiUrl(fundingCall);
         });
         return entities;
     }
@@ -90,5 +91,10 @@ public class FundingCallIndexRepository : IndexRepositoryBase<FundingCall>
                 }
             }
         }
+    }
+
+    private static void HandleResearchfiUrl(FundingCall fundingCall)
+    {
+        fundingCall.ResearchfiUrl = new ResearchfiUrl(resourceType: "funding-call", id: fundingCall.Id.ToString());
     }
 }

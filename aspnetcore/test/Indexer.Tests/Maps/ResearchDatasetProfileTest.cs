@@ -254,7 +254,7 @@ public class ResearchDatasetProfileTest
                     PidType = "preferredIdentifierType"
                 }
             },
-            LocalIdentifier = "localIdentifier",
+            LocalIdentifier = "ab6730f7-a2a2-407b-9e18-d03b650d011f",
             DimResearchDataCatalog = new DimResearchDataCatalog
             {
                 Id = 7,
@@ -367,7 +367,7 @@ public class ResearchDatasetProfileTest
                     Type = "preferredIdentifierType"
                 }
             },
-            Id = "localIdentifier",
+            Id = "ab6730f7-a2a2-407b-9e18-d03b650d011f",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,

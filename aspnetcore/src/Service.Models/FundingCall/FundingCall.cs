@@ -94,8 +94,12 @@ public class FundingCall
     /// Yhteystiedot
     /// </summary>
     public string? ContactInformation { get; set; }
+
+    /// <summary>
+    /// Linkki Tutkimustietovarantoon
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
     
-    [Ignore]
     public int Id { get; set; }
     
     [Ignore]

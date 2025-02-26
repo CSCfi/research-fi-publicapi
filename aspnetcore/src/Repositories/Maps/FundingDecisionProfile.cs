@@ -16,6 +16,7 @@ public class FundingDecisionProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateProjection<DimFundingDecision, FundingDecision>()
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
@@ -52,7 +53,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.CallProgrammes, opt => opt.Ignore()) // CallProgrammes will be populated during the in memory operations
             .ForMember(dst => dst.FundingReceivers, opt => opt.Ignore()) // GrantedFunding will be populated during the in memory operations;
             .ForMember(dst => dst.Funder, opt => opt.Ignore()) // Funder will be populated during the in memory operations;
-            ;
+            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
 
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

@@ -58,4 +58,9 @@ public class Organization
             Pids = Pids
         };
     }
+
+    /// <summary>
+    /// Linkki Tutkimustietovarantoon
+    /// </summary>
+    public ResearchfiUrl? ResearchfiUrl { get; set; }
 }
