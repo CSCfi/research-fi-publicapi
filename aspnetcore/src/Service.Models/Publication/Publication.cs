@@ -292,7 +292,12 @@ public class Publication
     /// <summary>
     /// Yhteisjulkaisuun liittyvät osajulkaisut
     /// </summary>
-    public List<String>? OrgPublicationIDs { get; set; }   
+    public List<String>? OrgPublicationIDs { get; set; }
+
+    /// <summary>
+    /// Yhteisjulkaisuun liittyvät osajulkaisut
+    /// </summary>
+    public List<OrganizationPartOfCoPublication>? OrgPublications { get; set; }   
 
     /// <summary>
     /// Linkki Tutkimustietovarantoon
