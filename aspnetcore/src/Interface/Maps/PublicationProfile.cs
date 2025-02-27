@@ -52,5 +52,7 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.ReferenceData, ThesisType>();
         CreateMap<Service.Models.Keyword, Keyword>();
         CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
+        CreateMap<Service.Models.OrganizationPartOfCoPublication, ResearchFi.OrganizationPartOfCoPublication>();
+        CreateMap<Service.Models.OrganizationPartOfPublication_Organization, ResearchFi.OrganizationPartOfCoPublication_Organization>();
     }
 }
