@@ -93,6 +93,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.OrgPublications, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t =>
                 new OrganizationPartOfCoPublication() {
                     Id = t.PublicationId,
+                    OriginalPublicationId = t.OriginalPublicationId,
                     Organization = new OrganizationPartOfPublication_Organization() {
                         Id = t.PublicationOrgId
                     }
