@@ -314,7 +314,7 @@ public class Publication
     /// <summary>
     /// Publication information sent by individual organisations related to co-publications as part of national publication data collection
     /// </summary>
-    public List<OrganizationPartOfCoPublication>? OrgPublications { get; set; }
+    public List<OrganizationPartOfCoPublication>? OrganizationPartsOfCoPublication { get; set; }
 
     /// <summary>
     /// Researchfi portal URL
