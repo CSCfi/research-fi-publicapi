@@ -247,6 +247,15 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
 
     private static void SetResearchfiUrl(FundingDecision fundingDecision)
     {
-        fundingDecision.ResearchfiUrl = new ResearchfiUrl(resourceType: "funding-decision", id: fundingDecision.Id.ToString());
+        // Funding decisions with type of funding 62, 66 and 69 are not shown in portal
+        if (
+            fundingDecision.TypeOfFunding != null &&
+            fundingDecision.TypeOfFunding.Code != "62" &&
+            fundingDecision.TypeOfFunding.Code != "66" &&
+            fundingDecision.TypeOfFunding.Code != "69"
+        )
+        {
+            fundingDecision.ResearchfiUrl = new ResearchfiUrl(resourceType: "funding-decision", id: fundingDecision.Id.ToString());
+        }
     }
 }
