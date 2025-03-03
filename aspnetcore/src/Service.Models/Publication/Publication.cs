@@ -297,7 +297,7 @@ public class Publication
     /// <summary>
     /// Yhteisjulkaisuun liittyvät osajulkaisut
     /// </summary>
-    public List<OrganizationPartOfCoPublication>? OrgPublications { get; set; }   
+    public List<OrganizationPartOfCoPublication>? OrganizationPartsOfCoPublication { get; set; }   
 
     /// <summary>
     /// Linkki Tutkimustietovarantoon

@@ -672,7 +672,7 @@ public class PublicationProfileTest
             },
             CoPublicationID = null,
             OrgPublicationIDs = new List<string> {},
-            OrgPublications = new List<OrganizationPartOfCoPublication> {},
+            OrganizationPartsOfCoPublication = new List<OrganizationPartOfCoPublication> {},
             Created = new DateTime(2023, 3, 10, 10, 43, 00),
             Modified = new DateTime(2023, 3, 10, 10, 44, 00),
             OrgPublicationDatabaseContributionDTOs = new(),
