@@ -13,7 +13,7 @@
 		<nowarn>$(NoWarn);1591</nowarn>
 		<RootNamespace>CSC.PublicApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<AssemblyName>CSC.PublicApi.$(MSBuildProjectName)</AssemblyName>
-	  <UserSecretsId>4f740bea-0188-43cc-ae56-7b5017862261</UserSecretsId>
+	  <UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
