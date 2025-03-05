@@ -86,6 +86,11 @@ public class ResearchDataset
     public List<Keyword>? Keywords { get; set; }
 
     /// <summary>
+    /// Subject headings
+    /// </summary>
+    public List<Keyword>? SubjectHeadings { get; set; }
+
+    /// <summary>
     /// Related datasets
     /// </summary>
     public List<DatasetRelation>? DatasetRelations { get; set; }

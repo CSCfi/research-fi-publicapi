@@ -35,6 +35,8 @@ public class ResearchDataset
     public ReferenceData? License { get; set; }
 
     public List<Keyword>? Keywords { get; set; }
+    
+    public List<Keyword>? SubjectHeadings { get; set; }
 
     public List<DatasetRelation>? DatasetRelations { get; set; }
 
