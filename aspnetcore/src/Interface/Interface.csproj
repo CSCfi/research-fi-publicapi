@@ -13,7 +13,7 @@
 		<nowarn>$(NoWarn);1591</nowarn>
 		<RootNamespace>CSC.PublicApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		<AssemblyName>CSC.PublicApi.$(MSBuildProjectName)</AssemblyName>
-	  <UserSecretsId>4f740bea-0188-43cc-ae56-7b5017862261</UserSecretsId>
+	  <UserSecretsId>b73bde99-06bf-406c-8e60-eb475cb00acc</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -34,7 +34,7 @@
 		<PackageReference Include="Scrutor" Version="4.2.2" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
-		<PackageReference Include="Serilog.Enrichers.ClientInfo" Version="1.3.0" />
+		<PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.2" />
 		<PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
