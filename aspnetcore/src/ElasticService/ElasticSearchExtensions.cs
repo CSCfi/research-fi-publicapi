@@ -38,6 +38,7 @@ public static class ElasticSearchExtensions
 
         // https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.17/configuration-options.html
         var connectionSettings = new ConnectionSettings(new Uri(elasticSearchClusterUrl))
+            .EnableApiVersioningHeader()  // Enable compatibility mode
             .DefaultFieldNameInferrer(i => i) // This forces elastic to store .Net objects using type names, instead of camel casing. This enables using nameof when referring to fields.
             .MaximumRetries(5);
 
