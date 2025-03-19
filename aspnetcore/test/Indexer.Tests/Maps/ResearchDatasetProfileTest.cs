@@ -169,10 +169,16 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
+                    Keyword = "keyword1",
                     Language = "keywordLanguage",
-                    Scheme = "keywordScheme",
-                    Keyword = "keywordValue"
-                }
+                    Scheme = "Avainsana"
+                },
+                new()
+                {
+                    Keyword = "subjectHeading1",
+                    Language = "keywordLanguage",
+                    Scheme = "Theme"
+                },
             },
             BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>
             {
@@ -354,9 +360,18 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
+                    Value = "keyword1",
                     Language = "keywordLanguage",
-                    Value = "keywordValue",
-                    Scheme = "keywordScheme"
+                    Scheme = "Avainsana"
+                }
+            },
+            SubjectHeadings = new List<Keyword>
+            {
+                new()
+                {
+                    Value = "subjectHeading1",
+                    Language = "keywordLanguage",
+                    Scheme = "Theme"
                 }
             },
             PersistentIdentifiers = new List<PersistentIdentifier>

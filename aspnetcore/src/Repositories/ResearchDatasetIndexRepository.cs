@@ -68,6 +68,11 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         {
             researchDataset.Keywords = null;
         }
+
+        if (researchDataset.SubjectHeadings != null && !researchDataset.SubjectHeadings.Any())
+        {
+            researchDataset.SubjectHeadings = null;
+        }
         
         if (researchDataset.FieldsOfScience != null && !researchDataset.FieldsOfScience.Any())
         {
