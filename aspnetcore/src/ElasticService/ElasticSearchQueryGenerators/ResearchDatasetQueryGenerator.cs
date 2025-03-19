@@ -67,6 +67,15 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
                 ));
         }
 
+        if (parameters.SubjectHeadings is not null)
+        {
+            subQueries.Add(t =>
+                t.Match(m =>
+                    m.Field(f => f.SubjectHeadings.Suffix(nameof(Keyword.Value)))
+                        .Query(parameters.SubjectHeadings)
+                ));
+        }
+
         if (parameters.OrganizationName is not null)
         {
             subQueries.Add(t =>
