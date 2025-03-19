@@ -22,6 +22,8 @@ public class ResearchDatasetSearchParameters
 
     public string? Keywords { get; set; }
 
+    public string? SubjectHeadings { get; set; }
+
     public string? RelatedDatasetId { get; set; }
 
     public string? ResearchDataCatalog { get; set; }

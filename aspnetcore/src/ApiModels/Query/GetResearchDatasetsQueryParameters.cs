@@ -90,6 +90,13 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     public string? Keywords { get; set; }
 
     /// <summary>
+    /// One subfield value of field subject heading is exactly equal to the text.
+    /// </summary>
+    /// <see cref="ResearchDataset.SubjectHeadings"/>
+    /// <see cref="ResearchFi.Keyword.Value"/>
+    public string? SubjectHeadings { get; set; }
+
+    /// <summary>
     /// One subfield id of field datasetRelations is exactly equal to the text.
     /// </summary>
     /// <see cref="ResearchDataset.DatasetRelations"/>
