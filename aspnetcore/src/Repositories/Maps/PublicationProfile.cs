@@ -90,6 +90,15 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Count > 0)) // Publication is a co-publication, when InverseDimPublicationNavigation references one or more organization publications. This property is used in query filter.
             .ForMember(dst => dst.CoPublicationID, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0  ? src.DimPublicationNavigation.PublicationId : null))
             .ForMember(dst => dst.OrgPublicationIDs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t => t.PublicationId)))
+            .ForMember(dst => dst.OrganizationPartsOfCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t =>
+                new OrganizationPartOfCoPublication() {
+                    Id = t.PublicationId,
+                    OriginalPublicationId = t.OriginalPublicationId,
+                    Organization = new OrganizationPartOfPublication_Organization() {
+                        Id = t.PublicationOrgId
+                    }
+                }
+            )))  
             .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
         
         CreateProjection<DimReferencedatum, ReferenceData>()

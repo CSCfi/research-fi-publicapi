@@ -312,6 +312,11 @@ public class Publication
     public List<String>? OrgPublicationIDs { get; set; }
 
     /// <summary>
+    /// Publication information sent by individual organisations related to co-publications as part of national publication data collection
+    /// </summary>
+    public List<OrganizationPartOfCoPublication>? OrganizationPartsOfCoPublication { get; set; }
+
+    /// <summary>
     /// Researchfi portal URL
     /// </summary>
     public ResearchfiUrl? ResearchfiUrl { get; set; }
