@@ -28,6 +28,7 @@ public class FundingCallIndexRepositoryTest
         var organization1 = new Organization
         {
             Id = 111, // This id must match foundation id in the model
+            OrganizationId = "organizationId111",
             NameFi = "Test Organization 1 nameFi",
             Pids = new List<PersistentIdentifier>
             {
@@ -46,6 +47,7 @@ public class FundingCallIndexRepositoryTest
         var organization2 = new Organization
         {
             Id = 222, // This id must match foundation id in the model
+            OrganizationId = "organizationId222",
             NameFi = "Test Organization 2 nameFi",
             Pids = new List<PersistentIdentifier>
             {
@@ -75,8 +77,16 @@ public class FundingCallIndexRepositoryTest
         var fundingCallObject = fundingCalls.FirstOrDefault();
         fundingCallObject.Should().NotBeNull().And.BeAssignableTo<FundingCall>();
         var fundingCall = (FundingCall)fundingCallObject!;
+
+        // Check that BusinessId is set correctly in HandleFoundationBusinessID
         fundingCall.Foundations[0].BusinessId.Should().Be("1234567-8");
         fundingCall.Foundations[1].BusinessId.Should().Be("2345678-9");
+
+        // Check that ResearchfiUrl is set correctly in HandleResearchfiUrl
+        fundingCall.ResearchfiUrl.Should().NotBeNull();
+        fundingCall.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/funding-call/123");
+        fundingCall.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/funding-call/123");
+        fundingCall.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/funding-call/123");
     }
     
     
@@ -133,6 +143,7 @@ public class FundingCallIndexRepositoryTest
             SourceDescription = "Test Source Description",
             EuCallId = "EU123",
             SourceProgrammeId = "PROG123"
+            // ResearchfiUrl should be set in HandleResearchfiUrl
         };
     }
 }
