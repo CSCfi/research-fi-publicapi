@@ -72,7 +72,7 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
             HandleAuthors(publication);
             HandleParentPublications(publication);
             HandlePeerReviewed(publication);
-
+            HandleResearchfiUrl(publication);
         });
         return entities;
     }

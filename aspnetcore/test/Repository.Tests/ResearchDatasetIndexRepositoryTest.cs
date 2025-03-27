@@ -100,6 +100,12 @@ public class ResearchDatasetIndexRepositoryTest
 
         resultResearchDataset.VersionSet.Should().NotBeNull();
         resultResearchDataset.IsLatestVersion.Should().Be(true);
+
+        // Check that ResearchfiUrl is set correctly in HandleResearchfiUrl
+        resultResearchDataset.ResearchfiUrl.Should().NotBeNull();
+        resultResearchDataset.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/dataset/localIdentifier");
+        resultResearchDataset.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/dataset/localIdentifier");
+        resultResearchDataset.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/dataset/localIdentifier");
     }
     
     private static ResearchDataset GetModel()
@@ -213,6 +219,7 @@ public class ResearchDatasetIndexRepositoryTest
             DatasetRelations = null,
             VersionSet = null,
             IsLatestVersion = null
+            // ResearchfiUrl should be set in HandleResearchfiUrl
         };
     }
 }
