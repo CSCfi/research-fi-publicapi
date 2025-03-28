@@ -9,7 +9,7 @@ public partial class FactFieldValuesTest
 
     public int DimFieldDisplaySettingsId { get; set; }
 
-    public long DimNameId { get; set; }
+    public int DimNameId { get; set; }
 
     public int DimWebLinkId { get; set; }
 

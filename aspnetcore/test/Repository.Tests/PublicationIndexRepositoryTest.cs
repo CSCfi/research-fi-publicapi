@@ -113,14 +113,6 @@ public class PublicationIndexRepositoryTest
 
         // Check that HandleEmptyCollections works correctly
         publication.Keywords.Should().BeNullOrEmpty();
-
-        // Check that ISBN and ISSN are set correctly in HandleIssnAndIsbn
-        publication.Isbn.Should().NotBeNullOrEmpty();
-        publication.Isbn[0].Should().Be("ISBN 1");
-        publication.Isbn[1].Should().Be("ISBN 2");
-        publication.Issn.Should().NotBeNullOrEmpty();
-        publication.Issn[0].Should().Be("ISSN 1");
-        publication.Issn[1].Should().Be("ISSN 2");
         
         // Check that ResearchfiUrl is set correctly in HandleResearchfiUrl
         publication.ResearchfiUrl.Should().NotBeNull();
@@ -191,10 +183,6 @@ public class PublicationIndexRepositoryTest
                     ContributionType = "publication_organization_unit"
                 }
             },
-            Isbn1 = "ISBN 1",
-            Isbn2 = "ISBN 2",
-            Issn1 = "ISSN 1",
-            Issn2 = "ISSN 2",
             // ResearchfiUrl should be set in SetResearchfiUrl
         };
     }

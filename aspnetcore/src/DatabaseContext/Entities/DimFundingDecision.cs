@@ -28,7 +28,7 @@ public partial class DimFundingDecision
     public int DimFundingDecisionIdParentDecision { get; set; }
 
     /// <summary>
-    /// Päätöksen paikallinen tunniste (tiedon toimittajan)
+    /// P��t�ksen paikallinen tunniste (tiedon toimittajan)
     /// </summary>
     public string? FunderProjectNumber { get; set; }
 
@@ -69,7 +69,7 @@ public partial class DimFundingDecision
     public int DimRegisteredDataSourceId { get; set; }
 
     /// <summary>
-    /// Rahoituspäätös - Päätöspaneeli
+    /// Rahoitusp��t�s - P��t�spaneeli
     /// </summary>
     public int? DimCallDecisionsId { get; set; }
 

@@ -234,18 +234,43 @@ public class PublicationProfileTest
                 NameSv = "publicationTypeCodeSv",
                 NameEn = "publicationTypeCodeEn"
             },
+            DimPids = new List<DimPid>
+            {
+                new()
+                {
+                    PidType = "doi",
+                    PidContent = "doi test value"
+                },
+                new()
+                {
+                    PidType = "isbn",
+                    PidContent = "isbn test value 1"
+                },
+                new()
+                {
+                    PidType = "isbn",
+                    PidContent = "isbn test value 2"
+                },
+                new()
+                {
+                    PidType = "issn",
+                    PidContent = "issn test value 1"
+                },
+                new()
+                {
+                    PidType = "issn",
+                    PidContent = "issn test value 2"
+                }
+            },
+
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
             ConferenceName = "ConferenceName",
-            Issn = "issn",
-            Issn2 = "issn2",
             Volume = "volume",
             PageNumberText = "pageNumberText",
             ArticleNumberText = "articleNumberText",
             ParentPublicationName = "parentPublicationName",
-            ParentPublicationPublisher = "parentPublicationPublisher",
-            Isbn = "isbn",
-            Isbn2 = "isbn2",
+            ParentPublicationEditors = "parentPublicationPublisher",
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
             JufoClassNavigation = new DimReferencedatum
@@ -281,7 +306,6 @@ public class PublicationProfileTest
                 NameSv = "publisherOpenAccessCodeSv",
                 NameEn = "publisherOpenAccessCodeEn"
             },
-            Doi = "doi",
             DoiHandle = "doiHandle",
             DimKeywords = new List<DimKeyword>
             {
@@ -490,15 +514,13 @@ public class PublicationProfileTest
             JournalName = "JournalName",
             IssueNumber = "IssueNumber",
             ConferenceName = "ConferenceName",
-            Issn1 = "issn",
-            Issn2 = "issn2",
             Volume = "volume",
             PageNumberText = "pageNumberText",
             ArticleNumberText = "articleNumberText",
             ParentPublicationName = "parentPublicationName",
             ParentPublicationPublisher = "parentPublicationPublisher",
-            Isbn1 = "isbn",
-            Isbn2 = "isbn2",
+            Isbn = new List<string> { "isbn test value 1", "isbn test value 2" },
+            Issn = new List<string> { "issn test value 1", "issn test value 2" },
             PublisherName = "publisherName",
             PublisherLocation = "publisherLocation",
             JufoCode = "jufoCode",
@@ -517,7 +539,7 @@ public class PublicationProfileTest
                 NameEn = "jufoClassCodeFrozenNameEn",
                 NameSv = "jufoClassCodeFrozenNameSv"
             },
-            Doi = "doi",
+            Doi = "doi test value",
             DoiHandle = "doiHandle",
             Keywords = new List<Keyword>
             {
