@@ -66,7 +66,6 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
                 return;
             }
             
-            HandleIssnAndIsbn(publication);
             HandleEmptyCollections(publication);
             HandleOrganizations(publication);
             HandleAuthors(publication);
@@ -128,7 +127,6 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
             publication.FieldsOfArt.AddRange(fieldsOfArt.DistinctBy(x => x.Code));
         }
          
-        HandleIssnAndIsbn(publication);
         HandleEmptyCollections(publication);
         HandleOrganizations(publication);
         HandleAuthors(publication);
@@ -325,26 +323,6 @@ public class PublicationIndexRepository : IndexRepositoryBase<Publication>
         {
             publication.Keywords = null;
         }
-    }
-
-    private static void HandleIssnAndIsbn(Publication publication)
-    {
-            var issn = new List<string?>
-            {
-                publication.Issn1?.Trim(),
-                publication.Issn2?.Trim()
-            };
-
-            publication.Issn = issn.ToList();
-            
-            var isbn = new List<string?>
-            {
-                publication.Isbn1?.Trim(),
-                publication.Isbn2?.Trim()
-            };
-
-            publication.Issn = issn.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
-            publication.Isbn = isbn.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
     }
 
     private static void HandleResearchfiUrl(Publication publication)

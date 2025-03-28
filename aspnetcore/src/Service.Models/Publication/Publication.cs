@@ -303,18 +303,6 @@ public class Publication
     /// Linkki Tutkimustietovarantoon
     /// </summary>
     public ResearchfiUrl? ResearchfiUrl { get; set; }
-
-    [Ignore]
-    public string? Isbn1 { get; set; }
-
-    [Ignore]
-    public string? Isbn2 { get; set; }
-    
-    [Ignore]
-    public string? Issn1 { get; set; }
-
-    [Ignore]
-    public string? Issn2 { get; set; }
     
     [Ignore]
     public List<FactContribution>? DatabaseContributions { get; set; }

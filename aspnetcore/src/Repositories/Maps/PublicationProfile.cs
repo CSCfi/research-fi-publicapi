@@ -38,24 +38,19 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName)) 
             .ForMember(dst => dst.IssueNumber, opt => opt.MapFrom(src => src.IssueNumber))
             .ForMember(dst => dst.ConferenceName, opt => opt.MapFrom(src => src.ConferenceName))
-            .ForMember(dst => dst.Issn1, opt => opt.MapFrom(src => src.Issn))
-            .ForMember(dst => dst.Issn2, opt => opt.MapFrom(src => src.Issn2))
             .ForMember(dst => dst.Volume, opt => opt.MapFrom(src => src.Volume))
             .ForMember(dst => dst.PageNumberText, opt => opt.MapFrom(src => src.PageNumberText))
             .ForMember(dst => dst.ArticleNumberText, opt => opt.MapFrom(src => src.ArticleNumberText))
             .ForMember(dst => dst.ParentPublicationName, opt => opt.MapFrom(src => src.ParentPublicationName))
-            .ForMember(dst => dst.ParentPublicationPublisher, opt => opt.MapFrom(src => src.ParentPublicationPublisher))
+            .ForMember(dst => dst.ParentPublicationPublisher, opt => opt.MapFrom(src => src.ParentPublicationEditors))
             .ForMember(dst => dst.OpenAccess, opt => opt.MapFrom(src => src.OpenAccess != "9" ? src.OpenAccess : null))
             .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublisherOpenAccessCodeNavigation.CodeValue != "9" ? src.PublisherOpenAccessCodeNavigation : null))
-            .ForMember(dst => dst.Isbn1, opt => opt.MapFrom(src => src.Isbn))
-            .ForMember(dst => dst.Isbn2, opt => opt.MapFrom(src => src.Isbn2))
             .ForMember(dst => dst.PublisherName, opt => opt.MapFrom(src => src.PublisherName))
             .ForMember(dst => dst.PublisherLocation, opt => opt.MapFrom(src => src.PublisherLocation))
             .ForMember(dst => dst.JufoCode, opt => opt.MapFrom(src => src.DimPublicationChannel.JufoCode))
             .ForMember(dst => dst.JufoClass, opt => opt.MapFrom(src => src.JufoClassNavigation))
             .ForMember(dst => dst.JufoCodeRecorded, opt => opt.MapFrom(src => src.DimPublicationChannelIdFrozenNavigation.JufoCode))
             .ForMember(dst => dst.JufoClassRecorded, opt => opt.MapFrom(src => src.JufoClassCodeFrozenNavigation))
-            .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.Doi))
             .ForMember(dst => dst.DoiHandle, opt => opt.MapFrom(src => src.DoiHandle))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.Select(f => f.DimReferencedata)))
             .ForMember(dst => dst.OrgPublicationFieldsOfScienceDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
@@ -80,8 +75,9 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.Abstract, opt => opt.MapFrom(src => src.Abstract))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
             .ForMember(dst => dst.Modified, opt => opt.MapFrom(src => src.Modified))
-            .ForMember(dst => dst.Issn, opt => opt.Ignore())  // Handled during in memory operations in the index repository
-            .ForMember(dst => dst.Isbn, opt => opt.Ignore())  // Handled during in memory operations in the index repository
+            .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.DimPids.Where(pid => pid.PidType == "doi").Select(pid => pid.PidContent).FirstOrDefault()))
+            .ForMember(dst => dst.Isbn, opt => opt.MapFrom(src => src.DimPids.Where(pid => pid.PidType == "isbn").Select(pid => pid.PidContent)))
+            .ForMember(dst => dst.Issn, opt => opt.MapFrom(src => src.DimPids.Where(pid => pid.PidType == "issn").Select(pid => pid.PidContent)))
             .ForMember(dst => dst.Organizations, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.Authors, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.PeerReviewed, opt => opt.Ignore())  // Handled during in memory operations in the index repository
