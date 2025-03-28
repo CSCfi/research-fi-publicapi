@@ -24,7 +24,7 @@ public partial class DimDescriptiveItem
     /// https://iri.suomi.fi/model/researchfi_core_project/
     /// Projektin kuvailutiedot ajassa
     /// https://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time
-    /// * alkamisp�iv�m��r�
+    /// * alkamispäivämäärä
     /// </summary>
     public int DimStartDate { get; set; }
 
@@ -32,7 +32,7 @@ public partial class DimDescriptiveItem
     /// https://iri.suomi.fi/model/researchfi_core_project/
     /// Projektin kuvailutiedot ajassa
     /// https://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time
-    /// * p��ttymisp�iv�m��r�
+    /// * päättymispäivämäärä
     /// </summary>
     public int? DimEndDate { get; set; }
 
@@ -40,7 +40,7 @@ public partial class DimDescriptiveItem
     /// https://iri.suomi.fi/model/researchfi_core_project/
     /// Projektin kuvailutiedot ajassa
     /// https://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time
-    /// * kuvailutiedon sis�lt�
+    /// * kuvailutiedon sisältö
     /// </summary>
     public string? DescriptiveItem { get; set; }
 

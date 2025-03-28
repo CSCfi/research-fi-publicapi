@@ -429,12 +429,12 @@ public partial class ApiDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__dim_call__3213E83FD98AF042");
 
-            entity.ToTable("dim_call_decisions", tb => tb.HasComment("Rahoitusp��t�spaneeli"));
+            entity.ToTable("dim_call_decisions", tb => tb.HasComment("Rahoituspäätöspaneeli"));
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CallProcessingPhase)
                 .HasMaxLength(255)
-                .HasComment("Rahoitusp��t�spaneeli - Haun vaihe")
+                .HasComment("Rahoituspäätöspaneeli - Haun vaihe")
                 .HasColumnName("call_processing_phase");
             entity.Property(e => e.DecisionMaker).HasColumnName("decision_maker");
             entity.Property(e => e.DimCallProgrammeId).HasColumnName("dim_call_programme_id");
@@ -702,7 +702,7 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DescriptiveItem)
                 .IsUnicode(false)
-                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* kuvailutiedon sis�lt�")
+                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* kuvailutiedon sisältö")
                 .HasColumnName("descriptive_item");
             entity.Property(e => e.DescriptiveItemLanguage)
                 .HasMaxLength(255)
@@ -714,14 +714,14 @@ public partial class ApiDbContext : DbContext
                 .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_type\r\n- description\r\n- name\r\n- goal\r\n- outcome_effect\r\n- abberviation")
                 .HasColumnName("descriptive_item_type");
             entity.Property(e => e.DimEndDate)
-                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* p��ttymisp�iv�m��r�")
+                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* päättymispäivämäärä")
                 .HasColumnName("dim_end_date");
             entity.Property(e => e.DimRegisteredDataSourceId).HasColumnName("dim_registered_data_source_id");
             entity.Property(e => e.DimResearchProjectId)
                 .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n- liittyy projektiin")
                 .HasColumnName("dim_research_project_id");
             entity.Property(e => e.DimStartDate)
-                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* alkamisp�iv�m��r�")
+                .HasComment("https://iri.suomi.fi/model/researchfi_core_project/\r\nProjektin kuvailutiedot ajassa\r\nhttps://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time\r\n* alkamispäivämäärä")
                 .HasColumnName("dim_start_date");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -1086,7 +1086,7 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.DescriptionFi).HasColumnName("description_fi");
             entity.Property(e => e.DescriptionSv).HasColumnName("description_sv");
             entity.Property(e => e.DimCallDecisionsId)
-                .HasComment("Rahoitusp��t�s - P��t�spaneeli")
+                .HasComment("Rahoituspäätös - päätöspaneeli")
                 .HasColumnName("dim_call_decisions_id");
             entity.Property(e => e.DimCallProgrammeId).HasColumnName("dim_call_programme_id");
             entity.Property(e => e.DimDateIdApproval).HasColumnName("dim_date_id_approval");
@@ -1103,7 +1103,7 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.DimTypeOfFundingId).HasColumnName("dim_type_of_funding_id");
             entity.Property(e => e.FunderProjectNumber)
                 .HasMaxLength(255)
-                .HasComment("P��t�ksen paikallinen tunniste (tiedon toimittajan)")
+                .HasComment("Päätöksen paikallinen tunniste (tiedon toimittajan)")
                 .HasColumnName("funder_project_number");
             entity.Property(e => e.FundingDecisionCurrencyAbbreviation)
                 .HasMaxLength(255)
@@ -3135,7 +3135,7 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DimRegisteredDataSourceId).HasColumnName("dim_registered_data_source_id");
             entity.Property(e => e.EndDate)
-                .HasComment("Hanke - p��ttymisp�iv�m��r�")
+                .HasComment("Hanke - päättymispäivämäärä")
                 .HasColumnName("end_date");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
@@ -3151,7 +3151,7 @@ public partial class ApiDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("source_id");
             entity.Property(e => e.StartDate)
-                .HasComment("Hanke - alkamisp�iv�m��r�")
+                .HasComment("Hanke - alkamispäivämäärä")
                 .HasColumnName("start_date");
 
             entity.HasOne(d => d.DimRegisteredDataSource).WithMany(p => p.DimResearchProjects)

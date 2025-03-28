@@ -13,12 +13,12 @@ public partial class DimResearchProject
     public int ResponsibleOrganization { get; set; }
 
     /// <summary>
-    /// Hanke - alkamisp�iv�m��r�
+    /// Hanke - alkamispäivämäärä
     /// </summary>
     public int? StartDate { get; set; }
 
     /// <summary>
-    /// Hanke - p��ttymisp�iv�m��r�
+    /// Hanke - päättymispäivämäärä
     /// </summary>
     public int? EndDate { get; set; }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace CSC.PublicApi.DatabaseContext.Entities;
 
 /// <summary>
-/// Rahoitusp��t�spaneeli
+/// Rahoituspäätöspaneeli
 /// </summary>
 public partial class DimCallDecision
 {
@@ -17,7 +17,7 @@ public partial class DimCallDecision
     public int DimCallProgrammeId { get; set; }
 
     /// <summary>
-    /// Rahoitusp��t�spaneeli - Haun vaihe
+    /// Rahoituspäätöspaneeli - Haun vaihe
     /// </summary>
     public string CallProcessingPhase { get; set; } = null!;
 
