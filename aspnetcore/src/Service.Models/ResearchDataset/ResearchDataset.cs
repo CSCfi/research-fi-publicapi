@@ -4,6 +4,7 @@ namespace CSC.PublicApi.Service.Models.ResearchDataset;
 
 public class ResearchDataset
 {
+    public long ExportSortId { get; set; }
     [Keyword]
     public string? Id { get; set; }
 

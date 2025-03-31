@@ -4,6 +4,8 @@ namespace CSC.PublicApi.Service.Models.FundingCall;
 
 public class FundingCall
 {
+    public long ExportSortId { get; set; }
+
     /// <summary>
     /// Haun nimi
     /// </summary>
