@@ -37,7 +37,7 @@ public class PublicationController : ControllerBase
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "GetPublications")]
-    [Authorize(Policy = ApiPolicies.Publication.Read)]
+    //[Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]
@@ -62,7 +62,7 @@ public class PublicationController : ControllerBase
     /// <response code="403">Forbidden.</response>
     /// <response code="404">Not found.</response>
     [HttpGet("{publicationId}", Name = "GetPublication")]
-    [Authorize(Policy = ApiPolicies.Publication.Read)]
+    //[Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(Publication), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

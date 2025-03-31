@@ -22,7 +22,7 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Query(GenerateQueryForSearch(searchParameters));
     }
 
-    public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuerySearchAfter(TIn searchParameters, int pageSize, long? searchAfter)
+    public Func<SearchDescriptor<TOut>, ISearchRequest> GenerateQuerySearchAfter(TIn searchParameters, int pageSize, string? searchAfter)
     {
         var indexName = _configuration.GetIndexNameForType(typeof(TOut));
 

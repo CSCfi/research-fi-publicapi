@@ -32,7 +32,7 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
         return (searchResult.Documents, new SearchResult(pageNumber, pageSize, searchResult.HitsMetadata?.Total.Value));
     }
 
-    public async Task<(IEnumerable<TOut>, SearchAfterResult)> SearchAfter(TIn parameters, int pageSize, long? searchAfter)
+    public async Task<(IEnumerable<TOut>, SearchAfterResult)> SearchAfter(TIn parameters, int pageSize, string? searchAfter)
     {
         var query = _queryGenerator.GenerateQuerySearchAfter(parameters, pageSize, searchAfter);
 
@@ -44,10 +44,10 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
             Console.WriteLine(searchResult.DebugInformation);            
         }
         
-        long? searchAfterValue = null;
+        string? searchAfterValue = null;
         
         if (searchResult.Hits.Count > 0) {
-            searchAfterValue = (long)searchResult.Hits.Last().Sorts.First();
+            searchAfterValue = (string)searchResult.Hits.Last().Sorts.First();
         }
 
         return (searchResult.Documents, new SearchAfterResult(searchAfterValue, pageSize));

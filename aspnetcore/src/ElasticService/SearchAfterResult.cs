@@ -2,9 +2,9 @@
 
 public class SearchAfterResult
 {
-    public long? SearchAfter { get; }
+    public string? SearchAfter { get; }
     public int PageSize { get; }
-    public SearchAfterResult(long? searchAfter, int pageSize)
+    public SearchAfterResult(string? searchAfter, int pageSize)
     {
         SearchAfter = searchAfter;
         PageSize = pageSize;

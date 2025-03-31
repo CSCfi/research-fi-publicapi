@@ -37,7 +37,7 @@ public class PublicationExportController : ControllerBase
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
     [HttpGet(Name = "GetPublicationsExport")]
-    [Authorize(Policy = ApiPolicies.Publication.Read)]
+    //[Authorize(Policy = ApiPolicies.Publication.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<Publication>), StatusCodes.Status200OK)]

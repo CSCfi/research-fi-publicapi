@@ -30,7 +30,7 @@ public static class ResponseHelper
         httpContext.Response.Headers.Add("x-page-size", searchAfterResult.PageSize.ToString());
         if (searchAfterResult.SearchAfter != null)
         {
-            httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter.ToString());
+            httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter);
             httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfterResult.SearchAfter));
         }
     }
@@ -56,7 +56,7 @@ public static class ResponseHelper
         }
         return result;
     }
-    private static string GetLinksSearchAfter(HttpRequest httpRequest, long? searchAfter)
+    private static string GetLinksSearchAfter(HttpRequest httpRequest, string? searchAfter)
     {
         var url = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.Path}";
         var queryValues = QueryHelpers.ParseQuery(httpRequest.QueryString.Value);
@@ -72,7 +72,7 @@ public static class ResponseHelper
         query["pageNumber"] = pageNumber.ToString();
         return $"<{QueryHelpers.AddQueryString(url, query)}>; rel=\"{rel}\"";
     }
-    private static string CreateLinkSearchAfter(string url, Dictionary<string, StringValues> query, long? searchAfter, string rel)
+    private static string CreateLinkSearchAfter(string url, Dictionary<string, StringValues> query, string? searchAfter, string rel)
     {
         query["NextPageToken"] = searchAfter.ToString();
         return $"<{QueryHelpers.AddQueryString(url, query)}>; rel=\"{rel}\"";
