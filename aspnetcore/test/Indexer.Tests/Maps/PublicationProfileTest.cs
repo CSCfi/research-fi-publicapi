@@ -197,7 +197,7 @@ public class PublicationProfileTest
     {
         DimPublication dimPublication = new()
         {
-            Id = 1,
+            Id = 123456789,
             PublicationId = "publicationId",
             OriginalPublicationId = "abc123",
             PublicationName = "nameFi",
@@ -475,6 +475,7 @@ public class PublicationProfileTest
     {
         return new Publication
         {
+            ExportSortId = 123456789,
             Id = "publicationId",
             OriginalPublicationId = "abc123",
             Name = "nameFi",

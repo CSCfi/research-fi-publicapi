@@ -16,6 +16,7 @@ public class ResearchDatasetProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateProjection<DimResearchDataset, ResearchDataset>()
+            .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))

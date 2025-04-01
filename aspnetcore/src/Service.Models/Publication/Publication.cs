@@ -7,6 +7,8 @@ namespace CSC.PublicApi.Service.Models.Publication;
 /// </summary>
 public class Publication
 {
+    public long ExportSortId { get; set; }
+
     /// <summary>
     /// Julkaisun tunnus
     /// </summary>
