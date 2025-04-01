@@ -30,14 +30,14 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             return descriptor => descriptor
                 .Index(indexName)
                 .Take(pageSize)
-                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                .Sort(sort => sort.Ascending("ExportSortId"))
                 .Query(GenerateQueryForSearch(searchParameters));
         }
         else {
             return descriptor => descriptor
                 .Index(indexName)
                 .Take(pageSize)
-                .Sort(sort => sort.Ascending(SortSpecialField.DocumentIndexOrder))
+                .Sort(sort => sort.Ascending("ExportSortId"))
                 .Query(GenerateQueryForSearch(searchParameters))
                 .SearchAfter(searchAfter);
         }

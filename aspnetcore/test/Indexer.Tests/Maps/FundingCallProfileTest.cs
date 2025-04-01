@@ -53,6 +53,7 @@ public class FundingCallProfileTest
     {
         return new DimCallProgramme
         {
+            Id = 123456789,
             NameFi = "nameFi",
             NameSv = "nameSv",
             NameEn = "nameEn",
@@ -134,6 +135,8 @@ public class FundingCallProfileTest
     {
         return new FundingCall
         {
+            ExportSortId = 123456789,
+            Id = 123456789,
             NameFi = "nameFi",
             NameSv = "nameSv",
             NameEn = "nameEn",

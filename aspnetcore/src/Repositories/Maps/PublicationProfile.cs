@@ -20,6 +20,7 @@ public class PublicationProfile : Profile
         
         CreateProjection<DimPublication, Publication>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.PublicationId))
             .ForMember(dst => dst.OriginalPublicationId, opt => opt.MapFrom(src => src.OriginalPublicationId))
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.PublicationName))

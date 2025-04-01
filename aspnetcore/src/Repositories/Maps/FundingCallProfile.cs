@@ -14,6 +14,7 @@ public class FundingCallProfile : Profile
         AllowNullDestinationValues = true;
         
         CreateProjection<DimCallProgramme, FundingCall>()
+            .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))

@@ -277,6 +277,7 @@ public class ResearchDatasetProfileTest
     {
         return new ResearchDataset
         {
+            ExportSortId = Id,
             DatabaseId = Id,
             NameFi = "nameFi",
             NameSv = "nameSv",
