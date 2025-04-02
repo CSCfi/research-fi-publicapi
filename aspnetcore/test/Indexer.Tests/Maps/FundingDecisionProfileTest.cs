@@ -106,6 +106,7 @@ public class FundingDecisionProfileTest
     {
         return new DimFundingDecision
         {
+            Id = 123456789,
             NameFi = "namefi",
             NameSv = "namesv",
             NameEn = "nameen",
@@ -291,6 +292,8 @@ public class FundingDecisionProfileTest
     {
         return new FundingDecision
         {
+            ExportSortId = 123456789,
+            Id = 123456789,
             NameFi = "namefi",
             NameSv = "namesv",
             NameEn = "nameen",

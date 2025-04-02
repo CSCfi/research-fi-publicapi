@@ -7,6 +7,8 @@ namespace CSC.PublicApi.Service.Models.Publication;
 /// </summary>
 public class Publication
 {
+    public long ExportSortId { get; set; }
+
     /// <summary>
     /// Julkaisun tunnus
     /// </summary>
@@ -303,18 +305,6 @@ public class Publication
     /// Linkki Tutkimustietovarantoon
     /// </summary>
     public ResearchfiUrl? ResearchfiUrl { get; set; }
-
-    [Ignore]
-    public string? Isbn1 { get; set; }
-
-    [Ignore]
-    public string? Isbn2 { get; set; }
-    
-    [Ignore]
-    public string? Issn1 { get; set; }
-
-    [Ignore]
-    public string? Issn2 { get; set; }
     
     [Ignore]
     public List<FactContribution>? DatabaseContributions { get; set; }
