@@ -4,6 +4,7 @@ namespace CSC.PublicApi.Service.Models.FundingDecision;
 
 public class FundingDecision
 {
+    public long ExportSortId { get; set; }
     public string? NameFi { get; set; }
 
     public string? NameSv { get; set; }

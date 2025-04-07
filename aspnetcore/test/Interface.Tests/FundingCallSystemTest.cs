@@ -117,8 +117,8 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
                 NamesShouldMatch(fc, "apurahojen"),
 
             // should find only calls with the given foundation name
-            [FoundationName("s��ti�")] = fc =>
-                FoundationNamesShouldMatch(fc, "s��ti�"),
+            [FoundationName("säätiö")] = fc =>
+                FoundationNamesShouldMatch(fc, "säätiö"),
 
             // should find calls with the given foundation business id
             [FoundationBusinessId("02509")] = fc =>
