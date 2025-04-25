@@ -29,14 +29,20 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Services.AddDbContext<VirtaJtpDbContext>(options =>
-   // options.UseSqlServer("name=dbconnectionstringvirta"));
      {
-        options.UseSqlServer("name=dbconnectionstringvirta", opt =>
-            {
-                opt.CommandTimeout(300);
-            });
-        //options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
-            });
+         options.UseSqlServer("name=dbconnectionstringvirta", opt =>
+             {
+                 opt.CommandTimeout(300);
+             });
+     });
+
+builder.Services.AddDbContext<ImportDbContext>(options =>
+     {
+         options.UseSqlServer("name=dbconnectionstringimportdb", opt =>
+             {
+                 opt.CommandTimeout(300);
+             });
+     });
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -93,7 +99,7 @@ app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (IDiagnostic
     var clientId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
     var organizationId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid")?.Value;
     var queryString = httpContext.Request.QueryString.HasValue ? httpContext.Request.QueryString.Value : "";
-    
+
     context.Set("CorrelationId", correlationId);
     context.Set("ClientId", clientId);
     context.Set("OrganizationId", organizationId);
