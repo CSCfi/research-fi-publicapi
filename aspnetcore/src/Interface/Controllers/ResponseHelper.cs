@@ -30,6 +30,7 @@ public static class ResponseHelper
         httpContext.Response.Headers.Add("x-page-size", searchAfterResult.PageSize.ToString());
         if (searchAfterResult.SearchAfter != null)
         {
+            httpContext.Response.Headers.Add("x-total", searchAfterResult.TotalResults.ToString());
             httpContext.Response.Headers.Add("x-next-page-token", searchAfterResult.SearchAfter.ToString());
             httpContext.Response.Headers.Add("link", GetLinksSearchAfter(httpContext.Request, searchAfterResult.SearchAfter));
         }
