@@ -51,6 +51,14 @@ public abstract class QueryGeneratorBase<TIn, TOut> : IQueryGenerator<TIn, TOut>
             .Query(GenerateQueryForSingle(id));
     }
 
+    public Func<CountDescriptor<TOut>, ICountRequest> GenerateCountQuery(TIn searchParameters)
+    {
+        var indexName = _configuration.GetIndexNameForType(typeof(TOut));
+        return descriptor => descriptor
+            .Index(indexName)
+            .Query(GenerateQueryForSearch(searchParameters));
+    }
+
     protected abstract Func<QueryContainerDescriptor<TOut>, QueryContainer> GenerateQueryForSearch(TIn parameters);
 
     protected abstract Func<QueryContainerDescriptor<TOut>,QueryContainer> GenerateQueryForSingle(string id);

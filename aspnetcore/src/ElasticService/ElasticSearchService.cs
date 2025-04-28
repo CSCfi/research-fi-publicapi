@@ -50,7 +50,22 @@ public class ElasticSearchService<TIn, TOut> : ISearchService<TIn, TOut> where T
             searchAfterValue = (long)searchResult.Hits.Last().Sorts.First();
         }
 
-        return (searchResult.Documents, new SearchAfterResult(searchAfterValue, pageSize));
+        // Get total number of hits that match the query.
+        // Must use separate count query, since with normal search query Elasticsearch reports max 10000 as total hits.
+        // This adds additional load to Elasticsearch, it should only be used with "search after" queries.
+        long? totalResults = null;
+        var countQuery = _queryGenerator.GenerateCountQuery(parameters);
+        try
+        {
+            var countResult = await _elasticClient.CountAsync(countQuery);
+            totalResults = countResult.Count;
+        }
+        catch (System.Exception)
+        {
+            // Pass without throwing an exception
+        }
+
+        return (searchResult.Documents, new SearchAfterResult(searchAfterValue, pageSize, totalResults));
     }
 
     public async Task<TOut?> GetSingle(string id)
