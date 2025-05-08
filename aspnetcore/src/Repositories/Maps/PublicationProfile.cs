@@ -44,7 +44,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ArticleNumberText, opt => opt.MapFrom(src => src.ArticleNumberText))
             .ForMember(dst => dst.ParentPublicationName, opt => opt.MapFrom(src => src.ParentPublicationName))
             .ForMember(dst => dst.ParentPublicationPublisher, opt => opt.MapFrom(src => src.ParentPublicationEditors))
-            .ForMember(dst => dst.OpenAccess, opt => opt.MapFrom(src => src.OpenAccess != "9" ? src.OpenAccess : null))
+            .ForMember(dst => dst.OpenAccess, opt => opt.MapFrom(src => src.OpenAccessCodeNavigation.CodeValue != "9" ? src.OpenAccessCodeNavigation : null))
             .ForMember(dst => dst.PublisherOpenAccess, opt => opt.MapFrom(src => src.PublisherOpenAccessCodeNavigation.CodeValue != "9" ? src.PublisherOpenAccessCodeNavigation : null))
             .ForMember(dst => dst.PublisherName, opt => opt.MapFrom(src => src.PublisherName))
             .ForMember(dst => dst.PublisherLocation, opt => opt.MapFrom(src => src.PublisherLocation))

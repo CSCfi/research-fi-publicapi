@@ -42,7 +42,7 @@ public partial class DimDescriptiveItem
     /// https://iri.suomi.fi/model/researchfi_core_project/cl_project_descriptive_in_time
     /// * kuvailutiedon sisältö
     /// </summary>
-    public string? DescriptiveItem { get; set; }
+    public string DescriptiveItem { get; set; } = null!;
 
     /// <summary>
     /// https://iri.suomi.fi/model/researchfi_core_project/
@@ -70,9 +70,17 @@ public partial class DimDescriptiveItem
 
     public int DimRegisteredDataSourceId { get; set; }
 
+    public int DimPublicationId { get; set; }
+
+    public int DimResearchDatasetId { get; set; }
+
     public virtual DimDate? DimEndDateNavigation { get; set; }
 
+    public virtual DimPublication DimPublication { get; set; } = null!;
+
     public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
+
+    public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
 
     public virtual DimResearchProject DimResearchProject { get; set; } = null!;
 
