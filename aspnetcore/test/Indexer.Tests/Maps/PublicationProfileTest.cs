@@ -306,6 +306,13 @@ public class PublicationProfileTest
                 NameSv = "publisherOpenAccessCodeSv",
                 NameEn = "publisherOpenAccessCodeEn"
             },
+            OpenAccessCodeNavigation = new DimReferencedatum
+            {
+                CodeValue = "openAccessCode",
+                NameFi = "openAccessCodeFi",
+                NameSv = "openAccessCodeSv",
+                NameEn = "openAccessCodeEn"
+            },
             DoiHandle = "doiHandle",
             DimKeywords = new List<DimKeyword>
             {
@@ -702,7 +709,14 @@ public class PublicationProfileTest
             OrgPublicationArtPublicatonTypeCategoryDTOs = new(),
             OrgPublicationFieldsOfArtDTOs = new(),
             OrgPublicationFieldsOfScienceDTOs = new(),
-            OrgPublicationKeywordDTOs = new()
+            OrgPublicationKeywordDTOs = new(),
+            OpenAccess = new ReferenceData
+            {
+                Code = "openAccessCode",
+                NameFi = "openAccessCodeFi",
+                NameSv = "openAccessCodeSv",
+                NameEn = "openAccessCodeEn"
+            }
         };
     }
 }
