@@ -38,6 +38,17 @@ builder.Services.AddDbContext<VirtaJtpDbContext>(options =>
         //options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             });
 
+builder.Services.AddDbContext<ImportDbContext>(options =>
+   // options.UseSqlServer("name=dbconnectionstringimportdb"));
+     {
+        options.UseSqlServer("name=dbconnectionstringimportdb", opt =>
+            {
+                opt.CommandTimeout(300);
+            });
+        //options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+            });
+
+
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
