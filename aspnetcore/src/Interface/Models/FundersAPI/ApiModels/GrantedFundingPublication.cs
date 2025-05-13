@@ -4,15 +4,17 @@ namespace CSC.PublicApi.Interface.Models.FundersAPI.ApiModels
 {
     public partial class GrantedFundingPublication
     {
-        [Required(ErrorMessage = "Either PublicationId or Doi must be provided.")]
         public string? PublicationId { get; set; }
-
-        [Required(ErrorMessage = "Either PublicationId or Doi must be provided.")]
         public string? Doi { get; set; }
 
-        public bool IsValid()
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return !string.IsNullOrEmpty(PublicationId) || !string.IsNullOrEmpty(Doi);
+            if (string.IsNullOrEmpty(PublicationId) && string.IsNullOrEmpty(Doi))
+            {
+                yield return new ValidationResult(
+                    "Either PublicationId or Doi must be provided.",
+                    new[] { nameof(PublicationId), nameof(Doi) });
+            }
         }
 
         public string GetPublicationIdentifier()
