@@ -136,6 +136,7 @@ public class FundingCallQueryGenerator : QueryGeneratorBase<FundingCallSearchPar
     {
         // Sort funding calls
         return sortDescriptor => sortDescriptor
-            .Field(f => f.CallProgrammeDueDate, SortOrder.Ascending);
+            .Field(f => f.CallProgrammeDueDate, SortOrder.Ascending)
+            .Field(f => f.ExportSortId, SortOrder.Ascending); // DO NOT REMOVE, prevents duplicates in the result set
     }
 }
