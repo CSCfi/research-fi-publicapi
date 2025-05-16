@@ -343,6 +343,7 @@ public class PublicationQueryGenerator : QueryGeneratorBase<PublicationSearchPar
     {
         // Sort publications
         return sortDescriptor => sortDescriptor
-            .Field(f => f.PublicationYear, SortOrder.Descending);
+            .Field(f => f.PublicationYear, SortOrder.Descending)
+            .Field(f => f.ExportSortId, SortOrder.Ascending); // DO NOT REMOVE, prevents duplicates in the result set
     }
 }
