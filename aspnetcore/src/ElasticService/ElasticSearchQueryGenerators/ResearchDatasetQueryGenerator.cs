@@ -216,6 +216,7 @@ public class ResearchDatasetQueryGenerator : QueryGeneratorBase<ResearchDatasetS
     {
         // Sort research datasets
         return sortDescriptor => sortDescriptor
-            .Field(f => f.Created, SortOrder.Descending);
+            .Field(f => f.Created, SortOrder.Descending)
+            .Field(f => f.ExportSortId, SortOrder.Ascending); // DO NOT REMOVE, prevents duplicates in the result set
     }
 }

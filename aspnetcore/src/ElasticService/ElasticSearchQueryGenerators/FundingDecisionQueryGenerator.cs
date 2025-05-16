@@ -179,6 +179,7 @@ public class FundingDecisionQueryGenerator : QueryGeneratorBase<FundingDecisionS
     {
         // Sort funding decisions
         return sortDescriptor => sortDescriptor
-            .Field(f => f.FundingStartDate, SortOrder.Descending);
+            .Field(f => f.FundingStartDate, SortOrder.Descending)
+            .Field(f => f.ExportSortId, SortOrder.Ascending); // DO NOT REMOVE, prevents duplicates in the result set
     }
 }
