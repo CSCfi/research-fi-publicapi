@@ -273,7 +273,7 @@ public class ResearchDatasetProfileTest
                 NameSv = "accessTypeNameSv",
                 NameEn = "accessTypeNameEn"
             },
-            License = new License
+            License = new LicenseResearchDataset
             {
                 Code = "licenseCode",
                 NameFi = "licenseNameFi",

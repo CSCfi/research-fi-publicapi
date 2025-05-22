@@ -449,7 +449,7 @@ public class PublicationProfileTest
                 NameSv = "publicationStatusNameSv",
                 NameEn = "publicationStatusNameEn"
             },
-            License = new License
+            License = new LicensePublication
             {
                 Code = "1337"
             },
@@ -458,7 +458,7 @@ public class PublicationProfileTest
                 new()
                 {
                     Url = "preprintArchivedUrl",
-                    License = new License
+                    License = new LicensePublication
                     {
                         Code = "preprintArchivedLicenseCode"
                     },
@@ -474,7 +474,7 @@ public class PublicationProfileTest
                 new()
                 {
                     Url = "selfArchivedUrl",
-                    License = new License
+                    License = new LicensePublication
                     {
                         Code = "selfArchivedLicenseCode"
                     },

@@ -20,7 +20,7 @@ public class Contributor
     /// <summary>
     /// Agent role
     /// 
-    /// http://uri.suomi.fi/codelist/fairdata/agentrole
+    /// https://uri.suomi.fi/codelist/fairdata/agentrole
     /// </summary>
     public AgentRole? Role { get; set; }
 }

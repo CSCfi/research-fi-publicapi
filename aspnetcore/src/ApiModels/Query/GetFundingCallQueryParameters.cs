@@ -35,7 +35,7 @@ public class GetFundingCallQueryParameters
     /// <summary>
     /// The field categories.codeValue is exactly equal to the text. 
     /// 
-    /// Code: http://uri.suomi.fi/codelist/research/auroran_alat
+    /// Code: https://uri.suomi.fi/codelist/research/auroran_alat
     /// </summary>
     /// <see cref="FundingCall.Categories"/>
     public string? Category { get; set; }

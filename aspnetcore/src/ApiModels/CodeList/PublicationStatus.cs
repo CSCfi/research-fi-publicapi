@@ -3,7 +3,7 @@
 /// <summary>
 /// Publication status code
 ///
-/// http://uri.suomi.fi/codelist/research/julkaisuntila
+/// https://uri.suomi.fi/codelist/research/julkaisuntila
 /// </summary>
 public class PublicationStatus : CodeList
 {

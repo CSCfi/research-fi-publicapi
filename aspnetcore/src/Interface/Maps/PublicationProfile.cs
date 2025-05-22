@@ -43,7 +43,7 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.ReferenceData, ArticleType>();
         CreateMap<Service.Models.ReferenceData, ArtPublicationTypeCategory>();
         CreateMap<Service.Models.ReferenceData, PublicationStatus>();
-        CreateMap<Service.Models.ReferenceData, License>();
+        CreateMap<Service.Models.ReferenceData, LicensePublication>();
         CreateMap<Service.Models.ReferenceData, CountryCode>();
         CreateMap<Service.Models.ReferenceData, Language>();
         CreateMap<Service.Models.ReferenceData, SelfArchiveVersion>();
