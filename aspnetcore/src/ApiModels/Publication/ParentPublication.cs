@@ -15,7 +15,7 @@ public class ParentPublication
     /// <summary>
     /// Parent publication type
     ///
-    /// http://uri.suomi.fi/codelist/research/Emojulkaisuntyyppi
+    /// https://uri.suomi.fi/codelist/research/Emojulkaisuntyyppi
     /// </summary>
     public ParentPublicationType? Type { get; set; }
 

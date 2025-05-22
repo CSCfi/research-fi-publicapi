@@ -52,7 +52,7 @@ public class Publication
     /// <summary>
     /// Publication format
     ///
-    /// http://uri.suomi.fi/codelist/research/julkaisumuoto
+    /// https://uri.suomi.fi/codelist/research/julkaisumuoto
     /// </summary>
     public PublicationFormat? Format { get; set; }
 
@@ -64,21 +64,21 @@ public class Publication
     /// <summary>
     /// Target audience of the publication
     ///
-    /// http://uri.suomi.fi/codelist/research/julkaisunyleiso
+    /// https://uri.suomi.fi/codelist/research/julkaisunyleiso
     /// </summary>
     public TargetAudience? TargetAudience { get; set; }
 
     /// <summary>
     /// National classification for publications
     ///
-    /// http://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
+    /// https://uri.suomi.fi/codelist/research/Julkaisutyyppiluokitus
     /// </summary>
     public PublicationType? Type { get; set; }
 
      /// <summary>
      /// Thesis type
      ///
-     /// http://uri.suomi.fi/codelist/research/Opinnaytetyyppi
+     /// https://uri.suomi.fi/codelist/research/Opinnaytetyyppi
      /// </summary>
      public ThesisType? ThesisType { get; set; }
 
@@ -125,14 +125,14 @@ public class Publication
     /// <summary>
     /// Open access of publication
     ///
-    /// http://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
+    /// https://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
     /// </summary>
     public OpenAccess OpenAccess { get; set; }
 
     /// <summary>
     /// Open Access status of a publication channel
     ///
-    /// http://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
+    /// https://uri.suomi.fi/codelist/research/JulkaisuKanavaOA
     /// </summary>
     public PublisherOpenAccess PublisherOpenAccess { get; set; }
 
@@ -159,7 +159,7 @@ public class Publication
     /// <summary>
     /// Publication forum classification
     ///
-    /// http://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
+    /// https://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
     /// </summary>
     public JufoClass? JufoClass { get; set; }
 
@@ -171,7 +171,7 @@ public class Publication
     /// <summary>
     /// Publication forum classification (recorded)
     ///
-    /// http://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
+    /// https://uri.suomi.fi/codelist/research/julkaisufoorumiluokitus
     /// </summary>
     public JufoClass? jufoClassRecorded { get; set; }
 
@@ -203,14 +203,14 @@ public class Publication
     /// <summary>
     /// Fields of science
     ///
-    /// http://uri.suomi.fi/codelist/research/Tieteenala2010
+    /// https://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
     /// Fields of art
     ///
-    /// http://uri.suomi.fi/codelist/research/Taiteenala
+    /// https://uri.suomi.fi/codelist/research/Taiteenala
     /// </summary>
     public List<FieldOfArt>? FieldsOfArt { get; set; }
 
@@ -227,14 +227,14 @@ public class Publication
     /// <summary>
     /// Publication country
     ///
-    /// http://uri.suomi.fi/codelist/jhs/valtio_1_20120101
+    /// https://uri.suomi.fi/codelist/jhs/valtio_1_20120101
     /// </summary>
     public CountryCode? Country { get; set; }
 
     /// <summary>
     /// Language of the publication
     ///
-    /// http://uri.suomi.fi/codelist/research/languages
+    /// https://uri.suomi.fi/codelist/research/languages
     /// </summary>
     public Language? Language { get; set; }
 
@@ -261,28 +261,28 @@ public class Publication
     /// <summary>
     /// Article type code
     ///
-    /// http://uri.suomi.fi/codelist/research/Artikkelintyyppikoodi
+    /// https://uri.suomi.fi/codelist/research/Artikkelintyyppikoodi
     /// </summary>
     public ArticleType? ArticleType { get; set; }
 
     /// <summary>
     /// Publication status code
     ///
-    /// /// http://uri.suomi.fi/codelist/research/julkaisuntila
+    /// https://uri.suomi.fi/codelist/research/julkaisuntila
     /// </summary>
     public PublicationStatus? Status { get; set; }
 
     /// <summary>
     /// License
     /// 
-    /// http://uri.suomi.fi/codelist/fairdata/license
+    /// https://koodistot.suomi.fi/codescheme;registryCode=research;schemeCode=Lisenssi
     /// </summary>
-    public License? License { get; set; }
+    public LicensePublication? License { get; set; }
 
     /// <summary>
     /// Art publications type category
     ///
-    /// http://uri.suomi.fi/codelist/research/TaidejulkaisuTyyppikategoria
+    /// https://uri.suomi.fi/codelist/research/TaidejulkaisuTyyppikategoria
     /// </summary>
     public List<ArtPublicationTypeCategory>? ArtPublicationTypeCategory { get; set; }
 

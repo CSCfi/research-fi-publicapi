@@ -70,7 +70,7 @@ public class FundingDecision
     /// <summary>
     /// Funding type
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/rahoitusmuoto
+    /// Koodisto: https://uri.suomi.fi/codelist/research/rahoitusmuoto
     /// </summary>
     public FundingType? TypeOfFunding { get; set; }
     
@@ -97,7 +97,7 @@ public class FundingDecision
     /// <summary>
     /// Fields of science
     ///
-    /// Koodisto: http://uri.suomi.fi/codelist/research/Tieteenala2010
+    /// Koodisto: https://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     public List<FieldOfScience>? FieldsOfScience { get; set; }
     

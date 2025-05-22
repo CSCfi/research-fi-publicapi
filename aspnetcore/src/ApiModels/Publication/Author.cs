@@ -25,7 +25,7 @@ public class Author
     /// <summary>
     /// Art publications role code of the author
     ///
-    /// http://uri.suomi.fi/codelist/research/TaidejulkaisuRooli
+    /// https://uri.suomi.fi/codelist/research/TaidejulkaisuRooli
     /// </summary>
     public ArtPublicationRole? ArtPublicationRole { get; set; }
 
