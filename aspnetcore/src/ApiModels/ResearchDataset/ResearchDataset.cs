@@ -55,30 +55,30 @@ public class ResearchDataset
     /// <summary>
     /// Fields of science
     /// 
-    /// http://uri.suomi.fi/codelist/research/Tieteenala2010
+    /// https://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     public List<FieldOfScience>? FieldsOfScience { get; set; }
 
     /// <summary>
     /// Languages
     /// 
-    /// http://lexvo.org/id/iso639-3
+    /// https://lexvo.org/id/iso639-3
     /// </summary>
     public List<LexvoLanguage>? Languages { get; set; }
 
     /// <summary>
     /// Access types
     /// 
-    /// http://uri.suomi.fi/codelist/fairdata/access_type
+    /// https://uri.suomi.fi/codelist/fairdata/access_type
     /// </summary>
     public AccessType? AccessType { get; set; }
 
     /// <summary>
     /// License
     /// 
-    /// http://uri.suomi.fi/codelist/fairdata/license
+    /// https://uri.suomi.fi/codelist/fairdata/license
     /// </summary>
-    public License? License { get; set; }
+    public LicenseResearchDataset? License { get; set; }
 
     /// <summary>
     /// Keywords

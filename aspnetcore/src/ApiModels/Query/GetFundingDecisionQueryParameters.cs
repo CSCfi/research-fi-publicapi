@@ -94,7 +94,7 @@ public class GetFundingDecisionQueryParameters
     /// <summary>
     /// The field typeOfFunding is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/research/rahoitusmuoto
+    /// Code: https://uri.suomi.fi/codelist/research/rahoitusmuoto
     /// </summary>
     /// <see cref="FundingDecision.TypeOfFunding"/>
     public string? TypeOfFunding { get; set; }

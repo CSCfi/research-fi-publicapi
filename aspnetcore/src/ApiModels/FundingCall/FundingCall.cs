@@ -90,7 +90,7 @@ public class FundingCall
     /// <summary>
     /// Categories of the call
     /// 
-    /// Koodisto: http://uri.suomi.fi/codelist/research/auroran_alat
+    /// Koodisto: https://uri.suomi.fi/codelist/research/auroran_alat
     /// </summary>
     public List<Category>? Categories { get; set; }
 

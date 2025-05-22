@@ -43,7 +43,7 @@ public class ResearchDatasetProfile : Profile
         CreateMap<Service.Models.ReferenceData, FieldOfScience>();
         CreateMap<Service.Models.ReferenceData, LexvoLanguage>();
         CreateMap<Service.Models.ReferenceData, AccessType>();
-        CreateMap<Service.Models.ReferenceData, License>();
+        CreateMap<Service.Models.ReferenceData, LicenseResearchDataset>();
         CreateMap<Service.Models.Keyword, Keyword>();
         CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
     }
