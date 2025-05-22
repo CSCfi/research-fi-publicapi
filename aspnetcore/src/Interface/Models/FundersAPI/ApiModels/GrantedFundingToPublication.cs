@@ -2,10 +2,17 @@
 
 namespace CSC.PublicApi.Interface.Models.FundersAPI.ApiModels
 {
-    public partial class GrantedFundingPublication
+    public partial class GrantedFundingToPublication
+
     {
+        public string OrganizationId { get; set; } = null!;
+
+        public string GrantedFundingId { get; set; } = null!;
+
         public string? PublicationId { get; set; }
+
         public string? Doi { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
