@@ -15,16 +15,16 @@ public class LocallyReportedPublicationInformation
     /// <summary>
     /// Self archive version
     ///
-    /// http://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
+    /// https://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
     /// </summary>
     public SelfArchiveVersion? Version { get; set; }
     
     /// <summary>
     /// License
     ///
-    /// http://uri.suomi.fi/codelist/research/Lisenssi
+    /// https://uri.suomi.fi/codelist/research/Lisenssi
     /// </summary>
-    public License? License { get; set; }
+    public LicensePublication? License { get; set; }
 
     /// <summary>
     /// Embargo date

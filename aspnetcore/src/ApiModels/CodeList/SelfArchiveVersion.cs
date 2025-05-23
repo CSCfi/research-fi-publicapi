@@ -3,7 +3,7 @@
 /// <summary>
 /// Self archive version
 ///
-/// http://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
+/// https://uri.suomi.fi/codelist/research/RinnakkaistallenneVersio
 /// </summary>
 public class SelfArchiveVersion : CodeList
 {

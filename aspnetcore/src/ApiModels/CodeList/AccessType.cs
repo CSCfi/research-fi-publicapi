@@ -3,7 +3,7 @@
 /// <summary>
 /// Access types
 /// 
-/// http://uri.suomi.fi/codelist/fairdata/access_type
+/// https://uri.suomi.fi/codelist/fairdata/access_type
 /// </summary>
 public class AccessType : CodeList
 {

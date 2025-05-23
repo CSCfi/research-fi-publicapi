@@ -3,7 +3,7 @@
 /// <summary>
 /// Open access of publication
 /// 
-/// http://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
+/// https://uri.suomi.fi/codelist/research/AvoinSaatavuusKytkin
 /// </summary>
 public class OpenAccess : CodeList
 {

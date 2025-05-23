@@ -53,7 +53,7 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     /// <summary>
     /// One subfield fieldId of field FieldOfScience is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/research/Tieteenala2010
+    /// Code: https://uri.suomi.fi/codelist/research/Tieteenala2010
     /// </summary>
     /// <see cref="ResearchDataset.FieldsOfScience"/>
     public string? FieldOfScience { get; set; }
@@ -61,7 +61,7 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     /// <summary>
     /// One subfield code of field language is exactly equal to the text.
     ///
-    /// Code: http://lexvo.org/id/iso639-3
+    /// Code: https://lexvo.org/id/iso639-3
     /// </summary>
     /// <see cref="ResearchDataset.Languages"/>
     public string? Language { get; set; }
@@ -69,7 +69,7 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     /// <summary>
     /// The field AccessType subfield code is exactly equal to the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/fairdata/access_type
+    /// Code: https://uri.suomi.fi/codelist/fairdata/access_type
     /// </summary>
     /// <see cref="ResearchDataset.AccessType"/>
     public string? Access { get; set; }
@@ -77,7 +77,7 @@ public class GetResearchDatasetsQueryParameters : PaginationQueryParameters
     /// <summary>
     /// The field license subfield code is exactly the same as the text.
     ///
-    /// Code: http://uri.suomi.fi/codelist/fairdata/license
+    /// Code: https://uri.suomi.fi/codelist/fairdata/license
     /// </summary>
     /// <see cref="ResearchDataset.License"/>
     public string? License { get; set; }

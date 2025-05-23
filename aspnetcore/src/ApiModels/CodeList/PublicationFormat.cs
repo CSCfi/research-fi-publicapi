@@ -3,7 +3,7 @@
 /// <summary>
 /// Publication format
 ///
-/// http://uri.suomi.fi/codelist/research/julkaisumuoto
+/// https://uri.suomi.fi/codelist/research/julkaisumuoto
 /// </summary>
 public class PublicationFormat : CodeList
 {
