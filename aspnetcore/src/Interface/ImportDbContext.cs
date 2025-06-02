@@ -24,11 +24,7 @@ public partial class ImportDbContext : DbContext
         {
             entity.ToTable("imp_link_granted_funding_to_publication");
 
-            entity.HasIndex(e => e.ClientId, "Index_imp_link_granted_funding_to_publication_1");
-
-            entity.HasIndex(e => e.PublicationId, "Index_imp_link_granted_funding_to_publication_2");
-
-            entity.HasIndex(e => e.Doi, "Index_imp_link_granted_funding_to_publication_3");
+            entity.HasIndex(e => new { e.ClientId, e.FunderProjectNumber, e.OrganizationId }, "Index_imp_link_granted_funding_to_publication_1");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ClientId)

@@ -1,4 +1,5 @@
 using CSC.PublicApi.Interface.Models.FundersAPI.ApiModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ImpLinkGrantedFundingToPublication = CSC.PublicApi.Interface.Models.ImportDb.Entities.ImpLinkGrantedFundingToPublication;
@@ -26,6 +27,7 @@ public class FunderController : ControllerBase
     /// <param name="organizationId">Organization identifier.</param>
     /// <returns>Collection of <see cref="GrantedFundingToPublication"/></returns>
     [HttpGet("{grantedFundingId}/publications/{organizationId}", Name = "GetGrantedFundingToPublications")]
+    [Authorize(Policy = ApiPolicies.Funder.Read)]
     [ProducesResponseType(typeof(IEnumerable<GrantedFundingToPublication>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async IAsyncEnumerable<GrantedFundingToPublication> GetGrantedFundingPublications(string grantedFundingId, string organizationId)
@@ -64,6 +66,7 @@ public class FunderController : ControllerBase
     /// <param name="grantedFundingToPublicationModel">Publication details provided in the request body.</param>
     /// <returns><see cref="GrantedFundingPublication"/></returns>
     [HttpPost("{grantedFundingId}/publications/{organizationId}", Name = "PostGrantedFundingToPublication")]
+    [Authorize(Policy = ApiPolicies.Funder.Write)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> PostGrantedFundingToPublication(string grantedFundingId, string organizationId, [FromBody] PostGrantedFundingToPublication postGrantedFundingToPublicationModel)
@@ -124,6 +127,7 @@ public class FunderController : ControllerBase
     /// <param name="publicationIdentifier">Publication Identifier.</param>
     /// <returns><see cref="GrantedFundingToPublication"/></returns>
     [HttpGet("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "GetGrantedFundingToPublication")]
+    [Authorize(Policy = ApiPolicies.Funder.Read)]
     [ProducesResponseType(typeof(GrantedFundingToPublication), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier)
@@ -158,6 +162,7 @@ public class FunderController : ControllerBase
     /// <param name="grantedFundingToPublicationModel">Publication details provided in the request body.</param>
     /// <returns><see cref="GrantedFunding"/></returns>
     [HttpPut("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "PutGrantedFundingToPublication")]
+    [Authorize(Policy = ApiPolicies.Funder.Write)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PutGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier, [FromBody] GrantedFundingToPublication grantedFundingToPublicationModel)
@@ -193,6 +198,7 @@ public class FunderController : ControllerBase
     /// <param name="organizationId">Organization identifier.</param>
     /// <param name="publicationIdentifier">Publication identifier.</param>
     [HttpDelete("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "DeleteGrantedFundingToPublication")]
+    [Authorize(Policy = ApiPolicies.Funder.Write)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier)
@@ -211,6 +217,5 @@ public class FunderController : ControllerBase
         _importDbContext.ImpLinkGrantedFundingToPublications.Remove(entity);
         await _importDbContext.SaveChangesAsync();
         return NoContent();
-    }
-                    
+    }                
 }
