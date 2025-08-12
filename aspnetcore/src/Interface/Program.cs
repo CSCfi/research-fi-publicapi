@@ -15,7 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-});
+    // The following two lines are added to trust the headers from the OpenShift router.
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+}); 
 
 // Register settings.
 builder.Services.AddSettings(builder.Configuration);
