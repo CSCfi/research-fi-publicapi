@@ -21,7 +21,7 @@ public class FunderController : ControllerBase
         _importDbContext = importDbContext;
         _logger = logger;
         _diagnosticContext = diagnosticContext;
-        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Publication);
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Funder);
     }
 
     /// <summary>
