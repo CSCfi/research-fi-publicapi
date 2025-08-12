@@ -2,6 +2,7 @@ using CSC.PublicApi.Interface.Models.FundersAPI.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using ImpLinkGrantedFundingToPublication = CSC.PublicApi.Interface.Models.ImportDb.Entities.ImpLinkGrantedFundingToPublication;
 
 namespace CSC.PublicApi.Interface.Controllers;
@@ -13,11 +14,14 @@ public class FunderController : ControllerBase
 {
     private readonly ImportDbContext _importDbContext;
     private readonly ILogger<FunderController> _logger;
+    private readonly IDiagnosticContext _diagnosticContext;
 
-    public FunderController(ImportDbContext importDbContext, ILogger<FunderController> logger)
+    public FunderController(ImportDbContext importDbContext, ILogger<FunderController> logger, IDiagnosticContext diagnosticContext)
     {
         _importDbContext = importDbContext;
         _logger = logger;
+        _diagnosticContext = diagnosticContext;
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Publication);
     }
 
     /// <summary>
@@ -28,6 +32,8 @@ public class FunderController : ControllerBase
     /// <returns>Collection of <see cref="GrantedFundingToPublication"/></returns>
     [HttpGet("{grantedFundingId}/publications/{organizationId}", Name = "GetGrantedFundingToPublications")]
     [Authorize(Policy = ApiPolicies.Funder.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(IEnumerable<GrantedFundingToPublication>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async IAsyncEnumerable<GrantedFundingToPublication> GetGrantedFundingPublications(string grantedFundingId, string organizationId)
@@ -67,6 +73,8 @@ public class FunderController : ControllerBase
     /// <returns><see cref="GrantedFundingPublication"/></returns>
     [HttpPost("{grantedFundingId}/publications/{organizationId}", Name = "PostGrantedFundingToPublication")]
     [Authorize(Policy = ApiPolicies.Funder.Write)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> PostGrantedFundingToPublication(string grantedFundingId, string organizationId, [FromBody] PostGrantedFundingToPublication postGrantedFundingToPublicationModel)
@@ -128,6 +136,8 @@ public class FunderController : ControllerBase
     /// <returns><see cref="GrantedFundingToPublication"/></returns>
     [HttpGet("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "GetGrantedFundingToPublication")]
     [Authorize(Policy = ApiPolicies.Funder.Read)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(GrantedFundingToPublication), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier)
@@ -163,6 +173,8 @@ public class FunderController : ControllerBase
     /// <returns><see cref="GrantedFunding"/></returns>
     [HttpPut("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "PutGrantedFundingToPublication")]
     [Authorize(Policy = ApiPolicies.Funder.Write)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PutGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier, [FromBody] GrantedFundingToPublication grantedFundingToPublicationModel)
@@ -199,6 +211,8 @@ public class FunderController : ControllerBase
     /// <param name="publicationIdentifier">Publication identifier.</param>
     [HttpDelete("{grantedFundingId}/publications/{organizationId}/{publicationIdentifier}", Name = "DeleteGrantedFundingToPublication")]
     [Authorize(Policy = ApiPolicies.Funder.Write)]
+    [Produces(ApiConstants.ContentTypeJson)]
+    [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteGrantedFundingToPublication(string grantedFundingId, string organizationId, string publicationIdentifier)
