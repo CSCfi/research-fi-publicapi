@@ -94,12 +94,7 @@ builder.Services.AddAutoMapper(typeof(ApiPolicies).Assembly);
 
 var app = builder.Build();
 
-// Use Forwarded Headers Middleware to enable client ip address detection behind load balancer.
-// Must run this before other middleware.
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+app.UseForwardedHeaders();
 app.UseHeaderPropagation();
 
 // Generate correlation ids for requests.
