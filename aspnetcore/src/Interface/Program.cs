@@ -107,9 +107,11 @@ app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = (IDiagnostic
     var clientId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
     var organizationId = httpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "organizationid")?.Value;
     var queryString = httpContext.Request.QueryString.HasValue ? httpContext.Request.QueryString.Value : "";
+    var xForwardedFor = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
     
     context.Set("CorrelationId", correlationId);
     context.Set("ClientId", clientId);
+    context.Set("ClientIp", !string.IsNullOrEmpty(xForwardedFor) ? xForwardedFor : httpContext.Connection.RemoteIpAddress?.ToString());
     context.Set("OrganizationId", organizationId);
     context.Set("QueryString", queryString);
 });
