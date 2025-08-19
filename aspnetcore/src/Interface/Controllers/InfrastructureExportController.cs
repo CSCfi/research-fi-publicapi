@@ -9,15 +9,15 @@ namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
 [ApiVersion(ApiConstants.ApiVersion1)]
-[Route("v{version:apiVersion}/infrastructures")]
-public class InfrastructureController : ControllerBase
+[Route("v{version:apiVersion}/infrastructures-export")]
+public class InfrastructureExportController : ControllerBase
 {
-    private readonly ILogger<InfrastructureController> _logger;
+    private readonly ILogger<InfrastructureExportController> _logger;
     private IInfrastructureService _service;
     private readonly IDiagnosticContext _diagnosticContext;
 
-    public InfrastructureController(
-        ILogger<InfrastructureController> logger,
+    public InfrastructureExportController(
+        ILogger<InfrastructureExportController> logger,
         IInfrastructureService service,
         IDiagnosticContext diagnosticContext)
     {
@@ -28,14 +28,14 @@ public class InfrastructureController : ControllerBase
     }
 
     /// <summary>
-    /// Endpoint for filtering infrastructures using the specified query parameters.
+    /// Endpoint for bypassing the limit of 10000 records for infrastructures.
     /// </summary>
     /// <param name="infrastructuresQueryParameters">The query parameters for filtering the results.</param>
     /// <returns>Paged search result as a collection of <see cref="Infrastructure"/> objects.</returns>
     /// <response code="200">Ok.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="403">Forbidden.</response>
-    [HttpGet(Name = "GetInfrastructures")]
+    [HttpGet(Name = "GetInfrastructuresExport")]
     [Authorize(Policy = ApiPolicies.Infrastructure.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
@@ -43,11 +43,11 @@ public class InfrastructureController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void),StatusCodes.Status403Forbidden)]
     // [ApiExplorerSettings(IgnoreApi = true)] // Hidden
-    public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters infrastructuresQueryParameters, [FromQuery] PaginationQueryParameters paginationQueryParameters)
+    public async Task<IEnumerable<Infrastructure>> Get([FromQuery] GetInfrastructuresQueryParameters infrastructuresQueryParameters, [FromQuery] SearchAfterQueryParameters searchAfterQueryParameters)
     {
-        var (infrastructures, searchResult) = await _service.GetInfrastructures(infrastructuresQueryParameters, paginationQueryParameters);
+        var (infrastructures, searchAfterResult) = await _service.GetInfrastructuresSearchAfter(infrastructuresQueryParameters, searchAfterQueryParameters);
 
-        ResponseHelper.AddPaginationResponseHeaders(HttpContext, searchResult);
+        ResponseHelper.AddPaginationResponseHeadersSearchAfter(HttpContext, searchAfterResult);
 
         return infrastructures;
     }
