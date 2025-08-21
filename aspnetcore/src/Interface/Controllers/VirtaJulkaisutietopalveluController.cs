@@ -1,25 +1,25 @@
-using CSC.PublicApi.Interface;
 using Microsoft.AspNetCore.Mvc;
 using CSC.PublicApi.Interface.Models;
-using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using ResearchFi.Query;
-//using Organization = ResearchFi.Organization.Organization;
-using Serilog;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
+using ResearchFi.VirtaJtp.Duplikaatit;
+using ResearchFi.VirtaJtp.Tilanneraportti;
+using ResearchFi.VirtaJtp.Virheraportti;
+using ResearchFi.VirtaJtp.YhteisjulkaisutRistiriitaiset;
 
 namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
-[Route("[controller]")]  
+[Route("[controller]")]
 
 public class VirtaJulkaisutietopalveluController : ControllerBase
-{    private const string ApiVersion = "1.0";
+{
+    private const string ApiVersion = "1.0";
     private readonly VirtaJtpDbContext _virtaJtpDbContext;
     private readonly ILogger<VirtaJulkaisutietopalveluController> _logger;
 
-    public VirtaJulkaisutietopalveluController(ILogger<VirtaJulkaisutietopalveluController> logger,VirtaJtpDbContext virtaJtpDbContext)
+    public VirtaJulkaisutietopalveluController(ILogger<VirtaJulkaisutietopalveluController> logger, VirtaJtpDbContext virtaJtpDbContext)
     {
         _logger = logger;
         _virtaJtpDbContext = virtaJtpDbContext;
@@ -30,60 +30,110 @@ public class VirtaJulkaisutietopalveluController : ControllerBase
     [MapToApiVersion(ApiVersion)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
-    [ProducesResponseType(typeof(IEnumerable<Duplikaatit>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<DuplikaatitAPI>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]    
-    public async IAsyncEnumerable<Duplikaatit> GetDuplikaatit([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async IAsyncEnumerable<DuplikaatitAPI> GetDuplikaatit([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
-         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);     
-         var duplikaatits =  _virtaJtpDbContext.Duplikaatits
-         .OrderBy(b => b.DuplikaattiId)
-         .AsNoTracking();
-         //.Where(b => b.DuplikaattiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize)
-         
-        if (virtaQueryParameters.organisaatiotunnus != null)
-         {
-            duplikaatits = duplikaatits.Where(b =>
-            // b.DuplikaattiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize && 
-             b.Organisaatiotunnus == virtaQueryParameters.organisaatiotunnus);
-         }
-         duplikaatits = duplikaatits.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
- 
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+        var duplikaatits = _virtaJtpDbContext.Duplikaatits
+            .OrderBy(b => b.DuplikaattiId)
+            .AsNoTracking();
 
-            await foreach (var duplikaatti in duplikaatits.AsAsyncEnumerable())
+        if (virtaQueryParameters.organisaatiotunnus != null)
+        {
+            duplikaatits = duplikaatits.Where(b =>
+                b.Organisaatiotunnus == virtaQueryParameters.organisaatiotunnus);
+        }
+        duplikaatits = duplikaatits
+            .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+            .Take(queryParameters.PageSize);
+
+        await foreach (var duplikaatti in duplikaatits.AsAsyncEnumerable())
+        {
+            // Map from DB model to API model
+            yield return new DuplikaatitAPI
             {
-                yield return duplikaatti;
-            }
+                DuplikaattiId = duplikaatti.DuplikaattiId,
+                Organisaatiotunnus = duplikaatti.Organisaatiotunnus,
+                Organisaationimi = duplikaatti.Organisaationimi,
+                Julkaisuntunnus = duplikaatti.Julkaisuntunnus,
+                Kuvaus = duplikaatti.Kuvaus,
+                Julkaisunorgtunnus = duplikaatti.Julkaisunorgtunnus,
+                Duplikaattijulkaisunorgtunnus = duplikaatti.Duplikaattijulkaisunorgtunnus,
+                Julkaisunnimi = duplikaatti.Julkaisunnimi,
+                Duplikaattijulkaisunnimi = duplikaatti.Duplikaattijulkaisunnimi,
+                Julkaisutyyppikoodi = duplikaatti.Julkaisutyyppikoodi,
+                Tila = duplikaatti.Tila,
+                TarkistusId = duplikaatti.TarkistusId,
+                Luontipaivamaara = duplikaatti.Luontipaivamaara,
+                Ilmoitusvuosi = duplikaatti.Ilmoitusvuosi,
+                Julkaisuvuosi = duplikaatti.Julkaisuvuosi
+            };
+        }
     }
+
 
     [HttpGet("Latausraportit/tilanne")]
     [Authorize(Policy = ApiPolicies.Publication.Read)]
     [MapToApiVersion(ApiVersion)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
-    [ProducesResponseType(typeof(IEnumerable<Tilanneraportti>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<TilanneraporttiAPI>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-
-    public async IAsyncEnumerable<Tilanneraportti> Get([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
+    public async IAsyncEnumerable<TilanneraporttiAPI> Get([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
-         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext,  queryParameters.PageNumber, queryParameters.PageSize);     
-         var tilanneraporttis =  _virtaJtpDbContext.Tilanneraporttis
-         .OrderBy(a => a.TilanneraporttiId)
-         .AsNoTracking();
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+        var tilanneraporttis = _virtaJtpDbContext.Tilanneraporttis
+            .OrderBy(a => a.TilanneraporttiId)
+            .AsNoTracking();
 
         if (virtaQueryParameters.organisaatiotunnus != null)
-         {
+        {
             tilanneraporttis = tilanneraporttis.Where(b =>
-            // b.DuplikaattiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize && 
-             b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus);
-         }
-         tilanneraporttis = tilanneraporttis.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
+            b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus);
+        }
+        tilanneraporttis = tilanneraporttis
+            .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+            .Take(queryParameters.PageSize);
 
-            await foreach (var tilanneraportti in tilanneraporttis.AsAsyncEnumerable())
+        await foreach (var tilanneraportti in tilanneraporttis.AsAsyncEnumerable())
+        {
+            // Map from DB model to API model
+            yield return new TilanneraporttiAPI
             {
-                yield return tilanneraportti;
-            }
+                TilanneraporttiId = tilanneraportti.TilanneraporttiId,
+                Organisaationimi = tilanneraportti.Organisaationimi,
+                OrganisaatioTunnus = tilanneraportti.OrganisaatioTunnus,
+                JulkaisuVuosi = tilanneraportti.JulkaisuVuosi,
+                IlmoitusVuosi = tilanneraportti.IlmoitusVuosi,
+                JulkaisunNimi = tilanneraportti.JulkaisunNimi,
+                JulkaisuTyyppi = tilanneraportti.JulkaisuTyyppi,
+                JulkaisunTila = tilanneraportti.JulkaisunTila,
+                JulkaisunTunnus = tilanneraportti.JulkaisunTunnus,
+                OrganisaationJulkaisuTunnus = tilanneraportti.OrganisaationJulkaisuTunnus,
+                Luontipaivamaara = tilanneraportti.Luontipaivamaara,
+                Paivityspaivamaara = tilanneraportti.Paivityspaivamaara,
+                JufoTunnus = tilanneraportti.JufoTunnus,
+                JufoLuokkaKoodi = tilanneraportti.JufoLuokkaKoodi,
+                AvoinSaatavuusJulkaisumaksu = tilanneraportti.AvoinSaatavuusJulkaisumaksu,
+                AvoinSaatavuusJulkaisumaksuVuosi = tilanneraportti.AvoinSaatavuusJulkaisumaksuVuosi,
+                JulkaisuKanavaOa = tilanneraportti.JulkaisuKanavaOa,
+                AvoinSaatavuusKytkin = tilanneraportti.AvoinSaatavuusKytkin,
+                LisenssiKoodi = tilanneraportti.LisenssiKoodi,
+                MuotoKoodi = tilanneraportti.MuotoKoodi,
+                YleisoKoodi = tilanneraportti.YleisoKoodi,
+                EmojulkaisuntyyppiKoodi = tilanneraportti.EmojulkaisuntyyppiKoodi,
+                ArtikkelityyppiKoodi = tilanneraportti.ArtikkelityyppiKoodi,
+                VertaisarvioituKytkin = tilanneraportti.VertaisarvioituKytkin,
+                RaporttiKytkin = tilanneraportti.RaporttiKytkin,
+                OpinnayteKoodi = tilanneraportti.OpinnayteKoodi,
+                TaidetyyppiKoodi = tilanneraportti.TaidetyyppiKoodi,
+                AvsovellusTyyppiKoodi = tilanneraportti.AvsovellusTyyppiKoodi,
+                RinnakkaistallennettuKytkin = tilanneraportti.RinnakkaistallennettuKytkin
+            };
+        }
     }
 
     [HttpGet("Latausraportit/virheet")]
@@ -91,30 +141,46 @@ public class VirtaJulkaisutietopalveluController : ControllerBase
     [MapToApiVersion(ApiVersion)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
-    [ProducesResponseType(typeof(IEnumerable<Virheraportti>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<VirheraporttiAPI>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-
-    public async IAsyncEnumerable<Virheraportti> GetVirheet([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
+    public async IAsyncEnumerable<VirheraporttiAPI> GetVirheet([FromQuery] GetVirtaQueryParameters virtaQueryParameters, [FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
-         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);     
-         var virheraporttis =  _virtaJtpDbContext.Virheraporttis
-         .OrderBy(b => b.VirheraporttiId)
-         .AsNoTracking();
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+        var virheraporttis = _virtaJtpDbContext.Virheraporttis
+            .OrderBy(b => b.VirheraporttiId)
+            .AsNoTracking();
 
         if (virtaQueryParameters.organisaatiotunnus != null)
-         {
+        {
             virheraporttis = virheraporttis.Where(b =>
-            // b.DuplikaattiId > (queryParameters.PageNumber - 1)*queryParameters.PageSize && 
-             b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus);
-         }
-         virheraporttis = virheraporttis.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
- 
+                b.OrganisaatioTunnus == virtaQueryParameters.organisaatiotunnus);
+        }
+        virheraporttis = virheraporttis
+            .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+            .Take(queryParameters.PageSize);
 
-            await foreach (var virheraportti in virheraporttis.AsAsyncEnumerable())
+        await foreach (var virheraportti in virheraporttis.AsAsyncEnumerable())
+        {
+            // Map from DB model to API model
+            yield return new VirheraporttiAPI
             {
-                yield return virheraportti;
-            }   
+                VirheraporttiId = virheraportti.VirheraporttiId,
+                OrganisaatioTunnus = virheraportti.OrganisaatioTunnus,
+                Nimi = virheraportti.Nimi,
+                Kuvaus = virheraportti.Kuvaus,
+                JulkaisunOrgTunnus = virheraportti.JulkaisunOrgTunnus,
+                JulkaisunNimi = virheraportti.JulkaisunNimi,
+                Julkaisutyyppikoodi = virheraportti.Julkaisutyyppikoodi,
+                Tila = virheraportti.Tila,
+                TarkistusId = virheraportti.TarkistusId,
+                Koodi = virheraportti.Koodi,
+                Virheviesti = virheraportti.Virheviesti,
+                Luontipaivamaara = virheraportti.Luontipaivamaara,
+                IlmoitusVuosi = virheraportti.IlmoitusVuosi,
+                JulkaisuVuosi = virheraportti.JulkaisuVuosi
+            };
+        }
     }
 
     [HttpGet("Yhteisjulkaisut/ristiriitaiset")]
@@ -122,21 +188,42 @@ public class VirtaJulkaisutietopalveluController : ControllerBase
     [MapToApiVersion(ApiVersion)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
-    [ProducesResponseType(typeof(IEnumerable<YhteisjulkaisutRistiriitaiset>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<YhteisjulkaisutRistiriitaisetApi>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async IAsyncEnumerable<YhteisjulkaisutRistiriitaiset> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
+    public async IAsyncEnumerable<YhteisjulkaisutRistiriitaisetApi> Get([FromQuery] VirtaPaginationQueryParameters queryParameters)
     {
-         ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);            
-         var YhteisjulkaisutRistiriitaisets =  _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
-         .OrderBy(b => b.RrId)
-         .AsNoTracking();
- 
-         YhteisjulkaisutRistiriitaisets = YhteisjulkaisutRistiriitaisets.Skip((queryParameters.PageNumber - 1)*queryParameters.PageSize).Take(queryParameters.PageSize);
+        ResponseHelper.AddVirtaPaginationResponseHeaders(HttpContext, queryParameters.PageNumber, queryParameters.PageSize);
+        var YhteisjulkaisutRistiriitaisets = _virtaJtpDbContext.YhteisjulkaisutRistiriitaisets
+            .OrderBy(b => b.RrId)
+            .AsNoTracking();
 
-            await foreach (var YhteisjulkaisutRistiriitaiset in YhteisjulkaisutRistiriitaisets.AsAsyncEnumerable())
+        YhteisjulkaisutRistiriitaisets = YhteisjulkaisutRistiriitaisets
+            .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+            .Take(queryParameters.PageSize);
+
+        await foreach (var YhteisjulkaisutRistiriitaiset in YhteisjulkaisutRistiriitaisets.AsAsyncEnumerable())
+        {
+            // Map from DB model to API model
+            // Database property "Julkaisutyyppi" is mapped to API property "RistiriitainenTieto"
+            yield return new YhteisjulkaisutRistiriitaisetApi
             {
-                yield return YhteisjulkaisutRistiriitaiset;
-            }
+                RrId = YhteisjulkaisutRistiriitaiset.RrId,
+                YhteisjulkaisunTunnus = YhteisjulkaisutRistiriitaiset.YhteisjulkaisunTunnus,
+                JulkaisunTunnus = YhteisjulkaisutRistiriitaiset.JulkaisunTunnus,
+                Organisaationimi = YhteisjulkaisutRistiriitaiset.Organisaationimi,
+                OrganisaatioTunnus = YhteisjulkaisutRistiriitaiset.OrganisaatioTunnus,
+                JulkaisuVuosi = YhteisjulkaisutRistiriitaiset.JulkaisuVuosi,
+                IlmoitusVuosi = YhteisjulkaisutRistiriitaiset.IlmoitusVuosi,
+                JulkaisunNimi = YhteisjulkaisutRistiriitaiset.JulkaisunNimi,
+                RistiriitainenTieto = YhteisjulkaisutRistiriitaiset.Julkaisutyyppi, // Map from "Julkaisutyyppi" in the DB to "RistiriitainenTieto"
+                JulkaisunOrgTunnus = YhteisjulkaisutRistiriitaiset.JulkaisunOrgTunnus,
+                LiittyvaJulkaisunOrgTunnus = YhteisjulkaisutRistiriitaiset.LiittyvaJulkaisunOrgTunnus,
+                Luontipaivamaara = YhteisjulkaisutRistiriitaiset.Luontipaivamaara,
+                Koodi = YhteisjulkaisutRistiriitaiset.Koodi,
+                Kuvaus = YhteisjulkaisutRistiriitaiset.Kuvaus,
+                Tila = YhteisjulkaisutRistiriitaiset.Tila
+            };
+        }
     }
 }
