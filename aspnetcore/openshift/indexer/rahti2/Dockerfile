@@ -24,6 +24,7 @@ RUN dotnet publish "Indexer/Indexer.csproj" -c Release -o out
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/runtime:8.0
+ENV TZ=Europe/Helsinki
 WORKDIR /app
 COPY --from=build-env /build/out .
 ENTRYPOINT ["dotnet", "CSC.PublicApi.Indexer.dll"]

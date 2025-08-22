@@ -22,6 +22,7 @@ RUN dotnet publish "Interface/Interface.csproj" -c Release -o out
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
+ENV TZ=Europe/Helsinki
 WORKDIR /app
 COPY --from=build-env /build/out .
 EXPOSE 8080
