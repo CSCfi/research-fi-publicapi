@@ -36,6 +36,18 @@ public class DatabasePreflightCheck
         bool isGood = true;
         if (_context != null && _logger != null)
         {
+            // Log OpenShift build information
+            var buildCommitHash = Environment.GetEnvironmentVariable("OPENSHIFT_BUILD_COMMIT");
+            if (!string.IsNullOrEmpty(buildCommitHash))
+            {
+                _logger.LogInformation(_logPrefix + "OPENSHIFT_BUILD_COMMIT: {CommitHash}", buildCommitHash);
+            }
+            var buildName = Environment.GetEnvironmentVariable("OPENSHIFT_BUILD_NAME");
+            if (!string.IsNullOrEmpty(buildName))
+            {
+                _logger.LogInformation(_logPrefix + "OPENSHIFT_BUILD_NAME: {BuildName}", buildName);
+            }
+
             _logger.LogInformation(_logPrefix + "Check that required database tables contain data for indexing");
 
             // Publication count
