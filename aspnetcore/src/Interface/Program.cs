@@ -31,6 +31,18 @@ Log.Logger = new LoggerConfiguration()
     .Configuration(builder.Configuration)
     .CreateLogger();
 
+// Log OpenShift build information
+var buildCommitHash = Environment.GetEnvironmentVariable("OPENSHIFT_BUILD_COMMIT");
+if (!string.IsNullOrEmpty(buildCommitHash))
+{
+    Log.Information("OPENSHIFT_BUILD_COMMIT: {CommitHash}", buildCommitHash);
+}
+var buildName = Environment.GetEnvironmentVariable("OPENSHIFT_BUILD_NAME");
+if (!string.IsNullOrEmpty(buildName))
+{
+    Log.Information("OPENSHIFT_BUILD_NAME: {BuildName}", buildName);
+}
+
 builder.Services.AddDbContext<VirtaJtpDbContext>(options =>
    // options.UseSqlServer("name=dbconnectionstringvirta"));
      {
