@@ -7,25 +7,9 @@ public partial class DimInfrastructure
 {
     public int Id { get; set; }
 
-    public int NextInfastructureId { get; set; }
-
-    public string? NameFi { get; set; }
-
-    public string? NameSv { get; set; }
-
-    public string? NameEn { get; set; }
-
-    public string? DescriptionFi { get; set; }
-
-    public string? DescriptionSv { get; set; }
-
-    public string? DescriptionEn { get; set; }
-
-    public int? StartYear { get; set; }
-
-    public int? EndYear { get; set; }
-
     public string? Acronym { get; set; }
+
+    public int StartingYear { get; set; }
 
     public bool FinlandRoadmap { get; set; }
 
@@ -37,15 +21,13 @@ public partial class DimInfrastructure
 
     public DateTime? Modified { get; set; }
 
-    public string? Urn { get; set; }
+    public int DimRegisteredDataSourceId { get; set; }
 
-    public string? ScientificDescriptionFi { get; set; }
+    public virtual ICollection<DimContactInformation> DimContactInformations { get; set; } = new List<DimContactInformation>();
 
-    public string? ScientificDescriptionSv { get; set; }
+    public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();
 
-    public string? ScientificDescriptionEn { get; set; }
-
-    public virtual ICollection<DimPid> DimPids { get; set; } = new List<DimPid>();
+    public virtual ICollection<DimWebLink> DimWebLinks { get; set; } = new List<DimWebLink>();
 
     public virtual ICollection<FactContribution> FactContributions { get; set; } = new List<FactContribution>();
 
@@ -53,17 +35,17 @@ public partial class DimInfrastructure
 
     public virtual ICollection<FactInfraKeyword> FactInfraKeywords { get; set; } = new List<FactInfraKeyword>();
 
+    public virtual ICollection<FactKeyword> FactKeywords { get; set; } = new List<FactKeyword>();
+
     public virtual ICollection<FactRelation> FactRelationFromInfrastructures { get; set; } = new List<FactRelation>();
 
     public virtual ICollection<FactRelation> FactRelationToInfrastructures { get; set; } = new List<FactRelation>();
 
     public virtual ICollection<FactUpkeep> FactUpkeeps { get; set; } = new List<FactUpkeep>();
 
-    public virtual ICollection<DimInfrastructure> InverseNextInfastructure { get; set; } = new List<DimInfrastructure>();
-
-    public virtual DimInfrastructure NextInfastructure { get; set; } = null!;
-
     public virtual ICollection<DimEsfri> DimEsfris { get; set; } = new List<DimEsfri>();
 
     public virtual ICollection<DimMeril> DimMerils { get; set; } = new List<DimMeril>();
+
+    public virtual ICollection<DimReferencedatum> DimReferencedata { get; set; } = new List<DimReferencedatum>();
 }

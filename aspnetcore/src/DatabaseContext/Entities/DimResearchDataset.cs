@@ -79,6 +79,8 @@ public partial class DimResearchDataset
 
     public virtual ICollection<FactFieldValue> FactFieldValues { get; set; } = new List<FactFieldValue>();
 
+    public virtual ICollection<FactKeyword> FactKeywords { get; set; } = new List<FactKeyword>();
+
     public virtual ICollection<FactRelation> FactRelationFromResearchDatasets { get; set; } = new List<FactRelation>();
 
     public virtual ICollection<FactRelation> FactRelationToResearchDatasets { get; set; } = new List<FactRelation>();

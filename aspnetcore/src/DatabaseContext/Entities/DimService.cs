@@ -7,28 +7,6 @@ public partial class DimService
 {
     public int Id { get; set; }
 
-    public string? NameFi { get; set; }
-
-    public string? NameSv { get; set; }
-
-    public string? NameEn { get; set; }
-
-    public string? DescriptionFi { get; set; }
-
-    public string? DescriptionSv { get; set; }
-
-    public string? DescriptionEn { get; set; }
-
-    public string? ScientificDescriptionFi { get; set; }
-
-    public string? ScientificDescriptionSv { get; set; }
-
-    public string? ScientificDescriptionEn { get; set; }
-
-    public string? Acronym { get; set; }
-
-    public string? Type { get; set; }
-
     public string SourceId { get; set; } = null!;
 
     public string? SourceDescription { get; set; }
@@ -37,7 +15,15 @@ public partial class DimService
 
     public DateTime? Modified { get; set; }
 
+    public int DimInfrastructureId { get; set; }
+
+    public virtual ICollection<DimContactInformation> DimContactInformations { get; set; } = new List<DimContactInformation>();
+
+    public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();
+
     public virtual ICollection<DimPid> DimPids { get; set; } = new List<DimPid>();
+
+    public virtual ICollection<DimWebLink> DimWebLinks { get; set; } = new List<DimWebLink>();
 
     public virtual ICollection<FactInfraKeyword> FactInfraKeywords { get; set; } = new List<FactInfraKeyword>();
 

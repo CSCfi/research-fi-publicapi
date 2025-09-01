@@ -1,14 +1,74 @@
 ﻿using AutoMapper;
+using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.DatabaseContext.Entities;
+using CSC.PublicApi.Service.Models.Infrastructure;
 using Infrastructure = CSC.PublicApi.Service.Models.Infrastructure.Infrastructure;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
 public class InfrastructureProfile : Profile
 {
+    private const string DescriptiveItemType_Name = "name";
+    private const string DescriptiveItemType_Description = "description";
+    private const string DescriptiveItemType_ScientificDescription = "scientific_description";
+    private const string WebLinkType_Homepage = "homepage";
+    private const string WebLinkType_TermsOfUse = "terms_of_use";
+
     public InfrastructureProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+
         CreateProjection<DimInfrastructure, Infrastructure>()
-            .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
+            // Acronym
+            .ForMember(dst => dst.Abbreviation, opt => opt.MapFrom(src => src.Acronym))
+            // Starting year
+            .ForMember(dst => dst.StartingYear, opt => opt.MapFrom(src => src.StartingYear))
+            // End year - TODO when new field is added in database
+            // On the academy of Finland road map
+            .ForMember(dst => dst.OnTheAcademyOfFinlandRoadmap, opt => opt.MapFrom(src => src.FinlandRoadmap))
+            // Name
+            .ForMember(dst => dst.InfraName, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name)))
+            // Description
+            .ForMember(dst => dst.InfraDescription, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description)))
+            // Scientific description
+            .ForMember(dst => dst.InfraScientificDescription, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_ScientificDescription)))
+            // ESFRI code
+            .ForMember(dst => dst.EsfriCode, opt => opt.MapFrom(src => src.DimReferencedata))
+            // Researchfi landing page (hardcoded)
+            .ForMember(dst => dst.ResearchFiLandingPage, opt => opt.MapFrom(src => "TODO"))
+            // Keywords
+            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.FactInfraKeywords
+                .Select(k => k.DimKeyword)))
+            // Web link - Homepage
+            .ForMember(dst => dst.InfraHomepage, opt => opt.MapFrom(src => src.DimWebLinks
+                .Where(wl => wl.LinkType == WebLinkType_Homepage)))
+            // Web link - Terms of use
+            .ForMember(dst => dst.InfraTermsOfUse, opt => opt.MapFrom(src => src.DimWebLinks
+                .Where(wl => wl.LinkType == WebLinkType_TermsOfUse)));
+
+        CreateProjection<DimReferencedatum, ReferenceData>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
+
+        CreateProjection<DimDescriptiveItem, DescriptiveItemStruct>()
+            .ForMember(dst => dst.DescriptiveItem, opt => opt.MapFrom(src => src.DescriptiveItem))
+            .ForMember(dst => dst.DescriptiveItemLanguage, opt => opt.MapFrom(src => src.DescriptiveItemLanguage))
+            .ForMember(dst => dst.DescriptiveItemTypeName, opt => opt.MapFrom(src => src.DescriptiveItemType));
+
+        CreateProjection<DimKeyword, Keywords>()
+            .ForMember(dst => dst.DimKeywordLanguage, opt => opt.MapFrom(src => src.Language))
+            .ForMember(dst => dst.Keyword, opt => opt.MapFrom(src => src.Keyword));
+
+        CreateProjection<DimWebLink, Weblink>()
+            .ForMember(dst => dst.LanguageVariant, opt => opt.MapFrom(src => src.LanguageVariant))
+            .ForMember(dst => dst.LinkLabel, opt => opt.MapFrom(src => src.LinkLabel))
+            .ForMember(dst => dst.WebLinkUrl, opt => opt.MapFrom(src => src.Url));
     }
 }

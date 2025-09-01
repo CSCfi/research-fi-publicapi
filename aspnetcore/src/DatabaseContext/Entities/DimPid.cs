@@ -51,8 +51,6 @@ public partial class DimPid
 
     public virtual DimEvent DimEvent { get; set; } = null!;
 
-    public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
-
     public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
 
     public virtual DimOrganization DimOrganization { get; set; } = null!;

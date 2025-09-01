@@ -3,386 +3,501 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Represents a coordinate containing various infrastructure-related details.
+    /// Represents a coordinate with various descriptive and relational properties.
     /// </summary>
     public partial class Coordinate
     {
         /// <summary>
-        /// Gets or sets the contact information.
+        /// Description of the coordinate.
+        /// </summary>
+        public DescriptiveItemDescription? ClDescription { get; set; }
+
+        /// <summary>
+        /// Name of the coordinate.
+        /// </summary>
+        public DescriptiveItemName? ClName { get; set; }
+
+        /// <summary>
+        /// Service identifier for the coordinate.
+        /// </summary>
+        public ServiceOtherIdentifier? ClPidTypesService { get; set; }
+
+        /// <summary>
+        /// Scientific description of the coordinate.
+        /// </summary>
+        public DescriptiveItemScientificDesription? ClScientificDescription { get; set; }
+
+        /// <summary>
+        /// Contact information for the coordinate.
         /// </summary>
         public ContactInformation? DimContactInformation { get; set; }
 
         /// <summary>
-        /// Gets or sets the descriptive item details.
+        /// Infrastructure details.
         /// </summary>
-        public Descriptions? DimDescriptiveItem { get; set; }
+        public Infrastructure? DimInfrastructure { get; set; }
 
         /// <summary>
-        /// Gets or sets the research infrastructure details.
-        /// </summary>
-        public Infrastructure? Infrastructure { get; set; }
-
-        /// <summary>
-        /// Gets or sets the keyword details.
+        /// Keywords associated with the coordinate.
         /// </summary>
         public Keywords? DimKeyword { get; set; }
 
         /// <summary>
-        /// Gets or sets the service details of the infrastructure.
+        /// Service details for the coordinate.
         /// </summary>
         public ResearchInfrastructureService? DimService { get; set; }
 
         /// <summary>
-        /// Gets or sets the web link details.
+        /// Web link details.
         /// </summary>
         public Weblink? DimWebLink { get; set; }
 
         /// <summary>
-        /// Gets or sets the organization information.
+        /// Organization information.
         /// </summary>
         public OrganizationInformation? OrganizationInformation { get; set; }
 
         /// <summary>
-        /// Gets or sets the relationship to other infrastructures.
+        /// Infrastructure identifiers.
+        /// </summary>
+        public InfrastructureIdentifiers? PidTypesInfra { get; set; }
+
+        /// <summary>
+        /// Relationship to other infrastructures.
         /// </summary>
         public InfrastructureRelations? RelationshipToInfrastructure { get; set; }
     }
 
     /// <summary>
-    /// Represents contact information.
+    /// Represents a descriptive item description with language and type information.
+    /// </summary>
+    /// <summary>fi / en / sv</summary>
+    public partial class DescriptiveItemDescription
+    {
+        /// <summary>
+        /// Descriptive item content.
+        /// </summary>
+        public string? DescriptiveItem { get; set; }
+
+        /// <summary>
+        /// Language code for the descriptive item.
+        /// </summary>
+        public string? DescriptiveItemLanguage { get; set; }
+
+        /// <summary>
+        /// Type description of the descriptive item.
+        /// </summary>
+        public DescriptiveItemTypeDescription? DescriptiveItemTypeDescription { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a descriptive item name with language and type information.
+    /// </summary>
+    /// <summary>fi / en / sv</summary>
+    public partial class DescriptiveItemName
+    {
+        /// <summary>
+        /// Name of the descriptive item.
+        /// </summary>
+        public string? DescriptiveItem { get; set; }
+
+        /// <summary>
+        /// Language code for the descriptive item name.
+        /// </summary>
+        public string? DescriptiveItemLanguage { get; set; }
+
+        /// <summary>
+        /// Type name of the descriptive item.
+        /// </summary>
+        public string? DescriptiveItemTypeName { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a service identifier with content and type.
+    /// </summary>
+    public partial class ServiceOtherIdentifier
+    {
+        /// <summary>
+        /// Content of the service identifier.
+        /// </summary>
+        public string? PidContentService { get; set; }
+
+        /// <summary>
+        /// Type of the service identifier.
+        /// </summary>
+        public EIdentifierType? PidTypeService { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a scientific description with language and type information.
+    /// </summary>
+    /// <summary>fi / en / sv</summary>
+    public partial class DescriptiveItemScientificDesription
+    {
+        /// <summary>
+        /// Scientific description content.
+        /// </summary>
+        public string? DescriptiveItem { get; set; }
+
+        /// <summary>
+        /// Language code for the scientific description.
+        /// </summary>
+        public string? DescriptiveItemLanguage { get; set; }
+
+        /// <summary>
+        /// Type of the scientific description.
+        /// </summary>
+        public DescriptiveItemTypeScientificDescription? DescriptiveItemTypeScientificDesription { get; set; }
+    }
+
+    /// <summary>
+    /// Represents contact information with content, type, and name.
     /// </summary>
     public partial class ContactInformation
     {
         /// <summary>
-        /// Gets or sets the content of the contact information.
+        /// Content of the contact information.
         /// </summary>
         public string? ContactInformationContent { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the contact information.
+        /// Type of the contact information.
         /// </summary>
         public ContactInformationType? ContactInformationType { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the contact person.
+        /// Name of the contact person.
         /// </summary>
         public string? ContactName { get; set; }
     }
 
     /// <summary>
-    /// Represents descriptive items.
-    /// </summary>
-    public partial class Descriptions
-    {
-        /// <summary>
-        /// Gets or sets the list of descriptive items.
-        /// </summary>
-        public List<string>? DescriptiveItem { get; set; }
-
-        /// <summary>
-        /// Gets or sets the list of language codes for the descriptive items.
-        /// </summary>
-        public List<DescriptiveItemLanguageCode>? DescriptiveItemLanguage { get; set; }
-    }
-
-    /// <summary>
-    /// Research infrastructure details.
+    /// Represents a research infrastructure with various descriptive and relational properties.
     /// </summary>
     public partial class Infrastructure
     {
         /// <summary>
-        /// Abbreviation.
+        /// Acronym of the research infrastructure.
         /// </summary>
         public string? Acronym { get; set; }
 
         /// <summary>
-        /// Infrastructure contact information.
+        /// Contact information for the infrastructure.
         /// </summary>
         public List<ContactInformation>? DimInfrastructureId1 { get; set; }
 
         /// <summary>
-        /// ESFRI classification.
+        /// ESFRI code of the infrastructure.
         /// </summary>
         public List<string>? EsfriCode { get; set; }
 
         /// <summary>
-        /// Field of science.
+        /// Fields of science related to the infrastructure.
         /// </summary>
         public List<string>? FieldOfScience { get; set; }
 
         /// <summary>
-        /// On the Academy of Finland roadmap.
+        /// Indicates if the infrastructure is part of Finland's roadmap.
         /// </summary>
         public bool? FinlandRoadmap { get; set; }
 
         /// <summary>
-        /// Infrastructure description.
+        /// Descriptions of the infrastructure.
         /// </summary>
-        public Descriptions? InfraDescription { get; set; }
+        public List<DescriptiveItemDescription>? InfraDescription { get; set; }
 
         /// <summary>
-        /// Infrastructure weblink.
+        /// Homepage links for the infrastructure.
         /// </summary>
         public List<Weblink>? InfraHomepage { get; set; }
 
         /// <summary>
-        /// Infrastructure name.
+        /// Names of the infrastructure.
         /// </summary>
-        public Descriptions? InfraName { get; set; }
+        public List<DescriptiveItemName>? InfraName { get; set; }
 
         /// <summary>
-        /// Infrastructure scientific description.
+        /// Scientific descriptions of the infrastructure.
         /// </summary>
-        public Descriptions? InfraScientificDescription { get; set; }
+        public List<DescriptiveItemScientificDesription>? InfraScientificDescription { get; set; }
 
         /// <summary>
-        /// Infrastructure local identifier.
-        /// </summary>
-        public string? InfrastructureLocalIdentifier { get; set; }
-
-        /// <summary>
-        /// Infrastructure PID [URN].
+        /// URN of the infrastructure.
         /// </summary>
         public string? InfrastructureUrn { get; set; }
 
         /// <summary>
-        /// Service belonging to infrastructure.
+        /// Services provided by the infrastructure.
         /// </summary>
         public ResearchInfrastructureService? InfrastructuresService { get; set; }
 
         /// <summary>
-        /// Infrastructure terms of use.
+        /// Terms of use for the infrastructure.
         /// </summary>
         public List<Weblink>? InfraTermsOfUse { get; set; }
 
         /// <summary>
-        /// Keywords.
+        /// Keywords associated with the infrastructure.
         /// </summary>
         public List<Keywords>? Keywords { get; set; }
 
         /// <summary>
-        /// Organization related to infrastructure.
+        /// Organizations related to the infrastructure.
         /// </summary>
         public List<OrganizationInformation>? OrganizationRelatedToInfra { get; set; }
 
         /// <summary>
-        /// Related infrastructure.
+        /// Other identifiers for the infrastructure.
+        /// </summary>
+        public List<InfrastructureIdentifiers>? OtherIdentifierInfra { get; set; }
+
+        /// <summary>
+        /// Related infrastructures.
         /// </summary>
         public List<InfrastructureRelations>? RelatedInfrastructure { get; set; }
 
         /// <summary>
-        /// Infrastruktuurin laskeutumissivu Tiede ja Tutkimus.fi -portaalissa.
+        /// Landing page for the infrastructure on Research.fi.
         /// </summary>
         public string? ResearchFiLandingPage { get; set; }
 
         /// <summary>
-        /// Organization responsible for infrastructure.
+        /// Responsible organization for the infrastructure.
         /// </summary>
         public OrganizationInformation? ResponsibleOrganization { get; set; }
 
         /// <summary>
-        /// Starting year.
+        /// Starting year of the infrastructure.
         /// </summary>
         public double? StartingYear { get; set; }
     }
 
     /// <summary>
-    /// Represents a web link.
+    /// Represents a web link with language variant, label, and URL.
     /// </summary>
     public partial class Weblink
     {
         /// <summary>
-        /// Link language variant.
+        /// Language variant of the web link.
         /// </summary>
         public string? LanguageVariant { get; set; }
 
         /// <summary>
-        /// Link label.
+        /// Label for the web link.
         /// </summary>
         public string? LinkLabel { get; set; }
 
         /// <summary>
-        /// Link (url).
+        /// URL of the web link.
         /// </summary>
         public string? WebLinkUrl { get; set; }
     }
 
     /// <summary>
-    /// Research infrastructure service.
+    /// Represents a research infrastructure service with various descriptive and relational properties.
     /// </summary>
     public partial class ResearchInfrastructureService
     {
         /// <summary>
-        /// Service contact information.
+        /// Contact information for the service.
         /// </summary>
         public List<ContactInformation>? DimServiceId1 { get; set; }
 
         /// <summary>
-        /// Service PID [URN].
+        /// Other identifiers for the service.
         /// </summary>
-        public string? ServiceUrn { get; set; }
+        public List<ServiceOtherIdentifier>? OtherIdentifierService { get; set; }
 
         /// <summary>
-        /// Service description.
-        /// </summary>
-        public Descriptions? ServiceDescription { get; set; }
-
-        /// <summary>
-        /// Service name.
-        /// </summary>
-        public Descriptions? ServiceName { get; set; }
-
-        /// <summary>
-        /// Service website.
+        /// Websites for the service.
         /// </summary>
         public List<Weblink>? ServiceWebsite { get; set; }
     }
 
     /// <summary>
-    /// Keywords.
+    /// Represents keywords with language and content.
     /// </summary>
     public partial class Keywords
     {
         /// <summary>
-        /// Keyword language.
+        /// Language of the keyword.
         /// </summary>
         public string? DimKeywordLanguage { get; set; }
 
         /// <summary>
-        /// Keyword content.
+        /// Content of the keyword.
         /// </summary>
         public string? Keyword { get; set; }
     }
 
     /// <summary>
-    /// Organization information.
+    /// Represents organization information with identifier and PID type.
     /// </summary>
     public partial class OrganizationInformation
     {
         /// <summary>
-        /// Organization identifier.
+        /// Identifier for the organization.
         /// </summary>
         public string? OrganizationIdentifier { get; set; }
 
         /// <summary>
-        /// Organization PID type.
+        /// PID type for the organization.
         /// </summary>
         public OrganizationPidType? OrganizationPidType { get; set; }
     }
 
     /// <summary>
-    /// Infrastructure relations.
+    /// Represents infrastructure identifiers with content and type.
+    /// </summary>
+    public partial class InfrastructureIdentifiers
+    {
+        /// <summary>
+        /// Content of the infrastructure identifier.
+        /// </summary>
+        public string? PidContentInfra { get; set; }
+        /// <summary>Organisaation paikallinen tunniste infrastruktuurille</summary>
+        public EIdentifierType PidTypeInfra { get; set; }
+    }
+
+    /// <summary>
+    /// Represents relationships between infrastructures with various descriptive properties.
     /// </summary>
     public partial class InfrastructureRelations
     {
         /// <summary>
-        /// Unidentified international infra name.
+        /// Name of the related international infrastructure.
         /// </summary>
         public string? InternationalInfraName { get; set; }
 
         /// <summary>
-        /// Unidentified international infra weblink.
+        /// Web link to the related international infrastructure.
         /// </summary>
         public string? InternationalInfraWeblink { get; set; }
 
         /// <summary>
-        /// Related infra PID [URN].
+        /// Other identifiers for the related infrastructure.
+        /// </summary>
+        public List<InfrastructureIdentifiers>? OtherIdentifierRelatedInfra { get; set; }
+
+        /// <summary>
+        /// PID of the related infrastructure.
         /// </summary>
         public string? RelatedInfraPid { get; set; }
 
         /// <summary>
-        /// Related infrastructure local identifier.
-        /// </summary>
-        public string? RelatedInfrastructureLocalIdentifier { get; set; }
-
-        /// <summary>
-        /// Relation end date.
+        /// End date of the relationship.
         /// </summary>
         public string? RelationEndDate { get; set; }
 
         /// <summary>
-        /// Relation type code.
+        /// Type code of the relationship.
         /// </summary>
         public string? RelationTypeCode { get; set; }
 
         /// <summary>
-        /// Relationship start date.
+        /// Start date of the relationship.
         /// </summary>
         public string? RelationshipStartDate { get; set; }
 
         /// <summary>
-        /// Valid relationship.
+        /// Validity of the relationship.
         /// </summary>
         public ValidRelationship? ValidRelation { get; set; }
     }
 
     /// <summary>
-    /// Represents the type of contact information.
+    /// Types of descriptive item descriptions.
+    /// </summary>
+    public enum DescriptiveItemTypeDescription
+    {
+        /// <summary>
+        /// General description.
+        /// </summary>
+        Description
+    };
+
+    /// <summary>
+    /// Types of descriptive item names.
+    /// </summary>
+    public enum DescriptiveItemTypeName
+    {
+        /// <summary>
+        /// General name.
+        /// </summary>
+        Name
+    };
+
+    /// <summary>
+    /// Types of infrastructure identifiers.
+    /// </summary>
+    public enum EIdentifierType
+    {
+        /// <summary>
+        /// Local identifier.
+        /// </summary>
+        LocalIdentifier
+    };
+
+    /// <summary>
+    /// Types of scientific descriptions.
+    /// </summary>
+    public enum DescriptiveItemTypeScientificDescription
+    {
+        /// <summary>
+        /// Scientific description.
+        /// </summary>
+        ScientificDescription
+    };
+
+    /// <summary>
+    /// Types of contact information.
     /// </summary>
     public enum ContactInformationType
     {
         /// <summary>
-        /// Email contact information.
+        /// Email contact type.
         /// </summary>
         Email,
 
         /// <summary>
-        /// Phone number contact information.
+        /// Phone number contact type.
         /// </summary>
         PhoneNumber,
 
         /// <summary>
-        /// Postal address contact information.
+        /// Postal address contact type.
         /// </summary>
         PostalAddress,
 
         /// <summary>
-        /// Visiting address contact information.
+        /// Visiting address contact type.
         /// </summary>
         VisitingAddress
     };
 
     /// <summary>
-    /// Represents the language codes for descriptive items.
-    /// </summary>
-    public enum DescriptiveItemLanguageCode { 
-        /// <summary>
-        /// English language code.
-        /// </summary>
-        En, 
-        /// <summary>
-        /// Finnish language code.
-        /// </summary>
-        Fi, 
-        /// <summary>
-        /// Swedish language code.
-        /// </summary>
-        Sv 
-    };
-
-    /// <summary>
-    /// Represents the PID type of an organization.
+    /// Types of organization PID.
     /// </summary>
     public enum OrganizationPidType
     {
         /// <summary>
-        /// Business ID.
+        /// Business ID type.
         /// </summary>
         BusinessId
     };
 
     /// <summary>
-    /// Represents the validity of a relationship.
+    /// Validity of relationships.
     /// </summary>
     public enum ValidRelationship
     {
         /// <summary>
-        /// The relationship is valid.
+        /// Valid relationship type 0.
         /// </summary>
         The0,
 
         /// <summary>
-        /// The relationship is invalid.
+        /// Valid relationship type 1.
         /// </summary>
         The1
     };

@@ -117,6 +117,8 @@ public partial class DimReferencedatum
 
     public virtual ICollection<DimCallProgramme> DimCallProgrammes { get; set; } = new List<DimCallProgramme>();
 
+    public virtual ICollection<DimInfrastructure> DimInfrastructures { get; set; } = new List<DimInfrastructure>();
+
     public virtual ICollection<DimPublication> DimPublications { get; set; } = new List<DimPublication>();
 
     public virtual ICollection<DimPublication> DimPublicationsNavigation { get; set; } = new List<DimPublication>();
