@@ -3447,6 +3447,11 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.SourceId)
                 .HasMaxLength(255)
                 .HasColumnName("source_id");
+
+            entity.HasOne(d => d.DimInfrastructure).WithMany(p => p.DimServices)
+                .HasForeignKey(d => d.DimInfrastructureId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("service_infra");
         });
 
         modelBuilder.Entity<DimServiceOld>(entity =>

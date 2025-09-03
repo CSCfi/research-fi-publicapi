@@ -3,6 +3,8 @@
 
 public class Infrastructure
 {
+    public long ExportSortId { get; set; }
+
     /// <summary>
     /// Abbreviation.
     /// </summary>
@@ -16,7 +18,7 @@ public class Infrastructure
     /// <summary>
     /// On the Academy of Finland roadmap.
     /// </summary>
-    public bool? OnTheAcademyOfFinlandRoadmap { get; set; }
+    public bool? FinlandRoadmap { get; set; }
 
     /// <summary>
     /// Names of the infrastructure.
@@ -57,14 +59,24 @@ public class Infrastructure
     /// Terms of use for the infrastructure.
     /// </summary>
     public List<Weblink>? InfraTermsOfUse { get; set; }
+
+    /// <summary>
+    /// Service belonging to infrastructure
+    /// </summary>
+    public List<ResearchInfrastructureService>? InfrastructuresService { get; set; }
+
+    /// <summary>
+    /// Contact information
+    /// </summary>
+    public List<ContactInformation>? DimInfrastructureId1 { get; set; }
 }
 
 /// <summary>fi / en / sv</summary>
 public partial class DescriptiveItemStruct
 {
-    public string DescriptiveItem { get; set; }
-    public string DescriptiveItemLanguage { get; set; }
-    public string DescriptiveItemTypeName { get; set; }
+    public string? DescriptiveItem { get; set; }
+    public string? DescriptiveItemLanguage { get; set; }
+    public string? DescriptiveItemTypeName { get; set; }
 }
 
 /// <summary>
@@ -103,3 +115,49 @@ public partial class Weblink
     /// </summary>
     public string? WebLinkUrl { get; set; }
 }
+
+/// <summary></summary>
+public partial class ResearchInfrastructureService
+{
+    /// <summary></summary>
+    public List<ContactInformation>? DimServiceId1 { get; set; }
+    /// <summary></summary>
+    public List<ServiceOtherIdentifier>? OtherIdentifierService { get; set; }
+
+    /// <summary>service's URN, key identifier in Research.fi</summary>
+    public string? ServiceUrn { get; set; }
+
+    /// <summary>fi / en / sv</summary>
+    public List<DescriptiveItemStruct>? ServiceDescription { get; set; }
+
+    /// <summary>fi / en / sv</summary>
+    public List<DescriptiveItemStruct>? ServiceName { get; set; }
+    /// <summary></summary>
+    public List<Weblink>? ServiceWebsite { get; set; }
+}
+
+/// <summary></summary>
+public partial class ContactInformation
+{
+    /// <summary></summary>
+    public string? ContactInformationContent { get; set; }
+    /// <summary></summary>
+    public string? ContactInformationType { get; set; }
+    /// <summary></summary>
+    public string? ContactName { get; set; }
+}
+
+/// <summary></summary>
+public partial class ServiceOtherIdentifier
+{
+    /// <summary></summary>
+    public string? PidContentService { get; set; }
+    /// <summary></summary>
+    public EIdentifierType? PidTypeService { get; set; }
+}
+
+/// <summary>Organisaation paikallinen tunniste infrastruktuurille</summary>
+public enum EIdentifierType {
+    /// <summary></summary>
+    LocalIdentifier
+};
