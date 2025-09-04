@@ -6,6 +6,11 @@ public class Infrastructure
     public long ExportSortId { get; set; }
 
     /// <summary>
+    /// Infrastructure URN, key identifier in Research.fi
+    /// </summary>
+    public string? InfrastructureUrn { get; set; }
+
+    /// <summary>
     /// Abbreviation.
     /// </summary>
     public string? Abbreviation { get; set; }

@@ -51,6 +51,8 @@ public partial class DimPid
 
     public virtual DimEvent DimEvent { get; set; } = null!;
 
+    public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
+
     public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
 
     public virtual DimOrganization DimOrganization { get; set; } = null!;
@@ -72,6 +74,8 @@ public partial class DimPid
     public virtual DimResearchDataCatalog DimResearchDataCatalog { get; set; } = null!;
 
     public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
+
+    public virtual DimResearchProject? DimResearchProject { get; set; }
 
     public virtual DimService DimService { get; set; } = null!;
 

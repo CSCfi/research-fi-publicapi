@@ -27,6 +27,8 @@ public partial class DimInfrastructure
 
     public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();
 
+    public virtual ICollection<DimPid> DimPids { get; set; } = new List<DimPid>();
+
     public virtual ICollection<DimService> DimServices { get; set; } = new List<DimService>();
 
     public virtual ICollection<DimWebLink> DimWebLinks { get; set; } = new List<DimWebLink>();

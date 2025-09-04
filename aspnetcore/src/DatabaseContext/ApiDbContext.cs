@@ -2102,6 +2102,11 @@ public partial class ApiDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("event_identifier");
 
+            entity.HasOne(d => d.DimInfrastructure).WithMany(p => p.DimPids)
+                .HasForeignKey(d => d.DimInfrastructureId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("URN/infrastructure");
+
             entity.HasOne(d => d.DimKnownPerson).WithMany(p => p.DimPids)
                 .HasForeignKey(d => d.DimKnownPersonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -2153,6 +2158,10 @@ public partial class ApiDbContext : DbContext
                 .HasForeignKey(d => d.DimResearchDatasetId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("URN/DOI");
+
+            entity.HasOne(d => d.DimResearchProject).WithMany(p => p.DimPids)
+                .HasForeignKey(d => d.DimResearchProjectId)
+                .HasConstraintName("RAID");
 
             entity.HasOne(d => d.DimService).WithMany(p => p.DimPids)
                 .HasForeignKey(d => d.DimServiceId)

@@ -8,6 +8,7 @@ namespace CSC.PublicApi.Repositories.Maps;
 
 public class InfrastructureProfile : Profile
 {
+    private const string DimPid_PidType_Urn = "URN";
     private const string DescriptiveItemType_Name = "name";
     private const string DescriptiveItemType_Description = "description";
     private const string DescriptiveItemType_ScientificDescription = "scientific_description";
@@ -25,6 +26,9 @@ public class InfrastructureProfile : Profile
 
         CreateProjection<DimInfrastructure, Infrastructure>()
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
+            // URN
+            .ForMember(dst => dst.InfrastructureUrn, opt => opt.MapFrom(src => src.DimPids.Where(dp => dp.PidType == DimPid_PidType_Urn)
+                .Select(dp => dp.PidContent).FirstOrDefault()))
             // Acronym
             .ForMember(dst => dst.Abbreviation, opt => opt.MapFrom(src => src.Acronym))
             // Starting year
