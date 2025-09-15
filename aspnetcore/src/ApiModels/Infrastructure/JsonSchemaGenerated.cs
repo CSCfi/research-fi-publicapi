@@ -1,76 +1,36 @@
 namespace Generated
 {
-    using System.Collections.Generic;
-
     /// <summary></summary>
-    public partial class ResearchInfrastructure
+    public partial class InfrastructureGenerated
     {
         /// <summary></summary>
-        public DescriptiveItemDescription? ClDescription { get; set; }
+        public ContactInformation? ContactInformation { get; set; }
         /// <summary></summary>
-        public DescriptiveItemName? ClName { get; set; }
+        public ContentDescriptionText? DescriptiveText { get; set; }
         /// <summary></summary>
-        public ServiceOtherIdentifier? ClPidTypesService { get; set; }
+        public Identifier? Identifier { get; set; }
         /// <summary></summary>
-        public DescriptiveItemScientificDesription? ClScientificDescription { get; set; }
+        public InternationalNetworkInfra? InternationalInfra { get; set; }
         /// <summary></summary>
-        public ContactInformation? DimContactInformation { get; set; }
+        public DescriptiveTerm? Keyword { get; set; }
         /// <summary></summary>
-        public DimInfrastructureClass? DimInfrastructure { get; set; }
+        public OtherPersistentIdentifier? PidAttributes { get; set; }
         /// <summary></summary>
-        public Keywords? DimKeyword { get; set; }
-        /// <summary></summary>
-        public ResearchInfrastructureService? DimService { get; set; }
-        /// <summary></summary>
-        public Weblink? DimWebLink { get; set; }
-        /// <summary></summary>
-        public OrganizationInformation? OrganizationInformation { get; set; }
-        /// <summary></summary>
-        public InfrastructureIdentifiers? PidTypesInfra { get; set; }
-        /// <summary></summary>
-        public InfrastructureRelations? RelationshipToInfrastructure { get; set; }
-    }
+        public ReferenceData? ReferenceData { get; set; }
 
-    /// <summary></summary>
-    public partial class DescriptiveItemDescription
-    {
-        /// <summary></summary>
-        public string? DescriptiveItem { get; set; }
-        /// <summary></summary>
-        public DescriptiveItemLanguageCode DescriptiveItemLanguage { get; set; }
-        /// <summary></summary>
-        public DescriptiveItemTypeDescription DescriptiveItemTypeDescription { get; set; }
-    }
+        /// <summary>
+        /// one, and only one, of related infra is given
+        /// </summary>
+        public InfrastructureNetwork? Relation { get; set; }
 
-    /// <summary></summary>
-    public partial class DescriptiveItemName
-    {
         /// <summary></summary>
-        public string? DescriptiveItem { get; set; }
+        public ResearchInfrastructure? ResearchInfrastructure { get; set; }
         /// <summary></summary>
-        public DescriptiveItemLanguageCode? DescriptiveItemLanguage { get; set; }
+        public ResearchOrganization? ResearchOrganization { get; set; }
         /// <summary></summary>
-        public DescriptiveItemTypeName? DescriptiveItemTypeName { get; set; }
-    }
-
-    /// <summary></summary>
-    public partial class ServiceOtherIdentifier
-    {
+        public InfrastructureSService? Service { get; set; }
         /// <summary></summary>
-        public string? PidContentService { get; set; }
-        /// <summary></summary>
-        public EIdentifierType? PidTypeService { get; set; }
-    }
-
-    /// <summary></summary>
-    public partial class DescriptiveItemScientificDesription
-    {
-        /// <summary></summary>
-        public string? DescriptiveItem { get; set; }
-        /// <summary></summary>
-        public DescriptiveItemLanguageCode? DescriptiveItemLanguage { get; set; }
-        /// <summary></summary>
-        public DescriptiveItemTypeScientificDescription? DescriptiveItemTypeScientificDesription { get; set; }
+        public Weblink? Weblink { get; set; }
     }
 
     /// <summary></summary>
@@ -79,181 +39,183 @@ namespace Generated
         /// <summary></summary>
         public string? ContactInformationContent { get; set; }
         /// <summary></summary>
-        public ContactInformationType? ContactInformationType { get; set; }
+        public string? ContactInformationLabel { get; set; }
         /// <summary></summary>
-        public string? ContactName { get; set; }
+        public ContactInformationType? ContactInformationType { get; set; }
     }
 
     /// <summary></summary>
-    public partial class DimInfrastructureClass
+    public partial class ContentDescriptionText
+    {
+        /// <summary></summary>
+        public string? Desciptive { get; set; }
+        /// <summary></summary>
+        public LanguageCode? LanguageCodeVariant { get; set; }
+    }
+
+    /// <summary></summary>
+    public partial class Identifier
+    {
+        /// <summary></summary>
+        public Dictionary<string, object>? InfraLocalIdentifier { get; set; }
+        /// <summary></summary>
+        public List<OtherPersistentIdentifier>? OtherPid { get; set; }
+        /// <summary></summary>
+        public string? PersistentIdentifierUrn { get; set; }
+    }
+
+    /// <summary></summary>
+    public partial class OtherPersistentIdentifier
+    {
+        /// <summary></summary>
+        public string? Pid { get; set; }
+        /// <summary></summary>
+        public string? PidType { get; set; }
+    }
+
+    /// <summary></summary>
+    public partial class InternationalNetworkInfra
+    {
+        /// <summary></summary>
+        public string? InternationalInfraIdentifier { get; set; }
+        /// <summary></summary>
+        public string? InternationalInfraName { get; set; }
+        /// <summary></summary>
+        public string? InternationalInfraWeblink { get; set; }
+    }
+
+    /// <summary></summary>
+    public partial class DescriptiveTerm
+    {
+        /// <summary></summary>
+        public string? DescriptiveTermDescriptiveTerm { get; set; }
+        /// <summary></summary>
+        public string? LanguageCodeKeyword { get; set; }
+    }
+
+    /// <summary>
+    /// http://uri.suomi.fi/codelist/research/ESFRI-Domain
+    ///
+    /// http://uri.suomi.fi/codelist/research/Tieteenala2010
+    /// </summary>
+    public partial class ReferenceData
+    {
+        /// <summary></summary>
+        public string? CodeDescriptionEn { get; set; }
+        /// <summary></summary>
+        public string? CodeDescriptionFi { get; set; }
+        /// <summary></summary>
+        public string? CodeDescriptionSv { get; set; }
+        /// <summary></summary>
+        public string? CodeValue { get; set; }
+    }
+
+    /// <summary>
+    /// one, and only one, of related infra is given
+    /// </summary>
+    public partial class InfrastructureNetwork
+    {
+        /// <summary></summary>
+        public string? RelationEndDate { get; set; }
+        /// <summary></summary>
+        public string? RelationStartDate { get; set; }
+        /// <summary></summary>
+        public Identifier? RelationToInfra { get; set; }
+        /// <summary></summary>
+        public InternationalNetworkInfra? RelationToInternationalInfra { get; set; }
+        /// <summary></summary>
+        public string? RelationType { get; set; }
+        /// <summary></summary>
+        public bool? RelationValid { get; set; }
+    }
+
+    /// <summary></summary>
+    public partial class ResearchInfrastructure
     {
         /// <summary></summary>
         public string? Acronym { get; set; }
         /// <summary></summary>
-        public List<ContactInformation>? DimInfrastructureId1 { get; set; }
-        /// <summary></summary>
-        public List<string>? EsfriCode { get; set; }
-        /// <summary></summary>
-        public List<string>? FieldOfScience { get; set; }
-        /// <summary></summary>
-        public bool FinlandRoadmap { get; set; }
+        public List<ResearchOrganization>? ContributionOrganization { get; set; }
+
+        /// <summary>
+        /// http://uri.suomi.fi/codelist/research/ESFRI-Domain
+        /// </summary>
+        public List<ReferenceData>? Esfri { get; set; }
+
+        /// <summary>
+        /// http://uri.suomi.fi/codelist/research/Tieteenala2010
+        /// </summary>
+        public List<ReferenceData>? FieldOfScience { get; set; }
 
         /// <summary></summary>
-        public List<DescriptiveItemDescription>? InfraDescription { get; set; }
-
+        public bool? FinlandRoadmapInfrastructure { get; set; }
+        /// <summary></summary>
+        public List<ContactInformation>? InfraContactInformation { get; set; }
+        /// <summary></summary>
+        public List<ContentDescriptionText>? InfraDescription { get; set; }
         /// <summary></summary>
         public List<Weblink>? InfraHomepage { get; set; }
+        /// <summary></summary>
+        public Identifier? InfraIdentifier { get; set; }
+        /// <summary></summary>
+        public List<DescriptiveTerm>? InfraKeyword { get; set; }
+        /// <summary></summary>
+        public Dictionary<string, object>? InfraLocalIdentifier { get; set; }
+        /// <summary></summary>
+        public List<ContentDescriptionText>? InfraName { get; set; }
+        /// <summary></summary>
+        public List<ContentDescriptionText>? InfraScientificDescription { get; set; }
+        /// <summary></summary>
+        public List<InfrastructureSService>? IsComposedOf { get; set; }
+        /// <summary></summary>
+        public List<InfrastructureNetwork>? RelationFrom { get; set; }
+        /// <summary></summary>
+        public ResearchOrganization? ResponsibleOrganization { get; set; }
+        /// <summary></summary>
+        public List<Dictionary<string, object>>? StartingYear { get; set; }
+        /// <summary></summary>
+        public Weblink? TermsOfUse { get; set; }
+    }
 
+    /// <summary></summary>
+    public partial class ResearchOrganization
+    {
         /// <summary></summary>
-        public List<DescriptiveItemName>? InfraName { get; set; }
-
-        /// <summary></summary>
-        public List<DescriptiveItemScientificDesription>? InfraScientificDescription { get; set; }
-
-        /// <summary>Infrastructure URN, key identifier in Research.fi</summary>
-        public string? InfrastructureUrn { get; set; }
-
-        /// <summary></summary>
-        public List<ResearchInfrastructureService>? InfrastructuresService { get; set; }
-        /// <summary></summary>
-        public List<Weblink>? InfraTermsOfUse { get; set; }
-        /// <summary></summary>
-        public List<Keywords>? Keywords { get; set; }
-        /// <summary></summary>
-        public List<OrganizationInformation>? OrganizationRelatedToInfra { get; set; }
-        /// <summary></summary>
-        public List<InfrastructureIdentifiers>? OtherIdentifierInfra { get; set; }
-        /// <summary></summary>
-        public List<InfrastructureRelations>? RelatedInfrastructure { get; set; }
-
-        /// <summary>https://tiedejatutkimus.fi/en/results/infrastructure/ + Infrastructure key identifier; [URN]</summary>
-        public string? ResearchFiLandingPage { get; set; }
-        /// <summary></summary>
-        public OrganizationInformation? ResponsibleOrganization { get; set; }
-        /// <summary></summary>
-        public double StartingYear { get; set; }
+        public string? OrganizationIdentifier { get; set; }
     }
 
     /// <summary></summary>
     public partial class Weblink
     {
         /// <summary></summary>
-        public string? LanguageVariant { get; set; }
+        public string? LanguageCodeWeblink { get; set; }
         /// <summary></summary>
-        public string? LinkLabel { get; set; }
+        public string? Url { get; set; }
         /// <summary></summary>
-        public string? WebLinkUrl { get; set; }
+        public string? WeblinkLabel { get; set; }
     }
 
     /// <summary></summary>
-    public partial class ResearchInfrastructureService
+    public partial class InfrastructureSService
     {
         /// <summary></summary>
-        public List<ContactInformation>? DimServiceId1 { get; set; }
+        public List<ContactInformation>? ServiceContactInformation { get; set; }
         /// <summary></summary>
-        public List<ServiceOtherIdentifier>? OtherIdentifierService { get; set; }
-
-        /// <summary>service's URN, key identifier in Research.fi</summary>
-        public string? ServiceUrn { get; set; }
-
-        /// <summary>fi / en / sv</summary>
-        public List<DescriptiveItemDescription>? ServiceDescription { get; set; }
-
-        /// <summary>fi / en / sv</summary>
-        public List<DescriptiveItemName>? ServiceName { get; set; }
+        public List<ContentDescriptionText>? ServiceDescription { get; set; }
         /// <summary></summary>
-        public List<Weblink>? ServiceWebsite { get; set; }
+        public List<Weblink>? ServiceHomepage { get; set; }
+        /// <summary></summary>
+        public Identifier? ServiceIdentifier { get; set; }
+        /// <summary></summary>
+        public List<ContentDescriptionText>? ServiceName { get; set; }
     }
-
-    /// <summary></summary>
-    public partial class Keywords
-    {
-        /// <summary></summary>
-        public string? DimKeywordLanguage { get; set; }
-        /// <summary></summary>
-        public string? Keyword { get; set; }
-    }
-
-    /// <summary></summary>
-    public partial class OrganizationInformation
-    {
-        /// <summary></summary>
-        public string? OrganizationIdentifier { get; set; }
-        /// <summary></summary>
-        public OrganizationPidType OrganizationPidType { get; set; }
-    }
-
-    /// <summary></summary>
-    public partial class InfrastructureIdentifiers
-    {
-        /// <summary></summary>
-        public string? PidContentInfra { get; set; }
-
-        /// <summary>Organisaation paikallinen tunniste infrastruktuurille</summary>
-        public EIdentifierType PidTypeInfra { get; set; }
-    }
-
-    /// <summary></summary>
-    public partial class InfrastructureRelations
-    {
-        /// <summary></summary>
-        public string? InternationalInfraName { get; set; }
-        /// <summary></summary>
-        public string? InternationalInfraWeblink { get; set; }
-        /// <summary></summary>
-        public List<InfrastructureIdentifiers>? OtherIdentifierRelatedInfra { get; set; }
-        /// <summary></summary>
-        public string? RelatedInfraPid { get; set; }
-        /// <summary></summary>
-        public string? RelationEndDate { get; set; }
-        /// <summary></summary>
-        public string? RelationTypeCode { get; set; }
-        /// <summary></summary>
-        public string? RelationshipStartDate { get; set; }
-        /// <summary></summary>
-        public ValidRelationship ValidRelation { get; set; }
-    }
-
-    /// <summary></summary>
-    public enum DescriptiveItemLanguageCode {
-        /// <summary></summary>
-        En,
-        /// <summary></summary>
-        Fi,
-        /// <summary></summary>
-        Sv
-    };
-
-    /// <summary></summary>
-    public enum DescriptiveItemTypeDescription {
-        /// <summary></summary>
-        Description
-    };
-
-    /// <summary></summary>
-    public enum DescriptiveItemTypeName {
-        /// <summary></summary>
-        Name
-    };
-
-    /// <summary>Organisaation paikallinen tunniste infrastruktuurille</summary>
-    public enum EIdentifierType {
-        /// <summary></summary>
-        LocalIdentifier
-    };
-
-    /// <summary></summary>
-    public enum DescriptiveItemTypeScientificDescription {
-        /// <summary></summary>
-        ScientificDescription
-    };
 
     /// <summary></summary>
     public enum ContactInformationType {
         /// <summary></summary>
         Email,
         /// <summary></summary>
-        PhoneNumber,
+        Phone,
         /// <summary></summary>
         PostalAddress,
         /// <summary></summary>
@@ -261,16 +223,12 @@ namespace Generated
     };
 
     /// <summary></summary>
-    public enum OrganizationPidType {
+    public enum LanguageCode {
         /// <summary></summary>
-        BusinessId
-    };
-
-    /// <summary></summary>
-    public enum ValidRelationship {
+        En,
         /// <summary></summary>
-        The0,
+        Fi,
         /// <summary></summary>
-        The1
+        Sv
     };
 }
