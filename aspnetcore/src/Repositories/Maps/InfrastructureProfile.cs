@@ -3,6 +3,7 @@ using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Service.Models.Infrastructure;
 using Infrastructure = CSC.PublicApi.Service.Models.Infrastructure.Infrastructure;
+using System.Collections.Immutable;
 
 namespace CSC.PublicApi.Repositories.Maps;
 
@@ -18,6 +19,7 @@ public class InfrastructureProfile : Profile
     private const string ContactInformationType_PhoneNumber = "phone_number";
     private const string ContactInformationType_PostalAddress = "postal_address";
     private const string ContactInformationType_VisitingAddress = "visiting_address";
+    private const string DimReferencedata_CodeScheme_FieldOfScience = "Tieteenala2010";
 
     public InfrastructureProfile()
     {
@@ -27,7 +29,7 @@ public class InfrastructureProfile : Profile
         CreateProjection<DimInfrastructure, Infrastructure>()
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             // URN
-            .ForMember(dst => dst.Identifier, opt => opt.MapFrom(src =>
+            .ForMember(dst => dst.InfraIdentifier, opt => opt.MapFrom(src =>
                 src.DimPids.FirstOrDefault() == null ? null : new Identifier
                 {
                     PersistentIdentifierUrn = src.DimPids.Where(dp => dp.PidType == DimPid_PidType_Urn).Select(dp => dp.PidContent).FirstOrDefault(),
@@ -36,13 +38,13 @@ public class InfrastructureProfile : Profile
                         Pid = dp.PidContent,
                         PidType = dp.PidType
                     }).ToList()
-                    // TODO        InfraLocalIdentifier = src.DimPids.FirstOrDefault().LocalIdentifier
+                    // TODO: InfraLocalIdentifier
                 }))
             // Acronym
             .ForMember(dst => dst.Acronym, opt => opt.MapFrom(src => src.Acronym))
             // Starting year
             .ForMember(dst => dst.StartingYear, opt => opt.MapFrom(src => src.StartingYear))
-            // End year - TODO when new field is added in database
+            // TODO: End year to be added when field is available in the DB
             // On the academy of Finland road map
             .ForMember(dst => dst.FinlandRoadmapInfrastructure, opt => opt.MapFrom(src => src.FinlandRoadmap))
             // Name
@@ -70,7 +72,11 @@ public class InfrastructureProfile : Profile
             // Service
             .ForMember(dst => dst.Service, opt => opt.MapFrom(src => src.DimServices.FirstOrDefault()))
             // Contact information
-            .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations));
+            .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
+            // Infrastructure network
+            // TODO: .ForMember(dst => dst.Relation, opt => opt.MapFrom(src => src.fact))
+            // Field of science
+            .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.ToList().Select(f => f.DimReferencedata)));
 
         CreateProjection<DimReferencedatum, CSC.PublicApi.Service.Models.Infrastructure.ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

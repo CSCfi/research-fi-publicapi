@@ -14,7 +14,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary></summary>
         public ContentDescriptionText? DescriptiveText { get; set; }
         /// <summary></summary>
-        public Identifier? Identifier { get; set; }
+        public Identifier? InfraIdentifier { get; set; }
         /// <summary></summary>
         public InternationalNetworkInfra? InternationalInfra { get; set; }
         /// <summary></summary>
@@ -24,10 +24,8 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary></summary>
         public ReferenceData? ReferenceData { get; set; }
 
-        /// <summary>
-        /// one, and only one, of related infra is given
-        /// </summary>
-        public InfrastructureNetwork? Relation { get; set; }
+        /// <summary></summary>
+        public List<InfrastructureNetwork>? RelationFrom { get; set; }
         /// <summary></summary>
         public ResearchOrganization? ResearchOrganization { get; set; }
         /// <summary></summary>
@@ -59,8 +57,6 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary></summary>
         public List<Weblink>? InfraHomepage { get; set; }
         /// <summary></summary>
-        public Identifier? InfraIdentifier { get; set; }
-        /// <summary></summary>
         public List<DescriptiveTerm>? InfraKeyword { get; set; }
         /// <summary></summary>
         public Dictionary<string, object>? InfraLocalIdentifier { get; set; }
@@ -70,8 +66,6 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<ContentDescriptionText>? InfraScientificDescription { get; set; }
         /// <summary></summary>
         public List<InfrastructureSService>? IsComposedOf { get; set; }
-        /// <summary></summary>
-        public List<InfrastructureNetwork>? RelationFrom { get; set; }
         /// <summary></summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }
         /// <summary></summary>
