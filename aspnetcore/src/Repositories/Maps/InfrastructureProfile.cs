@@ -74,7 +74,28 @@ public class InfrastructureProfile : Profile
             // Contact information
             .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             // Infrastructure network
-            // TODO: .ForMember(dst => dst.Relation, opt => opt.MapFrom(src => src.fact))
+            // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
+            .ForMember(dst => dst.RelationFrom,
+                opt => opt.MapFrom(src => src.FactRelationFromInfrastructures
+                    .Select(rel => new InfrastructureNetwork
+                    {
+                        RelationStartDate = rel.StartDate != -1 ? new DateTime(rel.StartDateNavigation.Year, rel.StartDateNavigation.Month, rel.StartDateNavigation.Day) : null,
+                        RelationEndDate = rel.EndDate != -1 ? new DateTime(rel.EndDateNavigation.Year, rel.EndDateNavigation.Month, rel.EndDateNavigation.Day) : null,
+                        RelationType = rel.RelationTypeCodeNavigation != null ? rel.RelationTypeCodeNavigation.CodeValue : null,
+                        RelationValid = rel.ValidRelation,
+                        RelationToInfra = new Identifier
+                        {
+                            PersistentIdentifierUrn = rel.ToInfrastructure.DimPids.Where(dp => dp.PidType == DimPid_PidType_Urn).Select(dp => dp.PidContent).FirstOrDefault(),
+                            OtherPid = rel.ToInfrastructure.DimPids.Where(dp => dp.PidType != DimPid_PidType_Urn).Select(dp => new OtherPersistentIdentifier
+                            {
+                                Pid = dp.PidContent,
+                                PidType = dp.PidType
+                            }).ToList()
+                        }
+                    }).ToList()
+                )
+            ) 
+
             // Field of science
             .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.ToList().Select(f => f.DimReferencedata)));
 
@@ -117,8 +138,11 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.ContactInformationContent, opt => opt.MapFrom(src => src.ContactInformationContent))
             .ForMember(dst => dst.ContactInformationType, opt => opt.MapFrom(src => ConvertToContactInformationType(src.ContactInformationType)))
             .ForMember(dst => dst.ContactInformationLabel, opt => opt.MapFrom(src => src.ContactName));
-    }
 
+        CreateProjection<DimDate, DateTime?>()
+            .ConvertUsing(dimDate => dimDate.Id == -1 ? null : new DateTime(dimDate.Year, dimDate.Month, dimDate.Day));
+    }
+    
     private static LanguageCode? ConvertToLanguageCode(string? descriptiveItemLanguage)
     {
         return Enum.TryParse<LanguageCode>(descriptiveItemLanguage, true, out var result) ? result : (LanguageCode?)null;
