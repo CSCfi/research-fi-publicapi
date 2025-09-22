@@ -1405,6 +1405,9 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
+            entity.Property(e => e.ResponsibleOrganizationId)
+                .HasDefaultValue(-1)
+                .HasColumnName("responsible_organization_id");
             entity.Property(e => e.SourceDescription)
                 .HasMaxLength(255)
                 .HasColumnName("source_description");

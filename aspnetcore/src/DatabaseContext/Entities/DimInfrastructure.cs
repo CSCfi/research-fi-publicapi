@@ -23,6 +23,8 @@ public partial class DimInfrastructure
 
     public int DimRegisteredDataSourceId { get; set; }
 
+    public int ResponsibleOrganizationId { get; set; }
+
     public virtual ICollection<DimContactInformation> DimContactInformations { get; set; } = new List<DimContactInformation>();
 
     public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();
