@@ -83,6 +83,7 @@ public class Program
                 options.UseSqlServer("name=dbconnectionstring", opt =>
                 {
                     opt.CommandTimeout(queryTimeout);
+                    opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 });
                 options.ConfigureWarnings(x => x.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             });
