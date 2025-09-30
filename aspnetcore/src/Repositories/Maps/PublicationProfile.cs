@@ -12,21 +12,22 @@ public class PublicationProfile : Profile
 {
     private const string PreprintType = "preprint";
     private const string SelfArchivedType = "self_archived";
+    private const string DescriptiveItemType_Abstract = "abstract";
 
     public PublicationProfile()
     {
         AllowNullCollections = true;
         AllowNullDestinationValues = true;
-        
+
         CreateProjection<DimPublication, Publication>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.PublicationId))
             .ForMember(dst => dst.OriginalPublicationId, opt => opt.MapFrom(src => src.OriginalPublicationId))
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.PublicationName))
-            .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src => (DateTime?)(src.PublicationYear.HasValue ? new DateTime(src.PublicationYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
-            .ForMember(dst => dst.ReportingYear, opt =>opt.MapFrom(src => (DateTime?)(src.ReportingYear.HasValue ? new DateTime(src.ReportingYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
-            .ForMember(dst => dst.ApcPaymentYear, opt =>opt.MapFrom(src => (DateTime?)(src.ApcPaymentYear.HasValue ? new DateTime(src.ApcPaymentYear.Value,1,1,0,0,0,DateTimeKind.Utc) : null)))
+            .ForMember(dst => dst.PublicationYear, opt => opt.MapFrom(src => (DateTime?)(src.PublicationYear.HasValue ? new DateTime(src.PublicationYear.Value, 1, 1, 0, 0, 0, DateTimeKind.Utc) : null)))
+            .ForMember(dst => dst.ReportingYear, opt => opt.MapFrom(src => (DateTime?)(src.ReportingYear.HasValue ? new DateTime(src.ReportingYear.Value, 1, 1, 0, 0, 0, DateTimeKind.Utc) : null)))
+            .ForMember(dst => dst.ApcPaymentYear, opt => opt.MapFrom(src => (DateTime?)(src.ApcPaymentYear.HasValue ? new DateTime(src.ApcPaymentYear.Value, 1, 1, 0, 0, 0, DateTimeKind.Utc) : null)))
             .ForMember(dst => dst.AuthorsText, opt => opt.MapFrom(src => src.AuthorsText))
             .ForMember(dst => dst.DatabaseContributions, opt => opt.MapFrom(src => src.FactContributions))
             .ForMember(dst => dst.OrgPublicationDatabaseContributionDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
@@ -36,7 +37,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.TargetAudience, opt => opt.MapFrom(src => src.TargetAudienceCodeNavigation))
             .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.PublicationTypeCodeNavigation))
             .ForMember(dst => dst.ThesisType, opt => opt.MapFrom(src => src.ThesisTypeCodeNavigation))
-            .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName)) 
+            .ForMember(dst => dst.JournalName, opt => opt.MapFrom(src => src.JournalName))
             .ForMember(dst => dst.IssueNumber, opt => opt.MapFrom(src => src.IssueNumber))
             .ForMember(dst => dst.ConferenceName, opt => opt.MapFrom(src => src.ConferenceName))
             .ForMember(dst => dst.Volume, opt => opt.MapFrom(src => src.Volume))
@@ -73,7 +74,7 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.SelfArchived, opt => opt.MapFrom(src => src.DimLocallyReportedPubInfos.Where(i => i.SelfArchivedType == SelfArchivedType)))
             .ForMember(dst => dst.ArtPublicationTypeCategory, opt => opt.MapFrom(src => src.DimReferencedata))
             .ForMember(dst => dst.OrgPublicationArtPublicatonTypeCategoryDTOs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation))
-            .ForMember(dst => dst.Abstract, opt => opt.MapFrom(src => src.Abstract))
+            .ForMember(dst => dst.Abstract, opt => opt.MapFrom(src => src.DimDescriptiveItems.Where(di => di.DescriptiveItemType == DescriptiveItemType_Abstract).Select(di => di.DescriptiveItem).FirstOrDefault()))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
             .ForMember(dst => dst.Modified, opt => opt.MapFrom(src => src.Modified))
             .ForMember(dst => dst.Doi, opt => opt.MapFrom(src => src.DimPids.Where(pid => pid.PidType == "doi").Select(pid => pid.PidContent).FirstOrDefault()))
@@ -85,19 +86,21 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.ParentPublication, opt => opt.Ignore())  // Handled during in memory operations in the index repository
             .ForMember(dst => dst.IsOrgPublication, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0)) // Publication is an organization publication, when DimPublicationId references co-publication. This property is used in query filter.
             .ForMember(dst => dst.IsCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Count > 0)) // Publication is a co-publication, when InverseDimPublicationNavigation references one or more organization publications. This property is used in query filter.
-            .ForMember(dst => dst.CoPublicationID, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0  ? src.DimPublicationNavigation.PublicationId : null))
+            .ForMember(dst => dst.CoPublicationID, opt => opt.MapFrom(src => src.DimPublicationId != null && src.DimPublicationId > 0 ? src.DimPublicationNavigation.PublicationId : null))
             .ForMember(dst => dst.OrgPublicationIDs, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t => t.PublicationId)))
             .ForMember(dst => dst.OrganizationPartsOfCoPublication, opt => opt.MapFrom(src => src.InverseDimPublicationNavigation.Select(t =>
-                new OrganizationPartOfCoPublication() {
+                new OrganizationPartOfCoPublication()
+                {
                     Id = t.PublicationId,
                     OriginalPublicationId = t.OriginalPublicationId,
-                    Organization = new OrganizationPartOfPublication_Organization() {
+                    Organization = new OrganizationPartOfPublication_Organization()
+                    {
                         Id = t.PublicationOrgId
                     }
                 }
-            )))  
+            )))
             .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
-        
+
         CreateProjection<DimReferencedatum, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.CodeValue))
@@ -111,34 +114,34 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.EmbargoDate, opt => opt.MapFrom(src => src.SelfArchivedEmbargoDate))
             .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.SelfArchivedLicenseCodeNavigation))
             .ForMember(dst => dst.Version, opt => opt.MapFrom(src => src.SelfArchivedVersionCodeNavigation));
-        
+
         CreateProjection<DimKeyword, Keyword>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Keyword))
             .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.Language))
             .ForMember(dst => dst.Scheme, opt => opt.MapFrom(src => src.Scheme));
-        
+
         CreateProjection<DimFieldOfArt, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.FieldId))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
-        
+
         CreateProjection<DimFieldOfEducation, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.FieldId))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
-        
+
         CreateProjection<string, ReferenceData>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src))
             .ForMember(dst => dst.NameFi, opt => opt.Ignore())
             .ForMember(dst => dst.NameSv, opt => opt.Ignore())
             .ForMember(dst => dst.NameEn, opt => opt.Ignore());
-        
+
         CreateProjection<int?, ReferenceData>()
             .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.ToString()))
             .ForMember(dst => dst.NameFi, opt => opt.Ignore())
@@ -177,10 +180,10 @@ public class PublicationProfile : Profile
             .ForMember(dst => dst.FirstNames, opt => opt.MapFrom(src => src.FirstNames))
             .ForMember(dst => dst.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(dst => dst.Orcid,
-                opt => opt.MapFrom(src => 
+                opt => opt.MapFrom(src =>
                     src.DimKnownPersonIdConfirmedIdentityNavigation.DimPids
                         .FirstOrDefault(pid => pid.PidType == "orcid").PidContent));
-        
+
         CreateProjection<DimPid, PersistentIdentifier>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Content, opt => opt.MapFrom(src => src.PidContent))
