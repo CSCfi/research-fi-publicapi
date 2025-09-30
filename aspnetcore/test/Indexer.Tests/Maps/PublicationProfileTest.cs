@@ -460,7 +460,14 @@ public class PublicationProfileTest
                     SelfArchivedType = "preprint"
                 }
             },
-            Abstract = "abstract",
+            DimDescriptiveItems = new List<DimDescriptiveItem>
+            {
+                new()
+                {
+                    DescriptiveItem = "test_abstract",
+                    DescriptiveItemType = "abstract"
+                }
+            },
             DimReferencedata = new List<DimReferencedatum>
             {
                 new()
@@ -682,7 +689,7 @@ public class PublicationProfileTest
                     EmbargoDate = new DateTime(2023, 3, 10, 10, 40, 00)
                 }
             },
-            Abstract = "abstract",
+            Abstract = "test_abstract",
             ArtPublicationTypeCategory = new List<ReferenceData>
             {
                 new()
