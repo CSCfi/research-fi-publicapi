@@ -2566,7 +2566,6 @@ public partial class ApiDbContext : DbContext
             entity.ToTable("dim_publication");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Abstract).HasColumnName("abstract");
             entity.Property(e => e.ApcFeeEur)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("apc_fee_EUR");
