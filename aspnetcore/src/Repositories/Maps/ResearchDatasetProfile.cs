@@ -9,6 +9,8 @@ namespace CSC.PublicApi.Repositories.Maps;
 public class ResearchDatasetProfile : Profile
 {
     private const string DataSetTypeVersion = "version";
+    private const string DescriptiveItemType_Name = "name";
+    private const string DescriptiveItemType_Description = "description";
 
     public ResearchDatasetProfile()
     {
@@ -18,20 +20,54 @@ public class ResearchDatasetProfile : Profile
         CreateProjection<DimResearchDataset, ResearchDataset>()
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
-            .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DescriptionFi))
-            .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DescriptionSv))
-            .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DescriptionEn))
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "fi")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "sv")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "en")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+            .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "fi")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+            .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "sv")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+            .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DimDescriptiveItems
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "en")
+                .Select(di => di.DescriptiveItem).FirstOrDefault()))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.DatasetCreated))
             .ForMember(dst => dst.Contributors, opt => opt.MapFrom(src => src.FactContributions.Where(fc => fc.DimOrganizationId != -1 || fc.DimNameId != -1)))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
-            .ForMember(dst => dst.Languages, opt => opt.MapFrom(src => src.DimReferencedata))
+            .ForMember(dst => dst.Languages, opt => opt.MapFrom(src => src.FactReferencedata.Where(f => f.DimReferencedata.CodeScheme == "languages").Select(f => f.DimReferencedata)))
             .ForMember(dst => dst.AccessType, opt => opt.MapFrom(src => src.DimReferencedataAvailabilityNavigation))
-            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.DimReferencedataLicenseNavigation))
-            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.DimKeywords.Where(keyword => keyword.Scheme == "Avainsana")))
-            .ForMember(dst => dst.SubjectHeadings, opt => opt.MapFrom(src => src.DimKeywords.Where(keyword => keyword.Scheme == "Theme")))
+            .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.FactReferencedata
+                .Where(f => f.DimReferencedata.CodeScheme == "license")
+                .Select(f => new ReferenceData
+                {
+                    Code = f.DimReferencedata.CodeValue,
+                    NameFi = f.DimReferencedata.NameFi,
+                    NameSv = f.DimReferencedata.NameSv,
+                    NameEn = f.DimReferencedata.NameEn
+                }).FirstOrDefault()))
+            .ForMember(dst => dst.Keywords, opt => opt.MapFrom(src => src.FactKeywords
+                .Where(f => f.DimKeyword.Scheme == "Avainsana")
+                .Select(f => new Keyword
+                {
+                    Value = f.DimKeyword.Keyword,
+                    Language = f.DimKeyword.Language,
+                    Scheme = f.DimKeyword.Scheme
+                })))
+            .ForMember(dst => dst.SubjectHeadings, opt => opt.MapFrom(src => src.FactKeywords
+                .Where(f => f.DimKeyword.Scheme == "Theme")
+                .Select(f => new Keyword
+                {
+                    Value = f.DimKeyword.Keyword,
+                    Language = f.DimKeyword.Language,
+                    Scheme = f.DimKeyword.Scheme
+                })))
             .ForMember(dst => dst.PersistentIdentifiers, opt => opt.MapFrom(src => src.DimPids))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.ResearchDataCatalog, opt => opt.MapFrom(src => src.DimResearchDataCatalog))

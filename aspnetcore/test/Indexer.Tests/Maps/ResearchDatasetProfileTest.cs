@@ -75,12 +75,45 @@ public class ResearchDatasetProfileTest
         return new DimResearchDataset
         {
             Id = Id,
-            NameFi = "nameFi",
-            NameSv = "nameSv",
-            NameEn = "nameEn",
-            DescriptionFi = "descFi",
-            DescriptionSv = "descSv",
-            DescriptionEn = "descEn",
+            DimDescriptiveItems = new List<DimDescriptiveItem>
+            {
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "fi",
+                    DescriptiveItem = "nameFi"
+                },
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "sv",
+                    DescriptiveItem = "nameSv"
+                },
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "en",
+                    DescriptiveItem = "nameEn"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "fi",
+                    DescriptiveItem = "descFi"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "sv",
+                    DescriptiveItem = "descSv"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "en",
+                    DescriptiveItem = "descEn"
+                }
+            },
             DatasetCreated = new DateTime(2021, 10, 1),
             FactContributions = new List<FactContribution>
             {
@@ -139,14 +172,40 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            DimReferencedata = new List<DimReferencedatum>
+            FactReferencedata = new List<FactReferencedatum>
             {
                 new()
                 {
-                    CodeValue = "languageCode",
-                    NameEn = "languageNameEn",
-                    NameFi = "languageNameFi",
-                    NameSv = "languageNameSv",
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "languageCode",
+                        NameEn = "languageNameEn",
+                        NameFi = "languageNameFi",
+                        NameSv = "languageNameSv",
+                        CodeScheme = "languages"
+                    }
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "licenseCode",
+                        NameFi = "licenseNameFi",
+                        NameSv = "licenseNameSv",
+                        NameEn = "licenseNameEn",
+                        CodeScheme = "license"
+                    }
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "accessTypeCode",
+                        NameFi = "accessTypeNameFi",
+                        NameSv = "accessTypeNameSv",
+                        NameEn = "accessTypeNameEn",
+                        CodeScheme = "access_type"
+                    }
                 }
             },
             DimReferencedataAvailabilityNavigation = new DimReferencedatum
@@ -157,28 +216,35 @@ public class ResearchDatasetProfileTest
                 NameEn = "accessTypeNameEn",
                 CodeScheme = "access_type"
             },
-            DimReferencedataLicenseNavigation = new DimReferencedatum
-            {
-                CodeValue = "licenseCode",
-                NameFi = "licenseNameFi",
-                NameSv = "licenseNameSv",
-                NameEn = "licenseNameEn",
-                CodeScheme = "license"
-            },
-            DimKeywords = new List<DimKeyword>
+            FactKeywords = new List<FactKeyword>
             {
                 new()
                 {
-                    Keyword = "keyword1",
-                    Language = "keywordLanguage",
-                    Scheme = "Avainsana"
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "keyword1",
+                        Language = "keywordLanguage1",
+                        Scheme = "Avainsana"
+                    }
                 },
                 new()
                 {
-                    Keyword = "subjectHeading1",
-                    Language = "keywordLanguage",
-                    Scheme = "Theme"
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "subjectHeading1",
+                        Language = "keywordLanguage2",
+                        Scheme = "Theme"
+                    }
                 },
+                new()
+                {
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "wrongSchemeKeyword",
+                        Language = "keywordLanguage3",
+                        Scheme = "WrongScheme"
+                    }
+                }
             },
             BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>
             {
@@ -214,7 +280,7 @@ public class ResearchDatasetProfileTest
                     DimResearchDatasetId2 = 32411,
                     Type = "notVersion"
                 },
-                
+
             },
             BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new List<BrDatasetDatasetRelationship>
             {
@@ -229,7 +295,7 @@ public class ResearchDatasetProfileTest
                     {
                         VersionInfo = "322",
                         LocalIdentifier = "6"
-                        
+
                     },
                     DimResearchDatasetId = 32411,
                     DimResearchDatasetId2 = 32412,
@@ -362,7 +428,7 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Value = "keyword1",
-                    Language = "keywordLanguage",
+                    Language = "keywordLanguage1",
                     Scheme = "Avainsana"
                 }
             },
@@ -371,7 +437,7 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Value = "subjectHeading1",
-                    Language = "keywordLanguage",
+                    Language = "keywordLanguage2",
                     Scheme = "Theme"
                 }
             },

@@ -16,4 +16,12 @@ public partial class FactKeyword
     public DateTime? Created { get; set; }
 
     public DateTime? Modified { get; set; }
+
+    public int DimResearchDatasetId { get; set; }
+
+    public virtual DimKeyword DimKeyword { get; set; } = null!;
+
+    public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
+
+    public virtual DimResearchProject DimResearchProject { get; set; } = null!;
 }
