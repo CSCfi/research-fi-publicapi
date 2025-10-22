@@ -4184,7 +4184,7 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.DimReferencedataId).HasColumnName("dim_referencedata_id");
             entity.Property(e => e.DimResearchDatasetId).HasColumnName("dim_research_dataset_id");
             entity.Property(e => e.DimInfrastructureId).HasColumnName("dim_infrastructure_id");
-            entity.Property(e => e.DimPublicationId).HasColumnName("dim_publication_ id");
+            entity.Property(e => e.DimPublicationId).HasColumnName("dim_publication_id");
             entity.Property(e => e.DimResearchActivityId).HasColumnName("dim_research_activity_id");
             entity.Property(e => e.DimFundingDecisionId).HasColumnName("dim_funding_decision_id");
             entity.Property(e => e.DimCallProgrammeId).HasColumnName("dim_call_programme_id");
