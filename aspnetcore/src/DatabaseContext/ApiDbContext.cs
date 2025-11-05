@@ -1311,6 +1311,7 @@ public partial class ApiDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created");
             entity.Property(e => e.DimIdentifierlessDataId).HasColumnName("dim_identifierless_data_id");
+            entity.Property(e => e.DimOrganizationId).HasColumnName("dim_organization_id");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");
@@ -1340,6 +1341,11 @@ public partial class ApiDbContext : DbContext
             entity.HasOne(d => d.DimIdentifierlessData).WithMany(p => p.InverseDimIdentifierlessData)
                 .HasForeignKey(d => d.DimIdentifierlessDataId)
                 .HasConstraintName("parent_data");
+
+            entity.HasOne(d => d.DimOrganization).WithMany(p => p.DimIdentifierlessData)
+                .HasForeignKey(d => d.DimOrganizationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("identifierlessIsPartOfOrganization");
         });
 
         modelBuilder.Entity<DimInfrastructure>(entity =>
