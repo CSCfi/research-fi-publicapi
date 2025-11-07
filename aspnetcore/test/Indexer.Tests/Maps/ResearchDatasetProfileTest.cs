@@ -119,6 +119,7 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
+                    DimOrganizationId = 42,
                     DimOrganization = new DimOrganization
                     {
                         Id = 42,
@@ -156,6 +157,42 @@ public class ResearchDatasetProfileTest
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
                         NameEn = "roleNameEn"
+                    },
+                    DimIdentifierlessDataId = 99,
+                    DimIdentifierlessData = new DimIdentifierlessDatum
+                    {
+                        Id = 99,
+                        ValueFi = "identifierlessDataValueFi",
+                        ValueSv = "identifierlessDataValueSv",
+                        ValueEn = "identifierlessDataValueEn",
+                        ValueUnd = "identifierlessDataValueUnd",
+                        DimOrganizationId = 43,
+                        DimOrganization = new DimOrganization
+                        {
+                            Id = 43,
+                            NameFi = "identifierlessOrganizationNameFi",
+                            NameSv = "identifierlessOrganizationNameSv",
+                            NameEn = "identifierlessOrganizationNameEn",
+                            NameVariants = "identifierlessOrganizationNameVariants",
+                            DimPids = new List<DimPid>
+                            {
+                                new()
+                                {
+                                    PidContent = "pidContent4",
+                                    PidType = "BusinessID"
+                                },
+                                new()
+                                {
+                                    PidContent = "pidContent5",
+                                    PidType = "PIC"
+                                },
+                                new()
+                                {
+                                    PidContent = "pidContent6",
+                                    PidType = "WrongType"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -352,11 +389,14 @@ public class ResearchDatasetProfileTest
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
             Created = new DateTime(2021, 10, 1),
-            Contributors = new List<Contributor>
+            ContributorsHelper = new List<ContributorHelper>
             {
                 new()
                 {
-                    Organization = new Organization
+                    FactContribution_DimOrganizationId = 42,
+                    FactContribution_DimIdentifierlessDataId = 99,
+                    FactContribution_DimIdentifierlessData_DimOrganizationId = 43,
+                    Organization_From_FactContribution_DimOrganization = new Organization
                     {
                         Id = "42",
                         Pids = new List<PersistentIdentifier>
@@ -377,7 +417,37 @@ public class ResearchDatasetProfileTest
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
-                    Person = new Person 
+                    Organization_From_FactContribution_DimIdentifierlessData = new Organization
+                    {
+                        Id = null,
+                        NameEn = "identifierlessDataValueEn",
+                        NameFi = "identifierlessDataValueFi",
+                        NameSv = "identifierlessDataValueSv",
+                        NameVariants = "identifierlessDataValueUnd",
+                        Pids = null
+                    },
+                    Organization_From_FactContribution_DimIdentifierlessData_DimOrganization = new Organization
+                    {
+                        Id = "43",
+                        NameEn = "identifierlessOrganizationNameEn",
+                        NameFi = "identifierlessOrganizationNameFi",
+                        NameSv = "identifierlessOrganizationNameSv",
+                        NameVariants = "identifierlessOrganizationNameVariants",
+                        Pids = new List<PersistentIdentifier>
+                        {
+                            new()
+                            {
+                                Content = "pidContent4",
+                                Type = "BusinessID"
+                            },
+                            new()
+                            {
+                            Content = "pidContent5",
+                            Type = "PIC"
+                            }
+                        },
+                    },
+                    Person = new Person
                     {
                         Name = "personFullName"
                     },

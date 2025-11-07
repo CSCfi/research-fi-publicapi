@@ -44,7 +44,7 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             .ThenInclude(f => f.DimOrganization)
             .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
     }
-    
+
     public override List<object> PerformInMemoryOperations(List<object> entities)
     {
         entities.ForEach(o =>
@@ -53,13 +53,60 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             {
                 return;
             }
-            
+
+            HandleContributorOrganizations(researchDataset);
             HandleEmptyContributors(researchDataset);
             HandleDatasetRelations(researchDataset);
             HandleEmptyCollections(researchDataset);
             HandleResearchfiUrl(researchDataset);
         });
         return entities;
+    }
+
+    public override object PerformInMemoryOperation(object entity)
+    {
+        ResearchDataset researchDataset = (ResearchDataset)entity;
+        HandleContributorOrganizations(researchDataset);
+        HandleEmptyContributors(researchDataset);
+        HandleDatasetRelations(researchDataset);
+        HandleEmptyCollections(researchDataset);
+        HandleResearchfiUrl(researchDataset);
+        return researchDataset;
+    }
+
+    private static void HandleContributorOrganizations(ResearchDataset researchDataset)
+    {
+        if (researchDataset.ContributorsHelper == null)
+        {
+            return;
+        }
+
+        researchDataset.Contributors = new List<Contributor>();
+        
+        foreach (var contributorHelper in researchDataset.ContributorsHelper)
+        {
+            var contributor = new Contributor
+            {
+                // Determine the correct organization based on available IDs
+                // Priority:
+                // 1. FactContribution_DimOrganizationId
+                // 2. FactContribution_DimIdentifierlessData_DimOrganizationId
+                // 3. FactContribution_DimIdentifierlessDataId
+                Organization = contributorHelper.FactContribution_DimOrganizationId != -1
+                    ? contributorHelper.Organization_From_FactContribution_DimOrganization
+                    : contributorHelper.FactContribution_DimIdentifierlessDataId != -1
+                        ? (contributorHelper.FactContribution_DimIdentifierlessData_DimOrganizationId != -1
+                            ? contributorHelper.Organization_From_FactContribution_DimIdentifierlessData_DimOrganization
+                            : contributorHelper.Organization_From_FactContribution_DimIdentifierlessData)
+                        : null,
+                Person = contributorHelper.Person,
+                Role = contributorHelper.Role
+            };
+
+            researchDataset.Contributors.Add(contributor);
+        }
+
+        researchDataset.ContributorsHelper = null;
     }
 
     private static void HandleEmptyCollections(ResearchDataset researchDataset)
@@ -73,17 +120,17 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         {
             researchDataset.SubjectHeadings = null;
         }
-        
+
         if (researchDataset.FieldsOfScience != null && !researchDataset.FieldsOfScience.Any())
         {
             researchDataset.FieldsOfScience = null;
         }
-        
+
         if (researchDataset.Languages != null && !researchDataset.Languages.Any())
         {
             researchDataset.Languages = null;
         }
-        
+
         if (researchDataset.PersistentIdentifiers != null && !researchDataset.PersistentIdentifiers.Any())
         {
             researchDataset.PersistentIdentifiers = null;

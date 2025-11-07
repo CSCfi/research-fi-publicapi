@@ -22,24 +22,31 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "fi")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "sv")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name && di.DescriptiveItemLanguage == "en")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.DescriptionFi, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "fi")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.DescriptionSv, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "sv")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.DescriptionEn, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description && di.DescriptiveItemLanguage == "en")
-                .Select(di => di.DescriptiveItem).FirstOrDefault()))
+                .Select(di => di.DescriptiveItem)
+                .FirstOrDefault()))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.DatasetCreated))
-            .ForMember(dst => dst.Contributors, opt => opt.MapFrom(src => src.FactContributions.Where(fc => fc.DimOrganizationId != -1 || fc.DimNameId != -1)))
+            .ForMember(dst => dst.Contributors, opt => opt.Ignore()) // Handled during in memory operations in the index repository
+            .ForMember(dst => dst.ContributorsHelper, opt => opt.MapFrom(src => src.FactContributions.Where(fc => fc.DimOrganizationId != -1 || fc.DimNameId != -1 || fc.DimIdentifierlessDataId != -1)))
             .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
             .ForMember(dst => dst.Languages, opt => opt.MapFrom(src => src.FactReferencedata.Where(f => f.DimReferencedata.CodeScheme == "languages").Select(f => f.DimReferencedata)))
             .ForMember(dst => dst.AccessType, opt => opt.MapFrom(src => src.DimReferencedataAvailabilityNavigation))
@@ -97,8 +104,13 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Keyword))
             .ForMember(dst => dst.Language, opt => opt.MapFrom(src => src.Language));
 
-        CreateProjection<FactContribution, Contributor>()
-            .ForMember(dst => dst.Organization, opt => opt.MapFrom(src => src.DimOrganization))
+        CreateProjection<FactContribution, ContributorHelper>()
+            .ForMember(dst => dst.FactContribution_DimOrganizationId, opt => opt.MapFrom(src => src.DimOrganizationId))
+            .ForMember(dst => dst.FactContribution_DimIdentifierlessDataId, opt => opt.MapFrom(src => src.DimIdentifierlessDataId))
+            .ForMember(dst => dst.FactContribution_DimIdentifierlessData_DimOrganizationId, opt => opt.MapFrom(src => src.DimIdentifierlessData.DimOrganizationId))
+            .ForMember(dst => dst.Organization_From_FactContribution_DimOrganization, opt => opt.MapFrom(src => src.DimOrganization))
+            .ForMember(dst => dst.Organization_From_FactContribution_DimIdentifierlessData, opt => opt.MapFrom(src => src.DimIdentifierlessData))
+            .ForMember(dst => dst.Organization_From_FactContribution_DimIdentifierlessData_DimOrganization, opt => opt.MapFrom(src => src.DimIdentifierlessData.DimOrganization))
             .ForMember(dst => dst.Person, opt => opt.MapFrom(src => src.DimName))
             .ForMember(dst => dst.Role, opt => opt.MapFrom(src => src.DimReferencedataActorRole));
 
@@ -110,6 +122,15 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn))
             .ForMember(dst => dst.NameVariants, opt => opt.MapFrom(src => src.NameVariants));
+
+        CreateProjection<DimIdentifierlessDatum, Organization>()
+            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => (string?)null)) // Set as null because data comes from table dim_identifierless_data
+            .ForMember(dst => dst.Pids, opt => opt.Ignore()) // Ignore for dim_identifierless_data
+            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.ValueFi))
+            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.ValueSv))
+            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.ValueEn))
+            .ForMember(dst => dst.NameVariants, opt => opt.MapFrom(src => src.ValueUnd));
 
         CreateProjection<DimName, Person>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)

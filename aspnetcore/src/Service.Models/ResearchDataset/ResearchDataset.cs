@@ -26,6 +26,9 @@ public class ResearchDataset
     public DateTime? Created { get; set; }
 
     public List<Contributor>? Contributors { get; set; }
+    
+    [Ignore]
+    public List<ContributorHelper>? ContributorsHelper { get; set; }
 
     public List<ReferenceData>? FieldsOfScience { get; set; }
 
