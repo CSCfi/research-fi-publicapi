@@ -44,8 +44,8 @@ public class ResearchDatasetProfileTest
     {
         // Arrange
         var entity = GetEntity();
-        entity.BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new List<BrDatasetDatasetRelationship>();
-        entity.BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>();
+        entity.FactRelationFromResearchDatasets = new List<FactRelation>();
+        entity.FactRelationToResearchDatasets = new List<FactRelation>();
 
         var model = GetModel();
         model.IncomingDatasetVersionRelations = new List<DatasetRelationBridge>();
@@ -283,76 +283,67 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>
+            FactRelationFromResearchDatasets = new List<FactRelation>
             {
                 new()
                 {
-                    DimResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "123",
-                        LocalIdentifier = "1"
-                    },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
-                    {
-                        VersionInfo = "123",
-                        LocalIdentifier = "2"
-                    },
-                    DimResearchDatasetId = 32410,
-                    DimResearchDatasetId2 = 32410,
-                    Type = "version"
-                },
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "321",
-                        LocalIdentifier = "3"
-                    },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
-                    {
-                        VersionInfo = "321",
-                        LocalIdentifier = "4"
-                    },
-                    DimResearchDatasetId = 32411,
-                    DimResearchDatasetId2 = 32411,
-                    Type = "notVersion"
-                },
-
-            },
-            BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new List<BrDatasetDatasetRelationship>
-            {
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "321",
-                        LocalIdentifier = "5"
-                    },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
-                    {
-                        VersionInfo = "322",
-                        LocalIdentifier = "6"
-
-                    },
-                    DimResearchDatasetId = 32411,
-                    DimResearchDatasetId2 = 32412,
-                    Type = "notVersion"
-                },
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
+                    FromResearchDataset = new DimResearchDataset
                     {
                         VersionInfo = "123",
                         LocalIdentifier = "7"
                     },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
+                    ToResearchDataset = new DimResearchDataset
                     {
                         VersionInfo = "321",
                         LocalIdentifier = "8"
                     },
-                    DimResearchDatasetId = 32410,
-                    DimResearchDatasetId2 = 32411,
-                    Type = "version"
+                    FromResearchDatasetId = 32410,
+                    ToResearchDatasetId = 32411,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "version"
+                    }
+                }
+            },
+            FactRelationToResearchDatasets = new List<FactRelation>
+            {
+                new()
+                {
+                    FromResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = "123",
+                        LocalIdentifier = "1"
+                    },
+                    ToResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = "123",
+                        LocalIdentifier = "2"
+                    },
+                    FromResearchDatasetId = 32410,
+                    ToResearchDatasetId = 32410,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "version"
+                    }
+                },
+                new()
+                {
+                    FromResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = "321",
+                        LocalIdentifier = "3"
+                    },
+                    ToResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = "321",
+                        LocalIdentifier = "4"
+                    },
+                    FromResearchDatasetId = 32411,
+                    ToResearchDatasetId = 32411,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "notVersion"
+                    }
                 }
             },
             DimPids = new List<DimPid>

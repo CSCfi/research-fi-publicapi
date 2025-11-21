@@ -78,8 +78,8 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.PersistentIdentifiers, opt => opt.MapFrom(src => src.DimPids))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.ResearchDataCatalog, opt => opt.MapFrom(src => src.DimResearchDataCatalog))
-            .ForMember(dst => dst.OutgoingDatasetRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasets))
-            .ForMember(dst => dst.IncomingDatasetVersionRelations, opt => opt.MapFrom(src => src.BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations.Where(s => s.Type == DataSetTypeVersion)))
+            .ForMember(dst => dst.OutgoingDatasetRelations, opt => opt.MapFrom(src => src.FactRelationToResearchDatasets))
+            .ForMember(dst => dst.IncomingDatasetVersionRelations, opt => opt.MapFrom(src => src.FactRelationFromResearchDatasets))
             .ForMember(dst => dst.DatasetRelations, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.VersionSet, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.IsLatestVersion, opt => opt.Ignore()) // Handled during in memory operations in the index repository
@@ -136,14 +136,14 @@ public class ResearchDatasetProfile : Profile
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.FullName));
 
-        CreateProjection<BrDatasetDatasetRelationship, DatasetRelationBridge>()
-            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
-            .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.DimResearchDatasetId))
-            .ForMember(dst => dst.DatabaseId2, opt => opt.MapFrom(src => src.DimResearchDatasetId2))
-            .ForMember(dst => dst.VersionNumber, opt => opt.MapFrom(src => src.DimResearchDataset.VersionInfo))
-            .ForMember(dst => dst.VersionNumber2, opt => opt.MapFrom(src => src.DimResearchDatasetId2Navigation.VersionInfo))
-            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.DimResearchDataset.LocalIdentifier))
-            .ForMember(dst => dst.Id2, opt => opt.MapFrom(src => src.DimResearchDatasetId2Navigation.LocalIdentifier));
+        CreateProjection<FactRelation, DatasetRelationBridge>()
+            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.RelationTypeCodeNavigation.CodeValue))
+            .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.FromResearchDatasetId))
+            .ForMember(dst => dst.DatabaseId2, opt => opt.MapFrom(src => src.ToResearchDatasetId))
+            .ForMember(dst => dst.VersionNumber, opt => opt.MapFrom(src => src.FromResearchDataset.VersionInfo))
+            .ForMember(dst => dst.VersionNumber2, opt => opt.MapFrom(src => src.ToResearchDataset.VersionInfo))
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.FromResearchDataset.LocalIdentifier))
+            .ForMember(dst => dst.Id2, opt => opt.MapFrom(src => src.ToResearchDataset.LocalIdentifier));
 
         CreateProjection<DimResearchDataCatalog, ResearchDataCatalog>()
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
