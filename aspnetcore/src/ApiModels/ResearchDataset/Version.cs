@@ -13,5 +13,5 @@ public class Version
     /// <summary>
     /// Version of the referenced data
     /// </summary>
-    public int VersionNumber { get; set; }
+    public string? VersionNumber { get; set; }
 }
