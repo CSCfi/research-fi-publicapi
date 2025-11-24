@@ -200,12 +200,12 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Identifier = "45670894-2a22-422e-8858-2fe52938276d",
-                    VersionNumber = "123"
+                    VersionNumber = 123
                 },
                 new()
                 {
                     Identifier = "9936fbc2-f043-4c27-9a65-a52472aa94cb",
-                    VersionNumber = "321"
+                    VersionNumber = 321
                 }
             },
             IsLatestVersion = false
@@ -320,12 +320,12 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Identifier = "45670894-2a22-422e-8858-2fe52938276d",
-                    VersionNumber = "123"
+                    VersionNumber = 123
                 },
                 new()
                 {
                     Identifier = "9936fbc2-f043-4c27-9a65-a52472aa94cb",
-                    VersionNumber = "321"
+                    VersionNumber = 321
                 }
             },
             IsLatestVersion = false

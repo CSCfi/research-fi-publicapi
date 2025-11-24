@@ -78,10 +78,21 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.PersistentIdentifiers, opt => opt.MapFrom(src => src.DimPids))
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.LocalIdentifier))
             .ForMember(dst => dst.ResearchDataCatalog, opt => opt.MapFrom(src => src.DimResearchDataCatalog))
-            .ForMember(dst => dst.OutgoingDatasetRelations, opt => opt.MapFrom(src => src.FactRelationToResearchDatasets))
-            .ForMember(dst => dst.IncomingDatasetVersionRelations, opt => opt.MapFrom(src => src.FactRelationFromResearchDatasets))
-            .ForMember(dst => dst.DatasetRelations, opt => opt.Ignore()) // Handled during in memory operations in the index repository
-            .ForMember(dst => dst.VersionSet, opt => opt.Ignore()) // Handled during in memory operations in the index repository
+            .ForMember(dst => dst.DatasetRelations, opt => opt.MapFrom(src => src.FactRelationFromResearchDatasets
+                .Where(f => f.RelationTypeCodeNavigation.CodeValue != "HasVersion")
+                .Select(f => new DatasetRelation
+                {
+                    Id = f.ToResearchDataset.LocalIdentifier,
+                    Type = f.RelationTypeCodeNavigation.CodeValue
+                })))
+            .ForMember(dst => dst.VersionInfo, opt => opt.MapFrom(src => src.VersionInfo))
+            .ForMember(dst => dst.VersionSet, opt => opt.MapFrom(src => src.FactRelationFromResearchDatasets
+                .Where(f => f.RelationTypeCodeNavigation.CodeValue == "HasVersion")
+                .Select(f => new CSC.PublicApi.Service.Models.ResearchDataset.Version
+                {
+                    VersionNumber = f.ToResearchDataset.VersionInfo,
+                    Identifier = f.ToResearchDataset.LocalIdentifier
+                })))
             .ForMember(dst => dst.IsLatestVersion, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.ResearchfiUrl, opt => opt.Ignore()); // Handled during in memory operations in the index repository
 
@@ -135,15 +146,6 @@ public class ResearchDatasetProfile : Profile
         CreateProjection<DimName, Person>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.FullName));
-
-        CreateProjection<FactRelation, DatasetRelationBridge>()
-            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.RelationTypeCodeNavigation.CodeValue))
-            .ForMember(dst => dst.DatabaseId, opt => opt.MapFrom(src => src.FromResearchDatasetId))
-            .ForMember(dst => dst.DatabaseId2, opt => opt.MapFrom(src => src.ToResearchDatasetId))
-            .ForMember(dst => dst.VersionNumber, opt => opt.MapFrom(src => src.FromResearchDataset.VersionInfo))
-            .ForMember(dst => dst.VersionNumber2, opt => opt.MapFrom(src => src.ToResearchDataset.VersionInfo))
-            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.FromResearchDataset.LocalIdentifier))
-            .ForMember(dst => dst.Id2, opt => opt.MapFrom(src => src.ToResearchDataset.LocalIdentifier));
 
         CreateProjection<DimResearchDataCatalog, ResearchDataCatalog>()
             .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))

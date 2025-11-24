@@ -6,6 +6,7 @@ using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
 using Organization = CSC.PublicApi.Service.Models.ResearchDataset.Organization;
+using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -44,12 +45,40 @@ public class ResearchDatasetProfileTest
     {
         // Arrange
         var entity = GetEntity();
-        entity.FactRelationFromResearchDatasets = new List<FactRelation>();
-        entity.FactRelationToResearchDatasets = new List<FactRelation>();
+        // Relation type "HasVersion" is not included in related datasets.
+        entity.FactRelationFromResearchDatasets = new List<FactRelation>
+        {
+            new FactRelation()
+            {
+                FromResearchDataset = new DimResearchDataset
+                {
+                    VersionInfo = 1,
+                    LocalIdentifier = "localIdentifier_1"
+                },
+                ToResearchDataset = new DimResearchDataset
+                {
+                    VersionInfo = 3,
+                    LocalIdentifier = "localIdentifier_3"
+                },
+                FromResearchDatasetId = 111,
+                ToResearchDatasetId = 113,
+                RelationTypeCodeNavigation = new DimReferencedatum
+                {
+                    CodeValue = "IsPartOf"
+                }
+            }
+        };
 
         var model = GetModel();
-        model.IncomingDatasetVersionRelations = new List<DatasetRelationBridge>();
-        model.OutgoingDatasetRelations = new List<DatasetRelationBridge>();
+        model.DatasetRelations = new List<DatasetRelation>()
+        {
+            new DatasetRelation()
+            {
+                Id = "localIdentifier_3",
+                Type = "IsPartOf"
+            }
+        };
+        model.VersionSet = new List<Version>();
 
         // Act
         var result = Act_Map(entity);
@@ -283,66 +312,64 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
+            VersionInfo = 1,
             FactRelationFromResearchDatasets = new List<FactRelation>
             {
                 new()
                 {
                     FromResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "123",
-                        LocalIdentifier = "7"
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
                     },
                     ToResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "8"
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
                     },
-                    FromResearchDatasetId = 32410,
-                    ToResearchDatasetId = 32411,
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 111,
                     RelationTypeCodeNavigation = new DimReferencedatum
                     {
-                        CodeValue = "version"
-                    }
-                }
-            },
-            FactRelationToResearchDatasets = new List<FactRelation>
-            {
-                new()
-                {
-                    FromResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "123",
-                        LocalIdentifier = "1"
-                    },
-                    ToResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "123",
-                        LocalIdentifier = "2"
-                    },
-                    FromResearchDatasetId = 32410,
-                    ToResearchDatasetId = 32410,
-                    RelationTypeCodeNavigation = new DimReferencedatum
-                    {
-                        CodeValue = "version"
+                        CodeValue = "HasVersion"
                     }
                 },
                 new()
                 {
                     FromResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "3"
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
                     },
                     ToResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "4"
+                        VersionInfo = 2,
+                        LocalIdentifier = "localIdentifier_2"
                     },
-                    FromResearchDatasetId = 32411,
-                    ToResearchDatasetId = 32411,
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 112,
                     RelationTypeCodeNavigation = new DimReferencedatum
                     {
-                        CodeValue = "notVersion"
+                        CodeValue = "HasVersion"
+                    }
+                },
+                new()
+                {
+                    FromResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
+                    },
+                    ToResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = 3,
+                        LocalIdentifier = "localIdentifier_3"
+                    },
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 113,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "IsPartOf"
                     }
                 }
             },
@@ -520,44 +547,28 @@ public class ResearchDatasetProfileTest
                 SourceId = "researchDataCatalogSourceId",
                 SourceDescription = "researchDataCatalogSourceDescription"
             },
-            IncomingDatasetVersionRelations = new List<DatasetRelationBridge>
+            DatasetRelations = new List<DatasetRelation>
             {
                 new()
                 {
-                    DatabaseId = 32410, 
-                    DatabaseId2 = 32411, 
-                    Id = "7", 
-                    Id2 = "8", 
-                    Type = "version", 
-                    VersionNumber = "123", 
-                    VersionNumber2 = "321"
+                    Id = "localIdentifier_3",
+                    Type = "IsPartOf"
                 }
             },
-            OutgoingDatasetRelations = new List<DatasetRelationBridge>
+            VersionInfo = 1,
+            VersionSet = new List<Version>
             {
                 new()
                 {
-                    DatabaseId = 32410, 
-                    DatabaseId2 = 32410, 
-                    Id = "1", 
-                    Id2 = "2", 
-                    Type = "version", 
-                    VersionNumber = "123", 
-                    VersionNumber2 = "123"
+                    Identifier = "localIdentifier_1",
+                    VersionNumber = 1
                 },
                 new()
                 {
-                    DatabaseId = 32411, 
-                    DatabaseId2 = 32411, 
-                    Id = "3", 
-                    Id2 = "4", 
-                    Type = "notVersion", 
-                    VersionNumber = "321", 
-                    VersionNumber2 = "321"
+                    Identifier = "localIdentifier_2",
+                    VersionNumber = 2,
                 }
             },
-            DatasetRelations = null,
-            VersionSet = null,
             IsLatestVersion = null
         };
     }
