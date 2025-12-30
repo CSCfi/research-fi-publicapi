@@ -47,7 +47,7 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.DatasetCreated))
             .ForMember(dst => dst.Contributors, opt => opt.Ignore()) // Handled during in memory operations in the index repository
             .ForMember(dst => dst.ContributorsHelper, opt => opt.MapFrom(src => src.FactContributions.Where(fc => fc.DimOrganizationId != -1 || fc.DimNameId != -1 || fc.DimIdentifierlessDataId != -1)))
-            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences))
+            .ForMember(dst => dst.FieldsOfScience, opt => opt.MapFrom(src => src.FactReferencedata.Where(f => f.DimReferencedata.CodeScheme == "Tieteenala2010").Select(f => f.DimReferencedata)))
             .ForMember(dst => dst.Languages, opt => opt.MapFrom(src => src.FactReferencedata.Where(f => f.DimReferencedata.CodeScheme == "languages").Select(f => f.DimReferencedata)))
             .ForMember(dst => dst.AccessType, opt => opt.MapFrom(src => src.DimReferencedataAvailabilityNavigation))
             .ForMember(dst => dst.License, opt => opt.MapFrom(src => src.FactReferencedata
@@ -103,12 +103,12 @@ public class ResearchDatasetProfile : Profile
             .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.NameSv))
             .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.NameEn));
       
-        CreateProjection<FactDimReferencedataFieldOfScience, ReferenceData>()
-            .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
-            .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue))
-            .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
-            .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
-            .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn));
+        // CreateProjection<FactDimReferencedataFieldOfScience, ReferenceData>()
+        //     .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
+        //     .ForMember(dst => dst.Code, opt => opt.MapFrom(src => src.DimReferencedata.CodeValue))
+        //     .ForMember(dst => dst.NameFi, opt => opt.MapFrom(src => src.DimReferencedata.NameFi))
+        //     .ForMember(dst => dst.NameSv, opt => opt.MapFrom(src => src.DimReferencedata.NameSv))
+        //     .ForMember(dst => dst.NameEn, opt => opt.MapFrom(src => src.DimReferencedata.NameEn));
 
         CreateProjection<DimKeyword, Keyword>()
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
