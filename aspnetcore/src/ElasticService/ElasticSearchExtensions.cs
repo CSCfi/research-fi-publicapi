@@ -25,12 +25,6 @@ public static class ElasticSearchExtensions
         // Get settings for the ElasticSearch client
         var connectionSettings = GetConnectionSettings(configuration);
 
-        // ElasticSearch debug mode
-        if (configuration["ElasticSearch:Debug"]?.ToLower() == "true")
-        {
-            connectionSettings.PrettyJson().EnableDebugMode();
-        }
-
         // Instantiate the client with the settings
         var elasticClient = new ElasticClient(connectionSettings);
 
