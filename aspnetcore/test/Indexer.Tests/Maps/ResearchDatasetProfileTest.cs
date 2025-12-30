@@ -225,21 +225,30 @@ public class ResearchDatasetProfileTest
                     }
                 }
             },
-            FactDimReferencedataFieldOfSciences = new List<FactDimReferencedataFieldOfScience>
+            FactReferencedata = new List<FactReferencedatum>
             {
                 new()
                 {
                     DimReferencedata = new DimReferencedatum
                     {
-                        CodeValue = "fieldOfScienceFieldId",
-                        NameFi = "fieldOfScienceNameFi",
-                        NameSv = "fieldOfScienceNameSv",
-                        NameEn = "fieldOfScienceNameEn"
+                        CodeValue = "fieldOfScienceFieldId_1",
+                        NameFi = "fieldOfScienceNameFi_1",
+                        NameSv = "fieldOfScienceNameSv_1",
+                        NameEn = "fieldOfScienceNameEn_1",
+                        CodeScheme = "Tieteenala2010"
                     }
-                }
-            },
-            FactReferencedata = new List<FactReferencedatum>
-            {
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "fieldOfScienceFieldId_2",
+                        NameFi = "fieldOfScienceNameFi_2",
+                        NameSv = "fieldOfScienceNameSv_2",
+                        NameEn = "fieldOfScienceNameEn_2",
+                        CodeScheme = "Tieteenala2010"
+                    }
+                },
                 new()
                 {
                     DimReferencedata = new DimReferencedatum
@@ -481,10 +490,17 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
-                    Code = "fieldOfScienceFieldId",
-                    NameFi = "fieldOfScienceNameFi",
-                    NameSv = "fieldOfScienceNameSv",
-                    NameEn = "fieldOfScienceNameEn"
+                    Code = "fieldOfScienceFieldId_1",
+                    NameFi = "fieldOfScienceNameFi_1",
+                    NameSv = "fieldOfScienceNameSv_1",
+                    NameEn = "fieldOfScienceNameEn_1"
+                },
+                new()
+                {
+                    Code = "fieldOfScienceFieldId_2",
+                    NameFi = "fieldOfScienceNameFi_2",
+                    NameSv = "fieldOfScienceNameSv_2",
+                    NameEn = "fieldOfScienceNameEn_2"
                 }
             },
             Languages = new List<ReferenceData>
