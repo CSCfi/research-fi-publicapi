@@ -47,7 +47,7 @@ public class ResearchDatasetIndexRepositoryTest
     {
         // Arrange
         var researchDataset = GetModel();
-        researchDataset.VersionSet = new List<Version>(); // No versions
+        researchDataset.VersionSet = null; // No versions
         var researchDatasets = new List<object>
         {
             researchDataset
@@ -63,7 +63,7 @@ public class ResearchDatasetIndexRepositoryTest
         var resultResearchDataset = (ResearchDataset)researchDatasetObject!;
 
         resultResearchDataset.DatasetRelations.Should().BeNull();
-        resultResearchDataset.VersionSet.Should().BeEmpty();
+        resultResearchDataset.VersionSet.Should().BeNull();
         resultResearchDataset.IsLatestVersion.Should().Be(true, "IsLatestVersion should be true");
     }
     

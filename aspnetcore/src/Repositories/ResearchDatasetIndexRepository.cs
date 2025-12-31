@@ -140,6 +140,16 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         {
             researchDataset.License = null;
         }
+
+        if (researchDataset.DatasetRelations != null && !researchDataset.DatasetRelations.Any())
+        {
+            researchDataset.DatasetRelations = null;
+        }
+
+        if (researchDataset.VersionSet != null && !researchDataset.VersionSet.Any())
+        {
+            researchDataset.VersionSet = null;
+        }
     }
 
     /// <summary>
