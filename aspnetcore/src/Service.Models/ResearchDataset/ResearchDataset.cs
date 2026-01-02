@@ -26,6 +26,9 @@ public class ResearchDataset
     public DateTime? Created { get; set; }
 
     public List<Contributor>? Contributors { get; set; }
+    
+    [Ignore]
+    public List<ContributorHelper>? ContributorsHelper { get; set; }
 
     public List<ReferenceData>? FieldsOfScience { get; set; }
 
@@ -45,24 +48,12 @@ public class ResearchDataset
     
     public ResearchDataCatalog? ResearchDataCatalog { get; set; }
 
-    /// <summary>
-    /// Intermediate collection for getting outgoing version relations from the database. Not to be stored in Elastic Search.
-    /// </summary>
     [Ignore]
-    public List<DatasetRelationBridge>? OutgoingDatasetRelations { get; set; }
-
-    /// <summary>
-    /// Intermediate collection for getting incoming version relations from the database. Not to be stored in Elastic Search.
-    /// </summary>
-    [Ignore]
-    public List<DatasetRelationBridge>? IncomingDatasetVersionRelations { get; set; }
+    public int VersionInfo { get; set; }
 
     /// <summary>
     /// Collection of version references built from incoming and outgoing relations, to be able to include all versions of the data set for all entities.
     /// </summary>
-    /// <remarks>
-    /// Filled in the in memory operations of the index repository.
-    /// </remarks>
     public List<Version>? VersionSet { get; set; }
 
     /// <summary>

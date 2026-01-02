@@ -134,7 +134,7 @@ public class Indexer
         {
             List<object> finalized = new();
 
-            if (indexName.Contains("publication"))
+            if (indexName.Contains("publication") || indexName.Contains("dataset"))
             {
                 // Create new index
                 var (indexToCreate, indexToDelete) = await _indexService.GetIndexNames(indexName);
@@ -174,7 +174,7 @@ public class Indexer
                     processedCount = processedCount + numOfResults;
                     finalized = new();
                     _logger.LogInformation("{EntityType:l}: Total documents indexed = {processedCount}", type.Name, processedCount);
-                } while (numOfResults >= takeAmount - 1);
+                } while (numOfResults > 0 && numOfResults >= takeAmount - 1);
 
                 // Activate new index and delete old
                 await _indexService.SwitchIndexes(indexName, indexToCreate, indexToDelete, type.Name);

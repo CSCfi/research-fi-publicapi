@@ -7,8 +7,5 @@ public class Version
     [Keyword]
     public string? Identifier { get; set; }
     
-    public string? VersionNumber { get; set; }
-    
-    [Ignore]
-    public int DatabaseId { get; set; }
+    public int VersionNumber { get; set; }
 }
