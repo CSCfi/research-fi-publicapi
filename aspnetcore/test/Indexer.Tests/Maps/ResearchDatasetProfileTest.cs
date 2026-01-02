@@ -6,6 +6,7 @@ using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
 using Organization = CSC.PublicApi.Service.Models.ResearchDataset.Organization;
+using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace CSC.PublicApi.Indexer.Tests.Maps;
 
@@ -44,12 +45,40 @@ public class ResearchDatasetProfileTest
     {
         // Arrange
         var entity = GetEntity();
-        entity.BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new List<BrDatasetDatasetRelationship>();
-        entity.BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>();
+        // Relation type "HasVersion" is not included in related datasets.
+        entity.FactRelationFromResearchDatasets = new List<FactRelation>
+        {
+            new FactRelation()
+            {
+                FromResearchDataset = new DimResearchDataset
+                {
+                    VersionInfo = 1,
+                    LocalIdentifier = "localIdentifier_1"
+                },
+                ToResearchDataset = new DimResearchDataset
+                {
+                    VersionInfo = 3,
+                    LocalIdentifier = "localIdentifier_3"
+                },
+                FromResearchDatasetId = 111,
+                ToResearchDatasetId = 113,
+                RelationTypeCodeNavigation = new DimReferencedatum
+                {
+                    CodeValue = "IsPartOf"
+                }
+            }
+        };
 
         var model = GetModel();
-        model.IncomingDatasetVersionRelations = new List<DatasetRelationBridge>();
-        model.OutgoingDatasetRelations = new List<DatasetRelationBridge>();
+        model.DatasetRelations = new List<DatasetRelation>()
+        {
+            new DatasetRelation()
+            {
+                Id = "localIdentifier_3",
+                Type = "IsPartOf"
+            }
+        };
+        model.VersionSet = new List<Version>();
 
         // Act
         var result = Act_Map(entity);
@@ -75,17 +104,51 @@ public class ResearchDatasetProfileTest
         return new DimResearchDataset
         {
             Id = Id,
-            NameFi = "nameFi",
-            NameSv = "nameSv",
-            NameEn = "nameEn",
-            DescriptionFi = "descFi",
-            DescriptionSv = "descSv",
-            DescriptionEn = "descEn",
+            DimDescriptiveItems = new List<DimDescriptiveItem>
+            {
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "fi",
+                    DescriptiveItem = "nameFi"
+                },
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "sv",
+                    DescriptiveItem = "nameSv"
+                },
+                new()
+                {
+                    DescriptiveItemType = "name",
+                    DescriptiveItemLanguage = "en",
+                    DescriptiveItem = "nameEn"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "fi",
+                    DescriptiveItem = "descFi"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "sv",
+                    DescriptiveItem = "descSv"
+                },
+                new()
+                {
+                    DescriptiveItemType = "description",
+                    DescriptiveItemLanguage = "en",
+                    DescriptiveItem = "descEn"
+                }
+            },
             DatasetCreated = new DateTime(2021, 10, 1),
             FactContributions = new List<FactContribution>
             {
                 new()
                 {
+                    DimOrganizationId = 42,
                     DimOrganization = new DimOrganization
                     {
                         Id = 42,
@@ -123,30 +186,101 @@ public class ResearchDatasetProfileTest
                         NameFi = "roleNameFi",
                         NameSv = "roleNameSv",
                         NameEn = "roleNameEn"
+                    },
+                    DimIdentifierlessDataId = 99,
+                    DimIdentifierlessData = new DimIdentifierlessDatum
+                    {
+                        Id = 99,
+                        ValueFi = "identifierlessDataValueFi",
+                        ValueSv = "identifierlessDataValueSv",
+                        ValueEn = "identifierlessDataValueEn",
+                        ValueUnd = "identifierlessDataValueUnd",
+                        DimOrganizationId = 43,
+                        DimOrganization = new DimOrganization
+                        {
+                            Id = 43,
+                            NameFi = "identifierlessOrganizationNameFi",
+                            NameSv = "identifierlessOrganizationNameSv",
+                            NameEn = "identifierlessOrganizationNameEn",
+                            NameVariants = "identifierlessOrganizationNameVariants",
+                            DimPids = new List<DimPid>
+                            {
+                                new()
+                                {
+                                    PidContent = "pidContent4",
+                                    PidType = "BusinessID"
+                                },
+                                new()
+                                {
+                                    PidContent = "pidContent5",
+                                    PidType = "PIC"
+                                },
+                                new()
+                                {
+                                    PidContent = "pidContent6",
+                                    PidType = "WrongType"
+                                }
+                            }
+                        }
                     }
                 }
             },
-            FactDimReferencedataFieldOfSciences = new List<FactDimReferencedataFieldOfScience>
+            FactReferencedata = new List<FactReferencedatum>
             {
                 new()
                 {
                     DimReferencedata = new DimReferencedatum
                     {
-                        CodeValue = "fieldOfScienceFieldId",
-                        NameFi = "fieldOfScienceNameFi",
-                        NameSv = "fieldOfScienceNameSv",
-                        NameEn = "fieldOfScienceNameEn"
+                        CodeValue = "fieldOfScienceFieldId_1",
+                        NameFi = "fieldOfScienceNameFi_1",
+                        NameSv = "fieldOfScienceNameSv_1",
+                        NameEn = "fieldOfScienceNameEn_1",
+                        CodeScheme = "Tieteenala2010"
                     }
-                }
-            },
-            DimReferencedata = new List<DimReferencedatum>
-            {
+                },
                 new()
                 {
-                    CodeValue = "languageCode",
-                    NameEn = "languageNameEn",
-                    NameFi = "languageNameFi",
-                    NameSv = "languageNameSv",
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "fieldOfScienceFieldId_2",
+                        NameFi = "fieldOfScienceNameFi_2",
+                        NameSv = "fieldOfScienceNameSv_2",
+                        NameEn = "fieldOfScienceNameEn_2",
+                        CodeScheme = "Tieteenala2010"
+                    }
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "languageCode",
+                        NameEn = "languageNameEn",
+                        NameFi = "languageNameFi",
+                        NameSv = "languageNameSv",
+                        CodeScheme = "languages"
+                    }
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "licenseCode",
+                        NameFi = "licenseNameFi",
+                        NameSv = "licenseNameSv",
+                        NameEn = "licenseNameEn",
+                        CodeScheme = "license"
+                    }
+                },
+                new()
+                {
+                    DimReferencedata = new DimReferencedatum
+                    {
+                        CodeValue = "accessTypeCode",
+                        NameFi = "accessTypeNameFi",
+                        NameSv = "accessTypeNameSv",
+                        NameEn = "accessTypeNameEn",
+                        CodeScheme = "access_type"
+                    }
                 }
             },
             DimReferencedataAvailabilityNavigation = new DimReferencedatum
@@ -157,99 +291,95 @@ public class ResearchDatasetProfileTest
                 NameEn = "accessTypeNameEn",
                 CodeScheme = "access_type"
             },
-            DimReferencedataLicenseNavigation = new DimReferencedatum
+            FactKeywords = new List<FactKeyword>
             {
-                CodeValue = "licenseCode",
-                NameFi = "licenseNameFi",
-                NameSv = "licenseNameSv",
-                NameEn = "licenseNameEn",
-                CodeScheme = "license"
+                new()
+                {
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "keyword1",
+                        Language = "keywordLanguage1",
+                        Scheme = "Avainsana"
+                    }
+                },
+                new()
+                {
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "subjectHeading1",
+                        Language = "keywordLanguage2",
+                        Scheme = "Theme"
+                    }
+                },
+                new()
+                {
+                    DimKeyword = new DimKeyword
+                    {
+                        Keyword = "wrongSchemeKeyword",
+                        Language = "keywordLanguage3",
+                        Scheme = "WrongScheme"
+                    }
+                }
             },
-            DimKeywords = new List<DimKeyword>
+            VersionInfo = 1,
+            FactRelationFromResearchDatasets = new List<FactRelation>
             {
                 new()
                 {
-                    Keyword = "keyword1",
-                    Language = "keywordLanguage",
-                    Scheme = "Avainsana"
+                    FromResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
+                    },
+                    ToResearchDataset = new DimResearchDataset
+                    {
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
+                    },
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 111,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "HasVersion"
+                    }
                 },
                 new()
                 {
-                    Keyword = "subjectHeading1",
-                    Language = "keywordLanguage",
-                    Scheme = "Theme"
-                },
-            },
-            BrDatasetDatasetRelationshipDimResearchDatasets = new List<BrDatasetDatasetRelationship>
-            {
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
+                    FromResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "123",
-                        LocalIdentifier = "1"
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
                     },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
+                    ToResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "123",
-                        LocalIdentifier = "2"
+                        VersionInfo = 2,
+                        LocalIdentifier = "localIdentifier_2"
                     },
-                    DimResearchDatasetId = 32410,
-                    DimResearchDatasetId2 = 32410,
-                    Type = "version"
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 112,
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "HasVersion"
+                    }
                 },
                 new()
                 {
-                    DimResearchDataset = new DimResearchDataset
+                    FromResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "3"
+                        VersionInfo = 1,
+                        LocalIdentifier = "localIdentifier_1"
                     },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
+                    ToResearchDataset = new DimResearchDataset
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "4"
+                        VersionInfo = 3,
+                        LocalIdentifier = "localIdentifier_3"
                     },
-                    DimResearchDatasetId = 32411,
-                    DimResearchDatasetId2 = 32411,
-                    Type = "notVersion"
-                },
-                
-            },
-            BrDatasetDatasetRelationshipDimResearchDatasetId2Navigations = new List<BrDatasetDatasetRelationship>
-            {
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
+                    FromResearchDatasetId = 111,
+                    ToResearchDatasetId = 113,
+                    RelationTypeCodeNavigation = new DimReferencedatum
                     {
-                        VersionInfo = "321",
-                        LocalIdentifier = "5"
-                    },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
-                    {
-                        VersionInfo = "322",
-                        LocalIdentifier = "6"
-                        
-                    },
-                    DimResearchDatasetId = 32411,
-                    DimResearchDatasetId2 = 32412,
-                    Type = "notVersion"
-                },
-                new()
-                {
-                    DimResearchDataset = new DimResearchDataset
-                    {
-                        VersionInfo = "123",
-                        LocalIdentifier = "7"
-                    },
-                    DimResearchDatasetId2Navigation = new DimResearchDataset
-                    {
-                        VersionInfo = "321",
-                        LocalIdentifier = "8"
-                    },
-                    DimResearchDatasetId = 32410,
-                    DimResearchDatasetId2 = 32411,
-                    Type = "version"
+                        CodeValue = "IsPartOf"
+                    }
                 }
             },
             DimPids = new List<DimPid>
@@ -286,11 +416,14 @@ public class ResearchDatasetProfileTest
             DescriptionSv = "descSv",
             DescriptionEn = "descEn",
             Created = new DateTime(2021, 10, 1),
-            Contributors = new List<Contributor>
+            ContributorsHelper = new List<ContributorHelper>
             {
                 new()
                 {
-                    Organization = new Organization
+                    FactContribution_DimOrganizationId = 42,
+                    FactContribution_DimIdentifierlessDataId = 99,
+                    FactContribution_DimIdentifierlessData_DimOrganizationId = 43,
+                    Organization_From_FactContribution_DimOrganization = new Organization
                     {
                         Id = "42",
                         Pids = new List<PersistentIdentifier>
@@ -311,7 +444,37 @@ public class ResearchDatasetProfileTest
                         NameEn = "organizationNameEn",
                         NameVariants = "organizationNameVariants"
                     },
-                    Person = new Person 
+                    Organization_From_FactContribution_DimIdentifierlessData = new Organization
+                    {
+                        Id = null,
+                        NameEn = "identifierlessDataValueEn",
+                        NameFi = "identifierlessDataValueFi",
+                        NameSv = "identifierlessDataValueSv",
+                        NameVariants = "identifierlessDataValueUnd",
+                        Pids = null
+                    },
+                    Organization_From_FactContribution_DimIdentifierlessData_DimOrganization = new Organization
+                    {
+                        Id = "43",
+                        NameEn = "identifierlessOrganizationNameEn",
+                        NameFi = "identifierlessOrganizationNameFi",
+                        NameSv = "identifierlessOrganizationNameSv",
+                        NameVariants = "identifierlessOrganizationNameVariants",
+                        Pids = new List<PersistentIdentifier>
+                        {
+                            new()
+                            {
+                                Content = "pidContent4",
+                                Type = "BusinessID"
+                            },
+                            new()
+                            {
+                            Content = "pidContent5",
+                            Type = "PIC"
+                            }
+                        },
+                    },
+                    Person = new Person
                     {
                         Name = "personFullName"
                     },
@@ -327,10 +490,17 @@ public class ResearchDatasetProfileTest
             {
                 new()
                 {
-                    Code = "fieldOfScienceFieldId",
-                    NameFi = "fieldOfScienceNameFi",
-                    NameSv = "fieldOfScienceNameSv",
-                    NameEn = "fieldOfScienceNameEn"
+                    Code = "fieldOfScienceFieldId_1",
+                    NameFi = "fieldOfScienceNameFi_1",
+                    NameSv = "fieldOfScienceNameSv_1",
+                    NameEn = "fieldOfScienceNameEn_1"
+                },
+                new()
+                {
+                    Code = "fieldOfScienceFieldId_2",
+                    NameFi = "fieldOfScienceNameFi_2",
+                    NameSv = "fieldOfScienceNameSv_2",
+                    NameEn = "fieldOfScienceNameEn_2"
                 }
             },
             Languages = new List<ReferenceData>
@@ -362,7 +532,7 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Value = "keyword1",
-                    Language = "keywordLanguage",
+                    Language = "keywordLanguage1",
                     Scheme = "Avainsana"
                 }
             },
@@ -371,7 +541,7 @@ public class ResearchDatasetProfileTest
                 new()
                 {
                     Value = "subjectHeading1",
-                    Language = "keywordLanguage",
+                    Language = "keywordLanguage2",
                     Scheme = "Theme"
                 }
             },
@@ -393,44 +563,28 @@ public class ResearchDatasetProfileTest
                 SourceId = "researchDataCatalogSourceId",
                 SourceDescription = "researchDataCatalogSourceDescription"
             },
-            IncomingDatasetVersionRelations = new List<DatasetRelationBridge>
+            DatasetRelations = new List<DatasetRelation>
             {
                 new()
                 {
-                    DatabaseId = 32410, 
-                    DatabaseId2 = 32411, 
-                    Id = "7", 
-                    Id2 = "8", 
-                    Type = "version", 
-                    VersionNumber = "123", 
-                    VersionNumber2 = "321"
+                    Id = "localIdentifier_3",
+                    Type = "IsPartOf"
                 }
             },
-            OutgoingDatasetRelations = new List<DatasetRelationBridge>
+            VersionInfo = 1,
+            VersionSet = new List<Version>
             {
                 new()
                 {
-                    DatabaseId = 32410, 
-                    DatabaseId2 = 32410, 
-                    Id = "1", 
-                    Id2 = "2", 
-                    Type = "version", 
-                    VersionNumber = "123", 
-                    VersionNumber2 = "123"
+                    Identifier = "localIdentifier_1",
+                    VersionNumber = 1
                 },
                 new()
                 {
-                    DatabaseId = 32411, 
-                    DatabaseId2 = 32411, 
-                    Id = "3", 
-                    Id2 = "4", 
-                    Type = "notVersion", 
-                    VersionNumber = "321", 
-                    VersionNumber2 = "321"
+                    Identifier = "localIdentifier_2",
+                    VersionNumber = 2,
                 }
             },
-            DatasetRelations = null,
-            VersionSet = null,
             IsLatestVersion = null
         };
     }

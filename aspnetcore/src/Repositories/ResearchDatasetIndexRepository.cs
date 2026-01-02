@@ -44,7 +44,7 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             .ThenInclude(f => f.DimOrganization)
             .ProjectTo<ResearchDataset>(_mapper.ConfigurationProvider);
     }
-    
+
     public override List<object> PerformInMemoryOperations(List<object> entities)
     {
         entities.ForEach(o =>
@@ -53,13 +53,60 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
             {
                 return;
             }
-            
+
+            HandleContributorOrganizations(researchDataset);
             HandleEmptyContributors(researchDataset);
-            HandleDatasetRelations(researchDataset);
+            HandleIsLatestVersion(researchDataset);
             HandleEmptyCollections(researchDataset);
             HandleResearchfiUrl(researchDataset);
         });
         return entities;
+    }
+
+    public override object PerformInMemoryOperation(object entity)
+    {
+        ResearchDataset researchDataset = (ResearchDataset)entity;
+        HandleContributorOrganizations(researchDataset);
+        HandleEmptyContributors(researchDataset);
+        HandleIsLatestVersion(researchDataset);
+        HandleEmptyCollections(researchDataset);
+        HandleResearchfiUrl(researchDataset);
+        return researchDataset;
+    }
+
+    private static void HandleContributorOrganizations(ResearchDataset researchDataset)
+    {
+        if (researchDataset.ContributorsHelper == null)
+        {
+            return;
+        }
+
+        researchDataset.Contributors = new List<Contributor>();
+        
+        foreach (var contributorHelper in researchDataset.ContributorsHelper)
+        {
+            var contributor = new Contributor
+            {
+                // Determine the correct organization based on available IDs
+                // Priority:
+                // 1. FactContribution_DimOrganizationId
+                // 2. FactContribution_DimIdentifierlessData_DimOrganizationId
+                // 3. FactContribution_DimIdentifierlessDataId
+                Organization = contributorHelper.FactContribution_DimOrganizationId != -1
+                    ? contributorHelper.Organization_From_FactContribution_DimOrganization
+                    : contributorHelper.FactContribution_DimIdentifierlessDataId != -1
+                        ? (contributorHelper.FactContribution_DimIdentifierlessData_DimOrganizationId != -1
+                            ? contributorHelper.Organization_From_FactContribution_DimIdentifierlessData_DimOrganization
+                            : contributorHelper.Organization_From_FactContribution_DimIdentifierlessData)
+                        : null,
+                Person = contributorHelper.Person,
+                Role = contributorHelper.Role
+            };
+
+            researchDataset.Contributors.Add(contributor);
+        }
+
+        researchDataset.ContributorsHelper = null;
     }
 
     private static void HandleEmptyCollections(ResearchDataset researchDataset)
@@ -73,17 +120,17 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         {
             researchDataset.SubjectHeadings = null;
         }
-        
+
         if (researchDataset.FieldsOfScience != null && !researchDataset.FieldsOfScience.Any())
         {
             researchDataset.FieldsOfScience = null;
         }
-        
+
         if (researchDataset.Languages != null && !researchDataset.Languages.Any())
         {
             researchDataset.Languages = null;
         }
-        
+
         if (researchDataset.PersistentIdentifiers != null && !researchDataset.PersistentIdentifiers.Any())
         {
             researchDataset.PersistentIdentifiers = null;
@@ -92,6 +139,16 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
         if (researchDataset.License is { Code: null, NameEn: null, NameFi: null, NameSv: null })
         {
             researchDataset.License = null;
+        }
+
+        if (researchDataset.DatasetRelations != null && !researchDataset.DatasetRelations.Any())
+        {
+            researchDataset.DatasetRelations = null;
+        }
+
+        if (researchDataset.VersionSet != null && !researchDataset.VersionSet.Any())
+        {
+            researchDataset.VersionSet = null;
         }
     }
 
@@ -119,57 +176,15 @@ public class ResearchDatasetIndexRepository : IndexRepositoryBase<ResearchDatase
     }
 
     /// <summary>
-    /// Checks all incoming and outgoing versions and creates a single list to the <see cref="ResearchDataset.VersionSet"/> property.
+    /// Determine if dataset is the latest version
     /// </summary>
-    private static void HandleDatasetRelations(ResearchDataset researchDataset)
+    private static void HandleIsLatestVersion(ResearchDataset researchDataset)
     {
-        var versions = new List<Version>();
-
-        if (researchDataset.IncomingDatasetVersionRelations != null)
-        {
-            versions.AddRange(researchDataset.IncomingDatasetVersionRelations.Select(version => new Version
-            { 
-                DatabaseId = version.DatabaseId, 
-                VersionNumber = version.VersionNumber, 
-                Identifier = version.Id
-            }).ToList());
-        }
-
-        if (researchDataset.OutgoingDatasetRelations != null)
-        {
-            foreach (var outgoingRelation in researchDataset.OutgoingDatasetRelations)
-            {
-                if (outgoingRelation.Type == "version")
-                {
-                    if (versions.All(s => s.DatabaseId != outgoingRelation.DatabaseId2))
-                    {
-                        versions.Add(new Version
-                        {
-                            DatabaseId = outgoingRelation.DatabaseId2, 
-                            VersionNumber = outgoingRelation.VersionNumber2, 
-                            Identifier = outgoingRelation.Id2
-                        });
-                    }
-                
-                    continue;
-                }
-
-                researchDataset.DatasetRelations ??= new List<DatasetRelation>();
-                researchDataset.DatasetRelations.Add(new DatasetRelation
-                { 
-                    Id = outgoingRelation.Id2, 
-                    Type = outgoingRelation.Type 
-                });
-            }
-        }
-
-        if (versions.Any())
-        {
-            researchDataset.VersionSet = versions;            
-        }
-
-        researchDataset.IsLatestVersion = researchDataset.VersionSet == null || researchDataset.VersionSet.Any(s =>
-            s.DatabaseId == researchDataset.DatabaseId && s.VersionNumber == researchDataset.VersionSet.Max(m => m.VersionNumber));
+        researchDataset.IsLatestVersion =
+            researchDataset.VersionSet == null ||
+            researchDataset.VersionSet.Count == 0 ||
+            researchDataset.VersionInfo >=
+                researchDataset.VersionSet.Max(m => m.VersionNumber);
     }
 
     private static void HandleResearchfiUrl(ResearchDataset researchDataset)
