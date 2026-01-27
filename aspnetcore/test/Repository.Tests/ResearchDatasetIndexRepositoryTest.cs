@@ -3,6 +3,7 @@ using CSC.PublicApi.Service.Models;
 using CSC.PublicApi.Service.Models.ResearchDataset;
 using FluentAssertions;
 using Xunit;
+using Version = CSC.PublicApi.Service.Models.ResearchDataset.Version;
 
 namespace Repository.Tests;
 
@@ -32,19 +33,8 @@ public class ResearchDatasetIndexRepositoryTest
         var researchDatasetObject = researchDatasets.FirstOrDefault();
         researchDatasetObject.Should().NotBeNull().And.BeAssignableTo<ResearchDataset>();
         var researchDataset = (ResearchDataset)researchDatasetObject!;
-        
-        researchDataset.DatasetRelations.Should().NotBeNullOrEmpty();
-        var datasetRelation = researchDataset.DatasetRelations!.FirstOrDefault();
-        datasetRelation.Should().NotBeNull();
-        datasetRelation!.Id.Should().Be("4");
-        datasetRelation.Type.Should().Be("notVersion");
-        
-        researchDataset.VersionSet.Should().NotBeNullOrEmpty();
-        researchDataset.VersionSet.Should().HaveCount(2);
-        researchDataset.VersionSet.Should().ContainSingle(v => v.Identifier == "1" && v.VersionNumber == "1");
-        researchDataset.VersionSet.Should().ContainSingle(v => v.Identifier == "2" && v.VersionNumber == "2");
 
-        researchDataset.IsLatestVersion.Should().Be(false);
+        researchDataset.IsLatestVersion.Should().Be(false, "IsLatestVersion should be false");
         researchDataset.Contributors.Should().BeNull();
         researchDataset.FieldsOfScience.Should().BeNull();
         researchDataset.Keywords.Should().BeNull();
@@ -57,13 +47,12 @@ public class ResearchDatasetIndexRepositoryTest
     {
         // Arrange
         var researchDataset = GetModel();
-        researchDataset.IncomingDatasetVersionRelations = null;
-        researchDataset.OutgoingDatasetRelations = null;
+        researchDataset.VersionSet = null; // No versions
         var researchDatasets = new List<object>
         {
             researchDataset
         };
-        
+
         // Act
         var resultDatasets = _researchDatasetIndexRepository.PerformInMemoryOperations(researchDatasets);
         
@@ -75,7 +64,7 @@ public class ResearchDatasetIndexRepositoryTest
 
         resultResearchDataset.DatasetRelations.Should().BeNull();
         resultResearchDataset.VersionSet.Should().BeNull();
-        resultResearchDataset.IsLatestVersion.Should().Be(true);
+        resultResearchDataset.IsLatestVersion.Should().Be(true, "IsLatestVersion should be true");
     }
     
     [Fact]
@@ -83,7 +72,20 @@ public class ResearchDatasetIndexRepositoryTest
     {
         // Arrange
         var researchDataset = GetModel();
-        researchDataset.DatabaseId = 101;
+        researchDataset.VersionInfo = 3; // Set to higher value than any in VersionSet
+        researchDataset.VersionSet = new List<Version>()
+        {
+            new Version
+            {
+                Identifier = "localIdentifier-1",
+                VersionNumber = 1
+            },
+            new Version
+            {
+                Identifier = "localIdentifier-1",
+                VersionNumber = 2
+            }
+        };
         var researchDatasets = new List<object>
         {
             researchDataset
@@ -103,9 +105,9 @@ public class ResearchDatasetIndexRepositoryTest
 
         // Check that ResearchfiUrl is set correctly in HandleResearchfiUrl
         resultResearchDataset.ResearchfiUrl.Should().NotBeNull();
-        resultResearchDataset.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/dataset/localIdentifier");
-        resultResearchDataset.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/dataset/localIdentifier");
-        resultResearchDataset.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/dataset/localIdentifier");
+        resultResearchDataset.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/dataset/localIdentifier-1");
+        resultResearchDataset.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/dataset/localIdentifier-1");
+        resultResearchDataset.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/dataset/localIdentifier-1");
     }
     
     private static ResearchDataset GetModel()
@@ -113,6 +115,7 @@ public class ResearchDatasetIndexRepositoryTest
         return new ResearchDataset
         {
             DatabaseId = 100,
+            Id = "localIdentifier-1",
             NameFi = "nameFi",
             NameSv = "nameSv",
             NameEn = "nameEn",
@@ -160,7 +163,6 @@ public class ResearchDatasetIndexRepositoryTest
             },
             Keywords = new List<Keyword>(),
             PersistentIdentifiers = new List<PersistentIdentifier>(),
-            Id = "localIdentifier",
             ResearchDataCatalog = new ResearchDataCatalog
             {
                 Id = 7,
@@ -170,56 +172,26 @@ public class ResearchDatasetIndexRepositoryTest
                 SourceId = "researchDataCatalogSourceId",
                 SourceDescription = "researchDataCatalogSourceDescription"
             },
-            IncomingDatasetVersionRelations = new List<DatasetRelationBridge>
-            {
-                new()
-                {
-                    DatabaseId = 101, 
-                    DatabaseId2 = 100, 
-                    Id = "2", 
-                    Id2 = "1", 
-                    Type = "version", 
-                    VersionNumber = "2", 
-                    VersionNumber2 = "1"
-                }
-            },
-            OutgoingDatasetRelations = new List<DatasetRelationBridge>
-            {
-                new()
-                {
-                    DatabaseId = 100,
-                    DatabaseId2 = 100,
-                    Id = "1", 
-                    Id2 = "1", 
-                    Type = "version", 
-                    VersionNumber = "1", 
-                    VersionNumber2 = "1"
-                },
-                new()
-                {
-                    DatabaseId = 100,
-                    DatabaseId2 = 101,
-                    Id = "1", 
-                    Id2 = "2", 
-                    Type = "version", 
-                    VersionNumber = "1", 
-                    VersionNumber2 = "2"
-                },
-                new()
-                {
-                    DatabaseId = 100, 
-                    DatabaseId2 = 105, 
-                    Id = "3", 
-                    Id2 = "4", 
-                    Type = "notVersion", 
-                    VersionNumber = "321", 
-                    VersionNumber2 = "321"
-                }
-            },
             DatasetRelations = null,
-            VersionSet = null,
+            VersionSet = new List<Version>()
+            {
+                new Version
+                {
+                    Identifier = "localIdentifier-1",
+                    VersionNumber = 1
+                },
+                new Version
+                {
+                    Identifier = "localIdentifier-1",
+                    VersionNumber = 2
+                },
+                new Version
+                {
+                    Identifier = "localIdentifier-2",
+                    VersionNumber = 1
+                }
+            },
             IsLatestVersion = null
-            // ResearchfiUrl should be set in HandleResearchfiUrl
         };
     }
 }
