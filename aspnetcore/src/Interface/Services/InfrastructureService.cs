@@ -1,20 +1,21 @@
 ﻿using AutoMapper;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.ElasticService.SearchParameters;
-using ResearchFi.Infrastructure;
 using ResearchFi.Query;
+using Infrastructure = ResearchFi.Infrastructure.Infrastructure;
 
 namespace CSC.PublicApi.Interface.Services;
 
 public class InfrastructureService : IInfrastructureService
 {
-    private readonly ILogger<InfrastructureService> _logger;
     private readonly IMapper _mapper;
     private readonly ISearchService<InfrastructureSearchParameters, Service.Models.Infrastructure.Infrastructure> _searchService;
 
-    public InfrastructureService(ILogger<InfrastructureService> logger, IMapper mapper, ISearchService<InfrastructureSearchParameters, Service.Models.Infrastructure.Infrastructure> searchService)
+    public InfrastructureService(
+        IMapper mapper,
+        ISearchService<InfrastructureSearchParameters,
+        Service.Models.Infrastructure.Infrastructure> searchService)
     {
-        _logger = logger;
         _mapper = mapper;
         _searchService = searchService;
     }
@@ -24,6 +25,15 @@ public class InfrastructureService : IInfrastructureService
         var searchParameters = _mapper.Map<InfrastructureSearchParameters>(infrastructuresQueryParameters);
 
         var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
+
+        // If query parameters contain ExcludeServices=true, omit IsComposedOf property
+        if (infrastructuresQueryParameters.ExcludeServices == true)
+        {
+            foreach (var infrastructure in result)
+            {
+                infrastructure.IsComposedOf = null;
+            }
+        }
 
         return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchResult);
     }
@@ -35,6 +45,22 @@ public class InfrastructureService : IInfrastructureService
 
         var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
+        // If query parameters contain ExcludeServices=true, omit IsComposedOf property
+        if (infrastructuresQueryParameters.ExcludeServices == true)
+        {
+            foreach (var infrastructure in result)
+            {
+                infrastructure.IsComposedOf = null;
+            }
+        }
+
         return (_mapper.Map<IEnumerable<Infrastructure>>(result), searchAfterResult);
+    }
+
+    public async Task<Infrastructure?> GetInfrastructure(string urn)
+    {
+        var result = await _searchService.GetSingle(urn);
+
+        return _mapper.Map<Infrastructure>(result);
     }
 }

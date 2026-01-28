@@ -1,0 +1,77 @@
+// https://tietomallit.suomi.fi/model/researchfi_publicapi_service?ver=1.0.0
+
+namespace ResearchFi.Infrastructure
+{
+    /// <summary>Infrastructure's service</summary>
+    public partial class Service
+    {
+        /// <summary>Classification - service user role. https://uri.suomi.fi/codelist/research/infrapalvelu-kayttaja</summary>
+        public List<ReferenceData>? ServiceUserRole { get; set; }
+
+        /// <summary>Service end user guide</summary>
+        public List<Weblink>? ServiceEndUserGuide { get; set; }
+       
+        /// <summary>Service is part of infrastructure</summary>
+        public ServiceInfrastructure? IsPartOf { get; set; }
+
+        /// <summary>Service name</summary>
+        public List<DescriptiveText>? ServiceName { get; set; }
+
+        /// <summary>Service homepage</summary>
+        public List<Weblink>? ServiceHomepage { get; set; }
+
+        /// <summary>Service identifier</summary>
+        public Identifier? ServiceIdentifier { get; set; }
+
+        /// <summary>Service starts on</summary>
+        public InfraDate? ServiceStartsOn { get; set; }
+
+        /// <summary>Service obtain instruction</summary>
+        public DescriptiveText? ServiceObtain { get; set; }
+
+        /// <summary>Service ends on</summary>
+        public InfraDate? ServiceEndsOn { get; set; }
+
+        /// <summary>Service booking link</summary>
+        public List<Weblink>? ServiceBookingLink { get; set; }
+
+        /// <summary>Classification - service target segment. https://uri.suomi.fi/codelist/research/infrapalvelu-kohderyhma"</summary>
+        public List<ReferenceData>? ServiceTargetSegment { get; set; }
+
+        /// <summary>Service research.fi URL</summary>
+        public LanguageVariant? ServiceResearchfiUrl { get; set; }
+
+            /// <summary>Service contact information</summary>
+        public List<ContactInformation>? ServiceContactInformation { get; set; }
+
+        /// <summary>Service description</summary>
+        public List<DescriptiveText>? ServiceDescription { get; set; }
+
+        /// <summary>Service privacy policy</summary>
+        public List<Weblink>? ServicePrivacyPolicy { get; set; }
+
+        /// <summary>Service terms of use</summary>
+        public List<Weblink>? ServiceTermsOfUse { get; set; }
+    }
+
+    /// <summary>Research infrastructure</summary>
+    public partial class ServiceInfrastructure
+    {
+        /// <summary>Infrastructure identifier</summary>
+        public Identifier? InfraIdentifier { get; set; }
+
+        /// <summary>Organization - participant</summary>
+        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+
+        /// <summary>Organization - responsible</summary>
+        public ResearchOrganization? ResponsibleOrganization { get; set; }
+
+        /// <summary>Infrastructure name</summary>
+        public List<DescriptiveText>? InfraName { get; set; }
+
+        /// <summary>
+        /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
+        /// </summary>
+        public List<ReferenceData>? Esfri { get; set; }
+    }
+}

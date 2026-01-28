@@ -37,6 +37,8 @@ public partial class FactRelation
 
     public string? SourceId { get; set; }
 
+    public bool? ValidRelation { get; set; }
+
     public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
 
     public virtual DimDate EndDateNavigation { get; set; } = null!;

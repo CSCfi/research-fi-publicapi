@@ -74,9 +74,15 @@ public partial class DimDescriptiveItem
 
     public int DimResearchDatasetId { get; set; }
 
+    public int DimInfrastructureId { get; set; }
+
+    public int DimServiceId { get; set; }
+
     public int DimResearchDataCatalogId { get; set; }
 
     public virtual DimDate? DimEndDateNavigation { get; set; }
+
+    public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
 
     public virtual DimPublication DimPublication { get; set; } = null!;
 
@@ -87,6 +93,8 @@ public partial class DimDescriptiveItem
     public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
 
     public virtual DimResearchProject DimResearchProject { get; set; } = null!;
+
+    public virtual DimService DimService { get; set; } = null!;
 
     public virtual DimDate DimStartDateNavigation { get; set; } = null!;
 }
