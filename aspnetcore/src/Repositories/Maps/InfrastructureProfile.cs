@@ -104,6 +104,7 @@ public class InfrastructureProfile : Profile
                 .Select(fc => fc.DimOrganization)))
             // Organization - responsible
            .ForMember(dst => dst.ResponsibleOrganization, opt => opt.MapFrom(src => src.ResponsibleOrganizationId != -1 ? src.ResponsibleOrganization : null))
+           // Infrastructure researchfi URL - handled in InfrastructureIndexRepository
            .ForMember(dst => dst.InfraResearchfiURL, opt => opt.Ignore());
 
 
@@ -111,6 +112,10 @@ public class InfrastructureProfile : Profile
         CreateProjection<DimService, CSC.PublicApi.Service.Models.Infrastructure.Service>()
             // Export sort id
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
+            // Local identifier
+            .ForMember(dst => dst.LocalIdentifier, opt => opt.MapFrom(src => src.LocalIdentifier))
+            // Pids - handled in InfrastructureServiceIndexRepository. Set to null if empty.
+            .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids))
             // Service name
             .ForMember(dst => dst.ServiceName, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name)))
@@ -122,8 +127,6 @@ public class InfrastructureProfile : Profile
             // Service homepage
             .ForMember(dst => dst.ServiceHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
-            // Pids - handled in InfrastructureServiceIndexRepository
-            .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids))
             // Service identifier - handled in InfrastructureServiceIndexRepository
             .ForMember(dst => dst.ServiceIdentifier, opt => opt.Ignore())
             // Service is part of infrastructure - handled in InfrastructureServiceIndexRepository
@@ -149,7 +152,7 @@ public class InfrastructureProfile : Profile
             // Service target segment
             .ForMember(dst => dst.ServiceTargetSegment, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_Infrapalvelu_Kohderyhma).Select(fr => fr.DimReferencedata)))
-            // Service researchfi URL
+            // Service researchfi URL - handled in InfrastructureServiceIndexRepository
             .ForMember(dst => dst.ServiceResearchfiURL, opt => opt.Ignore())
             // Service privacy policy
             .ForMember(dst => dst.ServicePrivacyPolicy, opt => opt.MapFrom(src => src.DimWebLinks
@@ -207,6 +210,10 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.WeblinkURL, opt => opt.MapFrom(src => src.Url));
 
         CreateProjection<DimService, InfrastructureService>()
+            // Local identifier - handled in InfrastructureIndexRepository
+            .ForMember(dst => dst.LocalIdentifier, opt => opt.MapFrom(src => src.LocalIdentifier))
+            // Pids - handled in InfrastructureServiceIndexRepository
+            .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids))
             .ForMember(dst => dst.ServiceContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             .ForMember(dst => dst.ServiceName, opt => opt.MapFrom(
                 src => src.DimDescriptiveItems.Where(di => di.DescriptiveItemType == DescriptiveItemType_Name)))
@@ -214,7 +221,7 @@ public class InfrastructureProfile : Profile
                 src => src.DimDescriptiveItems.Where(di => di.DescriptiveItemType == DescriptiveItemType_Description)))
             .ForMember(dst => dst.ServiceHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
-            .ForMember(dst => dst.ServiceIdentifier, opt => opt.Ignore())
+            .ForMember(dst => dst.ServiceIdentifier, opt => opt.Ignore()) // Handled in InfrastructureIndexRepository
             .ForMember(dst => dst.ServiceUserRole, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_Infrapalvelu_Kayttaja).Select(fr => fr.DimReferencedata)))
             .ForMember(dst => dst.ServiceEndUserGuide, opt => opt.MapFrom(src => src.DimWebLinks

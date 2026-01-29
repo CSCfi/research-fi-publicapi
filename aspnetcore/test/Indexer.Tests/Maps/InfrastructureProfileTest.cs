@@ -586,6 +586,7 @@ public class InfrastructureProfileTest
             {
                 new InfrastructureService
                 {
+                    Pids = new(), // Would be handled in InfrastructureIndexRepository
                     ServiceContactInformation = new List<ContactInformation>
                     {
                         new ContactInformation

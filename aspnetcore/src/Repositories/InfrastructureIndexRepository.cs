@@ -51,6 +51,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
 
             HandleOrganizations(infrastructure);
             HandleInfraPids(infrastructure);
+            HandleIsComposedOfPids(infrastructure);
             HandleRelationToInfraPids(infrastructure);
             HandleResearchfiUrl(infrastructure);
             HandleEmptyCollections(infrastructure);
@@ -63,6 +64,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         Infrastructure infrastructure = (Infrastructure)entity;
         HandleOrganizations(infrastructure);
         HandleInfraPids(infrastructure);
+        HandleIsComposedOfPids(infrastructure);
         HandleRelationToInfraPids(infrastructure);
         HandleResearchfiUrl(infrastructure);
         HandleEmptyCollections(infrastructure);
@@ -99,6 +101,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
     {
         if (infrastructure.Pids == null || !infrastructure.Pids.Any())
         {
+            infrastructure.Pids = null;
             return;
         }
 
@@ -126,8 +129,52 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             }
         }
 
-        // Clear DimPids after processing
+        // Clear Pids after processing
         infrastructure.Pids = null;
+    }
+
+    private void HandleIsComposedOfPids(Infrastructure infrastructure)
+    {
+        if (infrastructure.IsComposedOf == null || !infrastructure.IsComposedOf.Any())
+        {
+            infrastructure.IsComposedOf = null;
+            return;
+        }
+        foreach (InfrastructureService service in infrastructure.IsComposedOf)
+        {
+            if (service.Pids == null || !service.Pids.Any())
+            {
+                service.Pids = null;
+                continue;
+            }
+
+            service.ServiceIdentifier = new(){
+                PersistentIdentifierURN = null,
+                PersistentIdentifierURNLink = null,
+                OtherPid = new List<PidAttributes>(),
+                LocalIdentifier = service.LocalIdentifier
+            };
+
+            foreach (PersistentIdentifier pid in service.Pids)
+            {
+                if (pid.Type.ToLower() == "urn")
+                {
+                    service.ServiceIdentifier.PersistentIdentifierURN = pid.Content;
+                    service.ServiceIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
+                }
+                else
+                {
+                    service.ServiceIdentifier.OtherPid.Add(new PidAttributes
+                    {
+                        Pid = pid.Content,
+                        PidType = pid.Type.ToLower()
+                    });
+                }
+            }
+
+            // Clear Pids after processing
+            service.Pids = null;
+        }
     }
 
     private void HandleRelationToInfraPids(Infrastructure infrastructure)
@@ -141,6 +188,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         {
             if (infraNetwork.Pids == null || !infraNetwork.Pids.Any())
             {
+                infraNetwork.Pids = null;
                 continue;
             }
 
@@ -167,7 +215,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
                 }
             }
 
-            // Clear DimPids after processing
+            // Clear Pids after processing
             infraNetwork.Pids = null;
         }
     }
@@ -186,17 +234,43 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
 
     private static void HandleResearchfiUrl(Infrastructure infrastructure)
     {
+        // Infrastucture's researchfi URL
         if (infrastructure.InfraIdentifier == null || string.IsNullOrEmpty(infrastructure.InfraIdentifier.PersistentIdentifierURN))
         {
+            infrastructure.InfraResearchfiURL = null;
             return;
         }
-        ResearchfiUrl researchfiUrl = new ResearchfiUrl(resourceType: "infrastructure", id: infrastructure.InfraIdentifier.PersistentIdentifierURN);
+        ResearchfiUrl researchfiUrl = new ResearchfiUrl(
+            resourceType: "infrastructure",
+            id: infrastructure.InfraIdentifier.PersistentIdentifierURN
+        );
         infrastructure.InfraResearchfiURL = new LanguageVariant
         {
             Fi = researchfiUrl.Fi,
             Sv = researchfiUrl.Sv,
             En = researchfiUrl.En
         };
+
+        // Services' researchfi URLs
+        foreach (InfrastructureService service in infrastructure.IsComposedOf ?? [])
+        {
+            if (service.ServiceIdentifier == null || string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN))
+            {
+                service.ServiceResearchfiURL = null;
+                continue;
+            }
+            ResearchfiUrl serviceResearchfiUrl = new ResearchfiUrl(
+                resourceType: "infrastructure-service",
+                id: infrastructure.InfraIdentifier.PersistentIdentifierURN,
+                infrastructureServiceId: service.ServiceIdentifier.PersistentIdentifierURN
+            );
+            service.ServiceResearchfiURL = new LanguageVariant
+            {
+                Fi = serviceResearchfiUrl.Fi,
+                Sv = serviceResearchfiUrl.Sv,
+                En = serviceResearchfiUrl.En
+            };
+        }
     }
 
     private static void HandleEmptyCollections(Infrastructure infrastructure)

@@ -242,6 +242,14 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
     /// <summary>Infrastructure's service</summary>
     public partial class InfrastructureService
     {
+        ///<summary>Local identifier, handled in InfrastructureIndexRepository</summary>
+        [Ignore]
+        public string? LocalIdentifier { get; set; }
+
+        /// <summary>Pids, handled in InfrastructureIndexRepository</summary>
+        [Ignore]
+        public List<PersistentIdentifier>? Pids { get; set; }
+        
         /// <summary>Classification - service user role. https://uri.suomi.fi/codelist/research/infrapalvelu-kayttaja</summary>
         public List<ReferenceData>? ServiceUserRole { get; set; }
 

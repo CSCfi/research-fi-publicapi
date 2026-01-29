@@ -3468,6 +3468,9 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("created");
             entity.Property(e => e.DimInfrastructureId).HasColumnName("dim_infrastructure_id");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
+            entity.Property(e => e.LocalIdentifier)
+                .HasMaxLength(255)
+                .HasColumnName("local_identifier");
             entity.Property(e => e.Modified)
                 .HasColumnType("datetime")
                 .HasColumnName("modified");

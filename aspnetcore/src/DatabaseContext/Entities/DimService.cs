@@ -21,6 +21,8 @@ public partial class DimService
 
     public int EndDate { get; set; }
 
+    public string? LocalIdentifier { get; set; }
+
     public virtual ICollection<DimContactInformation> DimContactInformations { get; set; } = new List<DimContactInformation>();
 
     public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();

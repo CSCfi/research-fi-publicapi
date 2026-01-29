@@ -8,6 +8,10 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary></summary>
         public long ExportSortId { get; set; }
 
+        ///<summary>Local identifier, handled in InfrastructureIndexRepository</summary>
+        [Ignore]
+        public string? LocalIdentifier { get; set; }
+
         /// <summary>Pids, handled in InfrastructureServiceIndexRepository</summary>
         [Ignore]
         public List<PersistentIdentifier>? Pids { get; set; }

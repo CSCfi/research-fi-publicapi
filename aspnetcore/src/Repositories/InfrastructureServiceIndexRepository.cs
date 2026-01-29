@@ -53,6 +53,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             //HandleOrganizations(service);
             HandleServicePids(service);
             HandleIsPartOf(service);
+            HandleResearchfiUrl(service);
         });
         return entities;
     }
@@ -64,6 +65,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         //HandleOrganizations(service);
         HandleServicePids(service);
         HandleIsPartOf(service);
+        HandleResearchfiUrl(service);
         return service;
     }
 
@@ -71,12 +73,14 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
     {
         if (service.Pids == null || !service.Pids.Any())
         {
+            service.Pids = null;
             return;
         }
 
         service.ServiceIdentifier = new(){
             PersistentIdentifierURN = null,
             PersistentIdentifierURNLink = null,
+            LocalIdentifier = service.LocalIdentifier,
             OtherPid = new List<PidAttributes>()
         };
 
@@ -97,7 +101,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             }
         }
 
-        // Clear DimPids after processing
+        // Clear Pids after processing
         service.Pids = null;
     }
 
@@ -245,6 +249,34 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             service.IsPartOf.Esfri = null;
         }
     }
+
+    private static void HandleResearchfiUrl(CSC.PublicApi.Service.Models.Infrastructure.Service service)
+    {
+        // Infrastucture's researchfi URL
+        if (
+            service.ServiceIdentifier == null ||
+            string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN) ||
+            service.IsPartOf == null ||
+            service.IsPartOf.InfraIdentifier == null ||
+            string.IsNullOrEmpty(service.IsPartOf.InfraIdentifier.PersistentIdentifierURN)
+        )
+        {
+            service.ServiceResearchfiURL = null;
+            return;
+        }
+        ResearchfiUrl researchfiUrl = new ResearchfiUrl(
+            resourceType: "infrastructure-service",
+            id: service.IsPartOf.InfraIdentifier.PersistentIdentifierURN,
+            infrastructureServiceId: service.ServiceIdentifier.PersistentIdentifierURN
+        );
+        service.ServiceResearchfiURL = new LanguageVariant
+        {
+            Fi = researchfiUrl.Fi,
+            Sv = researchfiUrl.Sv,
+            En = researchfiUrl.En
+        };
+    }
+
 
     private void SetResearchOrganizationIdentifiers(ResearchOrganization targetOrganization, Service.Models.Organization.Organization organization)
     {
