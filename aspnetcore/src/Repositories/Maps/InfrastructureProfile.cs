@@ -142,7 +142,7 @@ public class InfrastructureProfile : Profile
                 .Where(wl => wl.LinkType == WebLinkType_EndUserGuide)))
             // Service obtain
             .ForMember(dst => dst.ServiceObtain, opt => opt.MapFrom(src => src.DimDescriptiveItems
-                .FirstOrDefault(di => di.DescriptiveItemType == DescriptiveItemType_ObtainInstruction)))
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_ObtainInstruction)))
             // Service booking link
             .ForMember(dst => dst.ServiceBookingLink, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Booking)))
@@ -150,7 +150,7 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.ServiceTargetSegment, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_Infrapalvelu_Kohderyhma).Select(fr => fr.DimReferencedata)))
             // Service researchfi URL
-            .ForMember(dst => dst.ServiceResearchfiUrl, opt => opt.Ignore())
+            .ForMember(dst => dst.ServiceResearchfiURL, opt => opt.Ignore())
             // Service privacy policy
             .ForMember(dst => dst.ServicePrivacyPolicy, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_PrivacyPolicy)))
@@ -220,12 +220,12 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.ServiceEndUserGuide, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_EndUserGuide)))
             .ForMember(dst => dst.ServiceObtain, opt => opt.MapFrom(src => src.DimDescriptiveItems
-                .FirstOrDefault(di => di.DescriptiveItemType == DescriptiveItemType_ObtainInstruction)))
+                .Where(di => di.DescriptiveItemType == DescriptiveItemType_ObtainInstruction)))
             .ForMember(dst => dst.ServiceBookingLink, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Booking)))
             .ForMember(dst => dst.ServiceTargetSegment, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_Infrapalvelu_Kohderyhma).Select(fr => fr.DimReferencedata)))
-            .ForMember(dst => dst.ServiceResearchfiUrl, opt => opt.Ignore())
+            .ForMember(dst => dst.ServiceResearchfiURL, opt => opt.Ignore())
             .ForMember(dst => dst.ServicePrivacyPolicy, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_PrivacyPolicy)))
             .ForMember(dst => dst.ServiceTermsOfUse, opt => opt.MapFrom(src => src.DimWebLinks
@@ -245,7 +245,7 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.Street, opt => opt.MapFrom(src => src.Street))
             .ForMember(dst => dst.PostalCode, opt => opt.MapFrom(src => src.PostalCode))
             .ForMember(dst => dst.Country, opt => opt.MapFrom(src => src.CountryCodeNavigation))
-            .ForMember(dst => dst.LocalityName, opt => opt.MapFrom(src => new LanguageVariant
+            .ForMember(dst => dst.Locality, opt => opt.MapFrom(src => new LanguageVariant
             {
                 Fi = src.LocalityFi,
                 Sv = src.LocalitySv,

@@ -27,7 +27,7 @@ namespace ResearchFi.Infrastructure
         public InfraDate? ServiceStartsOn { get; set; }
 
         /// <summary>Service obtain instruction</summary>
-        public DescriptiveText? ServiceObtain { get; set; }
+        public List<DescriptiveText>? ServiceObtain { get; set; }
 
         /// <summary>Service ends on</summary>
         public InfraDate? ServiceEndsOn { get; set; }

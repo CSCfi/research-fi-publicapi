@@ -75,8 +75,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
 
         service.ServiceIdentifier = new(){
-            PersistentIdentifierUrn = null,
-            PersistentIdentifierUrnLink = null,
+            PersistentIdentifierURN = null,
+            PersistentIdentifierURNLink = null,
             OtherPid = new List<PidAttributes>()
         };
 
@@ -84,8 +84,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         {
             if (pid.Type.ToLower() == "urn")
             {
-                service.ServiceIdentifier.PersistentIdentifierUrn = pid.Content;
-                service.ServiceIdentifier.PersistentIdentifierUrnLink = "https://urn.fi/" + pid.Content;
+                service.ServiceIdentifier.PersistentIdentifierURN = pid.Content;
+                service.ServiceIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
             }
             else
             {
@@ -112,8 +112,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             // Initialize IsPartOf
             service.IsPartOf ??= new ServiceInfrastructure();
             service.IsPartOf.InfraIdentifier = new(){
-                PersistentIdentifierUrn = null,
-                PersistentIdentifierUrnLink = null,
+                PersistentIdentifierURN = null,
+                PersistentIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>()
             };
         }
@@ -132,8 +132,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         {
             if (pid.Type.ToLower() == "urn")
             {
-                service.IsPartOf.InfraIdentifier.PersistentIdentifierUrn = pid.Content;
-                service.IsPartOf.InfraIdentifier.PersistentIdentifierUrnLink = "https://urn.fi/" + pid.Content;
+                service.IsPartOf.InfraIdentifier.PersistentIdentifierURN = pid.Content;
+                service.IsPartOf.InfraIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
             }
             else
             {

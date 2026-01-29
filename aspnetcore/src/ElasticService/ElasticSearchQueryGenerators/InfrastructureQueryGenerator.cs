@@ -33,7 +33,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         if (!string.IsNullOrWhiteSpace(parameters.PersistentIdentifierUrn))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.PersistentIdentifierUrn)
+                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.PersistentIdentifierURN)
                     .Query(parameters.PersistentIdentifierUrn)));
         }
 
@@ -53,7 +53,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         if (!string.IsNullOrWhiteSpace(parameters.InfraLocalIdentifier))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.InfraLocalIdentifier)
+                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.LocalIdentifier)
                     .Query(parameters.InfraLocalIdentifier)));
         }
 
@@ -220,7 +220,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
 
     protected override Func<QueryContainerDescriptor<Infrastructure>, QueryContainer> GenerateQueryForSingle(string id)
     {
-        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.InfraIdentifier.PersistentIdentifierUrn).Value(id));
+        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.InfraIdentifier.PersistentIdentifierURN).Value(id));
     }
 
     protected override Func<SortDescriptor<Infrastructure>, IPromise<IList<ISort>>> GenerateSortForSearch(InfrastructureSearchParameters parameters)

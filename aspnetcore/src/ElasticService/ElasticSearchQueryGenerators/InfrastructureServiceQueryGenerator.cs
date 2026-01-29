@@ -33,7 +33,7 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
         if (!string.IsNullOrWhiteSpace(parameters.PersistentIdentifierUrn))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierUrn)
+                t.MatchPhrase(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierURN)
                     .Query(parameters.PersistentIdentifierUrn)));
         }
 
@@ -85,7 +85,7 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
 
     protected override Func<QueryContainerDescriptor<CSC.PublicApi.Service.Models.Infrastructure.Service>, QueryContainer> GenerateQueryForSingle(string id)
     {
-        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierUrn).Value(id));
+        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierURN).Value(id));
     }
 
     protected override Func<SortDescriptor<CSC.PublicApi.Service.Models.Infrastructure.Service>, IPromise<IList<ISort>>> GenerateSortForSearch(InfrastructureServiceSearchParameters parameters)

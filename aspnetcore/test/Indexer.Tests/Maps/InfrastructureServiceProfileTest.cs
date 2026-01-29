@@ -400,7 +400,7 @@ public class InfrastructureServiceProfileTest
                         Street = "address 1 street",
                         Premise = "address 1 premise",
                         PostalCode = "address 1 postalcode",
-                        LocalityName = new LanguageVariant
+                        Locality = new LanguageVariant
                         {
                             Fi = "address 1 locality FI",
                             Sv = "address 1 locality SV",
@@ -449,9 +449,11 @@ public class InfrastructureServiceProfileTest
             },
             IsPartOf = null, // Handled in InfrastructureServiceIndexRepository
             ServiceIdentifier = null,
-            ServiceObtain = new DescriptiveText {
-                TextContent = "Test service obtain instruction 1", 
-                TextLanguage = "fi"
+            ServiceObtain = new List<DescriptiveText> {
+                new DescriptiveText {
+                    TextContent = "Test service obtain instruction 1", 
+                    TextLanguage = "fi"
+                }
             },
             ServiceBookingLink = new List<Weblink>
             {
@@ -481,7 +483,7 @@ public class InfrastructureServiceProfileTest
                     }
                 }
             },
-            ServiceResearchfiUrl = null,
+            ServiceResearchfiURL = null,
             ServicePrivacyPolicy = new List<Weblink>
             {
                 new Weblink { WeblinkURL = "service-privacy-policy-1.fi", WeblinkLanguage = "en" },

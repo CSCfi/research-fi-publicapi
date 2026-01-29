@@ -35,7 +35,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public InfraDate? ServiceStartsOn { get; set; }
 
         /// <summary>Service obtain instruction</summary>
-        public DescriptiveText? ServiceObtain { get; set; }
+        public List<DescriptiveText>? ServiceObtain { get; set; }
 
         /// <summary>Service ends on</summary>
         public InfraDate? ServiceEndsOn { get; set; }
@@ -47,7 +47,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<ReferenceData>? ServiceTargetSegment { get; set; }
 
         /// <summary>Service research.fi URL</summary>
-        public LanguageVariant? ServiceResearchfiUrl { get; set; }
+        public LanguageVariant? ServiceResearchfiURL { get; set; }
 
         /// <summary>Service contact information</summary>
         public List<ContactInformation>? ServiceContactInformation { get; set; }

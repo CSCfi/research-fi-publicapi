@@ -284,6 +284,59 @@ public class InfrastructureProfileTest
                     SourceId = "SRC-SERV-1",
                     Created = new DateTime(2022, 2, 2),
                     Modified = new DateTime(2023, 2, 2),
+                    StartDate = -1,  // ADD THIS
+                    EndDate = -1,    // ADD THIS
+                    FactReferencedata = new List<FactReferencedatum>
+                    {
+                        new FactReferencedatum
+                        {
+                            DimReferencedataId = 33333,
+                            DimReferencedata = new DimReferencedatum
+                            {
+                                CodeScheme = "infrapalvelu-kayttaja",
+                                CodeValue = "service-user-role-codevalue-1",
+                                NameFi = "service-user-role-name-fi-1",
+                                NameEn = "service-user-role-name-en-1",
+                                NameSv = "service-user-role-name-sv-1"
+                            }
+                        },
+                        new FactReferencedatum
+                        {
+                            DimReferencedataId = 33334,
+                            DimReferencedata = new DimReferencedatum
+                            {
+                                CodeScheme = "infrapalvelu-kayttaja",
+                                CodeValue = "service-user-role-codevalue-2",
+                                NameFi = "service-user-role-name-fi-2",
+                                NameEn = "service-user-role-name-en-2",
+                                NameSv = "service-user-role-name-sv-2"
+                            }
+                        },
+                        new FactReferencedatum
+                        {
+                            DimReferencedataId = 33335,
+                            DimReferencedata = new DimReferencedatum
+                            {
+                                CodeScheme = "infrapalvelu-kohderyhma",
+                                CodeValue = "service-target-segment-codevalue-1",
+                                NameFi = "service-target-segment-name-fi-1",
+                                NameEn = "service-target-segment-name-en-1",
+                                NameSv = "service-target-segment-name-sv-1"
+                            }
+                        },
+                        new FactReferencedatum
+                        {
+                            DimReferencedataId = 33336,
+                            DimReferencedata = new DimReferencedatum
+                            {
+                                CodeScheme = "infrapalvelu-kohderyhma",
+                                CodeValue = "service-target-segment-codevalue-2",
+                                NameFi = "service-target-segment-name-fi-2",
+                                NameEn = "service-target-segment-name-en-2",
+                                NameSv = "service-target-segment-name-sv-2"
+                            }
+                        }
+                    },
                     DimDescriptiveItems = new List<DimDescriptiveItem>
                     {
                         new DimDescriptiveItem
@@ -321,7 +374,25 @@ public class InfrastructureProfileTest
                             DescriptiveItemLanguage = "fi",
                             SourceId = "SRC123",
                             DimServiceId = 1
-                        }
+                        },
+                        new DimDescriptiveItem
+                        {
+                            Id = 5,
+                            DescriptiveItem = "infraservice-1-obtain-instruction-1",
+                            DescriptiveItemType = "obtain_instruction",
+                            DescriptiveItemLanguage = "en",
+                            SourceId = "SRC123",
+                            DimServiceId = 1
+                        },
+                        new DimDescriptiveItem
+                        {
+                            Id = 6,
+                            DescriptiveItem = "infraservice-1-obtain-instruction-2",
+                            DescriptiveItemType = "obtain_instruction",
+                            DescriptiveItemLanguage = "fi",
+                            SourceId = "SRC123",
+                            DimServiceId = 1
+                        },                        
                     },
                     DimContactInformations = new List<DimContactInformation>
                     {
@@ -337,83 +408,49 @@ public class InfrastructureProfileTest
                             DimTelephoneNumbers = new List<DimTelephoneNumber>
                             {
                                 new DimTelephoneNumber{ TelephoneNumber = "+358401234567" },
-                                new DimTelephoneNumber{ TelephoneNumber = "+358409876543" }
+                                new DimTelephoneNumber{ TelephoneNumber = "+358409876543" }   
                             }
                         }
                     },
                     DimWebLinks = new List<DimWebLink>
                     {
                         new DimWebLink{ Id = 1, Url = "https://infraservice-1-homepage-1.fi", LinkLabel = "infraservice-1-homepage-label-1", LinkType = "homepage", LanguageVariant = "en", SourceId = "SRC123" },
-                        new DimWebLink{ Id = 2, Url = "https://infraservice-1-homepage-2.fi", LinkLabel = "infraservice-1-homepage-label-2", LinkType = "homepage", LanguageVariant = "fi", SourceId = "SRC123" }
+                        new DimWebLink{ Id = 2, Url = "https://infraservice-1-homepage-2.fi", LinkLabel = "infraservice-1-homepage-label-2", LinkType = "homepage", LanguageVariant = "fi", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 3, Url = "https://infraservice-1-enduserguide-1.fi", LinkLabel = "infraservice-1-enduserguide-label-1", LinkType = "endUserGuide", LanguageVariant = "en", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 4, Url = "https://infraservice-1-enduserguide-2.fi", LinkLabel = "infraservice-1-enduserguide-label-2", LinkType = "endUserGuide", LanguageVariant = "fi", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 5, Url = "https://infraservice-1-privacypolicy-1.fi", LinkLabel = "infraservice-1-privacypolicy-label-1", LinkType = "privacy_policy", LanguageVariant = "en", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 6, Url = "https://infraservice-1-privacypolicy-2.fi", LinkLabel = "infraservice-1-privacypolicy-label-2", LinkType = "privacy_policy", LanguageVariant = "fi", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 7, Url = "https://infraservice-1-terms-of-use-1.fi", LinkLabel = "infraservice-1-terms-of-use-label-1", LinkType = "terms_of_use", LanguageVariant = "en", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 8, Url = "https://infraservice-1-terms-of-use-2.fi", LinkLabel = "infraservice-1-terms-of-use-label-2", LinkType = "terms_of_use", LanguageVariant = "fi", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 9, Url = "https://infraservice-1-booking-1.fi", LinkLabel = "infraservice-1-booking-label-1", LinkType = "booking", LanguageVariant = "en", SourceId = "SRC123" },
+                        new DimWebLink{ Id = 10, Url = "https://infraservice-1-booking-2.fi", LinkLabel = "infraservice-1-booking-label-2", LinkType = "booking", LanguageVariant = "fi", SourceId = "SRC123" }
+                    }
+                }
+            },
+            FactContributions = new List<FactContribution>
+            {
+                new FactContribution
+                {
+                    ContributionType = "organization_participate_infrastructure",
+                    DimOrganizationId = 54321,
+                    DimOrganization = new DimOrganization
+                    {
+                        Id = 54321,
+                        NameFi = "Contributor organization 1 name FI",
+                        NameEn = "Contributor organization 1 name EN",
+                        NameSv = "Contributor organization 1 name SV"
                     }
                 },
-                new DimService
+                new FactContribution
                 {
-                    Id = 2,
-                    SourceId = "SRC-SERV-2",
-                    Created = new DateTime(2022, 3, 3),
-                    Modified = new DateTime(2023, 3, 3),
-                    DimDescriptiveItems = new List<DimDescriptiveItem>
+                    ContributionType = "organization_participate_infrastructure",
+                    DimOrganizationId = 54322,
+                    DimOrganization = new DimOrganization
                     {
-                        new DimDescriptiveItem
-                        {
-                            Id = 1,
-                            DescriptiveItem = "infraservice-2-name-1",
-                            DescriptiveItemType = "name",
-                            DescriptiveItemLanguage = "en",
-                            SourceId = "SRC123",
-                            DimServiceId = 2
-                        },
-                        new DimDescriptiveItem
-                        {
-                            Id = 2,
-                            DescriptiveItem = "infraservice-2-name-2",
-                            DescriptiveItemType = "name",
-                            DescriptiveItemLanguage = "fi",
-                            SourceId = "SRC123",
-                            DimServiceId = 1
-                        },
-                        new DimDescriptiveItem
-                        {
-                            Id = 3,
-                            DescriptiveItem = "infraservice-2-description-1",
-                            DescriptiveItemType = "description",
-                            DescriptiveItemLanguage = "en",
-                            SourceId = "SRC123",
-                            DimServiceId = 2
-                        },
-                        new DimDescriptiveItem
-                        {
-                            Id = 4,
-                            DescriptiveItem = "infraservice-2-description-2",
-                            DescriptiveItemType = "description",
-                            DescriptiveItemLanguage = "fi",
-                            SourceId = "SRC123",
-                            DimServiceId = 2
-                        }
-                    },
-                                        DimContactInformations = new List<DimContactInformation>
-                    {
-                    new DimContactInformation
-                        {
-                            Id = 4,
-                            ContactLabel = "infraservice-2-contactinformation-label",
-                            DimEmailAddrresses = new List<DimEmailAddrress>
-                            {
-                                new DimEmailAddrress{ Email = "infraservice-2-email1@example.com" },
-                                new DimEmailAddrress{ Email = "infraservice-2-email2@example.com" }
-                            },
-                            DimTelephoneNumbers = new List<DimTelephoneNumber>
-                            {
-                                new DimTelephoneNumber{ TelephoneNumber = "+35899887766" },
-                                new DimTelephoneNumber{ TelephoneNumber = "+35855443322" }
-                            }
-                        }
-                    },
-                    DimWebLinks = new List<DimWebLink>
-                    {
-                        new DimWebLink{ Id = 1, Url = "https://infraservice-2-homepage-1.fi", LinkLabel = "infraservice-2-homepage-label-1", LinkType = "homepage", LanguageVariant = "en", SourceId = "SRC123" },
-                        new DimWebLink{ Id = 2, Url = "https://infraservice-2-homepage-2.fi", LinkLabel = "infraservice-2-homepage-label-2", LinkType = "homepage", LanguageVariant = "fi", SourceId = "SRC123" }
+                        Id = 54322,
+                        NameFi = "Contributor organization 2 name FI",
+                        NameEn = "Contributor organization 2 name EN",
+                        NameSv = "Contributor organization 2 name SV"
                     }
                 }
             }
@@ -463,7 +500,7 @@ public class InfrastructureProfileTest
                         Street = "address 1 street",
                         Premise = "address 1 premise",
                         PostalCode = "address 1 postalcode",
-                        LocalityName = new LanguageVariant
+                        Locality = new LanguageVariant
                         {
                             Fi = "address 1 locality FI",
                             Sv = "address 1 locality SV",
@@ -580,43 +617,80 @@ public class InfrastructureProfileTest
                     {
                         new Weblink{ WeblinkURL = "https://infraservice-1-homepage-1.fi", WeblinkLanguage = "en" },
                         new Weblink{ WeblinkURL = "https://infraservice-1-homepage-2.fi", WeblinkLanguage = "fi" }
-                    }
-                },
-                new InfrastructureService
-                {
-                    ServiceContactInformation = new List<ContactInformation>
+                    },
+                    ServiceUserRole = new List<Service.Models.Infrastructure.ReferenceData>
                     {
-                        new ContactInformation
+                        new Service.Models.Infrastructure.ReferenceData
                         {
-                            ContactInformationLabel = "infraservice-2-contactinformation-label",
-                            Phone = new List<string>
+                            CodeValue = "service-user-role-codevalue-1",
+                            CodeDescription = new Service.Models.Infrastructure.LanguageVariant
                             {
-                                "+35899887766",
-                                "+35855443322"
-                            },
-                            Email = new List<string>
+                                Fi = "service-user-role-name-fi-1",
+                                En = "service-user-role-name-en-1",
+                                Sv = "service-user-role-name-sv-1"
+                            }
+                        },
+                        new Service.Models.Infrastructure.ReferenceData
+                        {
+                            CodeValue = "service-user-role-codevalue-2",
+                            CodeDescription = new Service.Models.Infrastructure.LanguageVariant
                             {
-                                "infraservice-2-email1@example.com",
-                                "infraservice-2-email2@example.com"
+                                Fi = "service-user-role-name-fi-2",
+                                En = "service-user-role-name-en-2",
+                                Sv = "service-user-role-name-sv-2"
                             }
                         }
                     },
-                    ServiceDescription = new List<DescriptiveText>
+                    ServiceEndUserGuide = new List<Weblink>()
                     {
-                        new DescriptiveText{ TextContent = "infraservice-2-description-1", TextLanguage = "en" },
-                        new DescriptiveText{ TextContent = "infraservice-2-description-2", TextLanguage = "fi" }
+                        new Weblink{ WeblinkURL = "https://infraservice-1-enduserguide-1.fi", WeblinkLanguage = "en" },
+                        new Weblink{ WeblinkURL = "https://infraservice-1-enduserguide-2.fi", WeblinkLanguage = "fi" }
                     },
-                    ServiceName = new List<DescriptiveText>
+                    ServiceObtain = new List<DescriptiveText>
                     {
-                        new DescriptiveText{ TextContent = "infraservice-2-name-1", TextLanguage = "en" },
-                        new DescriptiveText{ TextContent = "infraservice-2-name-2", TextLanguage = "fi" }
+                        new DescriptiveText{ TextContent = "infraservice-1-obtain-instruction-1", TextLanguage = "en" },
+                        new DescriptiveText{ TextContent = "infraservice-1-obtain-instruction-2", TextLanguage = "fi" }
                     },
-                    ServiceHomepage = new List<Weblink>
+                    ServiceBookingLink = new List<Weblink>
                     {
-                        new Weblink{ WeblinkURL = "https://infraservice-2-homepage-1.fi", WeblinkLanguage = "en" },
-                        new Weblink{ WeblinkURL = "https://infraservice-2-homepage-2.fi", WeblinkLanguage = "fi" }
+                        new Weblink{ WeblinkURL = "https://infraservice-1-booking-1.fi", WeblinkLanguage = "en" },
+                        new Weblink{ WeblinkURL = "https://infraservice-1-booking-2.fi", WeblinkLanguage = "fi" }
+                    },
+                    ServiceTargetSegment = new List<Service.Models.Infrastructure.ReferenceData>
+                    {
+                        new Service.Models.Infrastructure.ReferenceData
+                        {
+                            CodeValue = "service-target-segment-codevalue-1",
+                            CodeDescription = new Service.Models.Infrastructure.LanguageVariant
+                            {
+                                Fi = "service-target-segment-name-fi-1",
+                                En = "service-target-segment-name-en-1",
+                                Sv = "service-target-segment-name-sv-1"
+                            }
+                        },
+                        new Service.Models.Infrastructure.ReferenceData
+                        {
+                            CodeValue = "service-target-segment-codevalue-2",
+                            CodeDescription = new Service.Models.Infrastructure.LanguageVariant
+                            {
+                                Fi = "service-target-segment-name-fi-2",
+                                En = "service-target-segment-name-en-2",
+                                Sv = "service-target-segment-name-sv-2"
+                            }
+                        }
+                    },
+                    ServiceResearchfiURL = null, // Would be handled in InfrastructureIndexRepository
+                    ServicePrivacyPolicy = new List<Weblink>
+                    {
+                        new Weblink{ WeblinkURL = "https://infraservice-1-privacypolicy-1.fi", WeblinkLanguage = "en" },
+                        new Weblink{ WeblinkURL = "https://infraservice-1-privacypolicy-2.fi", WeblinkLanguage = "fi" }
+                    },
+                    ServiceTermsOfUse = new List<Weblink>
+                    {
+                        new Weblink{ WeblinkURL = "https://infraservice-1-terms-of-use-1.fi", WeblinkLanguage = "en" },
+                        new Weblink{ WeblinkURL = "https://infraservice-1-terms-of-use-2.fi", WeblinkLanguage = "fi" }
                     }
-                }
+                },
             },
             InfraNetwork = new List<InfrastructureNetwork>
             {
@@ -648,7 +722,6 @@ public class InfrastructureProfileTest
                     }
                 }
             },
-            OrganizationParticipatesInfrastructure = new List<ResearchOrganization>(),
             ResponsibleOrganization = new ResearchOrganization
             {
                 DimOrganizationId = 12345,
@@ -657,6 +730,33 @@ public class InfrastructureProfileTest
                     Fi = "Responsible organization name FI",
                     En = "Responsible organization name EN",
                     Sv = "Responsible organization name SV"
+                }
+            },
+            OrganizationParticipatesInfrastructure = new List<ResearchOrganization>
+            {
+                new ResearchOrganization
+                {
+                    DimOrganizationId = 54321,
+                    OrganizationName = new LanguageVariant
+                    {
+                        Fi = "Contributor organization 1 name FI",
+                        En = "Contributor organization 1 name EN",
+                        Sv = "Contributor organization 1 name SV"
+                    },
+                    OrganizationIdentifier = null, // Would be handled in InfrastructureIndexRepository
+                    OrganizationIdentifierROR = null // Would be handled in InfrastructureIndexRepository
+                },
+                new ResearchOrganization
+                {
+                    DimOrganizationId = 54322,
+                    OrganizationName = new LanguageVariant
+                    {
+                        Fi = "Contributor organization 2 name FI",
+                        En = "Contributor organization 2 name EN",
+                        Sv = "Contributor organization 2 name SV"
+                    },
+                    OrganizationIdentifier = null, // Would be handled in InfrastructureIndexRepository
+                    OrganizationIdentifierROR = null // Would be handled in InfrastructureIndexRepository
                 }
             }
         };

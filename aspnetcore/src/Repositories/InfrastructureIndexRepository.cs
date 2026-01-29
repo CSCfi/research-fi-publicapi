@@ -103,18 +103,18 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         }
 
         infrastructure.InfraIdentifier = new(){
-            PersistentIdentifierUrn = null,
-            PersistentIdentifierUrnLink = null,
+            PersistentIdentifierURN = null,
+            PersistentIdentifierURNLink = null,
             OtherPid = new List<PidAttributes>(),
-            InfraLocalIdentifier = infrastructure.InfraIdentifier?.InfraLocalIdentifier ?? infrastructure.LocalIdentifier
+            LocalIdentifier = infrastructure.InfraIdentifier?.LocalIdentifier ?? infrastructure.LocalIdentifier
         };
 
         foreach (PersistentIdentifier pid in infrastructure.Pids)
         {
             if (pid.Type.ToLower() == "urn")
             {
-                infrastructure.InfraIdentifier.PersistentIdentifierUrn = pid.Content;
-                infrastructure.InfraIdentifier.PersistentIdentifierUrnLink = "https://urn.fi/" + pid.Content;
+                infrastructure.InfraIdentifier.PersistentIdentifierURN = pid.Content;
+                infrastructure.InfraIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
             }
             else
             {
@@ -145,8 +145,8 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             }
 
             infraNetwork.RelationToInfra = new(){
-                PersistentIdentifierUrn = null,
-                PersistentIdentifierUrnLink = null,
+                PersistentIdentifierURN = null,
+                PersistentIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>()
             };
 
@@ -154,8 +154,8 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             {
                 if (pid.Type.ToLower() == "urn")
                 {
-                    infraNetwork.RelationToInfra.PersistentIdentifierUrn = pid.Content;
-                    infraNetwork.RelationToInfra.PersistentIdentifierUrnLink = "https://urn.fi/" + pid.Content;
+                    infraNetwork.RelationToInfra.PersistentIdentifierURN = pid.Content;
+                    infraNetwork.RelationToInfra.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
                 }
                 else
                 {
@@ -186,11 +186,11 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
 
     private static void HandleResearchfiUrl(Infrastructure infrastructure)
     {
-        if (infrastructure.InfraIdentifier == null || string.IsNullOrEmpty(infrastructure.InfraIdentifier.PersistentIdentifierUrn))
+        if (infrastructure.InfraIdentifier == null || string.IsNullOrEmpty(infrastructure.InfraIdentifier.PersistentIdentifierURN))
         {
             return;
         }
-        ResearchfiUrl researchfiUrl = new ResearchfiUrl(resourceType: "infrastructure", id: infrastructure.InfraIdentifier.PersistentIdentifierUrn);
+        ResearchfiUrl researchfiUrl = new ResearchfiUrl(resourceType: "infrastructure", id: infrastructure.InfraIdentifier.PersistentIdentifierURN);
         infrastructure.InfraResearchfiURL = new LanguageVariant
         {
             Fi = researchfiUrl.Fi,
@@ -210,23 +210,23 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         if (infrastructure.InfraContactInformation != null && !infrastructure.InfraContactInformation.Any()) { infrastructure.InfraContactInformation = null; }
         if (infrastructure.Esfri != null && !infrastructure.Esfri.Any()) { infrastructure.Esfri = null; }
 
-        // // IsComposedOf
-        // foreach (InfrastructureService service in infrastructure.IsComposedOf ?? [])
-        // {
-        //     if (service.ServiceName != null && !service.ServiceName.Any()) { service.ServiceName = null; }
-        //     if (service.ServiceHomepage != null && !service.ServiceHomepage.Any()) { service.ServiceHomepage = null; }
-        //     if (service.ServiceContactInformation != null && !service.ServiceContactInformation.Any()) { service.ServiceContactInformation = null; }
-        //     if (service.ServiceDescription != null && !service.ServiceDescription.Any()) { service.ServiceDescription = null; }
-        //     if (service.ServiceBookingLink != null && !service.ServiceBookingLink.Any()) { service.ServiceBookingLink = null; }
-        //     if (service.ServiceUserRole != null && !service.ServiceUserRole.Any()) { service.ServiceUserRole = null; }
-        //     if (service.ServiceEndUserGuide != null && !service.ServiceEndUserGuide.Any()) { service.ServiceEndUserGuide = null; }
-        //     if (service.ServiceTargetSegment != null && !service.ServiceTargetSegment.Any()) { service.ServiceTargetSegment = null; }
-        //     if (service.ServicePrivacyPolicy != null && !service.ServicePrivacyPolicy.Any()) { service.ServicePrivacyPolicy = null; }
-        //     if (service.ServiceTermsOfUse != null && !service.ServiceTermsOfUse.Any()) { service.ServiceTermsOfUse = null; }
-        // }
-        // if (infrastructure.IsComposedOf != null && !infrastructure.IsComposedOf.Any())
-        // {
-        //      infrastructure.IsComposedOf = null;
-        // }
+        // IsComposedOf
+        foreach (InfrastructureService service in infrastructure.IsComposedOf ?? [])
+        {
+            if (service.ServiceName != null && !service.ServiceName.Any()) { service.ServiceName = null; }
+            if (service.ServiceHomepage != null && !service.ServiceHomepage.Any()) { service.ServiceHomepage = null; }
+            if (service.ServiceContactInformation != null && !service.ServiceContactInformation.Any()) { service.ServiceContactInformation = null; }
+            if (service.ServiceDescription != null && !service.ServiceDescription.Any()) { service.ServiceDescription = null; }
+            if (service.ServiceBookingLink != null && !service.ServiceBookingLink.Any()) { service.ServiceBookingLink = null; }
+            if (service.ServiceUserRole != null && !service.ServiceUserRole.Any()) { service.ServiceUserRole = null; }
+            if (service.ServiceEndUserGuide != null && !service.ServiceEndUserGuide.Any()) { service.ServiceEndUserGuide = null; }
+            if (service.ServiceTargetSegment != null && !service.ServiceTargetSegment.Any()) { service.ServiceTargetSegment = null; }
+            if (service.ServicePrivacyPolicy != null && !service.ServicePrivacyPolicy.Any()) { service.ServicePrivacyPolicy = null; }
+            if (service.ServiceTermsOfUse != null && !service.ServiceTermsOfUse.Any()) { service.ServiceTermsOfUse = null; }
+        }
+        if (infrastructure.IsComposedOf != null && !infrastructure.IsComposedOf.Any())
+        {
+             infrastructure.IsComposedOf = null;
+        }
     }
 }

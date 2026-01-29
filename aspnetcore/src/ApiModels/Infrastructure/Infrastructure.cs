@@ -54,8 +54,8 @@ namespace ResearchFi.Infrastructure
         /// <summary>Infra contact information</summary>
         public List<ContactInformation>? InfraContactInformation { get; set; }
 
-        /// <summary>Researchfi portal URL</summary>
-        public LanguageVariant? ResearchfiUrl { get; set; }
+        /// <summary>Infra research.fi URL</summary>
+        public LanguageVariant? InfraResearchfiURL { get; set; }
     }
 
     /// <summary>Contact information</summary>
@@ -90,23 +90,23 @@ namespace ResearchFi.Infrastructure
         public string? PostalCode { get; set; }
 
         /// <summary>Locality name</summary>
-        public LanguageVariant? LocalityName { get; set; }
+        public LanguageVariant? Locality { get; set; }
     }
 
     /// <summary>Identifier</summary>
     public partial class Identifier
     {
         /// <summary>Local identifier</summary>
-        public string? InfraLocalIdentifier { get; set; }
+        public string? LocalIdentifier { get; set; }
 
         /// <summary>Other persistent identifier</summary>
         public List<PidAttributes>? OtherPid { get; set; }
 
         /// <summary>Persistent identifier [URN]</summary>
-        public string? PersistentIdentifierUrn { get; set; }
+        public string? PersistentIdentifierURN { get; set; }
 
         /// <summary>persistent identifier [URN] link. https://urn.fi/ +[URN]</summary>
-        public string? PersistentIdentifierUrnLink { get; set; }
+        public string? PersistentIdentifierURNLink { get; set; }
     }
 
     /// <summary>Other persistent identifier</summary>
@@ -225,7 +225,7 @@ namespace ResearchFi.Infrastructure
         public InfraDate? ServiceStartsOn { get; set; }
 
         /// <summary>Service obtain instruction</summary>
-        public DescriptiveText? ServiceObtain { get; set; }
+        public List<DescriptiveText>? ServiceObtain { get; set; }
 
         /// <summary>Service ends on</summary>
         public InfraDate? ServiceEndsOn { get; set; }
@@ -240,7 +240,7 @@ namespace ResearchFi.Infrastructure
         public List<ReferenceData>? ServiceTargetSegment { get; set; }
 
         /// <summary>Service research.fi URL</summary>
-        public LanguageVariant? ServiceResearchfiUrl { get; set; }
+        public LanguageVariant? ServiceResearchfiURL { get; set; }
 
         /// <summary>Service description</summary>
         public List<DescriptiveText>? ServiceDescription { get; set; }

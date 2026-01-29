@@ -112,7 +112,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public string? PostalCode { get; set; }
 
         /// <summary>Locality name</summary>
-        public LanguageVariant? LocalityName { get; set; }
+        public LanguageVariant? Locality { get; set; }
     }
 
     /// <summary>Identifier</summary>
@@ -120,7 +120,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
     {
         /// <summary>Local identifier</summary>
         [Keyword]
-        public string? InfraLocalIdentifier { get; set; }
+        public string? LocalIdentifier { get; set; }
 
         /// <summary>Other persistent identifier</summary>
         [Nested]
@@ -128,10 +128,10 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
 
         /// <summary>Persistent identifier [URN]</summary>
         [Keyword]
-        public string? PersistentIdentifierUrn { get; set; }
+        public string? PersistentIdentifierURN { get; set; }
 
         /// <summary>persistent identifier [URN] link. https://urn.fi/ +[URN]</summary>
-        public string? PersistentIdentifierUrnLink { get; set; }
+        public string? PersistentIdentifierURNLink { get; set; }
     }
 
     /// <summary>Other persistent identifier</summary>
@@ -261,7 +261,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public InfraDate? ServiceStartsOn { get; set; }
 
         /// <summary>Service obtain instruction</summary>
-        public DescriptiveText? ServiceObtain { get; set; }
+        public List<DescriptiveText>? ServiceObtain { get; set; }
 
         /// <summary>Service ends on</summary>
         public InfraDate? ServiceEndsOn { get; set; }
@@ -276,7 +276,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<ReferenceData>? ServiceTargetSegment { get; set; }
 
         /// <summary>Service research.fi URL</summary>
-        public LanguageVariant? ServiceResearchfiUrl { get; set; }
+        public LanguageVariant? ServiceResearchfiURL { get; set; }
 
         /// <summary>Service description</summary>
         public List<DescriptiveText>? ServiceDescription { get; set; }
