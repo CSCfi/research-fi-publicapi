@@ -447,7 +447,7 @@ public class InfrastructureServiceProfileTest
                 new Weblink { WeblinkURL = "service-enduserguide-1.fi", WeblinkLanguage = "en" },
                 new Weblink { WeblinkURL = "service-enduserguide-2.fi", WeblinkLanguage = "fi" }
             },
-            IsPartOf = null, // Handled in InfrastructureServiceIndexRepository
+            IsPartOfInfrastructure = null, // Handled in InfrastructureServiceIndexRepository
             ServiceIdentifier = null,
             ServiceObtain = new List<DescriptiveText> {
                 new DescriptiveText {

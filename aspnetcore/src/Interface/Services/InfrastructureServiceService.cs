@@ -30,7 +30,7 @@ public class InfrastructureServiceService : IInfrastructureServiceService
         {
             foreach (var infrastructure in result)
             {
-                infrastructure.IsPartOf = null;
+                infrastructure.IsPartOfInfrastructure = null;
             }
         }
 
@@ -49,7 +49,7 @@ public class InfrastructureServiceService : IInfrastructureServiceService
         {
             foreach (var infrastructure in result)
             {
-                infrastructure.IsPartOf = null;
+                infrastructure.IsPartOfInfrastructure = null;
             }
         }
 

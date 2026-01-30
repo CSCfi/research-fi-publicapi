@@ -52,7 +52,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
 
             //HandleOrganizations(service);
             HandleServicePids(service);
-            HandleIsPartOf(service);
+            HandleIsPartOfInfrastructure(service);
             HandleResearchfiUrl(service);
         });
         return entities;
@@ -64,7 +64,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
 
         //HandleOrganizations(service);
         HandleServicePids(service);
-        HandleIsPartOf(service);
+        HandleIsPartOfInfrastructure(service);
         HandleResearchfiUrl(service);
         return service;
     }
@@ -105,7 +105,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         service.Pids = null;
     }
 
-    private void HandleIsPartOf(CSC.PublicApi.Service.Models.Infrastructure.Service service)
+    private void HandleIsPartOfInfrastructure(CSC.PublicApi.Service.Models.Infrastructure.Service service)
     {
         if (service.DimInfrastructureId <= 0)
         {
@@ -113,9 +113,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
         else
         {
-            // Initialize IsPartOf
-            service.IsPartOf ??= new ServiceInfrastructure();
-            service.IsPartOf.InfraIdentifier = new(){
+            // Initialize IsPartOfInfrastructure
+            service.IsPartOfInfrastructure ??= new ServiceInfrastructure();
+            service.IsPartOfInfrastructure.InfraIdentifier = new(){
                 PersistentIdentifierURN = null,
                 PersistentIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>()
@@ -123,7 +123,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
 
         // InfraIdentifier
-        service.IsPartOf.Pids = _context.DimPids
+        service.IsPartOfInfrastructure.Pids = _context.DimPids
             .AsNoTracking()
             .Where(pid => pid.DimInfrastructureId == service.DimInfrastructureId)
             .Select(pid => new PersistentIdentifier
@@ -132,24 +132,25 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                 Content = pid.PidContent
             })
             .ToList();
-        foreach (PersistentIdentifier pid in service.IsPartOf.Pids)
+        foreach (PersistentIdentifier pid in service.IsPartOfInfrastructure.Pids)
         {
             if (pid.Type.ToLower() == "urn")
             {
-                service.IsPartOf.InfraIdentifier.PersistentIdentifierURN = pid.Content;
-                service.IsPartOf.InfraIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
+                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN = pid.Content;
+                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
             }
             else
             {
-                service.IsPartOf.InfraIdentifier.OtherPid.Add(new PidAttributes
+                service.IsPartOfInfrastructure.InfraIdentifier.OtherPid.Add(new PidAttributes
                 {
                     Pid = pid.Content,
                     PidType = pid.Type.ToLower()
                 });
             }
         }
-        service.IsPartOf.Pids = null;
+        service.IsPartOfInfrastructure.Pids = null;
 
+        /*
         // OrganizationParticipatesInfrastructure
         List<int> participatingOrganizationIds = _context.FactContributions
             .Where(fc => fc.DimInfrastructureId == service.DimInfrastructureId && fc.ContributionType == "organization_participate_infrastructure")
@@ -157,9 +158,10 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             .Select(fc => fc.DimOrganizationId)
             .Distinct()
             .ToList();
+        
         if (participatingOrganizationIds.Any())
         {
-            service.IsPartOf.OrganizationParticipatesInfrastructure = new List<ResearchOrganization>();
+            service.IsPartOfInfrastructure.OrganizationParticipatesInfrastructure = new List<ResearchOrganization>();
             foreach (var orgId in participatingOrganizationIds)
             {
                 var participatingOrganization = GetOrganization(orgId);
@@ -177,10 +179,11 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                     }; 
                     SetResearchOrganizationIdentifiers(researchOrg, participatingOrganization);
                     researchOrg.DimOrganizationId = null;
-                    service.IsPartOf.OrganizationParticipatesInfrastructure.Add(researchOrg);
+                    service.IsPartOfInfrastructure.OrganizationParticipatesInfrastructure.Add(researchOrg);
                 }
             }
         }
+        */
 
         // ResponsibleOrganization
         DimInfrastructure relatedInfrastructure = _context.DimInfrastructures
@@ -191,7 +194,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             var organization = GetOrganization(relatedInfrastructure.ResponsibleOrganizationId);
             if (organization != null)
             {
-                service.IsPartOf.ResponsibleOrganization = new ResearchOrganization
+                service.IsPartOfInfrastructure.ResponsibleOrganization = new ResearchOrganization
                 {
                     DimOrganizationId = relatedInfrastructure.ResponsibleOrganizationId,
                     OrganizationName = new LanguageVariant
@@ -202,9 +205,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                     }
                 };
 
-                SetResearchOrganizationIdentifiers(service.IsPartOf.ResponsibleOrganization, organization);
+                SetResearchOrganizationIdentifiers(service.IsPartOfInfrastructure.ResponsibleOrganization, organization);
             }
-            service.IsPartOf.ResponsibleOrganization.DimOrganizationId = null;
+            service.IsPartOfInfrastructure.ResponsibleOrganization.DimOrganizationId = null;
         }
 
         // InfraName
@@ -214,23 +217,23 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             .ToList();
         if (dimDescriptiveItems.Any())
         {
-            service.IsPartOf.InfraName = new List<DescriptiveText>();
+            service.IsPartOfInfrastructure.InfraName = new List<DescriptiveText>();
             foreach (var item in dimDescriptiveItems)
             {
-                service.IsPartOf.InfraName.Add(new DescriptiveText
+                service.IsPartOfInfrastructure.InfraName.Add(new DescriptiveText
                 {
                     TextContent = item.DescriptiveItem,
                     TextLanguage = item.DescriptiveItemLanguage,
                 });
             }
-            if (!service.IsPartOf.InfraName.Any())
+            if (!service.IsPartOfInfrastructure.InfraName.Any())
             {
-                service.IsPartOf.InfraName = null;
+                service.IsPartOfInfrastructure.InfraName = null;
             }
         }
 
         // Esfri
-        service.IsPartOf.Esfri = _context.FactReferencedata
+        service.IsPartOfInfrastructure.Esfri = _context.FactReferencedata
             .AsNoTracking()
             .Where(rd => rd.DimInfrastructureId == service.DimInfrastructureId && rd.DimReferencedata.CodeScheme == "ESFRI-Domain")
             .Select(rd => new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
@@ -244,36 +247,50 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                 }
             })
             .ToList();
-        if (!service.IsPartOf.Esfri.Any())
+        if (!service.IsPartOfInfrastructure.Esfri.Any())
         {
-            service.IsPartOf.Esfri = null;
+            service.IsPartOfInfrastructure.Esfri = null;
         }
     }
 
     private static void HandleResearchfiUrl(CSC.PublicApi.Service.Models.Infrastructure.Service service)
     {
-        // Infrastucture's researchfi URL
+        // Check that both service and infrastructure identifiers exist
         if (
             service.ServiceIdentifier == null ||
             string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN) ||
-            service.IsPartOf == null ||
-            service.IsPartOf.InfraIdentifier == null ||
-            string.IsNullOrEmpty(service.IsPartOf.InfraIdentifier.PersistentIdentifierURN)
+            service.IsPartOfInfrastructure == null ||
+            service.IsPartOfInfrastructure.InfraIdentifier == null ||
+            string.IsNullOrEmpty(service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN)
         )
         {
             service.ServiceResearchfiURL = null;
             return;
         }
-        ResearchfiUrl researchfiUrl = new ResearchfiUrl(
+
+        // Service's researchfi URL
+        ResearchfiUrl researchfiURL = new ResearchfiUrl(
             resourceType: "infrastructure-service",
-            id: service.IsPartOf.InfraIdentifier.PersistentIdentifierURN,
+            id: service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN,
             infrastructureServiceId: service.ServiceIdentifier.PersistentIdentifierURN
         );
         service.ServiceResearchfiURL = new LanguageVariant
         {
-            Fi = researchfiUrl.Fi,
-            Sv = researchfiUrl.Sv,
-            En = researchfiUrl.En
+            Fi = researchfiURL.Fi,
+            Sv = researchfiURL.Sv,
+            En = researchfiURL.En
+        };
+
+        // IsPartOfInfrastructure's researchfi URL
+        ResearchfiUrl infraResearchfiURL = new ResearchfiUrl(
+            resourceType: "infrastructure",
+            id: service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN
+        );
+        service.IsPartOfInfrastructure.ResearchfiURL = new LanguageVariant
+        {
+            Fi = infraResearchfiURL.Fi,
+            Sv = infraResearchfiURL.Sv,
+            En = infraResearchfiURL.En
         };
     }
 

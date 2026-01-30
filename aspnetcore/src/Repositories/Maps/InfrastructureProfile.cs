@@ -130,7 +130,7 @@ public class InfrastructureProfile : Profile
             // Service identifier - handled in InfrastructureServiceIndexRepository
             .ForMember(dst => dst.ServiceIdentifier, opt => opt.Ignore())
             // Service is part of infrastructure - handled in InfrastructureServiceIndexRepository
-            .ForMember(dst => dst.IsPartOf, opt => opt.Ignore())
+            .ForMember(dst => dst.IsPartOfInfrastructure, opt => opt.Ignore())
             // DimInfrastructureId
             .ForMember(dst => dst.DimInfrastructureId, opt => opt.MapFrom(src => src.DimInfrastructureId))
             // Start date

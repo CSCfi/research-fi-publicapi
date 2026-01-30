@@ -23,7 +23,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<Weblink>? ServiceEndUserGuide { get; set; }
 
         /// <summary>Service is part of infrastructure</summary>
-        public ServiceInfrastructure? IsPartOf { get; set; }
+        public ServiceInfrastructure? IsPartOfInfrastructure { get; set; }
 
         /// <summary>Service name</summary>
         [Nested]
@@ -81,9 +81,6 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Infrastructure identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
-
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }
 
@@ -94,5 +91,8 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
         public List<ReferenceData>? Esfri { get; set; }
+
+        /// <summary>Infrastructure research.fi URL</summary>
+        public LanguageVariant? ResearchfiURL { get; set; }
     }
 }

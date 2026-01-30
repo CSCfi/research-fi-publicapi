@@ -12,7 +12,7 @@ namespace ResearchFi.Infrastructure
         public List<Weblink>? ServiceEndUserGuide { get; set; }
        
         /// <summary>Service is part of infrastructure</summary>
-        public ServiceInfrastructure? IsPartOf { get; set; }
+        public ServiceInfrastructure? IsPartOfInfrastructure { get; set; }
 
         /// <summary>Service name</summary>
         public List<DescriptiveText>? ServiceName { get; set; }
@@ -39,7 +39,7 @@ namespace ResearchFi.Infrastructure
         public List<ReferenceData>? ServiceTargetSegment { get; set; }
 
         /// <summary>Service research.fi URL</summary>
-        public LanguageVariant? ServiceResearchfiUrl { get; set; }
+        public LanguageVariant? ServiceResearchfiURL { get; set; }
 
             /// <summary>Service contact information</summary>
         public List<ContactInformation>? ServiceContactInformation { get; set; }
@@ -60,9 +60,6 @@ namespace ResearchFi.Infrastructure
         /// <summary>Infrastructure identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
-
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }
 
@@ -73,5 +70,8 @@ namespace ResearchFi.Infrastructure
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
         public List<ReferenceData>? Esfri { get; set; }
+
+        /// <summary>Infrastructure research.fi URL</summary>
+        public LanguageVariant? ResearchfiURL { get; set; }
     }
 }
