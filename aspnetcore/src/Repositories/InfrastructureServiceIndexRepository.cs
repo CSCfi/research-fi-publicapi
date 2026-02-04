@@ -91,7 +91,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             if (pid.Type.ToLower() == "urn")
             {
                 service.ServiceIdentifier.PersistentIdentifierURN = pid.Content;
-                service.ServiceIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
+                service.ServiceIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
             }
             else
             {
@@ -139,7 +139,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             if (pid.Type.ToLower() == "urn")
             {
                 service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN = pid.Content;
-                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURNLink = "https://urn.fi/" + pid.Content;
+                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
             }
             else
             {
