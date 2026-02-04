@@ -24,7 +24,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         return _context.DimInfrastructures
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(infrastructure => infrastructure.Id != -1)
+            .Where(infrastructure => infrastructure.Id != -1 && infrastructure.SourceDescription != "infra_old")
             .ProjectTo<Infrastructure>(_mapper.ConfigurationProvider);
     }
 
@@ -36,7 +36,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             .OrderBy(infrastructure => infrastructure.Id)
             .Skip(skipAmount)
             .Take(takeAmount)
-            .Where(infrastructure => infrastructure.Id != -1)
+            .Where(infrastructure => infrastructure.Id != -1 && infrastructure.SourceDescription != "infra_old")
             .ProjectTo<Infrastructure>(_mapper.ConfigurationProvider);
     }
 

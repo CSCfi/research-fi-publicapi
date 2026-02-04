@@ -25,7 +25,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         return _context.DimServices
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(service => service.Id != -1)
+            .Where(service => service.Id != -1 && service.SourceDescription != "infra_old")
             .ProjectTo<CSC.PublicApi.Service.Models.Infrastructure.Service>(_mapper.ConfigurationProvider);
     }
 
@@ -37,7 +37,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             .Take(takeAmount)
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(service => service.Id != -1)
+            .Where(service => service.Id != -1 && service.SourceDescription != "infra_old")
             .ProjectTo<CSC.PublicApi.Service.Models.Infrastructure.Service>(_mapper.ConfigurationProvider);
     }
 
