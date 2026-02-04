@@ -54,6 +54,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             HandleServicePids(service);
             HandleIsPartOfInfrastructure(service);
             HandleResearchfiUrl(service);
+            HandleEmptyCollections(service);
         });
         return entities;
     }
@@ -66,6 +67,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         HandleServicePids(service);
         HandleIsPartOfInfrastructure(service);
         HandleResearchfiUrl(service);
+        HandleEmptyCollections(service);
         return service;
     }
 
@@ -305,5 +307,20 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
 
         targetOrganization.OrganizationIdentifierROR = organization.Pids
             .FirstOrDefault(pid => pid.Type.ToLower() == pidTypeRorId)?.Content;
+    }
+
+    private static void HandleEmptyCollections(CSC.PublicApi.Service.Models.Infrastructure.Service service)
+    {
+        if (service.ServiceName != null && !service.ServiceName.Any()) { service.ServiceName = null; }
+        if (service.ServiceHomepage != null && !service.ServiceHomepage.Any()) { service.ServiceHomepage = null; }
+        if (service.ServiceContactInformation != null && !service.ServiceContactInformation.Any()) { service.ServiceContactInformation = null; }
+        if (service.ServiceDescription != null && !service.ServiceDescription.Any()) { service.ServiceDescription = null; }
+        if (service.ServiceBookingLink != null && !service.ServiceBookingLink.Any()) { service.ServiceBookingLink = null; }
+        if (service.ServiceUserRole != null && !service.ServiceUserRole.Any()) { service.ServiceUserRole = null; }
+        if (service.ServiceEndUserGuide != null && !service.ServiceEndUserGuide.Any()) { service.ServiceEndUserGuide = null; }
+        if (service.ServiceTargetSegment != null && !service.ServiceTargetSegment.Any()) { service.ServiceTargetSegment = null; }
+        if (service.ServicePrivacyPolicy != null && !service.ServicePrivacyPolicy.Any()) { service.ServicePrivacyPolicy = null; }
+        if (service.ServiceTermsOfUse != null && !service.ServiceTermsOfUse.Any()) { service.ServiceTermsOfUse = null; }
+        if (service.ServiceObtain != null && !service.ServiceObtain.Any()) { service.ServiceObtain = null; }
     }
 }
