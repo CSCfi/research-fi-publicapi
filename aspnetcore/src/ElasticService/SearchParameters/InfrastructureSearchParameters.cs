@@ -4,7 +4,7 @@ public class InfrastructureSearchParameters
 {
     public string? PersistentIdentifierUrn { get; set; }
     public string? OtherPersistentIdentifier { get; set; }
-    public string? InfraLocalIdentifier { get; set; }
+    public string? LocalIdentifier { get; set; }
     public string? InfraName { get; set; }
     public string? InfraDescription { get; set; }
     public string? Acronym { get; set; }

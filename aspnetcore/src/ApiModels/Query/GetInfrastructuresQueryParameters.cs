@@ -5,14 +5,14 @@
 /// </summary>
 public class GetInfrastructuresQueryParameters
 {
-    /// <summary>The field persistentIdentifierUrn is exactly equal to the text.</summary>
+    /// <summary>The field infraIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
     public string? PersistentIdentifierUrn { get; set; }
 
-    /// <summary>The field otherPersistentIdentifier is exactly equal to the text.</summary>
+    /// <summary>The field infraIdentifier.otherPersistentIdentifier is exactly equal to the text.</summary>
     public string? OtherPersistentIdentifier { get; set; }
 
-    /// <summary>The field infraLocalIdentifier is exactly equal to the text.</summary>
-    public string? InfraLocalIdentifier { get; set; }
+    /// <summary>The field infraIdentifier.localIdentifier is exactly equal to the text.</summary>
+    public string? LocalIdentifier { get; set; }
 
     /// <summary>The field infraName contains text.</summary>
     public string? InfraName { get; set; }

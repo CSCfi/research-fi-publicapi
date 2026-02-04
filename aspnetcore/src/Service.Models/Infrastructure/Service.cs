@@ -23,6 +23,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<Weblink>? ServiceEndUserGuide { get; set; }
 
         /// <summary>Service is part of infrastructure</summary>
+        [Nested]
         public ServiceInfrastructure? IsPartOfInfrastructure { get; set; }
 
         /// <summary>Service name</summary>

@@ -49,6 +49,14 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                             .Query(parameters.OtherPersistentIdentifier)))));
         }
 
+        // LocalIdentifier
+        if (!string.IsNullOrWhiteSpace(parameters.LocalIdentifier))
+        {
+            subQueries.Add(t =>
+                t.MatchPhrase(query => query.Field(f => f.ServiceIdentifier!.LocalIdentifier)
+                    .Query(parameters.LocalIdentifier)));
+        }
+
         // ServiceName
         if (!string.IsNullOrWhiteSpace(parameters.ServiceName))
         {
@@ -71,6 +79,30 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                         .MatchPhrase(m => m
                             .Field(f => f.ServiceDescription.First().TextContent)
                             .Query(parameters.ServiceDescription)))));
+        }
+
+        // IsPartOfInfrastructureURN
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureURN))
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.IsPartOfInfrastructure)
+                    .Query(q => q
+                        .MatchPhrase(m => m
+                            .Field(f => f.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN)
+                            .Query(parameters.IsPartOfInfrastructureURN)))));
+        }
+
+        // IsPartOfInfrastructureResponsibleOrganization
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureResponsibleOrganization))
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.IsPartOfInfrastructure)
+                    .Query(q => q
+                        .MatchPhrase(m => m
+                            .Field(f => f.IsPartOfInfrastructure.ResponsibleOrganization.OrganizationIdentifier)
+                            .Query(parameters.IsPartOfInfrastructureResponsibleOrganization)))));
         }
 
         return subQueries;

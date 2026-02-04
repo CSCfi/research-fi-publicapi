@@ -50,11 +50,11 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         }
 
         // LocalIdentifier
-        if (!string.IsNullOrWhiteSpace(parameters.InfraLocalIdentifier))
+        if (!string.IsNullOrWhiteSpace(parameters.LocalIdentifier))
         {
             subQueries.Add(t =>
                 t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.LocalIdentifier)
-                    .Query(parameters.InfraLocalIdentifier)));
+                    .Query(parameters.LocalIdentifier)));
         }
 
         // InfraName
