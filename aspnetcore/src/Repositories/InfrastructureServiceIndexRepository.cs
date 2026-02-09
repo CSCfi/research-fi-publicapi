@@ -299,14 +299,11 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
 
     private void SetResearchOrganizationIdentifiers(ResearchOrganization targetOrganization, Service.Models.Organization.Organization organization)
     {
-        string pidTypeBusinessId = "businessid";
-        string pidTypeRorId = "rorid";
-
-        targetOrganization.OrganizationIdentifier = organization.Pids
-            .FirstOrDefault(pid => pid.Type.ToLower() == pidTypeBusinessId)?.Content;
-
-        targetOrganization.OrganizationIdentifierROR = organization.Pids
-            .FirstOrDefault(pid => pid.Type.ToLower() == pidTypeRorId)?.Content;
+        targetOrganization.OrganizationIdentifier = organization.Pids.Select(pid => new PidAttributes
+        {
+            Pid = pid.Content,
+            PidType = pid.Type.ToLower()
+        }).ToList();
     }
 
     private static void HandleEmptyCollections(CSC.PublicApi.Service.Models.Infrastructure.Service service)

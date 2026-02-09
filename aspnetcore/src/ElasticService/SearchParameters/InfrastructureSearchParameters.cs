@@ -11,10 +11,8 @@ public class InfrastructureSearchParameters
     public string? Esfri { get; set; }
     public string? FieldOfScience { get; set; }
     public bool? FinlandRoadmapInfrastructure { get; set; }
-    public string? ResponsibleOrganizationRor { get; set; }
-    public string? ResponsibleOrganizationBusinessId { get; set; }
-    public string? OrganizationParticipatesInfrastructureRor { get; set; }
-    public string? OrganizationParticipatesInfrastructureBusinessId { get; set; }
+    public string? ResponsibleOrganizationId { get; set; }
+    public string? OrganizationParticipatesInfrastructureId { get; set; }
     public bool? ExcludeServices { get; set; }
     public int? InfraStartsOnYear { get; set; }
     public int? InfraEndsOnYear { get; set; }

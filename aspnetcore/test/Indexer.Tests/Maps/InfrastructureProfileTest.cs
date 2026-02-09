@@ -745,7 +745,6 @@ public class InfrastructureProfileTest
                         Sv = "Contributor organization 1 name SV"
                     },
                     OrganizationIdentifier = null, // Would be handled in InfrastructureIndexRepository
-                    OrganizationIdentifierROR = null // Would be handled in InfrastructureIndexRepository
                 },
                 new ResearchOrganization
                 {
@@ -757,7 +756,6 @@ public class InfrastructureProfileTest
                         Sv = "Contributor organization 2 name SV"
                     },
                     OrganizationIdentifier = null, // Would be handled in InfrastructureIndexRepository
-                    OrganizationIdentifierROR = null // Would be handled in InfrastructureIndexRepository
                 }
             }
         };

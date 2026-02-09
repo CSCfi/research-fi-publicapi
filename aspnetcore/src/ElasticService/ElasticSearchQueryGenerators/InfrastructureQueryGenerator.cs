@@ -110,52 +110,34 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                     .Value(parameters.FinlandRoadmapInfrastructure.Value)));
         }
 
-        // ResponsibleOrganizationRor
-        if (!string.IsNullOrWhiteSpace(parameters.ResponsibleOrganizationRor))
+        // ResponsibleOrganizationId
+        if (!string.IsNullOrWhiteSpace(parameters.ResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
                     .Path(p => p.ResponsibleOrganization)
                     .Query(q => q
-                        .Term(m => m
-                            .Field(f => f.ResponsibleOrganization!.OrganizationIdentifierROR)
-                            .Value(parameters.ResponsibleOrganizationRor)))));
-        }
-        
-        // ResponsibleOrganizationBusinessId
-        if (!string.IsNullOrWhiteSpace(parameters.ResponsibleOrganizationBusinessId))
-        {
-            subQueries.Add(t =>
-                t.Nested(n => n
-                    .Path(p => p.ResponsibleOrganization)
-                    .Query(q => q
-                        .Term(m => m
-                            .Field(f => f.ResponsibleOrganization!.OrganizationIdentifier)
-                            .Value(parameters.ResponsibleOrganizationBusinessId)))));
+                        .Nested(n2 => n2
+                            .Path(p => p.ResponsibleOrganization.OrganizationIdentifier)
+                            .Query(q2 => q2
+                                .Term(m => m
+                                    .Field(f => f.ResponsibleOrganization!.OrganizationIdentifier!.First().Pid)
+                                    .Value(parameters.ResponsibleOrganizationId)))))));
         }
 
-        // OrganizationParticipatesInfrastructureRor
-        if (!string.IsNullOrWhiteSpace(parameters.OrganizationParticipatesInfrastructureRor))
+        // OrganizationParticipatesInfrastructureId
+        if (!string.IsNullOrWhiteSpace(parameters.OrganizationParticipatesInfrastructureId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
                     .Path(p => p.OrganizationParticipatesInfrastructure)
                     .Query(q => q
-                        .Term(m => m
-                            .Field(f => f.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifierROR)
-                            .Value(parameters.OrganizationParticipatesInfrastructureRor)))));
-        }
-
-        // OrganizationParticipatesInfrastructureBusinessId
-        if (!string.IsNullOrWhiteSpace(parameters.OrganizationParticipatesInfrastructureBusinessId))
-        {
-            subQueries.Add(t =>
-                t.Nested(n => n
-                    .Path(p => p.OrganizationParticipatesInfrastructure)
-                    .Query(q => q
-                        .Term(m => m
-                            .Field(f => f.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier)
-                            .Value(parameters.OrganizationParticipatesInfrastructureBusinessId)))));
+                        .Nested(n2 => n2
+                            .Path(p => p.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier)
+                            .Query(q2 => q2
+                                .Term(m => m
+                                    .Field(f => f.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier!.First().Pid)
+                                    .Value(parameters.OrganizationParticipatesInfrastructureId)))))));
         }
 
         // FieldOfScience

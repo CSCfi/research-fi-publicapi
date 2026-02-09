@@ -188,7 +188,6 @@ public class InfrastructureProfile : Profile
                     Sv = src.NameSv,
                     En = src.NameEn
                 }))
-            .ForMember(dst => dst.OrganizationIdentifierROR, opt => opt.Ignore()) // handled in HandleOrganizations()
             .ForMember(dst => dst.OrganizationIdentifier, opt => opt.Ignore()); // handled in HandleOrganizations()
 
         CreateProjection<DimReferencedatum, CSC.PublicApi.Service.Models.Infrastructure.ReferenceData>()

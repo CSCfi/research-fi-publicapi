@@ -204,16 +204,12 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
     {
         public int? DimOrganizationId { get; set; }
 
-        /// <summary>Organization identifier [ROR]</summary>
-        [Keyword]
-        public string? OrganizationIdentifierROR { get; set; }
-
         /// <summary>Organization name</summary>
         public LanguageVariant? OrganizationName { get; set; }
 
-        /// <summary>Organization identifier [businessID]</summary>
-        [Keyword]
-        public string? OrganizationIdentifier { get; set; }
+        /// <summary>Organization identifiers</summary>
+        [Nested]
+        public List<PidAttributes>? OrganizationIdentifier { get; set; }
     }
     
     /// <summary>Language variant text</summary>

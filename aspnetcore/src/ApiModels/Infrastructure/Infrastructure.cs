@@ -170,14 +170,11 @@ namespace ResearchFi.Infrastructure
     /// <summary>Research organization</summary>
     public partial class ResearchOrganization
     {
-        /// <summary>Organization identifier [ROR]</summary>
-        public string? OrganizationIdentifierROR { get; set; }
-
         /// <summary>Organization name</summary>
         public LanguageVariant? OrganizationName { get; set; }
 
-        /// <summary>Organization identifier [businessID]</summary>
-        public string? OrganizationIdentifier { get; set; }
+        /// <summary>Organization identifiers</summary>
+        public List<PidAttributes>? OrganizationIdentifier { get; set; }
     }
 
     /// <summary>Language variant text</summary>

@@ -44,17 +44,11 @@ public class GetInfrastructuresQueryParameters
     /// </summary>
     public bool? FinlandRoadmapInfrastructure { get; set; }
 
-    /// <summary>The field responsibleOrganization.organizationIdentifierROR is exactly equal to the text.</summary>
-    public string? ResponsibleOrganizationRor { get; set; }
-    
-    /// <summary>The field responsibleOrganization.organizationIdentifier is exactly equal to the text.</summary>
-    public string? ResponsibleOrganizationBusinessId { get; set; }
+    /// <summary>List responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? ResponsibleOrganizationId { get; set; }
 
-    /// <summary>One organization in list organizationParticipatesInfrastructure has field organizationIdentifierROR exactly equal to the text.</summary>
-    public string? OrganizationParticipatesInfrastructureRor { get; set; }
-    
-    /// <summary>One organization in list organizationParticipatesInfrastructure has field organizationIdentifier exactly equal to the text.</summary>
-    public string? OrganizationParticipatesInfrastructureBusinessId { get; set; }
+    /// <summary>List organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? OrganizationParticipatesInfrastructureId { get; set; }
 
     /// <summary>The field infraStartsOn.year is equal.</summary>
     public int? InfraStartsOnYear { get; set; }
