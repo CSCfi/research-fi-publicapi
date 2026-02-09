@@ -26,12 +26,12 @@ public class InfrastructureService : IInfrastructureService
 
         var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
-        // If query parameters contain ExcludeServices=true, omit IsComposedOf property
+        // If query parameters contain ExcludeServices=true, omit InfraServices property
         if (infrastructuresQueryParameters.ExcludeServices == true)
         {
             foreach (var infrastructure in result)
             {
-                infrastructure.IsComposedOf = null;
+                infrastructure.InfraServices = null;
             }
         }
 
@@ -45,12 +45,12 @@ public class InfrastructureService : IInfrastructureService
 
         var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
 
-        // If query parameters contain ExcludeServices=true, omit IsComposedOf property
+        // If query parameters contain ExcludeServices=true, omit InfraServices property
         if (infrastructuresQueryParameters.ExcludeServices == true)
         {
             foreach (var infrastructure in result)
             {
-                infrastructure.IsComposedOf = null;
+                infrastructure.InfraServices = null;
             }
         }
 

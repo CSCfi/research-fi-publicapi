@@ -51,7 +51,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
 
             HandleOrganizations(infrastructure);
             HandleInfraPids(infrastructure);
-            HandleIsComposedOfPids(infrastructure);
+            HandleInfraServicesPids(infrastructure);
             HandleRelationToInfraPids(infrastructure);
             HandleResearchfiUrl(infrastructure);
             HandleEmptyCollections(infrastructure);
@@ -64,7 +64,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         Infrastructure infrastructure = (Infrastructure)entity;
         HandleOrganizations(infrastructure);
         HandleInfraPids(infrastructure);
-        HandleIsComposedOfPids(infrastructure);
+        HandleInfraServicesPids(infrastructure);
         HandleRelationToInfraPids(infrastructure);
         HandleResearchfiUrl(infrastructure);
         HandleEmptyCollections(infrastructure);
@@ -133,14 +133,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         infrastructure.Pids = null;
     }
 
-    private void HandleIsComposedOfPids(Infrastructure infrastructure)
+    private void HandleInfraServicesPids(Infrastructure infrastructure)
     {
-        if (infrastructure.IsComposedOf == null || !infrastructure.IsComposedOf.Any())
+        if (infrastructure.InfraServices == null || !infrastructure.InfraServices.Any())
         {
-            infrastructure.IsComposedOf = null;
+            infrastructure.InfraServices = null;
             return;
         }
-        foreach (InfrastructureService service in infrastructure.IsComposedOf)
+        foreach (InfrastructureService service in infrastructure.InfraServices)
         {
             if (service.Pids == null || !service.Pids.Any())
             {
@@ -252,7 +252,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         };
 
         // Services' researchfi URLs
-        foreach (InfrastructureService service in infrastructure.IsComposedOf ?? [])
+        foreach (InfrastructureService service in infrastructure.InfraServices ?? [])
         {
             if (service.ServiceIdentifier == null || string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN))
             {
@@ -284,8 +284,8 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         if (infrastructure.InfraContactInformation != null && !infrastructure.InfraContactInformation.Any()) { infrastructure.InfraContactInformation = null; }
         if (infrastructure.Esfri != null && !infrastructure.Esfri.Any()) { infrastructure.Esfri = null; }
 
-        // IsComposedOf
-        foreach (InfrastructureService service in infrastructure.IsComposedOf ?? [])
+        // InfraServices
+        foreach (InfrastructureService service in infrastructure.InfraServices ?? [])
         {
             if (service.ServiceName != null && !service.ServiceName.Any()) { service.ServiceName = null; }
             if (service.ServiceHomepage != null && !service.ServiceHomepage.Any()) { service.ServiceHomepage = null; }
@@ -298,9 +298,9 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             if (service.ServicePrivacyPolicy != null && !service.ServicePrivacyPolicy.Any()) { service.ServicePrivacyPolicy = null; }
             if (service.ServiceTermsOfUse != null && !service.ServiceTermsOfUse.Any()) { service.ServiceTermsOfUse = null; }
         }
-        if (infrastructure.IsComposedOf != null && !infrastructure.IsComposedOf.Any())
+        if (infrastructure.InfraServices != null && !infrastructure.InfraServices.Any())
         {
-             infrastructure.IsComposedOf = null;
+             infrastructure.InfraServices = null;
         }
     }
 }

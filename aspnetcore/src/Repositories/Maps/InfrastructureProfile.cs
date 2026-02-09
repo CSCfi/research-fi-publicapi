@@ -63,7 +63,7 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.InfraHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
             // Services
-            .ForMember(dst => dst.IsComposedOf, opt => opt.MapFrom(src => src.DimServices))
+            .ForMember(dst => dst.InfraServices, opt => opt.MapFrom(src => src.DimServices))
             // Contact information
             .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             // Infrastructure network

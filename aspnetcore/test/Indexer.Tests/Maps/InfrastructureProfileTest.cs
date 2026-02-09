@@ -582,7 +582,7 @@ public class InfrastructureProfileTest
                     CodeValue = "fos 2 code value"
                 }
             },
-            IsComposedOf = new List<InfrastructureService>
+            InfraServices = new List<InfrastructureService>
             {
                 new InfrastructureService
                 {

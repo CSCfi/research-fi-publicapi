@@ -34,7 +34,7 @@ namespace ResearchFi.Infrastructure
         public List<ReferenceData>? FieldOfScience { get; set; }
 
         /// <summary>Has a service</summary>
-        public List<InfrastructureService>? IsComposedOf { get; set; }
+        public List<InfrastructureService>? InfraServices { get; set; }
 
         /// <summary>Belongs to infrastructure network</summary>
         public List<InfrastructureNetwork>? InfraNetwork { get; set; }

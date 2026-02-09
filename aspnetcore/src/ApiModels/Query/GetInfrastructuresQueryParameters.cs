@@ -69,6 +69,6 @@ public class GetInfrastructuresQueryParameters
     /// </summary>
     public string? VisitingAddressCountryCode { get; set; }
 
-    /// <summary>Exclude related services (isComposedOf) from response data.</summary>
+    /// <summary>Exclude related services (InfraServices) from response data.</summary>
     public bool? ExcludeServices { get; set; } = false;
 }
