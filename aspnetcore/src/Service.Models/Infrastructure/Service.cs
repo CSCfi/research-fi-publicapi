@@ -37,12 +37,14 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public Identifier? ServiceIdentifier { get; set; }
 
         /// <summary>Service starts on</summary>
+        [Nested]
         public InfraDate? ServiceStartsOn { get; set; }
 
         /// <summary>Service obtain instruction</summary>
         public List<DescriptiveText>? ServiceObtain { get; set; }
 
         /// <summary>Service ends on</summary>
+        [Nested]
         public InfraDate? ServiceEndsOn { get; set; }
 
         /// <summary>Service booking link</summary>

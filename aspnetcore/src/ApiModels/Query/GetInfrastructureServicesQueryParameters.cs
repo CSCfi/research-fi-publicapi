@@ -25,4 +25,13 @@ public class GetInfrastructureServicesQueryParameters
 
     /// <summary>The field isPartOfInfrastructure.responsibleOrganization.organizationIdentifier is exactly equal to the text.</summary>
     public string? IsPartOfInfrastructureResponsibleOrganization { get; set; }
+
+    /// <summary>The field serviceStartsOn.year is equal</summary>
+    public int? ServiceStartsOnYear { get; set; }
+    
+    /// <summary>The field serviceEndsOn.year is equal.</summary>
+    public int? ServiceEndsOnYear { get; set; }
+    
+    /// <summary>The field serviceEndsOn.year is less than or equal.</summary>
+    public int? ServiceEndsByYear { get; set; }
 }

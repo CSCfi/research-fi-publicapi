@@ -56,10 +56,10 @@ public class GetInfrastructuresQueryParameters
     /// <summary>One organization in list organizationParticipatesInfrastructure has field organizationIdentifier exactly equal to the text.</summary>
     public string? OrganizationParticipatesInfrastructureBusinessId { get; set; }
 
-    /// <summary>The field infraStartsOn.year is exactly equal to the text.</summary>
+    /// <summary>The field infraStartsOn.year is equal.</summary>
     public int? InfraStartsOnYear { get; set; }
 
-    /// <summary>The field infraEndsOn.year is exactly equal to the text.</summary>
+    /// <summary>The field infraEndsOn.year is equal.</summary>
     public int? InfraEndsOnYear { get; set; }
 
     /// <summary>

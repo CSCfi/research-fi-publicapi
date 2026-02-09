@@ -28,7 +28,6 @@ public class InfrastructureServiceService : IInfrastructureServiceService
         return (_mapper.Map<IEnumerable<ResearchFi.Infrastructure.Service>>(result), searchResult);
     }
 
-
     public async Task<(IEnumerable<ResearchFi.Infrastructure.Service>, SearchAfterResult)> GetInfrastructureServicesSearchAfter(GetInfrastructureServicesQueryParameters infrastructureServicesQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters)
     {
         var searchParameters = _mapper.Map<InfrastructureServiceSearchParameters>(infrastructureServicesQueryParameters);

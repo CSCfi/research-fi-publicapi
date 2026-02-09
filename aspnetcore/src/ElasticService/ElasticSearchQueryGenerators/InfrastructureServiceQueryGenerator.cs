@@ -105,6 +105,42 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                             .Query(parameters.IsPartOfInfrastructureResponsibleOrganization)))));
         }
 
+        // ServiceStartsOnYear
+        if (parameters.ServiceStartsOnYear.HasValue)
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.ServiceStartsOn)
+                    .Query(q => q
+                        .Term(m => m
+                            .Field(f => f.ServiceStartsOn!.Year)
+                            .Value(parameters.ServiceStartsOnYear.Value)))));
+        }
+
+        // ServiceEndsOnYear
+        if (parameters.ServiceEndsOnYear.HasValue)
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.ServiceEndsOn)
+                    .Query(q => q
+                        .Term(m => m
+                            .Field(f => f.ServiceEndsOn!.Year)
+                            .Value(parameters.ServiceEndsOnYear.Value)))));
+        }
+
+        // ServiceEndsByYear
+        if (parameters.ServiceEndsByYear.HasValue)
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.ServiceEndsOn)
+                    .Query(q => q
+                        .Range(r => r
+                            .Field(f => f.ServiceEndsOn!.Year)
+                            .LessThanOrEquals(parameters.ServiceEndsByYear.Value)))));
+        }
+
         return subQueries;
     }
 
