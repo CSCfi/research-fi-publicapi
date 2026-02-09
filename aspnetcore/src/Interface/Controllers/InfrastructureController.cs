@@ -52,6 +52,7 @@ public class InfrastructureController : ControllerBase
         return infrastructures;
     }
 
+/*
     /// <summary>
     /// Endpoint for getting a single infrastructure based on the URN.
     /// </summary>
@@ -73,6 +74,7 @@ public class InfrastructureController : ControllerBase
         var infrastructure = await _infrastructureService.GetInfrastructure(urn);
         return infrastructure != null ? Results.Ok(infrastructure) : Results.NotFound();
     }
+*/
     
     /// <summary>
     /// Endpoint for filtering infrastructure services using the specified query parameters.
@@ -96,6 +98,7 @@ public class InfrastructureController : ControllerBase
         return services;
     }
 
+/*
     /// <summary>
     /// Endpoint for getting a single infrastructure service based on the URN.
     /// </summary>
@@ -118,4 +121,5 @@ public class InfrastructureController : ControllerBase
         var service = await _infrastructureServiceService.GetInfrastructureService(urn);
         return service != null ? Results.Ok(service) : Results.NotFound();
     }
+*/
 }
