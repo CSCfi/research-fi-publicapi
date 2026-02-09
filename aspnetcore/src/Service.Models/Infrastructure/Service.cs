@@ -84,6 +84,10 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Infrastructure identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
+        /// <summary>Organization - participant</summary>
+        [Nested]
+        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }
 

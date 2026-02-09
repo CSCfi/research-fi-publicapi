@@ -152,7 +152,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
         service.IsPartOfInfrastructure.Pids = null;
 
-        /*
+        
         // OrganizationParticipatesInfrastructure
         List<int> participatingOrganizationIds = _context.FactContributions
             .Where(fc => fc.DimInfrastructureId == service.DimInfrastructureId && fc.ContributionType == "organization_participate_infrastructure")
@@ -185,7 +185,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                 }
             }
         }
-        */
+        
 
         // ResponsibleOrganization
         DimInfrastructure relatedInfrastructure = _context.DimInfrastructures
