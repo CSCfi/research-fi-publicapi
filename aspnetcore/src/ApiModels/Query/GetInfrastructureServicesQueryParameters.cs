@@ -25,7 +25,4 @@ public class GetInfrastructureServicesQueryParameters
 
     /// <summary>The field isPartOfInfrastructure.responsibleOrganization.organizationIdentifier is exactly equal to the text.</summary>
     public string? IsPartOfInfrastructureResponsibleOrganization { get; set; }
-
-    /// <summary>Exclude related infrastructure (isPartOf) from response data.</summary>
-    public bool? ExcludeInfrastructures { get; set; } = false;
 }

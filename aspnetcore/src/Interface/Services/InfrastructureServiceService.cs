@@ -25,15 +25,6 @@ public class InfrastructureServiceService : IInfrastructureServiceService
 
         var (result, searchResult) = await _searchService.Search(searchParameters, paginationQueryParameters.PageNumber, paginationQueryParameters.PageSize);
 
-        // If query parameters contain ExcludeInfrastructures=true, omit IsPartOf property
-        if (infrastructureServicesQueryParameters.ExcludeInfrastructures == true)
-        {
-            foreach (var infrastructure in result)
-            {
-                infrastructure.IsPartOfInfrastructure = null;
-            }
-        }
-
         return (_mapper.Map<IEnumerable<ResearchFi.Infrastructure.Service>>(result), searchResult);
     }
 
@@ -43,15 +34,6 @@ public class InfrastructureServiceService : IInfrastructureServiceService
         var searchParameters = _mapper.Map<InfrastructureServiceSearchParameters>(infrastructureServicesQueryParameters);
 
         var (result, searchAfterResult) = await _searchService.SearchAfter(searchParameters, searchAfterQueryParameters.PageSize, searchAfterQueryParameters.NextPageToken);
-
-        // If query parameters contain ExcludeInfrastructures=true, omit IsPartOf property
-        if (infrastructureServicesQueryParameters.ExcludeInfrastructures == true)
-        {
-            foreach (var infrastructure in result)
-            {
-                infrastructure.IsPartOfInfrastructure = null;
-            }
-        }
 
         return (_mapper.Map<IEnumerable<ResearchFi.Infrastructure.Service>>(result), searchAfterResult);
     }

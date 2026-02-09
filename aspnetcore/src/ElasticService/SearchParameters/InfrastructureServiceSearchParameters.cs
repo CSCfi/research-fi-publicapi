@@ -9,5 +9,4 @@ public class InfrastructureServiceSearchParameters
     public string? ServiceDescription { get; set; }
     public string? IsPartOfInfrastructureURN { get; set; }
     public string? IsPartOfInfrastructureResponsibleOrganization { get; set; }
-    public bool? ExcludeInfrastructures { get; set; } 
 }
