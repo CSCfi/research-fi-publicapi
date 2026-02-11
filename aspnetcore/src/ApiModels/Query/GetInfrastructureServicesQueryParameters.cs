@@ -23,10 +23,18 @@ public class GetInfrastructureServicesQueryParameters
     /// <summary>The field isPartOfInfrastructure.infraIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
     public string? IsPartOfInfrastructureURN { get; set; }
 
-    /// <summary>List isPartOfInfrastructure.responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    /// <summary>
+    /// Responsible organization of the infrastructure offering the service.
+    /// 
+    /// List isPartOfInfrastructure.responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.
+    /// </summary>
     public string? IsPartOfInfrastructureResponsibleOrganizationId { get; set; }
 
-    /// <summary>List isPartOfInfrastructure.organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    /// <summary>
+    /// Participating organization of the infrastructure offering the service.
+    /// 
+    /// List isPartOfInfrastructure.organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.
+    /// </summary>
     public string? IsPartOfInfrastructureOrganizationParticipatesInfrastructureId { get; set; }
 
     /// <summary>The field serviceStartsOn.year is exactly equal</summary>
