@@ -23,13 +23,16 @@ public class GetInfrastructureServicesQueryParameters
     /// <summary>The field isPartOfInfrastructure.infraIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
     public string? IsPartOfInfrastructureURN { get; set; }
 
-    /// <summary>The field isPartOfInfrastructure.responsibleOrganization.organizationIdentifier is exactly equal to the text.</summary>
-    public string? IsPartOfInfrastructureResponsibleOrganization { get; set; }
+    /// <summary>List isPartOfInfrastructure.responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? IsPartOfInfrastructureResponsibleOrganizationId { get; set; }
 
-    /// <summary>The field serviceStartsOn.year is equal</summary>
+    /// <summary>List isPartOfInfrastructure.organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? IsPartOfInfrastructureOrganizationParticipatesInfrastructureId { get; set; }
+
+    /// <summary>The field serviceStartsOn.year is exactly equal</summary>
     public int? ServiceStartsOnYear { get; set; }
     
-    /// <summary>The field serviceEndsOn.year is equal.</summary>
+    /// <summary>The field serviceEndsOn.year is exactly equal.</summary>
     public int? ServiceEndsOnYear { get; set; }
     
     /// <summary>The field serviceEndsOn.year is less than or equal.</summary>

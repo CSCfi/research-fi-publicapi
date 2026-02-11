@@ -93,16 +93,34 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                             .Query(parameters.IsPartOfInfrastructureURN)))));
         }
 
-        // IsPartOfInfrastructureResponsibleOrganization
-        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureResponsibleOrganization))
+        // IsPartOfInfrastructureResponsibleOrganizationId
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
                     .Path(p => p.IsPartOfInfrastructure)
                     .Query(q => q
-                        .MatchPhrase(m => m
-                            .Field(f => f.IsPartOfInfrastructure.ResponsibleOrganization.OrganizationIdentifier)
-                            .Query(parameters.IsPartOfInfrastructureResponsibleOrganization)))));
+                        .Nested(n2 => n2
+                            .Path(p => p.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier)
+                            .Query(q2 => q2
+                                .Term(m => m
+                                    .Field(f => f.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier!.First().Pid)
+                                    .Value(parameters.IsPartOfInfrastructureResponsibleOrganizationId)))))));
+        }
+
+        // IsPartOfInfrastructureOrganizationParticipatesInfrastructureId
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureOrganizationParticipatesInfrastructureId))
+        {
+            subQueries.Add(t =>
+                t.Nested(n => n
+                    .Path(p => p.IsPartOfInfrastructure)
+                    .Query(q => q
+                        .Nested(n2 => n2
+                            .Path(p => p.IsPartOfInfrastructure!.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier)
+                            .Query(q2 => q2
+                                .Term(m => m
+                                    .Field(f => f.IsPartOfInfrastructure!.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier!.First().Pid)
+                                    .Value(parameters.IsPartOfInfrastructureOrganizationParticipatesInfrastructureId)))))));
         }
 
         // ServiceStartsOnYear
