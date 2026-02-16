@@ -21,6 +21,10 @@ public partial class DimTelephoneNumber
 
     public int DimKnownPersonId { get; set; }
 
+    public int DimContactInformationId { get; set; }
+
+    public virtual DimContactInformation DimContactInformation { get; set; } = null!;
+
     public virtual DimKnownPerson DimKnownPerson { get; set; } = null!;
 
     public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
