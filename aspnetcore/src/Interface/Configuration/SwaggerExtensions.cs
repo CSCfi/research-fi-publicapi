@@ -73,10 +73,10 @@ public static class SwaggerExtensions
         });
         app.UseSwaggerUI(options =>
         {
+            options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             foreach (var description in app.Services.GetRequiredService<IApiVersionDescriptionProvider>().ApiVersionDescriptions)
             {
                 options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             }
         });
     }
