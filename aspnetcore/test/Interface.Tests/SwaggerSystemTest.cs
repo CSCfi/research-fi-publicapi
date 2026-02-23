@@ -71,14 +71,21 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
         // Check that the paths property exists
         Assert.True(jsonDocument.RootElement.TryGetProperty("paths", out var pathsElement));
 
-        // Check that all expected endpoints exist in paths
+        // Check that all expected endpoints exist in paths.
         var actualPaths = pathsElement.EnumerateObject().Select(p => p.Name).ToHashSet(StringComparer.Ordinal);
-
         foreach (var expectedPath in expectedPaths_V1)
         {
             Assert.True(
                 actualPaths.Contains(expectedPath),
-                $"Swagger is missing expected path '{expectedPath}'.");
+                $"Swagger is missing expected path '{expectedPath}'. If it is removed on purpose, please update the test to remove it from the expected paths list.");
+        }
+
+        // Check that there are no unexpected paths, to prevent accidentally exposing a new endpoint.
+        foreach (var actualPath in actualPaths)
+        {
+            Assert.True(
+                expectedPaths_V1.Contains(actualPath, StringComparer.Ordinal),
+                $"Swagger contains unexpected path '{actualPath}'. If this endpoint is added on purpose, please update the test to add it to the expected paths list.");
         }
     }
 
@@ -87,7 +94,11 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
     {
         var expectedPaths_V2 = new[]
         {
-            "/v2/research-datasets"
+            "/v2/research-datasets",
+            "/VirtaJulkaisutietopalvelu/Latausraportit/duplikaatit",  // TODO: Add /v2/ prefix to Virtajulkaisutietopalvelu endpoints
+            "/VirtaJulkaisutietopalvelu/Latausraportit/tilanne",
+            "/VirtaJulkaisutietopalvelu/Latausraportit/virheet",
+            "/VirtaJulkaisutietopalvelu/Yhteisjulkaisut/ristiriitaiset"
         };
 
         // Arrange
@@ -116,14 +127,21 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
         // Check that the paths property exists
         Assert.True(jsonDocument.RootElement.TryGetProperty("paths", out var pathsElement));
 
-        // Check that all expected endpoints exist in paths
+        // Check that all expected endpoints exist in paths.
         var actualPaths = pathsElement.EnumerateObject().Select(p => p.Name).ToHashSet(StringComparer.Ordinal);
-
         foreach (var expectedPath in expectedPaths_V2)
         {
             Assert.True(
                 actualPaths.Contains(expectedPath),
-                $"Swagger is missing expected path '{expectedPath}'.");
+                $"Swagger is missing expected path '{expectedPath}'. If it is removed on purpose, please update the test to remove it from the expected paths list.");
+        }
+
+        // Check that there are no unexpected paths, to prevent accidentally exposing a new endpoint.
+        foreach (var actualPath in actualPaths)
+        {
+            Assert.True(
+                expectedPaths_V2.Contains(actualPath, StringComparer.Ordinal),
+                $"Swagger contains unexpected path '{actualPath}'. If this endpoint is added on purpose, please update the test to add it to the expected paths list.");
         }
     }
 }
