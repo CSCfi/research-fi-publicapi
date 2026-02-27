@@ -8,7 +8,7 @@ using CSC.PublicApi.Service.Models.ResearchDataset;
 using CSC.PublicApi.Service.Models.Publication;
 using FundingCallApiModel = ResearchFi.FundingCall.FundingCall;
 using FundingDecisionApiModel = ResearchFi.FundingDecision.FundingDecision;
-using ResearchDatasetApiModel = ResearchFi.ResearchDataset.ResearchDataset;
+using ResearchDatasetApiModel = ResearchFi.ResearchDataset.V1.ResearchDataset;
 using PublicationApiModel = ResearchFi.Publication.Publication;
 using System.Text.Json;
 
