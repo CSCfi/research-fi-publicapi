@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 
 namespace CSC.PublicApi.Interface.Configuration;
@@ -23,9 +24,17 @@ public static class SwaggerExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            // Needed because our models have non-unique names in different namespaces,
-            // causing error "SchemaId already used for different type".
-            options.CustomSchemaIds(type => type.FullName);
+            /*
+             * Modify generated schema IDs.
+             * Remove version number, which are used in namespace to separate API versions, from the schema ID.
+             * Example: ResearchFi.VirtaJtp.V1.DuplikaatitAPI -> ResearchFi.VirtaJtp.DuplikaatitAPI
+             */
+            options.CustomSchemaIds(t =>
+            {
+                var full = t.FullName ?? t.Name;
+                full = Regex.Replace(full, @"(\.|^)V\d+(_\d+)?\.", "$1"); // removes ".V1." or ".V1_1." etc.
+                return full;
+            });
         });
         services.ConfigureOptions<SwaggerConfiguration>();
     }
@@ -73,10 +82,10 @@ public static class SwaggerExtensions
         });
         app.UseSwaggerUI(options =>
         {
+            options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             foreach (var description in app.Services.GetRequiredService<IApiVersionDescriptionProvider>().ApiVersionDescriptions)
             {
                 options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             }
         });
     }

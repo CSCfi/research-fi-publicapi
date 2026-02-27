@@ -6,6 +6,7 @@
 public static class ApiConstants
 {
     public const string ApiVersion1 = "1.0";
+    public const string ApiVersion2 = "2.0";
     public const string ContentTypeJson = "application/json";
     public const string LogResourceType_PropertyName = "ResourceType";
     public const string LogResourceType_FundingCall = "funding_call";
