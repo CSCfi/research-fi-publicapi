@@ -70,6 +70,12 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
         // Version information for Swagger UI
         foreach (var apiVersionDescription in _provider.ApiVersionDescriptions)
         {
+            // At the moment, API version V2 is an example and should not be visible in the API documentation.
+            if (apiVersionDescription.GroupName.StartsWith("v2", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             var openApiInfo = new OpenApiInfo
             {
                 Title = _openApiSettings.Title,
