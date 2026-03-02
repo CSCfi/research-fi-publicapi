@@ -85,6 +85,12 @@ public static class SwaggerExtensions
             options.ConfigObject.AdditionalItems.Add("syntaxHighlight", false); // disable to improve performance with large responses
             foreach (var description in app.Services.GetRequiredService<IApiVersionDescriptionProvider>().ApiVersionDescriptions)
             {
+                // At the moment, API version V2 is an example and should not be visible in the API documentation.
+                if (description.GroupName.StartsWith("v2", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
             }
         });

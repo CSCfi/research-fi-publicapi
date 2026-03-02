@@ -12,6 +12,7 @@ using Serilog;
 namespace CSC.PublicApi.Interface.Controllers.V2;
 
 [ApiController]
+[ApiExplorerSettings(IgnoreApi = true)] // At the moment, this API version is an example and should not be visible in the API documentation.
 [ApiVersion(ApiVersion)]
 [Route("v{version:apiVersion}/research-datasets")]
 public class ResearchDatasetController : ControllerBase
