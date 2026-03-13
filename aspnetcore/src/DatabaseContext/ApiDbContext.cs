@@ -4642,20 +4642,6 @@ public partial class ApiDbContext : DbContext
                 .HasColumnName("row_created");
         });
 
-        modelBuilder.Entity<UpdatePidQueue>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("update_pid_queue");
-
-            entity.Property(e => e.Created)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("created");
-            entity.Property(e => e.DimInfrastructureId).HasColumnName("dim_infrastructure_id");
-            entity.Property(e => e.DimServiceId).HasColumnName("dim_service_id");
-        });
-
         OnModelCreatingPartial(modelBuilder);
     }
 
