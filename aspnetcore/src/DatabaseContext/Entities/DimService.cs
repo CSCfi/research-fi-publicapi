@@ -7,6 +7,8 @@ public partial class DimService
 {
     public int Id { get; set; }
 
+    public string? LocalIdentifier { get; set; }
+
     public string SourceId { get; set; } = null!;
 
     public string? SourceDescription { get; set; }
@@ -21,8 +23,6 @@ public partial class DimService
 
     public int EndDate { get; set; }
 
-    public string? LocalIdentifier { get; set; }
-
     public virtual ICollection<DimContactInformation> DimContactInformations { get; set; } = new List<DimContactInformation>();
 
     public virtual ICollection<DimDescriptiveItem> DimDescriptiveItems { get; set; } = new List<DimDescriptiveItem>();
@@ -35,11 +35,7 @@ public partial class DimService
 
     public virtual DimDate EndDateNavigation { get; set; } = null!;
 
-    public virtual ICollection<FactInfraKeyword> FactInfraKeywords { get; set; } = new List<FactInfraKeyword>();
-
     public virtual ICollection<FactReferencedatum> FactReferencedata { get; set; } = new List<FactReferencedatum>();
-
-    public virtual ICollection<FactUpkeep> FactUpkeeps { get; set; } = new List<FactUpkeep>();
 
     public virtual DimDate StartDateNavigation { get; set; } = null!;
 }

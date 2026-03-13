@@ -33,11 +33,11 @@ public partial class FactUpkeep
 
     public virtual DimGeo DimGeo { get; set; } = null!;
 
-    public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
+    public virtual DimInfrastructureOld DimInfrastructure { get; set; } = null!;
 
     public virtual DimOrganization DimOrganization { get; set; } = null!;
 
-    public virtual DimService DimService { get; set; } = null!;
+    public virtual DimServiceOld DimService { get; set; } = null!;
 
     public virtual DimServicePoint DimServicePoint { get; set; } = null!;
 }
