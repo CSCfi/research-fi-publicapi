@@ -21,11 +21,11 @@ public partial class FactInfraKeyword
 
     public DateTime? Modified { get; set; }
 
-    public virtual DimInfrastructure DimInfrastructure { get; set; } = null!;
+    public virtual DimInfrastructureOld DimInfrastructure { get; set; } = null!;
 
     public virtual DimKeyword DimKeyword { get; set; } = null!;
 
-    public virtual DimService DimService { get; set; } = null!;
+    public virtual DimServiceOld DimService { get; set; } = null!;
 
     public virtual DimServicePoint DimServicePoint { get; set; } = null!;
 }
