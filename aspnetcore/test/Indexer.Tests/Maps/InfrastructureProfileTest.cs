@@ -240,11 +240,8 @@ public class InfrastructureProfileTest
                         NameEn = "esfri 2 name EN",
                         NameSv = "esfri 2 name SV"
                     }
-                }
-            },
-            FactDimReferencedataFieldOfSciences = new List<FactDimReferencedataFieldOfScience>
-            {
-                new FactDimReferencedataFieldOfScience
+                },
+                new FactReferencedatum
                 {
                     DimReferencedataId = 22345,
                     DimReferencedata = new DimReferencedatum
@@ -256,7 +253,7 @@ public class InfrastructureProfileTest
                         NameSv = "fos 1 name SV"
                     }
                 },
-                new FactDimReferencedataFieldOfScience
+                new FactReferencedatum
                 {
                     DimReferencedataId = 22346,
                     DimReferencedata = new DimReferencedatum

@@ -97,7 +97,8 @@ public class InfrastructureProfile : Profile
                 )
             )
             // Field of science
-            .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactDimReferencedataFieldOfSciences.ToList().Select(f => f.DimReferencedata)))
+            .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactReferencedata
+                .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_FieldOfScience).Select(fr => fr.DimReferencedata)))
             // Organization - participant
             .ForMember(dst => dst.OrganizationParticipatesInfrastructure, opt => opt.MapFrom(src => src.FactContributions
                 .Where(fc => fc.ContributionType == ContributionType_Participant && fc.DimOrganizationId != -1)
