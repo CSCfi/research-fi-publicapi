@@ -15,7 +15,7 @@ public class Program
 {
     private const int DefaultQueryTimeout = 300;
 
-    public static async Task Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         var configuration = new ConfigurationBuilder()
@@ -30,24 +30,30 @@ public class Program
             .ReadFrom.Configuration(configuration)
             .CreateLogger();
 
-        // Create and configure the host to support dependency injection, configuration, etc.
-        var consoleHost = CreateHostBuilder(args).Build();
-
-        // Check if the database is ready for indexing.
-        var databasePreflightCheck = consoleHost.Services.GetRequiredService<DatabasePreflightCheck>();
-        if (!databasePreflightCheck.IsGood())
+        try
         {
-            return;
+            var consoleHost = CreateHostBuilder(args).Build();
+
+            var databasePreflightCheck = consoleHost.Services.GetRequiredService<DatabasePreflightCheck>();
+            if (!databasePreflightCheck.IsGood())
+            {
+                return 1;
+            }
+
+            var indexer = consoleHost.Services.GetRequiredService<Indexer>();
+            await indexer.Start();
+
+            return 0;
         }
-
-        // Get the "Main" service which handles the indexing.
-        var indexer = consoleHost.Services.GetRequiredService<Indexer>();
-
-        // Start indexing.
-        await indexer.Start();
-
-        // Flush logs
-        Log.CloseAndFlush();
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Indexer failed");
+            return 1;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) => Host
