@@ -26,6 +26,9 @@ objects:
       annotations:
         description: Public API indexer devel - single-run Job
     spec:
+      activeDeadlineSeconds: 5400 # Can run for 90 minutes
+      completions: 1 # Ensure only one successful completion is needed
+      backoffLimit: 1 # Allow only one retry on failure
       template:
         spec:
           restartPolicy: Never
