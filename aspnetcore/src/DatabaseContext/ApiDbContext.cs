@@ -165,7 +165,7 @@ public partial class ApiDbContext : DbContext
     public virtual DbSet<PidM> PidMs { get; set; }
 
    
-   
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BrFundingConsortiumParticipation>(entity =>
@@ -2624,11 +2624,13 @@ public partial class ApiDbContext : DbContext
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("apc_fee_EUR");
             entity.Property(e => e.ApcPaymentYear).HasColumnName("apc_payment_year");
+            entity.Property(e => e.ArtTypeCode).HasColumnName("art_type_code");
             entity.Property(e => e.ArticleNumberText)
                 .HasMaxLength(255)
                 .HasColumnName("article_number_text");
             entity.Property(e => e.ArticleTypeCode).HasColumnName("article_type_code");
             entity.Property(e => e.AuthorsText).HasColumnName("authors_text");
+            entity.Property(e => e.AvApplicationTypeCode).HasColumnName("av_application_type_code");
             entity.Property(e => e.BusinessCollaboration).HasColumnName("business_collaboration");
             entity.Property(e => e.ConferenceName)
                 .HasMaxLength(4000)
@@ -2695,7 +2697,7 @@ public partial class ApiDbContext : DbContext
                 .HasMaxLength(4000)
                 .HasColumnName("publisher_name");
             entity.Property(e => e.PublisherOpenAccessCode).HasColumnName("publisher_open_access_code");
-            entity.Property(e => e.Report).HasColumnName("report");
+            entity.Property(e => e.ReportSwitch).HasColumnName("report_switch");
             entity.Property(e => e.ReportingYear).HasColumnName("reporting_year");
             entity.Property(e => e.SelfArchivedCode).HasColumnName("self_archived_code");
             entity.Property(e => e.SourceDescription)
@@ -2710,9 +2712,19 @@ public partial class ApiDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("volume");
 
+            entity.HasOne(d => d.ArtTypeCodeNavigation).WithMany(p => p.DimPublicationArtTypeCodeNavigations)
+                .HasForeignKey(d => d.ArtTypeCode)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("art_type_code");
+
             entity.HasOne(d => d.ArticleTypeCodeNavigation).WithMany(p => p.DimPublicationArticleTypeCodeNavigations)
                 .HasForeignKey(d => d.ArticleTypeCode)
                 .HasConstraintName("article_type_code");
+
+            entity.HasOne(d => d.AvApplicationTypeCodeNavigation).WithMany(p => p.DimPublicationAvApplicationTypeCodeNavigations)
+                .HasForeignKey(d => d.AvApplicationTypeCode)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("av_application_type_code");
 
             entity.HasOne(d => d.DimPublicationChannel).WithMany(p => p.DimPublicationDimPublicationChannels)
                 .HasForeignKey(d => d.DimPublicationChannelId)
@@ -2785,6 +2797,11 @@ public partial class ApiDbContext : DbContext
                 .HasForeignKey(d => d.PublisherOpenAccessCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("publisher_open_access");
+
+            entity.HasOne(d => d.ReportSwitchNavigation).WithMany(p => p.DimPublicationReportSwitchNavigations)
+                .HasForeignKey(d => d.ReportSwitch)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("reportSwitch");
 
             entity.HasOne(d => d.TargetAudienceCodeNavigation).WithMany(p => p.DimPublicationTargetAudienceCodeNavigations)
                 .HasForeignKey(d => d.TargetAudienceCode)
