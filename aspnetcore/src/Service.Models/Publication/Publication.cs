@@ -267,6 +267,21 @@ public class Publication
     public string? Abstract { get; set; }
 
     /// <summary>
+    /// OKM:n raporttiluokitus
+    /// </summary>
+    public ReferenceData? ReportSwitch { get; set; }
+
+    /// <summary>
+    /// OKM:n AVsovellustyyppiluokitus
+    /// </summary>
+    public ReferenceData? AudioVisualApplicationType { get; set; }
+
+    /// <summary>
+    /// OKM:n Taidetyyppiluokitus
+    /// </summary>
+    public ReferenceData? ArtPublicationType { get; set; }
+
+    /// <summary>
     /// Luontiaika
     /// </summary>
     public DateTime? Created { get; set; }

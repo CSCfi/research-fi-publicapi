@@ -292,6 +292,28 @@ public class Publication
     public string? Abstract { get; set; }
 
     /// <summary>
+    /// Report
+    ///
+    /// https://uri.suomi.fi/codelist/research/raportti
+    /// </summary>
+    public ReportSwitch? ReportSwitch { get; set; }
+
+    /// <summary>
+    /// Art publication type
+    ///
+    /// https://uri.suomi.fi/codelist/research/TaidetyyppiKoodi
+    /// </summary>
+    public ArtPublicationType? ArtPublicationType { get; set; }
+
+    /// <summary>
+    /// Audiovisual Application Type
+    ///
+    /// https://uri.suomi.fi/codelist/research/AVSovellusTyyppiKoodi
+    /// </summary>
+    public AudioVisualApplicationType? AudioVisualApplicationType { get; set; }
+
+
+    /// <summary>
     /// Creation time
     /// </summary>
     public DateTime? Created { get; set; }

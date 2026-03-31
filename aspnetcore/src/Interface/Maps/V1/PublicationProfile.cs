@@ -53,6 +53,9 @@ public class PublicationProfile : Profile
         CreateMap<Service.Models.ReferenceData, OpenAccess>();
         CreateMap<Service.Models.ReferenceData, PublisherOpenAccess>();
         CreateMap<Service.Models.ReferenceData, ThesisType>();
+        CreateMap<Service.Models.ReferenceData, ReportSwitch>();
+        CreateMap<Service.Models.ReferenceData, ArtPublicationType>();
+        CreateMap<Service.Models.ReferenceData, AudioVisualApplicationType>();
         CreateMap<Service.Models.Keyword, Keyword>();
         CreateMap<Service.Models.ResearchfiUrl, ResearchFi.ResearchfiUrl>();
         CreateMap<Service.Models.OrganizationPartOfCoPublication, ResearchFi.OrganizationPartOfCoPublication>();
