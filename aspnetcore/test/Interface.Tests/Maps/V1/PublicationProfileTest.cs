@@ -104,6 +104,29 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
+            ReportSwitch = new Service.Models.ReferenceData
+            {
+                Code = "reportSwitchCode",
+                NameFi = "reportSwitchNameFi",
+                NameSv = "reportSwitchNameSv",
+                NameEn = "reportSwitchNameEn"
+            },
+            ArtPublicationType = new Service.Models.ReferenceData
+            {
+           
+                Code = "artPublicationTypeCode",
+                NameFi = "artPublicationTypeNameFi",
+                NameSv = "artPublicationTypeNameSv",
+                NameEn = "artPublicationTypeNameEn"
+            },
+            AudioVisualApplicationType = new Service.Models.ReferenceData
+            {
+           
+                Code = "audioVisualApplicationTypeCode",
+                NameFi = "audioVisualApplicationNameFi",
+                NameSv = "audioVisualApplicationNameSv",
+                NameEn = "audioVisualApplicationTypeNameEn"
+            },
             Type = new ReferenceData
             {
                 Code = "publicationTypeCode"
@@ -345,6 +368,27 @@ public class PublicationProfileTest
                 NameFi = "targetAudienceNameFi",
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
+            },
+            ReportSwitch = new ReportSwitch
+            {
+                Code = "reportSwitchCode",
+                NameFi = "reportSwitchNameFi",
+                NameSv = "reportSwitchNameSv",
+                NameEn = "reportSwitchNameEn"
+            },
+            ArtPublicationType = new ArtPublicationType
+            {
+                Code = "artPublicationTypeCode",
+                NameFi = "artPublicationTypeNameFi",
+                NameSv = "artPublicationTypeNameSv",
+                NameEn = "artPublicationTypeNameEn"
+            },
+            AudioVisualApplicationType = new AudioVisualApplicationType
+            {
+                Code = "audioVisualApplicationTypeCode",
+                NameFi = "audioVisualApplicationNameFi",
+                NameSv = "audioVisualApplicationNameSv",
+                NameEn = "audioVisualApplicationTypeNameEn"
             },
             Type = new PublicationType
             {
