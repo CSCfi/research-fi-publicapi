@@ -227,6 +227,27 @@ public class PublicationProfileTest
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
             },
+            ReportSwitchNavigation = new DimReferencedatum
+            {
+                CodeValue = "reportSwitchCode",
+                NameFi = "reportSwitchNameFi",
+                NameSv = "reportSwitchNameSv",
+                NameEn = "reportSwitchNameEn"
+            },
+            ArtTypeCodeNavigation = new DimReferencedatum 
+            {
+                CodeValue = "artPublicationTypeCode",
+                NameFi = "artPublicationTypeNameFi",
+                NameSv = "artPublicationTypeNameSv",
+                NameEn = "artPublicationTypeNameEn"
+            },
+            AvApplicationTypeCodeNavigation = new DimReferencedatum 
+            {
+                CodeValue = "avApplicationTypeCodeCode",
+                NameFi = "avApplicationTypeNameFi",
+                NameSv = "avApplicationTypeNameSv",
+                NameEn = "avApplicationTypeNameEn"
+            },
             PublicationTypeCodeNavigation = new DimReferencedatum
             {
                 CodeValue = "publicationTypeCode",
@@ -518,6 +539,27 @@ public class PublicationProfileTest
                 NameFi = "targetAudienceNameFi",
                 NameSv = "targetAudienceNameSv",
                 NameEn = "targetAudienceNameEn"
+            },
+            ReportSwitch = new ReferenceData
+            {
+                Code = "reportSwitchCode",
+                NameFi = "reportSwitchNameFi",
+                NameSv = "reportSwitchNameSv",
+                NameEn = "reportSwitchNameEn"
+            },
+            ArtPublicationType = new ReferenceData
+            {
+                Code = "artPublicationTypeCode",
+                NameFi = "artPublicationTypeNameFi",
+                NameSv = "artPublicationTypeNameSv",
+                NameEn = "artPublicationTypeNameEn"
+            },
+            AudioVisualApplicationType = new ReferenceData
+            {
+                Code = "avApplicationTypeCodeCode",
+                NameFi = "avApplicationTypeNameFi",
+                NameSv = "avApplicationTypeNameSv",
+                NameEn = "avApplicationTypeNameEn"
             },
             Type = new ReferenceData
             {
