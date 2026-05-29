@@ -86,7 +86,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
 
         /// <summary>Organization - participant</summary>
         [Nested]
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
 
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }

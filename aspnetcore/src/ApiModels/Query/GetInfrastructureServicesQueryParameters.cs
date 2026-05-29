@@ -5,8 +5,8 @@ namespace ResearchFi.Query;
 /// </summary>
 public class GetInfrastructureServicesQueryParameters
 {
-    /// <summary>The field serviceIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
-    public string? PersistentIdentifierUrn { get; set; }
+    /// <summary>The field serviceIdentifier.keyIdentifierURN is exactly equal to the text.</summary>
+    public string? KeyIdentifierUrn { get; set; }
 
     /// <summary>The field serviceIdentifier.otherPersistentIdentifier is exactly equal to the text.</summary>
     public string? OtherPersistentIdentifier { get; set; }
@@ -20,22 +20,22 @@ public class GetInfrastructureServicesQueryParameters
     /// <summary>The field serviceDescription contains text.</summary>
     public string? ServiceDescription { get; set; }
 
-    /// <summary>The field isPartOfInfrastructure.infraIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
+    /// <summary>The field isPartOfInfrastructure.infraIdentifier.keyIdentifierURN is exactly equal to the text.</summary>
     public string? IsPartOfInfrastructureURN { get; set; }
 
     /// <summary>
     /// Responsible organization of the infrastructure offering the service.
     /// 
-    /// List isPartOfInfrastructure.responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.
+    /// List isPartOfInfrastructure.infraResponsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.
     /// </summary>
-    public string? IsPartOfInfrastructureResponsibleOrganizationId { get; set; }
+    public string? IsPartOfInfrastructureInfraResponsibleOrganizationId { get; set; }
 
     /// <summary>
     /// Participating organization of the infrastructure offering the service.
     /// 
-    /// List isPartOfInfrastructure.organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.
+    /// List isPartOfInfrastructure.InfraParticipatingOrganizations.organizationIdentifier contains field pid exactly equal to the text.
     /// </summary>
-    public string? IsPartOfInfrastructureOrganizationParticipatesInfrastructureId { get; set; }
+    public string? IsPartOfInfrastructureInfraParticipatingOrganizationsId { get; set; }
 
     /// <summary>The field serviceStartsOn.year is exactly equal</summary>
     public int? ServiceStartsOnYear { get; set; }

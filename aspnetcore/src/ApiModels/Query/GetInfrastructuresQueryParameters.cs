@@ -5,8 +5,8 @@
 /// </summary>
 public class GetInfrastructuresQueryParameters
 {
-    /// <summary>The field infraIdentifier.persistentIdentifierURN is exactly equal to the text.</summary>
-    public string? PersistentIdentifierUrn { get; set; }
+    /// <summary>The field infraIdentifier.keyIdentifierURN is exactly equal to the text.</summary>
+    public string? KeyIdentifierUrn { get; set; }
 
     /// <summary>The field infraIdentifier.otherPersistentIdentifier is exactly equal to the text.</summary>
     public string? OtherPersistentIdentifier { get; set; }
@@ -42,13 +42,13 @@ public class GetInfrastructuresQueryParameters
     /// 
     /// If selection is false, return only those infrastructures, which are not on the roadmap for Finnish Research Infrastructures.
     /// </summary>
-    public bool? FinlandRoadmapInfrastructure { get; set; }
+    public bool? FinlandRoadmap { get; set; }
 
-    /// <summary>List responsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
-    public string? ResponsibleOrganizationId { get; set; }
+    /// <summary>List infraResponsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? InfraResponsibleOrganizationId { get; set; }
 
-    /// <summary>List organizationParticipatesInfrastructure.organizationIdentifier contains field pid exactly equal to the text.</summary>
-    public string? OrganizationParticipatesInfrastructureId { get; set; }
+    /// <summary>List infraParticipatingOrganizations.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    public string? InfraParticipatingOrganizationsId { get; set; }
 
     /// <summary>The field infraStartsOn.year is equal.</summary>
     public int? InfraStartsOnYear { get; set; }

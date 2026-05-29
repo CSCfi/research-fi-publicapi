@@ -61,7 +61,7 @@ namespace ResearchFi.Infrastructure
         public Identifier? InfraIdentifier { get; set; }
 
         /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
 
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }

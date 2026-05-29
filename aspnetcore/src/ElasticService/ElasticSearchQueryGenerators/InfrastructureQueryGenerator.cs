@@ -29,12 +29,12 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
     {
         var subQueries = new List<Func<QueryContainerDescriptor<Infrastructure>, QueryContainer>>();
 
-        // PersistentIdentifierUrn
-        if (!string.IsNullOrWhiteSpace(parameters.PersistentIdentifierUrn))
+        // KeyIdentifierUrn
+        if (!string.IsNullOrWhiteSpace(parameters.KeyIdentifierUrn))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.PersistentIdentifierURN)
-                    .Query(parameters.PersistentIdentifierUrn)));
+                t.MatchPhrase(query => query.Field(f => f.InfraIdentifier!.KeyIdentifierURN)
+                    .Query(parameters.KeyIdentifierUrn)));
         }
 
         // OtherPersistentIdentifier
@@ -45,7 +45,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                     .Path(p => p.InfraIdentifier!.OtherPid)
                     .Query(q => q
                         .MatchPhrase(m => m
-                            .Field(f => f.InfraIdentifier!.OtherPid!.First().Pid)
+                            .Field(f => f.InfraIdentifier!.OtherPid!.First().PidContent)
                             .Query(parameters.OtherPersistentIdentifier)))));
         }
 
@@ -85,7 +85,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         if (!string.IsNullOrWhiteSpace(parameters.Acronym))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.Acronym)
+                t.MatchPhrase(query => query.Field(f => f.InfraAcronym)
                     .Query(parameters.Acronym)));
         }
 
@@ -94,50 +94,50 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         {
             subQueries.Add(t =>
                 t.Nested(n => n
-                    .Path(p => p.Esfri)
+                    .Path(p => p.ESFRICodes)
                     .Query(q => q
                         .Term(m => m
-                            .Field(f => f.Esfri!.First().CodeValue)
+                            .Field(f => f.ESFRICodes!.First().CodeValue)
                             .Value(parameters.Esfri)))));
         }
 
-        // FinlandRoadmapInfrastructure
-        if (parameters.FinlandRoadmapInfrastructure.HasValue)
+        // FinlandRoadmap
+        if (parameters.FinlandRoadmap.HasValue)
         {
             subQueries.Add(t =>
                 t.Term(term => term
-                    .Field(f => f.FinlandRoadmapInfrastructure)
-                    .Value(parameters.FinlandRoadmapInfrastructure.Value)));
+                    .Field(f => f.FinlandRoadmap)
+                    .Value(parameters.FinlandRoadmap.Value)));
         }
 
-        // ResponsibleOrganizationId
+        // InfraResponsibleOrganizationId
         if (!string.IsNullOrWhiteSpace(parameters.ResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
-                    .Path(p => p.ResponsibleOrganization)
+                    .Path(p => p.InfraResponsibleOrganization)
                     .Query(q => q
                         .Nested(n2 => n2
-                            .Path(p => p.ResponsibleOrganization.OrganizationIdentifier)
+                            .Path(p => p.InfraResponsibleOrganization.OrganizationIdentifier)
                             .Query(q2 => q2
                                 .Term(m => m
-                                    .Field(f => f.ResponsibleOrganization!.OrganizationIdentifier!.First().Pid)
+                                    .Field(f => f.InfraResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
                                     .Value(parameters.ResponsibleOrganizationId)))))));
         }
 
-        // OrganizationParticipatesInfrastructureId
-        if (!string.IsNullOrWhiteSpace(parameters.OrganizationParticipatesInfrastructureId))
+        // InfraParticipatingOrganizationsId
+        if (!string.IsNullOrWhiteSpace(parameters.InfraParticipatingOrganizationsId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
-                    .Path(p => p.OrganizationParticipatesInfrastructure)
+                    .Path(p => p.InfraParticipatingOrganizations)
                     .Query(q => q
                         .Nested(n2 => n2
-                            .Path(p => p.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier)
+                            .Path(p => p.InfraParticipatingOrganizations!.First().OrganizationIdentifier)
                             .Query(q2 => q2
                                 .Term(m => m
-                                    .Field(f => f.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier!.First().Pid)
-                                    .Value(parameters.OrganizationParticipatesInfrastructureId)))))));
+                                    .Field(f => f.InfraParticipatingOrganizations!.First().OrganizationIdentifier!.First().PidContent)
+                                    .Value(parameters.InfraParticipatingOrganizationsId)))))));
         }
 
         // FieldOfScience
@@ -202,7 +202,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
 
     protected override Func<QueryContainerDescriptor<Infrastructure>, QueryContainer> GenerateQueryForSingle(string id)
     {
-        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.InfraIdentifier.PersistentIdentifierURN).Value(id));
+        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.InfraIdentifier.KeyIdentifierURN).Value(id));
     }
 
     protected override Func<SortDescriptor<Infrastructure>, IPromise<IList<ISort>>> GenerateSortForSearch(InfrastructureSearchParameters parameters)
