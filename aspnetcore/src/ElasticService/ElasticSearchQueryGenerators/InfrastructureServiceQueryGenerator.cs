@@ -93,8 +93,8 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                             .Query(parameters.IsPartOfInfrastructureURN)))));
         }
 
-        // IsPartOfInfrastructureResponsibleOrganizationId
-        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureResponsibleOrganizationId))
+        // IsPartOfInfrastructureInfraResponsibleOrganizationId
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureInfraResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
@@ -105,7 +105,7 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                             .Query(q2 => q2
                                 .Term(m => m
                                     .Field(f => f.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
-                                    .Value(parameters.IsPartOfInfrastructureResponsibleOrganizationId)))))));
+                                    .Value(parameters.IsPartOfInfrastructureInfraResponsibleOrganizationId)))))));
         }
 
         // IsPartOfInfrastructureInfraParticipatingOrganizationsId

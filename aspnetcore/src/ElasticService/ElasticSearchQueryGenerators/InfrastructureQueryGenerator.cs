@@ -111,7 +111,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
         }
 
         // InfraResponsibleOrganizationId
-        if (!string.IsNullOrWhiteSpace(parameters.ResponsibleOrganizationId))
+        if (!string.IsNullOrWhiteSpace(parameters.InfraResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
@@ -122,7 +122,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                             .Query(q2 => q2
                                 .Term(m => m
                                     .Field(f => f.InfraResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
-                                    .Value(parameters.ResponsibleOrganizationId)))))));
+                                    .Value(parameters.InfraResponsibleOrganizationId)))))));
         }
 
         // InfraParticipatingOrganizationsId

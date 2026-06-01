@@ -8,7 +8,7 @@ public class InfrastructureServiceSearchParameters
     public string? ServiceName { get; set; }
     public string? ServiceDescription { get; set; }
     public string? IsPartOfInfrastructureURN { get; set; }
-    public string? IsPartOfInfrastructureResponsibleOrganizationId { get; set; }
+    public string? IsPartOfInfrastructureInfraResponsibleOrganizationId { get; set; }
     public string? IsPartOfInfrastructureInfraParticipatingOrganizationsId { get; set; }
     public int? ServiceStartsOnYear { get; set; }
     public int? ServiceEndsOnYear { get; set; }
