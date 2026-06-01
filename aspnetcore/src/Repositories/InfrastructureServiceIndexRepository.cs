@@ -234,8 +234,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             }
         }
 
-        // Esfri
-        service.IsPartOfInfrastructure.Esfri = _context.FactReferencedata
+        // ESFRI
+        service.IsPartOfInfrastructure.ESFRICodes = _context.FactReferencedata
             .AsNoTracking()
             .Where(rd => rd.DimInfrastructureId == service.DimInfrastructureId && rd.DimReferencedata.CodeScheme == "ESFRI-Domain")
             .Select(rd => new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
@@ -249,9 +249,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                 }
             })
             .ToList();
-        if (!service.IsPartOfInfrastructure.Esfri.Any())
+        if (!service.IsPartOfInfrastructure.ESFRICodes.Any())
         {
-            service.IsPartOfInfrastructure.Esfri = null;
+            service.IsPartOfInfrastructure.ESFRICodes = null;
         }
     }
 

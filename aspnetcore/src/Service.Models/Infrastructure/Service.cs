@@ -97,7 +97,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
-        public List<ReferenceData>? Esfri { get; set; }
+        public List<ReferenceData>? ESFRICodes { get; set; }
 
         /// <summary>Infrastructure research.fi URL</summary>
         public LanguageVariant? ResearchfiURL { get; set; }
