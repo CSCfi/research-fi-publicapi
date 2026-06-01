@@ -61,7 +61,7 @@ namespace ResearchFi.Infrastructure
         public Identifier? InfraIdentifier { get; set; }
 
         /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
 
         /// <summary>Organization - responsible</summary>
         public ResearchOrganization? ResponsibleOrganization { get; set; }
@@ -72,7 +72,7 @@ namespace ResearchFi.Infrastructure
         /// <summary>
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
-        public List<ReferenceData>? Esfri { get; set; }
+        public List<ReferenceData>? ESFRICodes { get; set; }
 
         /// <summary>Infrastructure research.fi URL</summary>
         public LanguageVariant? ResearchfiURL { get; set; }
