@@ -38,7 +38,7 @@ public class GetInfrastructuresQueryParameters
     public string? FieldOfScience { get; set; }
 
     /// <summary>
-    /// If selection is true, return only those infrastucrues, which are on the roadmap for Finnish Research Infrastructures.
+    /// If selection is true, return only those infrastructures, which are on the roadmap for Finnish Research Infrastructures.
     /// 
     /// If selection is false, return only those infrastructures, which are not on the roadmap for Finnish Research Infrastructures.
     /// </summary>
