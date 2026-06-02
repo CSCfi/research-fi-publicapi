@@ -187,7 +187,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
         
 
-        // ResponsibleOrganization
+        // InfraResponsibleOrganization
         DimInfrastructure relatedInfrastructure = _context.DimInfrastructures
             .AsNoTracking()
             .First(infra => infra.Id == service.DimInfrastructureId);
@@ -196,7 +196,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             var organization = GetOrganization(relatedInfrastructure.ResponsibleOrganizationId);
             if (organization != null)
             {
-                service.IsPartOfInfrastructure.ResponsibleOrganization = new ResearchOrganization
+                service.IsPartOfInfrastructure.InfraResponsibleOrganization = new ResearchOrganization
                 {
                     DimOrganizationId = relatedInfrastructure.ResponsibleOrganizationId,
                     OrganizationName = new LanguageVariant
@@ -207,9 +207,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                     }
                 };
 
-                SetResearchOrganizationIdentifiers(service.IsPartOfInfrastructure.ResponsibleOrganization, organization);
+                SetResearchOrganizationIdentifiers(service.IsPartOfInfrastructure.InfraResponsibleOrganization, organization);
             }
-            service.IsPartOfInfrastructure.ResponsibleOrganization.DimOrganizationId = null;
+            service.IsPartOfInfrastructure.InfraResponsibleOrganization.DimOrganizationId = null;
         }
 
         // InfraName

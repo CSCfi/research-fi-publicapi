@@ -26,14 +26,14 @@ public class GetInfrastructureServicesQueryParameters
     /// <summary>
     /// Responsible organization of the infrastructure offering the service.
     /// 
-    /// List isPartOfInfrastructure.infraResponsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.
+    /// List isPartOfInfrastructure.infraResponsibleOrganization.organizationIdentifier contains field pidContent exactly equal to the text.
     /// </summary>
     public string? IsPartOfInfrastructureInfraResponsibleOrganizationId { get; set; }
 
     /// <summary>
     /// Participating organization of the infrastructure offering the service.
     /// 
-    /// List isPartOfInfrastructure.InfraParticipatingOrganizations.organizationIdentifier contains field pid exactly equal to the text.
+    /// List isPartOfInfrastructure.InfraParticipatingOrganizations.organizationIdentifier contains field pidContent exactly equal to the text.
     /// </summary>
     public string? IsPartOfInfrastructureInfraParticipatingOrganizationsId { get; set; }
 

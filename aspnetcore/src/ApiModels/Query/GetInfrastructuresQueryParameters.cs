@@ -20,15 +20,15 @@ public class GetInfrastructuresQueryParameters
     /// <summary>The field infraDescription contains text.</summary>
     public string? InfraDescription { get; set; }
 
-    /// <summary>The field acronym is exactly equal to the text.</summary>
-    public string? Acronym { get; set; }
+    /// <summary>The field infraAcronym is exactly equal to the text.</summary>
+    public string? InfraAcronym { get; set; }
 
     /// <summary>
-    /// One subfield codeValue of field esfri is exactly equal to the text.
+    /// One subfield codeValue of field esfriCode is exactly equal to the text.
     /// 
     /// Code:https://uri.suomi.fi/codelist/research/ESFRI-Domain
     /// </summary>
-    public string? Esfri { get; set; }
+    public string? EsfriCode { get; set; }
 
     /// <summary>
     /// One subfield codeValue of field fieldOfScience is exactly equal to the text.
@@ -38,16 +38,16 @@ public class GetInfrastructuresQueryParameters
     public string? FieldOfScience { get; set; }
 
     /// <summary>
-    /// If selection is true, return only those infrastucrues, which are on the roadmap for Finnish Research Infrastructures.
+    /// If selection is true, return only those infrastructures, which are on the roadmap for Finnish Research Infrastructures.
     /// 
     /// If selection is false, return only those infrastructures, which are not on the roadmap for Finnish Research Infrastructures.
     /// </summary>
     public bool? FinlandRoadmap { get; set; }
 
-    /// <summary>List infraResponsibleOrganization.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    /// <summary>List infraResponsibleOrganization.organizationIdentifier contains field pidContent exactly equal to the text.</summary>
     public string? InfraResponsibleOrganizationId { get; set; }
 
-    /// <summary>List infraParticipatingOrganizations.organizationIdentifier contains field pid exactly equal to the text.</summary>
+    /// <summary>List infraParticipatingOrganizations.organizationIdentifier contains field pidContent exactly equal to the text.</summary>
     public string? InfraParticipatingOrganizationsId { get; set; }
 
     /// <summary>The field infraStartsOn.year is equal.</summary>

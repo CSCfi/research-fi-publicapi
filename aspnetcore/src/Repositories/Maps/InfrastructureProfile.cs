@@ -43,7 +43,7 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids))
             // InfraIdentifier
             .ForMember(dst => dst.InfraIdentifier, opt => opt.Ignore()) // Handled in InfrastructureIndexRepository
-            // Acronym
+            // InfraAcronym
             .ForMember(dst => dst.InfraAcronym, opt => opt.MapFrom(src => src.Acronym))
             // Start date
             .ForMember(dst => dst.InfraStartsOn, opt => opt.MapFrom(src => src.DimStartDate != -1 ? new InfraDate(src.DimStartDateNavigation.Year, src.DimStartDateNavigation.Month, src.DimStartDateNavigation.Day) : null))

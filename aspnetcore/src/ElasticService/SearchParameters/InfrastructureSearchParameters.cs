@@ -7,8 +7,8 @@ public class InfrastructureSearchParameters
     public string? LocalIdentifier { get; set; }
     public string? InfraName { get; set; }
     public string? InfraDescription { get; set; }
-    public string? Acronym { get; set; }
-    public string? Esfri { get; set; }
+    public string? InfraAcronym { get; set; }
+    public string? EsfriCode { get; set; }
     public string? FieldOfScience { get; set; }
     public bool? FinlandRoadmap { get; set; }
     public string? InfraResponsibleOrganizationId { get; set; }
