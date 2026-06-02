@@ -101,10 +101,10 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                     .Path(p => p.IsPartOfInfrastructure)
                     .Query(q => q
                         .Nested(n2 => n2
-                            .Path(p => p.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier)
+                            .Path(p => p.IsPartOfInfrastructure!.InfraResponsibleOrganization!.OrganizationIdentifier)
                             .Query(q2 => q2
                                 .Term(m => m
-                                    .Field(f => f.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
+                                    .Field(f => f.IsPartOfInfrastructure!.InfraResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
                                     .Value(parameters.IsPartOfInfrastructureInfraResponsibleOrganizationId)))))));
         }
 

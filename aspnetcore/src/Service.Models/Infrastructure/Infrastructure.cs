@@ -20,7 +20,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Infra identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Acronym</summary>
+        /// <summary>Infra acronym</summary>
         [Keyword]
         public string? InfraAcronym { get; set; }
 

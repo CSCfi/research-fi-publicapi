@@ -8,45 +8,45 @@ namespace ResearchFi.Infrastructure
         /// <summary>Infra identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Acronym</summary>
-        public string? InfraAcronym { get; set; }
-
         /// <summary>Infra name</summary>
         public List<DescriptiveText>? InfraName { get; set; }
 
-        /// <summary>Organization - responsible</summary>
-        public ResearchOrganization? InfraResponsibleOrganization { get; set; }
+        /// <summary>Infra description</summary>
+        public List<DescriptiveText>? InfraDescription { get; set; }
+
+        /// <summary>Infra acronym</summary>
+        public string? InfraAcronym { get; set; }
 
         /// <summary>
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
         public List<ReferenceData>? ESFRICodes { get; set; }
 
-        /// <summary>Infra start date</summary>
-        public InfraDate? InfraStartsOn { get; set; }
-
-        /// <summary>Infra description</summary>
-        public List<DescriptiveText>? InfraDescription { get; set; }
-
         /// <summary>
         /// Classification - field of science. https://uri.suomi.fi/codelist/research/Tieteenala2010
         /// </summary>
         public List<ReferenceData>? FieldOfScience { get; set; }
+
+        /// <summary>Roadmap for Finnish Research for infrastructures</summary>
+        public bool? FinlandRoadmap { get; set; }
+
+        /// <summary>Organization - responsible</summary>
+        public ResearchOrganization? InfraResponsibleOrganization { get; set; }
+
+        /// <summary>Organization - participant</summary>
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
+
+        /// <summary>Infra start date</summary>
+        public InfraDate? InfraStartsOn { get; set; }
+
+        /// <summary>Infra end date</summary>
+        public InfraDate? InfraEndsOn { get; set; }
 
         /// <summary>Has a service</summary>
         public List<InfrastructureService>? InfraServices { get; set; }
 
         /// <summary>Has relation to another infra</summary>
         public List<InfrastructureNetwork>? InfraRelations { get; set; }
-
-        /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
-
-        /// <summary>Infra end date</summary>
-        public InfraDate? InfraEndsOn { get; set; }
-
-        /// <summary>Roadmap for Finnish Research for infrastructures</summary>
-        public bool? FinlandRoadmap { get; set; }
 
         /// <summary>Infra homepage</summary>
         public List<Weblink>? InfraHomepage { get; set; }

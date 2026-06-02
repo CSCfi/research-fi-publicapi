@@ -89,7 +89,7 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
 
         /// <summary>Organization - responsible</summary>
-        public ResearchOrganization? ResponsibleOrganization { get; set; }
+        public ResearchOrganization? InfraResponsibleOrganization { get; set; }
 
         /// <summary>Infrastructure name</summary>
         public List<DescriptiveText>? InfraName { get; set; }

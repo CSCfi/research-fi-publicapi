@@ -81,16 +81,16 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                             .Query(parameters.InfraDescription)))));
         }
 
-        // Acronym
-        if (!string.IsNullOrWhiteSpace(parameters.Acronym))
+        // InfraAcronym
+        if (!string.IsNullOrWhiteSpace(parameters.InfraAcronym))
         {
             subQueries.Add(t =>
                 t.MatchPhrase(query => query.Field(f => f.InfraAcronym)
-                    .Query(parameters.Acronym)));
+                    .Query(parameters.InfraAcronym)));
         }
 
-        // Esfri
-        if (!string.IsNullOrWhiteSpace(parameters.Esfri))
+        // EsfriCode
+        if (!string.IsNullOrWhiteSpace(parameters.EsfriCode))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
@@ -98,7 +98,7 @@ public class InfrastructureQueryGenerator : QueryGeneratorBase<InfrastructureSea
                     .Query(q => q
                         .Term(m => m
                             .Field(f => f.ESFRICodes!.First().CodeValue)
-                            .Value(parameters.Esfri)))));
+                            .Value(parameters.EsfriCode)))));
         }
 
         // FinlandRoadmap
