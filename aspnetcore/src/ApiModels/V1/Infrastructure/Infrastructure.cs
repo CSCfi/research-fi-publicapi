@@ -8,45 +8,45 @@ namespace ResearchFi.Infrastructure
         /// <summary>Infra identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Acronym</summary>
-        public string? Acronym { get; set; }
-
         /// <summary>Infra name</summary>
         public List<DescriptiveText>? InfraName { get; set; }
 
-        /// <summary>Organization - responsible</summary>
-        public ResearchOrganization? ResponsibleOrganization { get; set; }
+        /// <summary>Infra description</summary>
+        public List<DescriptiveText>? InfraDescription { get; set; }
+
+        /// <summary>Infra acronym</summary>
+        public string? InfraAcronym { get; set; }
 
         /// <summary>
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
-        public List<ReferenceData>? Esfri { get; set; }
-
-        /// <summary>Infra start date</summary>
-        public InfraDate? InfraStartsOn { get; set; }
-
-        /// <summary>Infra description</summary>
-        public List<DescriptiveText>? InfraDescription { get; set; }
+        public List<ReferenceData>? ESFRICodes { get; set; }
 
         /// <summary>
         /// Classification - field of science. https://uri.suomi.fi/codelist/research/Tieteenala2010
         /// </summary>
         public List<ReferenceData>? FieldOfScience { get; set; }
 
-        /// <summary>Has a service</summary>
-        public List<InfrastructureService>? InfraServices { get; set; }
+        /// <summary>Roadmap for Finnish Research for infrastructures</summary>
+        public bool? FinlandRoadmap { get; set; }
 
-        /// <summary>Belongs to infrastructure network</summary>
-        public List<InfrastructureNetwork>? InfraNetwork { get; set; }
+        /// <summary>Organization - responsible</summary>
+        public ResearchOrganization? InfraResponsibleOrganization { get; set; }
 
         /// <summary>Organization - participant</summary>
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
+
+        /// <summary>Infra start date</summary>
+        public InfraDate? InfraStartsOn { get; set; }
 
         /// <summary>Infra end date</summary>
         public InfraDate? InfraEndsOn { get; set; }
 
-        /// <summary>Roadmap for Finnish Research for infrastructures</summary>
-        public bool? FinlandRoadmapInfrastructure { get; set; }
+        /// <summary>Has a service</summary>
+        public List<InfrastructureService>? InfraServices { get; set; }
+
+        /// <summary>Has relation to another infra</summary>
+        public List<InfrastructureNetwork>? InfraRelations { get; set; }
 
         /// <summary>Infra homepage</summary>
         public List<Weblink>? InfraHomepage { get; set; }
@@ -102,19 +102,19 @@ namespace ResearchFi.Infrastructure
         /// <summary>Other persistent identifier</summary>
         public List<PidAttributes>? OtherPid { get; set; }
 
-        /// <summary>Persistent identifier [URN]</summary>
-        public string? PersistentIdentifierURN { get; set; }
+        /// <summary>Key identifier [URN]</summary>
+        public string? KeyIdentifierURN { get; set; }
 
-        /// <summary>persistent identifier [URN] link. https://urn.fi/ +[URN]</summary>
-        public string? PersistentIdentifierURNLink { get; set; }
+        /// <summary>Key identifier [URN] link. https://urn.fi/ +[URN]</summary>
+        public string? KeyIdentifierURNLink { get; set; }
     }
 
     /// <summary>Other persistent identifier</summary>
     public partial class PidAttributes
     {
-        /// <summary>Persistent identifier</summary>
-        public string? Pid { get; set; }
-        /// <summary>Persistent identifier type</summary>
+        /// <summary>Identifier</summary>
+        public string? PidContent { get; set; }
+        /// <summary>Identifier type</summary>
         public string? PidType { get; set; }
     }
 
@@ -158,13 +158,13 @@ namespace ResearchFi.Infrastructure
         public InternationalInfra? RelationToInternationalInfra { get; set; }
 
         /// <summary>Relation type - http://uri.suomi.fi/codelist/research/relationTypes_infrastructure</summary>
-        public ReferenceData? InfranetworkRelationType { get; set; }
+        public ReferenceData? RelationType { get; set; }
 
         /// <summary>Relation valid</summary>
         public bool? RelationValid { get; set; }
 
         /// <summary>Related infra</summary>
-        public Identifier? RelationToInfra { get; set; }
+        public Identifier? RelationToNationalInfra { get; set; }
     }
 
     /// <summary>Research organization</summary>

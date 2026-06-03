@@ -468,9 +468,9 @@ public class InfrastructureProfileTest
                 new DescriptiveText { TextContent = "Test infra description 1", TextLanguage = "en" },
                 new DescriptiveText { TextContent = "Test infra description 2", TextLanguage = "fi" }
             },
-            Acronym = "Test acronym",
+            InfraAcronym = "Test acronym",
             LocalIdentifier = "INFRA-LOCAL-1",
-            FinlandRoadmapInfrastructure = true,
+            FinlandRoadmap = true,
             InfraStartsOn = new InfraDate(year: 2022, month: 11, day: 1),
             InfraEndsOn = new InfraDate(year: 2023, month: 12, day: null),
             InfraHomepage = new List<Weblink> {
@@ -529,7 +529,7 @@ public class InfrastructureProfileTest
                     Content = "other-pid-content"
                 }
             },
-            Esfri = new()
+            ESFRICodes = new()
             {
                 new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
                 {
@@ -690,11 +690,11 @@ public class InfrastructureProfileTest
                     }
                 },
             },
-            InfraNetwork = new List<InfrastructureNetwork>
+            InfraRelations = new List<InfrastructureNetwork>
             {
                 new InfrastructureNetwork
                 {
-                    InfranetworkRelationType = new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
+                    RelationType = new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
                     {
                         CodeValue = "relation-typecode-codevalue",
                         CodeDescription = new LanguageVariant
@@ -720,7 +720,7 @@ public class InfrastructureProfileTest
                     }
                 }
             },
-            ResponsibleOrganization = new ResearchOrganization
+            InfraResponsibleOrganization = new ResearchOrganization
             {
                 DimOrganizationId = 12345,
                 OrganizationName = new LanguageVariant
@@ -730,7 +730,7 @@ public class InfrastructureProfileTest
                     Sv = "Responsible organization name SV"
                 }
             },
-            OrganizationParticipatesInfrastructure = new List<ResearchOrganization>
+            InfraParticipatingOrganizations = new List<ResearchOrganization>
             {
                 new ResearchOrganization
                 {

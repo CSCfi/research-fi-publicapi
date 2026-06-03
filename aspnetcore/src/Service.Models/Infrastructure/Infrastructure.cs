@@ -20,9 +20,9 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Infra identifier</summary>
         public Identifier? InfraIdentifier { get; set; }
 
-        /// <summary>Acronym</summary>
+        /// <summary>Infra acronym</summary>
         [Keyword]
-        public string? Acronym { get; set; }
+        public string? InfraAcronym { get; set; }
 
         /// <summary>Infra name</summary>
         [Nested]
@@ -30,13 +30,13 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
 
         /// <summary>Organization - responsible</summary>
         [Nested]
-        public ResearchOrganization? ResponsibleOrganization { get; set; }
+        public ResearchOrganization? InfraResponsibleOrganization { get; set; }
 
         /// <summary>
         /// Classification - ESFRI. https://uri.suomi.fi/codelist/research/ESFRI-Domain
         /// </summary>
         [Nested]
-        public List<ReferenceData>? Esfri { get; set; }
+        public List<ReferenceData>? ESFRICodes { get; set; }
 
         /// <summary>Infra start date</summary>
         [Nested]
@@ -55,19 +55,19 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Has a service</summary>
         public List<InfrastructureService>? InfraServices { get; set; }
 
-        /// <summary>Belongs to infrastructure network</summary>
-        public List<InfrastructureNetwork>? InfraNetwork { get; set; }
+        /// <summary>Has relation to another infra</summary>
+        public List<InfrastructureNetwork>? InfraRelations { get; set; }
 
         /// <summary>Organization - participant</summary>
         [Nested]
-        public List<ResearchOrganization>? OrganizationParticipatesInfrastructure { get; set; }
+        public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
 
         /// <summary>Infra end date</summary>
         [Nested]
         public InfraDate? InfraEndsOn { get; set; }
 
         /// <summary>Roadmap for Finnish Research for infrastructures</summary>
-        public bool? FinlandRoadmapInfrastructure { get; set; }
+        public bool? FinlandRoadmap { get; set; }
 
         /// <summary>Infra homepage</summary>
         public List<Weblink>? InfraHomepage { get; set; }
@@ -126,22 +126,22 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         [Nested]
         public List<PidAttributes>? OtherPid { get; set; }
 
-        /// <summary>Persistent identifier [URN]</summary>
+        /// <summary>Key identifier [URN]</summary>
         [Keyword]
-        public string? PersistentIdentifierURN { get; set; }
+        public string? KeyIdentifierURN { get; set; }
 
-        /// <summary>persistent identifier [URN] link. https://urn.fi/ +[URN]</summary>
-        public string? PersistentIdentifierURNLink { get; set; }
+        /// <summary>Key identifier [URN] link. https://urn.fi/ +[URN]</summary>
+        public string? KeyIdentifierURNLink { get; set; }
     }
 
     /// <summary>Other persistent identifier</summary>
     public partial class PidAttributes
     {
-        /// <summary>Persistent identifier</summary>
+        /// <summary>Identifier</summary>
         [Keyword]
-        public string? Pid { get; set; }
+        public string? PidContent { get; set; }
 
-        /// <summary>Persistent identifier type</summary>
+        /// <summary>Identifier type</summary>
         public string? PidType { get; set; }
     }
 
@@ -186,13 +186,13 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         public InternationalInfra? RelationToInternationalInfra { get; set; }
 
         /// <summary>Relation type - http://uri.suomi.fi/codelist/research/relationTypes_infrastructure</summary>
-        public ReferenceData? InfranetworkRelationType { get; set; }
+        public ReferenceData? RelationType { get; set; }
 
         /// <summary>Relation valid</summary>
         public bool? RelationValid { get; set; }
 
         /// <summary>Related infra</summary>
-        public Identifier? RelationToInfra { get; set; }
+        public Identifier? RelationToNationalInfra { get; set; }
 
         /// <summary>Pids, handled in InfrastructureServiceIndexRepository</summary>
         [Ignore]

@@ -80,8 +80,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         }
 
         service.ServiceIdentifier = new(){
-            PersistentIdentifierURN = null,
-            PersistentIdentifierURNLink = null,
+            KeyIdentifierURN = null,
+            KeyIdentifierURNLink = null,
             LocalIdentifier = service.LocalIdentifier,
             OtherPid = new List<PidAttributes>()
         };
@@ -90,14 +90,14 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         {
             if (pid.Type.ToLower() == "urn")
             {
-                service.ServiceIdentifier.PersistentIdentifierURN = pid.Content;
-                service.ServiceIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
+                service.ServiceIdentifier.KeyIdentifierURN = pid.Content;
+                service.ServiceIdentifier.KeyIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
             }
             else
             {
                 service.ServiceIdentifier.OtherPid.Add(new PidAttributes
                 {
-                    Pid = pid.Content,
+                    PidContent = pid.Content,
                     PidType = pid.Type.ToLower()
                 });
             }
@@ -118,8 +118,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             // Initialize IsPartOfInfrastructure
             service.IsPartOfInfrastructure ??= new ServiceInfrastructure();
             service.IsPartOfInfrastructure.InfraIdentifier = new(){
-                PersistentIdentifierURN = null,
-                PersistentIdentifierURNLink = null,
+                KeyIdentifierURN = null,
+                KeyIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>()
             };
         }
@@ -138,14 +138,14 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         {
             if (pid.Type.ToLower() == "urn")
             {
-                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN = pid.Content;
-                service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
+                service.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURN = pid.Content;
+                service.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
             }
             else
             {
                 service.IsPartOfInfrastructure.InfraIdentifier.OtherPid.Add(new PidAttributes
                 {
-                    Pid = pid.Content,
+                    PidContent = pid.Content,
                     PidType = pid.Type.ToLower()
                 });
             }
@@ -153,7 +153,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         service.IsPartOfInfrastructure.Pids = null;
 
         
-        // OrganizationParticipatesInfrastructure
+        // InfraParticipatingOrganizations
         List<int> participatingOrganizationIds = _context.FactContributions
             .Where(fc => fc.DimInfrastructureId == service.DimInfrastructureId && fc.ContributionType == "organization_participate_infrastructure")
             .AsNoTracking()
@@ -163,7 +163,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         
         if (participatingOrganizationIds.Any())
         {
-            service.IsPartOfInfrastructure.OrganizationParticipatesInfrastructure = new List<ResearchOrganization>();
+            service.IsPartOfInfrastructure.InfraParticipatingOrganizations = new List<ResearchOrganization>();
             foreach (var orgId in participatingOrganizationIds)
             {
                 var participatingOrganization = GetOrganization(orgId);
@@ -181,13 +181,13 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                     }; 
                     SetResearchOrganizationIdentifiers(researchOrg, participatingOrganization);
                     researchOrg.DimOrganizationId = null;
-                    service.IsPartOfInfrastructure.OrganizationParticipatesInfrastructure.Add(researchOrg);
+                    service.IsPartOfInfrastructure.InfraParticipatingOrganizations.Add(researchOrg);
                 }
             }
         }
         
 
-        // ResponsibleOrganization
+        // InfraResponsibleOrganization
         DimInfrastructure relatedInfrastructure = _context.DimInfrastructures
             .AsNoTracking()
             .First(infra => infra.Id == service.DimInfrastructureId);
@@ -196,7 +196,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             var organization = GetOrganization(relatedInfrastructure.ResponsibleOrganizationId);
             if (organization != null)
             {
-                service.IsPartOfInfrastructure.ResponsibleOrganization = new ResearchOrganization
+                service.IsPartOfInfrastructure.InfraResponsibleOrganization = new ResearchOrganization
                 {
                     DimOrganizationId = relatedInfrastructure.ResponsibleOrganizationId,
                     OrganizationName = new LanguageVariant
@@ -207,9 +207,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                     }
                 };
 
-                SetResearchOrganizationIdentifiers(service.IsPartOfInfrastructure.ResponsibleOrganization, organization);
+                SetResearchOrganizationIdentifiers(service.IsPartOfInfrastructure.InfraResponsibleOrganization, organization);
             }
-            service.IsPartOfInfrastructure.ResponsibleOrganization.DimOrganizationId = null;
+            service.IsPartOfInfrastructure.InfraResponsibleOrganization.DimOrganizationId = null;
         }
 
         // InfraName
@@ -234,8 +234,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
             }
         }
 
-        // Esfri
-        service.IsPartOfInfrastructure.Esfri = _context.FactReferencedata
+        // ESFRI
+        service.IsPartOfInfrastructure.ESFRICodes = _context.FactReferencedata
             .AsNoTracking()
             .Where(rd => rd.DimInfrastructureId == service.DimInfrastructureId && rd.DimReferencedata.CodeScheme == "ESFRI-Domain")
             .Select(rd => new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
@@ -249,9 +249,9 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
                 }
             })
             .ToList();
-        if (!service.IsPartOfInfrastructure.Esfri.Any())
+        if (!service.IsPartOfInfrastructure.ESFRICodes.Any())
         {
-            service.IsPartOfInfrastructure.Esfri = null;
+            service.IsPartOfInfrastructure.ESFRICodes = null;
         }
     }
 
@@ -260,10 +260,10 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         // Check that both service and infrastructure identifiers exist
         if (
             service.ServiceIdentifier == null ||
-            string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN) ||
+            string.IsNullOrEmpty(service.ServiceIdentifier.KeyIdentifierURN) ||
             service.IsPartOfInfrastructure == null ||
             service.IsPartOfInfrastructure.InfraIdentifier == null ||
-            string.IsNullOrEmpty(service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN)
+            string.IsNullOrEmpty(service.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURN)
         )
         {
             service.ServiceResearchfiURL = null;
@@ -273,8 +273,8 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         // Service's researchfi URL
         ResearchfiUrl researchfiURL = new ResearchfiUrl(
             resourceType: "infrastructure-service",
-            id: service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN,
-            infrastructureServiceId: service.ServiceIdentifier.PersistentIdentifierURN
+            id: service.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURN,
+            infrastructureServiceId: service.ServiceIdentifier.KeyIdentifierURN
         );
         service.ServiceResearchfiURL = new LanguageVariant
         {
@@ -286,7 +286,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
         // IsPartOfInfrastructure's researchfi URL
         ResearchfiUrl infraResearchfiURL = new ResearchfiUrl(
             resourceType: "infrastructure",
-            id: service.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN
+            id: service.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURN
         );
         service.IsPartOfInfrastructure.ResearchfiURL = new LanguageVariant
         {
@@ -301,7 +301,7 @@ public class InfrastructureServiceIndexRepository : IndexRepositoryBase<CSC.Publ
     {
         targetOrganization.OrganizationIdentifier = organization.Pids.Select(pid => new PidAttributes
         {
-            Pid = pid.Content,
+            PidContent = pid.Content,
             PidType = pid.Type.ToLower()
         }).ToList();
     }

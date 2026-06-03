@@ -52,7 +52,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             HandleOrganizations(infrastructure);
             HandleInfraPids(infrastructure);
             HandleInfraServicesPids(infrastructure);
-            HandleRelationToInfraPids(infrastructure);
+            HandleRelationToNationalInfraPids(infrastructure);
             HandleResearchfiUrl(infrastructure);
             HandleEmptyCollections(infrastructure);
         });
@@ -65,7 +65,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         HandleOrganizations(infrastructure);
         HandleInfraPids(infrastructure);
         HandleInfraServicesPids(infrastructure);
-        HandleRelationToInfraPids(infrastructure);
+        HandleRelationToNationalInfraPids(infrastructure);
         HandleResearchfiUrl(infrastructure);
         HandleEmptyCollections(infrastructure);
         return infrastructure;
@@ -73,17 +73,17 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
 
     private void HandleOrganizations(Infrastructure infrastructure)
     {
-        if (infrastructure.ResponsibleOrganization?.DimOrganizationId != null)
+        if (infrastructure.InfraResponsibleOrganization?.DimOrganizationId != null)
         {
-            var organization = GetOrganization(infrastructure.ResponsibleOrganization.DimOrganizationId.Value);
+            var organization = GetOrganization(infrastructure.InfraResponsibleOrganization.DimOrganizationId.Value);
             if (organization != null)
             {
-                SetResearchOrganizationIdentifiers(infrastructure.ResponsibleOrganization, organization);
+                SetResearchOrganizationIdentifiers(infrastructure.InfraResponsibleOrganization, organization);
             }
-            infrastructure.ResponsibleOrganization.DimOrganizationId = null;
+            infrastructure.InfraResponsibleOrganization.DimOrganizationId = null;
         }
 
-        foreach (var researchOrg in infrastructure.OrganizationParticipatesInfrastructure ?? [])
+        foreach (var researchOrg in infrastructure.InfraParticipatingOrganizations ?? [])
         {
             if (researchOrg.DimOrganizationId != null)
             {
@@ -106,8 +106,8 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         }
 
         infrastructure.InfraIdentifier = new(){
-            PersistentIdentifierURN = null,
-            PersistentIdentifierURNLink = null,
+            KeyIdentifierURN = null,
+            KeyIdentifierURNLink = null,
             OtherPid = new List<PidAttributes>(),
             LocalIdentifier = infrastructure.InfraIdentifier?.LocalIdentifier ?? infrastructure.LocalIdentifier
         };
@@ -116,14 +116,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         {
             if (pid.Type.ToLower() == "urn")
             {
-                infrastructure.InfraIdentifier.PersistentIdentifierURN = pid.Content;
-                infrastructure.InfraIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
+                infrastructure.InfraIdentifier.KeyIdentifierURN = pid.Content;
+                infrastructure.InfraIdentifier.KeyIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
             }
             else
             {
                 infrastructure.InfraIdentifier.OtherPid.Add(new PidAttributes
                 {
-                    Pid = pid.Content,
+                    PidContent = pid.Content,
                     PidType = pid.Type.ToLower()
                 });
             }
@@ -149,8 +149,8 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             }
 
             service.ServiceIdentifier = new(){
-                PersistentIdentifierURN = null,
-                PersistentIdentifierURNLink = null,
+                KeyIdentifierURN = null,
+                KeyIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>(),
                 LocalIdentifier = service.LocalIdentifier
             };
@@ -159,14 +159,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             {
                 if (pid.Type.ToLower() == "urn")
                 {
-                    service.ServiceIdentifier.PersistentIdentifierURN = pid.Content;
-                    service.ServiceIdentifier.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
+                    service.ServiceIdentifier.KeyIdentifierURN = pid.Content;
+                    service.ServiceIdentifier.KeyIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
                 }
                 else
                 {
                     service.ServiceIdentifier.OtherPid.Add(new PidAttributes
                     {
-                        Pid = pid.Content,
+                        PidContent = pid.Content,
                         PidType = pid.Type.ToLower()
                     });
                 }
@@ -177,14 +177,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         }
     }
 
-    private void HandleRelationToInfraPids(Infrastructure infrastructure)
+    private void HandleRelationToNationalInfraPids(Infrastructure infrastructure)
     {
-        if (infrastructure == null || !infrastructure.InfraNetwork.Any())
+        if (infrastructure == null || !infrastructure.InfraRelations.Any())
         {
             return;
         }
 
-        foreach (InfrastructureNetwork infraNetwork in infrastructure.InfraNetwork)
+        foreach (InfrastructureNetwork infraNetwork in infrastructure.InfraRelations)
         {
             if (infraNetwork.Pids == null || !infraNetwork.Pids.Any())
             {
@@ -192,9 +192,9 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
                 continue;
             }
 
-            infraNetwork.RelationToInfra = new(){
-                PersistentIdentifierURN = null,
-                PersistentIdentifierURNLink = null,
+            infraNetwork.RelationToNationalInfra = new(){
+                KeyIdentifierURN = null,
+                KeyIdentifierURNLink = null,
                 OtherPid = new List<PidAttributes>()
             };
 
@@ -202,14 +202,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             {
                 if (pid.Type.ToLower() == "urn")
                 {
-                    infraNetwork.RelationToInfra.PersistentIdentifierURN = pid.Content;
-                    infraNetwork.RelationToInfra.PersistentIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
+                    infraNetwork.RelationToNationalInfra.KeyIdentifierURN = pid.Content;
+                    infraNetwork.RelationToNationalInfra.KeyIdentifierURNLink = RepositoryHelpers.GetURNLink(pid.Content);
                 }
                 else
                 {
-                    infraNetwork.RelationToInfra.OtherPid.Add(new PidAttributes
+                    infraNetwork.RelationToNationalInfra.OtherPid.Add(new PidAttributes
                     {
-                        Pid = pid.Content,
+                        PidContent = pid.Content,
                         PidType = pid.Type.ToLower()
                     });
                 }
@@ -224,7 +224,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
     {
         targetOrganization.OrganizationIdentifier = organization.Pids.Select(pid => new PidAttributes
         {
-            Pid = pid.Content,
+            PidContent = pid.Content,
             PidType = pid.Type.ToLower()
         }).ToList();
     }
@@ -232,14 +232,14 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
     private static void HandleResearchfiUrl(Infrastructure infrastructure)
     {
         // Infrastucture's researchfi URL
-        if (infrastructure.InfraIdentifier == null || string.IsNullOrEmpty(infrastructure.InfraIdentifier.PersistentIdentifierURN))
+        if (infrastructure.InfraIdentifier == null || string.IsNullOrEmpty(infrastructure.InfraIdentifier.KeyIdentifierURN))
         {
             infrastructure.InfraResearchfiURL = null;
             return;
         }
         ResearchfiUrl researchfiUrl = new ResearchfiUrl(
             resourceType: "infrastructure",
-            id: infrastructure.InfraIdentifier.PersistentIdentifierURN
+            id: infrastructure.InfraIdentifier.KeyIdentifierURN
         );
         infrastructure.InfraResearchfiURL = new LanguageVariant
         {
@@ -251,15 +251,15 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         // Services' researchfi URLs
         foreach (InfrastructureService service in infrastructure.InfraServices ?? [])
         {
-            if (service.ServiceIdentifier == null || string.IsNullOrEmpty(service.ServiceIdentifier.PersistentIdentifierURN))
+            if (service.ServiceIdentifier == null || string.IsNullOrEmpty(service.ServiceIdentifier.KeyIdentifierURN))
             {
                 service.ServiceResearchfiURL = null;
                 continue;
             }
             ResearchfiUrl serviceResearchfiUrl = new ResearchfiUrl(
                 resourceType: "infrastructure-service",
-                id: infrastructure.InfraIdentifier.PersistentIdentifierURN,
-                infrastructureServiceId: service.ServiceIdentifier.PersistentIdentifierURN
+                id: infrastructure.InfraIdentifier.KeyIdentifierURN,
+                infrastructureServiceId: service.ServiceIdentifier.KeyIdentifierURN
             );
             service.ServiceResearchfiURL = new LanguageVariant
             {
@@ -275,11 +275,11 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         if (infrastructure.InfraName != null && !infrastructure.InfraName.Any()) { infrastructure.InfraName = null; }
         if (infrastructure.InfraDescription != null && !infrastructure.InfraDescription.Any()) { infrastructure.InfraDescription = null; }
         if (infrastructure.FieldOfScience != null && !infrastructure.FieldOfScience.Any()) { infrastructure.FieldOfScience = null; }
-        if (infrastructure.InfraNetwork != null && !infrastructure.InfraNetwork.Any()) { infrastructure.InfraNetwork = null; }
-        if (infrastructure.OrganizationParticipatesInfrastructure != null && !infrastructure.OrganizationParticipatesInfrastructure.Any()) { infrastructure.OrganizationParticipatesInfrastructure = null; }
+        if (infrastructure.InfraRelations != null && !infrastructure.InfraRelations.Any()) { infrastructure.InfraRelations = null; }
+        if (infrastructure.InfraParticipatingOrganizations != null && !infrastructure.InfraParticipatingOrganizations.Any()) { infrastructure.InfraParticipatingOrganizations = null; }
         if (infrastructure.InfraHomepage != null && !infrastructure.InfraHomepage.Any()) { infrastructure.InfraHomepage = null; }
         if (infrastructure.InfraContactInformation != null && !infrastructure.InfraContactInformation.Any()) { infrastructure.InfraContactInformation = null; }
-        if (infrastructure.Esfri != null && !infrastructure.Esfri.Any()) { infrastructure.Esfri = null; }
+        if (infrastructure.ESFRICodes != null && !infrastructure.ESFRICodes.Any()) { infrastructure.ESFRICodes = null; }
 
         // InfraServices
         foreach (InfrastructureService service in infrastructure.InfraServices ?? [])

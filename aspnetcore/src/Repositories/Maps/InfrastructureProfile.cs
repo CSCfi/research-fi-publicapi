@@ -43,14 +43,14 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.Pids, opt => opt.MapFrom(src => src.DimPids))
             // InfraIdentifier
             .ForMember(dst => dst.InfraIdentifier, opt => opt.Ignore()) // Handled in InfrastructureIndexRepository
-            // Acronym
-            .ForMember(dst => dst.Acronym, opt => opt.MapFrom(src => src.Acronym))
+            // InfraAcronym
+            .ForMember(dst => dst.InfraAcronym, opt => opt.MapFrom(src => src.Acronym))
             // Start date
             .ForMember(dst => dst.InfraStartsOn, opt => opt.MapFrom(src => src.DimStartDate != -1 ? new InfraDate(src.DimStartDateNavigation.Year, src.DimStartDateNavigation.Month, src.DimStartDateNavigation.Day) : null))
             // End date
             .ForMember(dst => dst.InfraEndsOn, opt => opt.MapFrom(src => src.DimEndDate != -1 ? new InfraDate(src.DimEndDateNavigation.Year, src.DimEndDateNavigation.Month, src.DimEndDateNavigation.Day) : null))
             // On the academy of Finland road map
-            .ForMember(dst => dst.FinlandRoadmapInfrastructure, opt => opt.MapFrom(src => src.FinlandRoadmap))
+            .ForMember(dst => dst.FinlandRoadmap, opt => opt.MapFrom(src => src.FinlandRoadmap))
             // Name
             .ForMember(dst => dst.InfraName, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Name)))
@@ -58,7 +58,7 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.InfraDescription, opt => opt.MapFrom(src => src.DimDescriptiveItems
                 .Where(di => di.DescriptiveItemType == DescriptiveItemType_Description)))
             // ESFRI
-            .ForMember(dst => dst.Esfri, opt => opt.MapFrom(src => src.FactReferencedata.Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_ESFRI_Domain).Select(fr => fr.DimReferencedata)))
+            .ForMember(dst => dst.ESFRICodes, opt => opt.MapFrom(src => src.FactReferencedata.Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_ESFRI_Domain).Select(fr => fr.DimReferencedata)))
             // Web link - Homepage
             .ForMember(dst => dst.InfraHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
@@ -68,11 +68,11 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             // Infrastructure network
             // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
-            .ForMember(dst => dst.InfraNetwork,
+            .ForMember(dst => dst.InfraRelations,
                 opt => opt.MapFrom(src => src.FactRelationFromInfrastructures
                     .Select(rel => new InfrastructureNetwork
                     {
-                        InfranetworkRelationType = rel.RelationTypeCodeNavigation != null
+                        RelationType = rel.RelationTypeCodeNavigation != null
                             ? new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
                             {
                                 CodeValue = rel.RelationTypeCodeNavigation.CodeValue,
@@ -91,7 +91,7 @@ public class InfrastructureProfile : Profile
                                 Content = dp.PidContent,
                                 Type = dp.PidType
                             }).ToList(),
-                        RelationToInfra = null, // Handled in InfrastructureIndexRepository
+                        RelationToNationalInfra = null, // Handled in InfrastructureIndexRepository
                         RelationToInternationalInfra = null // TODO: Handled in InfrastructureIndexRepository
                     }).ToList()
                 )
@@ -100,11 +100,11 @@ public class InfrastructureProfile : Profile
             .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_FieldOfScience).Select(fr => fr.DimReferencedata)))
             // Organization - participant
-            .ForMember(dst => dst.OrganizationParticipatesInfrastructure, opt => opt.MapFrom(src => src.FactContributions
+            .ForMember(dst => dst.InfraParticipatingOrganizations, opt => opt.MapFrom(src => src.FactContributions
                 .Where(fc => fc.ContributionType == ContributionType_Participant && fc.DimOrganizationId != -1)
                 .Select(fc => fc.DimOrganization)))
             // Organization - responsible
-           .ForMember(dst => dst.ResponsibleOrganization, opt => opt.MapFrom(src => src.ResponsibleOrganizationId != -1 ? src.ResponsibleOrganization : null))
+           .ForMember(dst => dst.InfraResponsibleOrganization, opt => opt.MapFrom(src => src.ResponsibleOrganizationId != -1 ? src.ResponsibleOrganization : null))
            // Infrastructure researchfi URL - handled in InfrastructureIndexRepository
            .ForMember(dst => dst.InfraResearchfiURL, opt => opt.Ignore());
 
@@ -171,7 +171,7 @@ public class InfrastructureProfile : Profile
         //     // Responsible organization
         //     .ForMember(dst => dst.ResponsibleOrganization, opt => opt.MapFrom(src => src.ResponsibleOrganization))
         //     // Organization - participant
-        //     .ForMember(dst => dst.OrganizationParticipatesInfrastructure, opt => opt.MapFrom(src => src.FactContributions
+        //     .ForMember(dst => dst.InfraParticipatingOrganizations, opt => opt.MapFrom(src => src.FactContributions
         //         .Where(fc => fc.ContributionType == ContributionType_Participant && fc.DimOrganizationId != -1)
         //         .Select(fc => fc.DimOrganization)))
         //     // Name

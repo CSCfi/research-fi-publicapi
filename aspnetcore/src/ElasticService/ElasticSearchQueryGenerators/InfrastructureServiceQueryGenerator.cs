@@ -29,12 +29,12 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
     {
         var subQueries = new List<Func<QueryContainerDescriptor<CSC.PublicApi.Service.Models.Infrastructure.Service>, QueryContainer>>();
 
-        // PersistentIdentifierUrn
-        if (!string.IsNullOrWhiteSpace(parameters.PersistentIdentifierUrn))
+        // KeyIdentifierUrn
+        if (!string.IsNullOrWhiteSpace(parameters.KeyIdentifierUrn))
         {
             subQueries.Add(t =>
-                t.MatchPhrase(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierURN)
-                    .Query(parameters.PersistentIdentifierUrn)));
+                t.MatchPhrase(query => query.Field(f => f.ServiceIdentifier.KeyIdentifierURN)
+                    .Query(parameters.KeyIdentifierUrn)));
         }
 
         // OtherPersistentIdentifier
@@ -45,7 +45,7 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                     .Path(p => p.ServiceIdentifier.OtherPid)
                     .Query(q => q
                         .MatchPhrase(m => m
-                            .Field(f => f.ServiceIdentifier.OtherPid.First().Pid)
+                            .Field(f => f.ServiceIdentifier.OtherPid.First().PidContent)
                             .Query(parameters.OtherPersistentIdentifier)))));
         }
 
@@ -89,38 +89,38 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
                     .Path(p => p.IsPartOfInfrastructure)
                     .Query(q => q
                         .MatchPhrase(m => m
-                            .Field(f => f.IsPartOfInfrastructure.InfraIdentifier.PersistentIdentifierURN)
+                            .Field(f => f.IsPartOfInfrastructure.InfraIdentifier.KeyIdentifierURN)
                             .Query(parameters.IsPartOfInfrastructureURN)))));
         }
 
-        // IsPartOfInfrastructureResponsibleOrganizationId
-        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureResponsibleOrganizationId))
+        // IsPartOfInfrastructureInfraResponsibleOrganizationId
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureInfraResponsibleOrganizationId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
                     .Path(p => p.IsPartOfInfrastructure)
                     .Query(q => q
                         .Nested(n2 => n2
-                            .Path(p => p.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier)
+                            .Path(p => p.IsPartOfInfrastructure!.InfraResponsibleOrganization!.OrganizationIdentifier)
                             .Query(q2 => q2
                                 .Term(m => m
-                                    .Field(f => f.IsPartOfInfrastructure!.ResponsibleOrganization!.OrganizationIdentifier!.First().Pid)
-                                    .Value(parameters.IsPartOfInfrastructureResponsibleOrganizationId)))))));
+                                    .Field(f => f.IsPartOfInfrastructure!.InfraResponsibleOrganization!.OrganizationIdentifier!.First().PidContent)
+                                    .Value(parameters.IsPartOfInfrastructureInfraResponsibleOrganizationId)))))));
         }
 
-        // IsPartOfInfrastructureOrganizationParticipatesInfrastructureId
-        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureOrganizationParticipatesInfrastructureId))
+        // IsPartOfInfrastructureInfraParticipatingOrganizationsId
+        if (!string.IsNullOrWhiteSpace(parameters.IsPartOfInfrastructureInfraParticipatingOrganizationsId))
         {
             subQueries.Add(t =>
                 t.Nested(n => n
                     .Path(p => p.IsPartOfInfrastructure)
                     .Query(q => q
                         .Nested(n2 => n2
-                            .Path(p => p.IsPartOfInfrastructure!.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier)
+                            .Path(p => p.IsPartOfInfrastructure!.InfraParticipatingOrganizations!.First().OrganizationIdentifier)
                             .Query(q2 => q2
                                 .Term(m => m
-                                    .Field(f => f.IsPartOfInfrastructure!.OrganizationParticipatesInfrastructure!.First().OrganizationIdentifier!.First().Pid)
-                                    .Value(parameters.IsPartOfInfrastructureOrganizationParticipatesInfrastructureId)))))));
+                                    .Field(f => f.IsPartOfInfrastructure!.InfraParticipatingOrganizations!.First().OrganizationIdentifier!.First().PidContent)
+                                    .Value(parameters.IsPartOfInfrastructureInfraParticipatingOrganizationsId)))))));
         }
 
         // ServiceStartsOnYear
@@ -171,7 +171,7 @@ public class InfrastructureServiceQueryGenerator : QueryGeneratorBase<Infrastruc
 
     protected override Func<QueryContainerDescriptor<CSC.PublicApi.Service.Models.Infrastructure.Service>, QueryContainer> GenerateQueryForSingle(string id)
     {
-        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.ServiceIdentifier.PersistentIdentifierURN).Value(id));
+        return queryContainerDescriptor => queryContainerDescriptor.Term(query => query.Field(f => f.ServiceIdentifier.KeyIdentifierURN).Value(id));
     }
 
     protected override Func<SortDescriptor<CSC.PublicApi.Service.Models.Infrastructure.Service>, IPromise<IList<ISort>>> GenerateSortForSearch(InfrastructureServiceSearchParameters parameters)
