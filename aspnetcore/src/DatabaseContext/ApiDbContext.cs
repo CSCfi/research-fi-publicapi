@@ -1566,12 +1566,12 @@ public partial class ApiDbContext : DbContext
             entity.Property(e => e.NameEn)
                 .HasMaxLength(4000)
                 .HasColumnName("name_en");
+            entity.Property(e => e.SourceDescription)
+                .HasMaxLength(255)
+                .HasColumnName("source_description");
             entity.Property(e => e.SourceId)
                 .HasMaxLength(255)
                 .HasColumnName("source_id");
-            entity.Property(e => e.SoureDescription)
-                .HasMaxLength(255)
-                .HasColumnName("soure_description");
             entity.Property(e => e.UnlinkedIdentifier)
                 .HasMaxLength(255)
                 .HasColumnName("unlinked_identifier");
