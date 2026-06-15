@@ -9,7 +9,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
     private const int BatchSize = 1500;
-    private const int DebugInfoLogMaxLength = 8000;
+    private const int DebugInfoLogMaxLength = 15000;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
@@ -150,13 +150,12 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
     private static string TruncateForLog(string? value, int maxLength)
     {
-        // if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
-        // {
-        //     return value ?? string.Empty;
-        // }
+        if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
+        {
+            return value ?? string.Empty;
+        }
 
-        // return value[..maxLength] + " ...[truncated]";
-        return value ?? string.Empty;
+        return value[..maxLength] + " ...[truncated]";
     }
 
     /// <summary>
