@@ -9,7 +9,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
     private const int BatchSize = 1500;
-    private const int DebugInfoLogMaxLength = 15000;
+    private const int DebugInfoLogMaxLength = 8000;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
