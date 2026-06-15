@@ -36,7 +36,6 @@ public class InfrastructureProfile : Profile
         AllowNullDestinationValues = true;
 
         CreateProjection<DimInfrastructure, CSC.PublicApi.Service.Models.Infrastructure.Infrastructure>()
-            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dst => dst.ExportSortId, opt => opt.MapFrom(src => (long)src.Id))
             // Local identifier - handled in InfrastructureIndexRepository
             .ForMember(dst => dst.LocalIdentifier, opt => opt.MapFrom(src => src.LocalIdentifier))

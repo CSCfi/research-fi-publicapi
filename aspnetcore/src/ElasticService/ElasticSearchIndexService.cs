@@ -150,12 +150,13 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
 
     private static string TruncateForLog(string? value, int maxLength)
     {
-        if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
-        {
-            return value ?? string.Empty;
-        }
+        // if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
+        // {
+        //     return value ?? string.Empty;
+        // }
 
-        return value[..maxLength] + " ...[truncated]";
+        // return value[..maxLength] + " ...[truncated]";
+        return value ?? string.Empty;
     }
 
     /// <summary>
