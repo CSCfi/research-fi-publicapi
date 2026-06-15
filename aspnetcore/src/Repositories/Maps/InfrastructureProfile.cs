@@ -84,15 +84,15 @@ public class InfrastructureProfile : Profile
                                 }
                             }
                             : null,
-                        // RelationValid = rel.ValidRelation,
+                        RelationValid = rel.ValidRelation,
                         // Pids = rel.ToInfrastructure.DimPids // Collect Pids, processed in InfrastructureIndexRepository
                         //     .Select(dp => new PersistentIdentifier
                         //     {
                         //         Content = dp.PidContent,
                         //         Type = dp.PidType
                         //     }).ToList(),
-                        // RelationToNationalInfra = null, // Handled in InfrastructureIndexRepository
-                        // RelationToInternationalInfra = null // TODO: Handled in InfrastructureIndexRepository
+                        RelationToNationalInfra = null, // Handled in InfrastructureIndexRepository
+                        RelationToInternationalInfra = null // TODO: Handled in InfrastructureIndexRepository
                     }).ToList()
                 )
             )
