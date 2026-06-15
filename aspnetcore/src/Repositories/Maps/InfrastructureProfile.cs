@@ -62,10 +62,10 @@ public class InfrastructureProfile : Profile
             // Web link - Homepage
             .ForMember(dst => dst.InfraHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
-            // // Services
-            // .ForMember(dst => dst.InfraServices, opt => opt.MapFrom(src => src.DimServices))
-            // // Contact information
-            // .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
+            // Services
+            .ForMember(dst => dst.InfraServices, opt => opt.MapFrom(src => src.DimServices))
+            // Contact information
+            .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             // // Infrastructure network
             // // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
             .ForMember(dst => dst.InfraRelations, opt => opt.MapFrom(src => new List<InfrastructureNetwork>()))
