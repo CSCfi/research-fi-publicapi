@@ -9,6 +9,7 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
     private readonly ILogger<ElasticSearchIndexService> _logger;
 
     private const int BatchSize = 1500;
+    private const int DebugInfoLogMaxLength = 8000;
 
     public ElasticSearchIndexService(IElasticClient elasticClient, ILogger<ElasticSearchIndexService> logger)
     {
@@ -104,15 +105,57 @@ public class ElasticSearchIndexService : IElasticSearchIndexService
             ++batchCounter;
             _logger.LogInformation("{EntityType:l}: Indexing {ElasticsearchBatchSize} documents. Batch {ElasticsearchBatchCurrent}/{ElasticsearchBatchCount}", modelType.Name, batchToIndex.Count, batchCounter, documentBatches.Count);
             var indexBatchResponse = await _elasticClient.BulkAsync(b => b
+                .RequestConfiguration(r => r.DisableDirectStreaming())
                 .Index(indexName)
                 .IndexMany(batchToIndex));
 
             if (!indexBatchResponse.IsValid)
             {
-                _logger.LogError("{EntityType:l}: Indexing documents to {IndexName:l} failed: {IndexerException}", modelType, indexName, indexBatchResponse.OriginalException.ToString());
+                LogBulkIndexFailure(modelType, indexName, batchCounter, documentBatches.Count, indexBatchResponse);
                 throw new InvalidOperationException($"Indexing documents to {indexName} failed.", indexBatchResponse.OriginalException);
             }
         }
+    }
+
+    private void LogBulkIndexFailure(Type modelType, string indexName, int batchCounter, int totalBatches, BulkResponse response)
+    {
+        var originalException = response.OriginalException?.ToString() ?? "N/A";
+        var serverError = response.ServerError?.ToString() ?? "N/A";
+        var debugInformation = TruncateForLog(response.DebugInformation, DebugInfoLogMaxLength);
+
+        var firstItemError = response.ItemsWithErrors.FirstOrDefault();
+        if (firstItemError?.Error != null)
+        {
+            _logger.LogError(
+                "{EntityType:l}: Bulk item error for {IndexName:l} batch {ElasticsearchBatchCurrent}/{ElasticsearchBatchCount}. ItemId={ItemId}, ItemType={ItemType}, ItemReason={ItemReason}",
+                modelType.Name,
+                indexName,
+                batchCounter,
+                totalBatches,
+                firstItemError.Id ?? "N/A",
+                firstItemError.Error.Type ?? "N/A",
+                firstItemError.Error.Reason ?? "N/A");
+        }
+
+        _logger.LogError(
+            "{EntityType:l}: Indexing documents to {IndexName:l} failed on batch {ElasticsearchBatchCurrent}/{ElasticsearchBatchCount}. OriginalException={IndexerException}. ServerError={ElasticsearchServerError}. DebugInformation={ElasticsearchDebugInformation}",
+            modelType.Name,
+            indexName,
+            batchCounter,
+            totalBatches,
+            originalException,
+            serverError,
+            debugInformation);
+    }
+
+    private static string TruncateForLog(string? value, int maxLength)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value.Length <= maxLength)
+        {
+            return value ?? string.Empty;
+        }
+
+        return value[..maxLength] + " ...[truncated]";
     }
 
     /// <summary>
