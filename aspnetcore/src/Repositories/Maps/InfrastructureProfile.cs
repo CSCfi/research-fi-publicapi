@@ -62,40 +62,41 @@ public class InfrastructureProfile : Profile
             // Web link - Homepage
             .ForMember(dst => dst.InfraHomepage, opt => opt.MapFrom(src => src.DimWebLinks
                 .Where(wl => wl.LinkType == WebLinkType_Homepage)))
-            // Services
-            .ForMember(dst => dst.InfraServices, opt => opt.MapFrom(src => src.DimServices))
-            // Contact information
-            .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
-            // Infrastructure network
-            // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
-            .ForMember(dst => dst.InfraRelations,
-                opt => opt.MapFrom(src => src.FactRelationFromInfrastructures
-                    .Select(rel => new InfrastructureNetwork
-                    {
-                        RelationType = rel.RelationTypeCodeNavigation != null
-                            ? new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
-                            {
-                                CodeValue = rel.RelationTypeCodeNavigation.CodeValue,
-                                CodeDescription = new LanguageVariant
-                                {
-                                    Fi = rel.RelationTypeCodeNavigation.NameFi,
-                                    Sv = rel.RelationTypeCodeNavigation.NameSv,
-                                    En = rel.RelationTypeCodeNavigation.NameEn
-                                }
-                            }
-                            : null,
-                        RelationValid = rel.ValidRelation,
-                        Pids = rel.ToInfrastructure.DimPids // Collect Pids, processed in InfrastructureIndexRepository
-                            .Select(dp => new PersistentIdentifier
-                            {
-                                Content = dp.PidContent,
-                                Type = dp.PidType
-                            }).ToList(),
-                        RelationToNationalInfra = null, // Handled in InfrastructureIndexRepository
-                        RelationToInternationalInfra = null // TODO: Handled in InfrastructureIndexRepository
-                    }).ToList()
-                )
-            )
+            // // Services
+            // .ForMember(dst => dst.InfraServices, opt => opt.MapFrom(src => src.DimServices))
+            // // Contact information
+            // .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
+            // // Infrastructure network
+            // // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
+            .ForMember(dst => dst.InfraRelations, opt => opt.MapFrom(src => new List<InfrastructureNetwork>()))
+            // .ForMember(dst => dst.InfraRelations,
+            //     opt => opt.MapFrom(src => src.FactRelationFromInfrastructures
+            //         .Select(rel => new InfrastructureNetwork
+            //         {
+            //             RelationType = rel.RelationTypeCodeNavigation != null
+            //                 ? new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
+            //                 {
+            //                     CodeValue = rel.RelationTypeCodeNavigation.CodeValue,
+            //                     CodeDescription = new LanguageVariant
+            //                     {
+            //                         Fi = rel.RelationTypeCodeNavigation.NameFi,
+            //                         Sv = rel.RelationTypeCodeNavigation.NameSv,
+            //                         En = rel.RelationTypeCodeNavigation.NameEn
+            //                     }
+            //                 }
+            //                 : null,
+            //             RelationValid = rel.ValidRelation,
+            //             Pids = rel.ToInfrastructure.DimPids // Collect Pids, processed in InfrastructureIndexRepository
+            //                 .Select(dp => new PersistentIdentifier
+            //                 {
+            //                     Content = dp.PidContent,
+            //                     Type = dp.PidType
+            //                 }).ToList(),
+            //             RelationToNationalInfra = null, // Handled in InfrastructureIndexRepository
+            //             RelationToInternationalInfra = null // TODO: Handled in InfrastructureIndexRepository
+            //         }).ToList()
+            //     )
+            // )
             // Field of science
             .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_FieldOfScience).Select(fr => fr.DimReferencedata)))
