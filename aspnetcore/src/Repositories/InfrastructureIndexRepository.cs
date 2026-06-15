@@ -49,10 +49,10 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
                 return;
             }
 
-            // HandleOrganizations(infrastructure);
-            // HandleInfraPids(infrastructure);
-            // HandleInfraServicesPids(infrastructure);
-            // HandleRelationToNationalInfraPids(infrastructure);
+            HandleOrganizations(infrastructure);
+            HandleInfraPids(infrastructure);
+            HandleInfraServicesPids(infrastructure);
+            HandleRelationToNationalInfraPids(infrastructure);
             HandleResearchfiUrl(infrastructure);
             HandleEmptyCollections(infrastructure);
         });
