@@ -69,7 +69,7 @@ public class InfrastructureProfile : Profile
             // Infrastructure network
             // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
             .ForMember(dst => dst.InfraRelations,
-                opt => opt.MapFrom(src => src.FactRelationFromInfrastructures.Where(rel => rel.ToInfrastructureId != -1)
+                opt => opt.MapFrom(src => src.FactRelationFromInfrastructures.Where(rel => rel.ToInfrastructure != null && rel.ToInfrastructureId > 0)
                     .Select(rel => new InfrastructureNetwork
                     {
                         RelationType = rel.RelationTypeCodeNavigation != null

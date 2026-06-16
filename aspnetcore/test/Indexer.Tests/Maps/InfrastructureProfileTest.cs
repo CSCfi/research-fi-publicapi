@@ -197,8 +197,10 @@ public class InfrastructureProfileTest
                         NameSv = "relation-typecode-name-sv",
                     },
                     ValidRelation = true,
+                    ToInfrastructureId = 11,
                     ToInfrastructure = new DimInfrastructure
                     {
+                        Id = 11,
                         DimPids = new List<DimPid>
                         {
                             new DimPid
