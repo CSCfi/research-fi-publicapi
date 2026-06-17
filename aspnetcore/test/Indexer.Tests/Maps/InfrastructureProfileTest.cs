@@ -187,7 +187,7 @@ public class InfrastructureProfileTest
             },
             FactRelationFromInfrastructures = new List<FactRelation>
             {
-                new FactRelation
+                new FactRelation // ToInfrastructure (national infra)
                 {
                     RelationTypeCodeNavigation = new DimReferencedatum
                     {
@@ -197,8 +197,10 @@ public class InfrastructureProfileTest
                         NameSv = "relation-typecode-name-sv",
                     },
                     ValidRelation = true,
+                    ToInfrastructureId = 11,
                     ToInfrastructure = new DimInfrastructure
                     {
+                        Id = 11,
                         DimPids = new List<DimPid>
                         {
                             new DimPid
@@ -212,6 +214,25 @@ public class InfrastructureProfileTest
                                 PidContent = "infranetwork-infra-1-pid2-content"
                             }
                         }
+                    }
+                },
+                new FactRelation // ToInternationalInfra (international infra)
+                {
+                    RelationTypeCodeNavigation = new DimReferencedatum
+                    {
+                        CodeValue = "relation2-typecode-codevalue",
+                        NameFi = "relation2-typecode-name-fi",
+                        NameEn = "relation2-typecode-name-en",
+                        NameSv = "relation2-typecode-name-sv"
+                    },
+                    ValidRelation = false,
+                    ToInternationalInfraId = 123,
+                    ToInternationalInfra = new DimInternationalInfra
+                    {
+                        Id = 123,
+                        NameEn = "Test international infra name EN",
+                        UnlinkedIdentifier = "INT-INFRA-123",
+                        Weblink = "https://testinternationalinfra123.fi"
                     }
                 }
             },
@@ -717,6 +738,29 @@ public class InfrastructureProfileTest
                             Type = "infranetwork-infra-1-pid2-type",
                             Content = "infranetwork-infra-1-pid2-content"
                         }
+                    }
+                }
+            },
+            InternationalInfraRelationsHelper = new List<InfrastructureNetwork>
+            {
+                new InfrastructureNetwork
+                {
+                    RelationType = new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
+                    {
+                        CodeValue = "relation2-typecode-codevalue",
+                        CodeDescription = new LanguageVariant
+                        {
+                            Fi = "relation2-typecode-name-fi",
+                            En = "relation2-typecode-name-en",
+                            Sv = "relation2-typecode-name-sv"
+                        }
+                    },
+                    RelationValid = false,
+                    RelationToInternationalInfra = new InternationalInfra()
+                    {
+                        InternationalInfraName = "Test international infra name EN",
+                        InternationalInfraIdentifier = "INT-INFRA-123",
+                        InternationalInfraWeblink = "https://testinternationalinfra123.fi"
                     }
                 }
             },
