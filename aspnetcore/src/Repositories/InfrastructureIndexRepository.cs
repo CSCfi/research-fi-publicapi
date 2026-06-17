@@ -53,6 +53,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             HandleInfraPids(infrastructure);
             HandleInfraServicesPids(infrastructure);
             HandleRelationToNationalInfraPids(infrastructure);
+            HandleRelationToInternationalInfra(infrastructure);
             HandleResearchfiUrl(infrastructure);
             HandleEmptyCollections(infrastructure);
         });
@@ -66,6 +67,7 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
         HandleInfraPids(infrastructure);
         HandleInfraServicesPids(infrastructure);
         HandleRelationToNationalInfraPids(infrastructure);
+        HandleRelationToInternationalInfra(infrastructure);
         HandleResearchfiUrl(infrastructure);
         HandleEmptyCollections(infrastructure);
         return infrastructure;
@@ -218,6 +220,31 @@ public class InfrastructureIndexRepository : IndexRepositoryBase<Infrastructure>
             // Clear Pids after processing
             infraNetwork.Pids = null;
         }
+    }
+
+    private void HandleRelationToInternationalInfra(Infrastructure infrastructure)
+    {
+        if (infrastructure == null || !infrastructure.InternationalInfraRelationsHelper.Any())
+        {
+            return;
+        }
+
+        // Append international infra relation info to InfraRelations and clear InternationalInfraRelationsHelper after processing
+        infrastructure.InfraRelations = (infrastructure.InfraRelations ?? []).Concat(
+            infrastructure.InternationalInfraRelationsHelper.Select(rel => new InfrastructureNetwork
+            {
+                RelationType = rel.RelationType,
+                RelationValid = rel.RelationValid,
+                RelationToNationalInfra = null,
+                RelationToInternationalInfra = new InternationalInfra()
+                {
+                    InternationalInfraIdentifier = rel.RelationToInternationalInfra?.InternationalInfraIdentifier,
+                    InternationalInfraName = rel.RelationToInternationalInfra?.InternationalInfraName,
+                    InternationalInfraWeblink = rel.RelationToInternationalInfra?.InternationalInfraWeblink
+                },
+                Pids = null
+             })).ToList();
+        infrastructure.InternationalInfraRelationsHelper = null;
     }
 
     private void SetResearchOrganizationIdentifiers(ResearchOrganization targetOrganization, Service.Models.Organization.Organization organization)
