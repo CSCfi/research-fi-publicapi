@@ -67,7 +67,7 @@ public class InfrastructureProfile : Profile
             // Contact information
             .ForMember(dst => dst.InfraContactInformation, opt => opt.MapFrom(src => src.DimContactInformations))
             // Infrastructure network
-            // Collect only from "FactRelationFromInfrastructures", do not collect "FactRelationToInfrastructures"
+            // Collect relation to national infras from "FactRelationFromInfrastructures" and "ToInfrastructure". Postprocessed in InfrastructureIndexRepository.
             .ForMember(dst => dst.InfraRelations,
                 opt => opt.MapFrom(src => src.FactRelationFromInfrastructures.Where(rel => rel.ToInfrastructure != null && rel.ToInfrastructureId > 0)
                     .Select(rel => new InfrastructureNetwork
@@ -96,6 +96,35 @@ public class InfrastructureProfile : Profile
                     }).ToList()
                 )
             )
+            // Collect relation to international infras from "FactRelationFromInfrastructures" and "ToInternationalInfra". Postprocessed in InfrastructureIndexRepository.
+            .ForMember(dst => dst.InternationalInfraRelationsHelper,
+                opt => opt.MapFrom(src => src.FactRelationFromInfrastructures.Where(rel => rel.ToInternationalInfra != null && rel.ToInternationalInfraId > 0)
+                    .Select(rel => new InfrastructureNetwork
+                    {
+                        RelationType = rel.RelationTypeCodeNavigation != null
+                            ? new CSC.PublicApi.Service.Models.Infrastructure.ReferenceData
+                            {
+                                CodeValue = rel.RelationTypeCodeNavigation.CodeValue,
+                                CodeDescription = new LanguageVariant
+                                {
+                                    Fi = rel.RelationTypeCodeNavigation.NameFi,
+                                    Sv = rel.RelationTypeCodeNavigation.NameSv,
+                                    En = rel.RelationTypeCodeNavigation.NameEn
+                                }
+                            }
+                            : null,
+                        RelationValid = rel.ValidRelation,
+                        RelationToNationalInfra = null,
+                        RelationToInternationalInfra = new InternationalInfra ()
+                        {
+                            InternationalInfraIdentifier = rel.ToInternationalInfra.UnlinkedIdentifier,
+                            InternationalInfraName = rel.ToInternationalInfra.NameEn,
+                            InternationalInfraWeblink = rel.ToInternationalInfra.Weblink
+                        }
+                    }).ToList()
+                )
+            )
+
             // Field of science
             .ForMember(dst => dst.FieldOfScience, opt => opt.MapFrom(src => src.FactReferencedata
                 .Where(fr => fr.DimReferencedata.CodeScheme == DimReferencedata_CodeScheme_FieldOfScience).Select(fr => fr.DimReferencedata)))

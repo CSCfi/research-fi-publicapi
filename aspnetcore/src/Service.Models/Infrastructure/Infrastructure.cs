@@ -58,6 +58,9 @@ namespace CSC.PublicApi.Service.Models.Infrastructure
         /// <summary>Has relation to another infra</summary>
         public List<InfrastructureNetwork>? InfraRelations { get; set; }
 
+        /// <summary>Helper property for handling international infra relations</summary>
+        public List<InfrastructureNetwork>? InternationalInfraRelationsHelper { get; set; }
+
         /// <summary>Organization - participant</summary>
         [Nested]
         public List<ResearchOrganization>? InfraParticipatingOrganizations { get; set; }
