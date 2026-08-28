@@ -39,6 +39,7 @@ public class FundingDecisionProfile : Profile
             .ForMember(dst => dst.IdentifiedTopics, opt => opt.MapFrom(src => src.BrWordClusterDimFundingDecisions.SelectMany(x => x.DimWordCluster.BrWordsDefineAClusters)))
             .ForMember(dst => dst.AmountInEur, opt => opt.MapFrom(src => src.AmountInEur))
             .ForMember(dst => dst.SourceDescription, opt => opt.MapFrom(src => src.SourceDescription))
+            .ForMember(dst => dst.SourceId, opt => opt.MapFrom(src => src.SourceId))
             .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
             .ForMember(dst => dst.Modified, opt => opt.MapFrom(src => src.Modified))
             // Finds the parents of CallProgrammes for FrameworkProgramme. Deepest parent will be later copied to FrameworkProgramme in the index repository in memory operations.

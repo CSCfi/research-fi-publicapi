@@ -62,6 +62,9 @@ public class FundingDecision
 
     [Ignore]
     public int? FunderId { get; set; }
+
+    [Ignore]
+    public string? SourceId { get; set; }
     
     /// <summary>
     /// "Temporary" property for getting parent of decision's CallProgramme.

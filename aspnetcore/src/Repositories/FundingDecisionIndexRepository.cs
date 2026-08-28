@@ -97,7 +97,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         }
     }
 
-    private FundingReceiver ToFundingReceiver(FundingGroupPerson fundingGroupPerson)
+    private FundingReceiver ToFundingReceiver(FundingGroupPerson fundingGroupPerson, string? decisionSourceId)
     {
         var receiver = new FundingReceiver
         {
@@ -105,7 +105,8 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             Organization = GetOrganization(fundingGroupPerson.OrganizationId)?.ToFundingDecisionOrganization(),
             RoleInFundingGroup = fundingGroupPerson.RoleInFundingGroup,
             ShareOfFundingInEur = fundingGroupPerson.ShareOfFundingInEur,
-            FunderProjectNumber = fundingGroupPerson.SourceId
+            FunderProjectNumber = fundingGroupPerson.SourceId,
+            FundedPerson = fundingGroupPerson.SourceId == decisionSourceId
         };
 
         if (receiver.Organization?.Pids != null && !receiver.Organization.Pids.Any())
@@ -124,7 +125,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         {
             foreach (var fundingGroupPerson in fundingDecision.SelfFundingGroupPerson)
             {
-                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson));
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson, fundingDecision.SourceId));
             }
         }
 
@@ -132,7 +133,7 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
         {
             foreach (var fundingGroupPerson in fundingDecision.ParentFundingGroupPerson)
             {
-                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson));
+                fundingGroupPersons.TryAdd(fundingGroupPerson.SourceId, ToFundingReceiver(fundingGroupPerson, fundingDecision.SourceId));
             }
         }
 
