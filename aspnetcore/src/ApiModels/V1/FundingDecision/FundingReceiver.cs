@@ -31,7 +31,7 @@ public class FundingReceiver
     public decimal? ShareOfFundingInEur { get; set; }
 
     /// <summary>
-    /// True if this receiver is the directly funded party
+    /// True if this receiver is the directly funded party in this funding decision
     /// </summary>
     public bool FundedPerson { get; set; }
 }
