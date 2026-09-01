@@ -14,6 +14,4 @@ public class FundingReceiver
 
     [Number(NumberType.ScaledFloat, ScalingFactor = 100)]
     public decimal? ShareOfFundingInEur { get; set; }
-
-    public bool FundedPerson { get; set; }
 }

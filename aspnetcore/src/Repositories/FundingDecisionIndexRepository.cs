@@ -99,6 +99,11 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
 
     private FundingReceiver ToFundingReceiver(FundingGroupPerson fundingGroupPerson, string? decisionSourceId)
     {
+        if (fundingGroupPerson.Person != null)
+        {
+            fundingGroupPerson.Person.FundedPerson = fundingGroupPerson.SourceId == decisionSourceId;
+        }
+
         var receiver = new FundingReceiver
         {
             Person = fundingGroupPerson.Person,
@@ -106,7 +111,6 @@ public class FundingDecisionIndexRepository : IndexRepositoryBase<FundingDecisio
             RoleInFundingGroup = fundingGroupPerson.RoleInFundingGroup,
             ShareOfFundingInEur = fundingGroupPerson.ShareOfFundingInEur,
             FunderProjectNumber = fundingGroupPerson.SourceId,
-            FundedPerson = fundingGroupPerson.SourceId == decisionSourceId
         };
 
         if (receiver.Organization?.Pids != null && !receiver.Organization.Pids.Any())

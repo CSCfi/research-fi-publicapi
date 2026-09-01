@@ -79,7 +79,8 @@ public class FundingDecisionProfile : Profile
             .AddTransform<string?>(s => string.IsNullOrWhiteSpace(s) ? null : s)
             .ForMember(dst => dst.FirstNames, opt => opt.MapFrom(src => src.FirstNames))
             .ForMember(dst => dst.LastName, opt => opt.MapFrom(src => src.LastName))
-            .ForMember(dst => dst.OrcId, opt => opt.MapFrom(src => src.DimKnownPersonIdConfirmedIdentityNavigation));
+            .ForMember(dst => dst.OrcId, opt => opt.MapFrom(src => src.DimKnownPersonIdConfirmedIdentityNavigation))
+            .ForMember(dst => dst.FundedPerson, opt => opt.Ignore());
 
         CreateProjection<DimKnownPerson, string?>()
             .ConvertUsing(x => x.DimPids.Where(p => p.PidType == "Orcid")
