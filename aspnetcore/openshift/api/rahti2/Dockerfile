@@ -1,5 +1,5 @@
 # Builder
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
 WORKDIR /build
 
 # Copy csproj and restore as distinct layers
@@ -21,7 +21,7 @@ COPY ["aspnetcore/src/Logging/","./Logging"]
 RUN dotnet publish "Interface/Interface.csproj" -c Release -o out
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 ENV TZ=Europe/Helsinki
 WORKDIR /app
 COPY --from=build-env /build/out .
