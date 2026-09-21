@@ -9,6 +9,7 @@ public static class ConfigurationExtensions
     {
         AddSettings<IndexNameSettings>("IndexNames", services, configuration);
         AddSettings<OpenApiSettings>("OpenApiSettings", services, configuration);
+        AddSettings<PersonBackendSettings>("PersonBackend", services, configuration);
     }
 
     private static void AddSettings<T>(string sectionName, IServiceCollection services, IConfiguration configuration) where T : class, new()
