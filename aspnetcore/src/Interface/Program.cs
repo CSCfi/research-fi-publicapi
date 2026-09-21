@@ -6,6 +6,7 @@ using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Interface;
 using CSC.PublicApi.Interface.Configuration;
 using CSC.PublicApi.Interface.Middleware;
+using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -82,6 +83,14 @@ builder.Services.Scan(scan =>
         .AddClasses()
         .AsMatchingInterface()
         .WithScopedLifetime());
+
+// Registered after the Scrutor scan above so this typed-client registration (with its configured
+// HttpClient) wins over the plain scoped registration the scan would otherwise add for the same interface.
+builder.Services.AddHttpClient<IPersonBackendClient, PersonBackendClient>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<PersonBackendSettings>();
+    client.BaseAddress = new Uri(settings.BaseUrl);
+});
 
 // Configure authentication and authorization.
 builder.Services.AddAuthentication(builder.Configuration);
