@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using ResearchFi.Query;
+using ResearchFi.PersonPublicApi;
 
 namespace CSC.PublicApi.Interface.Services;
 
@@ -14,15 +14,15 @@ public class PersonBackendClient : IPersonBackendClient
         _logger = logger;
     }
 
-    public async Task<string?> SearchPersonsAsync(GetPersonsQueryParameters queryParameters, CancellationToken cancellationToken = default)
+    public async Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("persons/search", queryParameters, cancellationToken);
+        var response = await _httpClient.PostAsJsonAsync("api/publicapi/profile", request, cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning("Person backend request failed with status code {StatusCode}", response.StatusCode);
             return null;
         }
 
-        return await response.Content.ReadAsStringAsync(cancellationToken);
+        return await response.Content.ReadFromJsonAsync<ProfileDataResponse>(cancellationToken);
     }
 }

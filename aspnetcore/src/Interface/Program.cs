@@ -84,12 +84,12 @@ builder.Services.Scan(scan =>
         .AsMatchingInterface()
         .WithScopedLifetime());
 
-// Registered after the Scrutor scan above so this typed-client registration (with its configured
-// HttpClient) wins over the plain scoped registration the scan would otherwise add for the same interface.
+// Typed HttpClient for calling the person backend; registered after Scrutor so it takes precedence.
 builder.Services.AddHttpClient<IPersonBackendClient, PersonBackendClient>((sp, client) =>
 {
     var settings = sp.GetRequiredService<PersonBackendSettings>();
     client.BaseAddress = new Uri(settings.BaseUrl);
+    client.DefaultRequestHeaders.Add("publicapitoken", settings.PublicApiToken);
 });
 
 // Configure authentication and authorization.

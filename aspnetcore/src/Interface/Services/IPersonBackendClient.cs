@@ -1,8 +1,8 @@
-using ResearchFi.Query;
+using ResearchFi.PersonPublicApi;
 
 namespace CSC.PublicApi.Interface.Services;
 
 public interface IPersonBackendClient
 {
-    Task<string?> SearchPersonsAsync(GetPersonsQueryParameters queryParameters, CancellationToken cancellationToken = default);
+    Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, CancellationToken cancellationToken = default);
 }
