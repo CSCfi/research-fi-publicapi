@@ -9,6 +9,8 @@
 		<DockerfileFile>..\..\openshift\api\Dockerfile</DockerfileFile>
 		<!-- Enable xml commment file generation for swagger to use. -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- Copies referenced packages' xml doc files (e.g. the person backend contracts package) alongside our own, so Swagger can load them too. -->
+		<CopyDocumentationFilesFromPackages>true</CopyDocumentationFilesFromPackages>
 		<!-- Do not warn about objects missing xml comments. -->
 		<nowarn>$(NoWarn);1591</nowarn>
 		<RootNamespace>CSC.PublicApi.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -19,6 +21,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="CSC.ResearchFi.Mydata.PublicApiContracts" Version="0.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="10.0.11" />
