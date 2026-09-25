@@ -36,7 +36,7 @@ public class PersonController : ControllerBase
     /// </summary>
     /// <param name="request">Request forwarded to the person backend.</param>
     [HttpPost(Name = "PostPerson")]
-    [Authorize(Policy = ApiPolicies.Person.Read)]
+    //[Authorize(Policy = ApiPolicies.Person.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(ProfileDataResponse), StatusCodes.Status200OK)]
