@@ -21,7 +21,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-		<PackageReference Include="CSC.ResearchFi.Mydata.PublicApiContracts" Version="0.0.1" />
+		<PackageReference Include="CSC.ResearchFi.Mydata.PublicApiContracts" Version="0.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.11" />
 		<PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="10.0.11" />
