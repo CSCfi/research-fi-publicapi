@@ -4,5 +4,5 @@ namespace CSC.PublicApi.Interface.Services;
 
 public interface IPersonBackendClient
 {
-    Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, CancellationToken cancellationToken = default);
+    Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, string? clientId, CancellationToken cancellationToken = default);
 }

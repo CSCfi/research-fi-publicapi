@@ -38,6 +38,7 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
             "/v1/infrastructures-export",
             "/v1/infrastructures-export/services",
             "/v1/infrastructures/services",
+            "/v1/persons",
             "/v1/publications",
             "/v1/publications-export",
             "/v1/publications/{publicationId}",

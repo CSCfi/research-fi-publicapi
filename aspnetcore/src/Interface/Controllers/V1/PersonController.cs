@@ -42,7 +42,8 @@ public class PersonController : ControllerBase
     [ProducesResponseType(typeof(ProfileDataResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> PostPerson([FromBody] ProfileDataRequest request)
     {
-        var result = await _personBackendClient.SearchPersonsAsync(request, HttpContext.RequestAborted);
+        var clientId = HttpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
+        var result = await _personBackendClient.SearchPersonsAsync(request, clientId, HttpContext.RequestAborted);
         return Ok(result);
     }
 }
