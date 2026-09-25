@@ -14,9 +14,17 @@ public class PersonBackendClient : IPersonBackendClient
         _logger = logger;
     }
 
-    public async Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, CancellationToken cancellationToken = default)
+    public async Task<ProfileDataResponse?> SearchPersonsAsync(ProfileDataRequest request, string? clientId, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/publicapi/profile", request, cancellationToken);
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "api/publicapi/profile")
+        {
+            Content = JsonContent.Create(request)
+        };
+        if (clientId != null)
+        {
+            httpRequest.Headers.Add("public-api-clientid", clientId);
+        }
+        var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning("Person backend request failed with status code {StatusCode}", response.StatusCode);
