@@ -30,9 +30,11 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
     public void Configure(SwaggerGenOptions options)
     {
         // Needed for getting Swagger UI page's controller/model member descriptions from code comments.
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"ApiModels.xml"));
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"api.PublicApiContracts.xml"));
+        // Guarded with File.Exists: IncludeXmlComments throws FileNotFoundException if the doc file is missing,
+        // and a missing xml-doc file (e.g. a referenced package didn't ship/copy one) shouldn't crash app startup.
+        IncludeXmlCommentsIfPresent(options, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+        IncludeXmlCommentsIfPresent(options, "ApiModels.xml");
+        IncludeXmlCommentsIfPresent(options, "api.PublicApiContracts.xml");
 
         // Setup OAuth login for Swagger UI
         var authorityUrl = _configuration.GetSection("keycloak")["authority"] ?? throw new InvalidOperationException("Could not get authority url from configuration.");
@@ -97,6 +99,15 @@ public class SwaggerConfiguration : IConfigureNamedOptions<SwaggerGenOptions>
             }
 
             options.SwaggerDoc(apiVersionDescription.GroupName, openApiInfo);
+        }
+    }
+
+    private static void IncludeXmlCommentsIfPresent(SwaggerGenOptions options, string xmlFileName)
+    {
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+        if (File.Exists(xmlPath))
+        {
+            options.IncludeXmlComments(xmlPath);
         }
     }
 }
