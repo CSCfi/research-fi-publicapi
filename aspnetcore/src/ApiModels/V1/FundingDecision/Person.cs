@@ -19,4 +19,9 @@ public class Person
     /// Last name of the person
     /// </summary>
     public string? LastName { get; set; }
+
+    /// <summary>
+    /// True if this person is the directly funded party in the funding decision
+    /// </summary>
+    public bool FundedPerson { get; set; }
 }
