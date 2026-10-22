@@ -45,6 +45,8 @@ public partial class FactContribution
 
     public int DimResearchProjectId { get; set; }
 
+    public int FactOrganizationGeneralId { get; set; }
+
     public virtual DimDate DimDate { get; set; } = null!;
 
     public virtual DimFundingDecision DimFundingDecision { get; set; } = null!;
@@ -72,4 +74,6 @@ public partial class FactContribution
     public virtual DimResearchDataCatalog DimResearchDataCatalog { get; set; } = null!;
 
     public virtual DimResearchDataset DimResearchDataset { get; set; } = null!;
+
+    public virtual FactOrganizationGeneral FactOrganizationGeneral { get; set; } = null!;
 }

@@ -69,8 +69,6 @@ public partial class DimOrganization
 
     public virtual ICollection<DimAffiliation> DimAffiliations { get; set; } = new List<DimAffiliation>();
 
-    public virtual ICollection<DimExternalService> DimExternalServices { get; set; } = new List<DimExternalService>();
-
     public virtual ICollection<DimFundingDecision> DimFundingDecisions { get; set; } = new List<DimFundingDecision>();
 
     public virtual ICollection<DimIdentifierlessDatum> DimIdentifierlessData { get; set; } = new List<DimIdentifierlessDatum>();
@@ -85,8 +83,6 @@ public partial class DimOrganization
 
     public virtual ICollection<DimProfileOnlyResearchActivity> DimProfileOnlyResearchActivities { get; set; } = new List<DimProfileOnlyResearchActivity>();
 
-    public virtual ICollection<DimPurpose> DimPurposes { get; set; } = new List<DimPurpose>();
-
     public virtual DimRegisteredDataSource DimRegisteredDataSource { get; set; } = null!;
 
     public virtual ICollection<DimRegisteredDataSource> DimRegisteredDataSources { get; set; } = new List<DimRegisteredDataSource>();
@@ -100,6 +96,8 @@ public partial class DimOrganization
     public virtual ICollection<DimWebLink> DimWebLinks { get; set; } = new List<DimWebLink>();
 
     public virtual ICollection<FactContribution> FactContributions { get; set; } = new List<FactContribution>();
+
+    public virtual ICollection<FactOrganizationGeneral> FactOrganizationGenerals { get; set; } = new List<FactOrganizationGeneral>();
 
     public virtual ICollection<FactUpkeep> FactUpkeeps { get; set; } = new List<FactUpkeep>();
 
