@@ -44,13 +44,13 @@ Run every command from `aspnetcore/`.
    git diff --ignore-cr-at-eol --stat
    ```
 
-3. Confirm no credentials were written. Expect no output.
+3. Confirm no credentials were written to generated C# source. Limit the scan to `.cs` files so the illustrative connection-string example in `readme.md` is ignored. Expect no output.
 
    ```
-   grep -rn -i "password\|OnConfiguring" src/DatabaseContext || true
+   grep -rn -i --include='*.cs' "password\|OnConfiguring" src/DatabaseContext || true
    ```
 
-   If anything is printed, stop, report the file and line without repeating the matched value, and ask the user how to proceed.
+   If anything is printed, stop, report the file and line without repeating the matched value, and ask the user how to proceed. Do not ask about matches in documentation examples; they are excluded from this scan.
 
 4. Build.
 
