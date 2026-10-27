@@ -16,5 +16,5 @@ public static class ApiConstants
     public const string LogResourceType_Publication = "publication";
     public const string LogResourceType_ResearchDataset = "research_dataset";
     public const string LogResourceType_Funder = "funder";
-    public const string LogResourceType_Person = "person";
+    public const string LogResourceType_Profile = "profile";
 }

@@ -39,9 +39,9 @@ public static class ApiPolicies
         public const string Write = "FunderWrite";
     };
 
-    public static class Person
+    public static class Profile
     {
-        public const string Read = "PersonRead";
+        public const string Read = "ProfileRead";
     };
 
     /// <summary>
@@ -58,6 +58,6 @@ public static class ApiPolicies
         [Publication.Read] = "publication-read",
         [Funder.Read] = "funder-read",
         [Funder.Write] = "funder-write",
-        [Person.Read] = "person-read"
+        [Profile.Read] = "person-read"
     };
 }

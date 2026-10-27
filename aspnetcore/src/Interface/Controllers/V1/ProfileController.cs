@@ -15,36 +15,46 @@ namespace CSC.PublicApi.Interface.Controllers;
 
 [ApiController]
 [ApiVersion(ApiVersion)]
-[Route("v{version:apiVersion}/persons")]
-public class PersonController : ControllerBase
+[Route("v{version:apiVersion}/profiles")]
+public class ProfileController : ControllerBase
 {
     private const string ApiVersion = ApiConstants.ApiVersion1;
-    private readonly ILogger<PersonController> _logger;
+    private readonly ILogger<ProfileController> _logger;
     private readonly IDiagnosticContext _diagnosticContext;
     private readonly IPersonBackendClient _personBackendClient;
 
-    public PersonController(ILogger<PersonController> logger, IDiagnosticContext diagnosticContext, IPersonBackendClient personBackendClient)
+    public ProfileController(ILogger<ProfileController> logger, IDiagnosticContext diagnosticContext, IPersonBackendClient personBackendClient)
     {
         _logger = logger;
         _diagnosticContext = diagnosticContext;
         _personBackendClient = personBackendClient;
-        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Person);
+        _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Profile);
     }
 
     /// <summary>
-    /// Search persons via the person backend. Response contract is not yet defined.
+    /// Search profiles via the person backend. Response contract is not yet defined.
     /// </summary>
     /// <param name="request">Request forwarded to the person backend.</param>
-    [HttpPost(Name = "PostPerson")]
-    [Authorize(Policy = ApiPolicies.Person.Read)]
+    [HttpPost(Name = "PostProfile")]
+    [Authorize(Policy = ApiPolicies.Profile.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(ProfileDataResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> PostPerson([FromBody] ProfileDataRequest request)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> PostProfile([FromBody] ProfileDataRequest request)
     {
         var clientId = HttpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
-        var result = await _personBackendClient.SearchPersonsAsync(request, clientId, HttpContext.RequestAborted);
-        return Ok(result);
+        var (response, errorStatusCode, errorContent, errorContentType) = await _personBackendClient.SearchPersonsAsync(request, clientId, HttpContext.RequestAborted);
+        if (errorStatusCode.HasValue)
+        {
+            return new ContentResult
+            {
+                StatusCode = (int)errorStatusCode.Value,
+                Content = errorContent,
+                ContentType = errorContentType
+            };
+        }
+
+        return Ok(response);
     }
 }
-
