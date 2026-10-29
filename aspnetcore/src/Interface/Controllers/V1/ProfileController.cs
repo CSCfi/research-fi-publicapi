@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CSC.PublicApi.Interface.Services;
-// ProfileDataRequest/ProfileDataResponse (namespace ResearchFi.PersonPublicApi) ship in the
+// ProfileDataRequest/ProfileDataResponse (namespace ResearchFi.ProfilePublicApi) ship in the
 // CSC.ResearchFi.Mydata.PublicApiContracts NuGet package, sourced from the Mydata API repo's
 // api.PublicApiContracts project. No package feed yet: to update, that repo bumps its version,
 // runs `dotnet pack`, hands over the .nupkg, and we drop it into packages/ and bump the
 // <PackageReference> version in Interface.csproj, then run `dotnet restore PublicApi.sln` (from
 // aspnetcore/) to pick it up. Reusing the same version number instead requires
 // `dotnet nuget locals global-packages --clear` first, since NuGet caches by id+version.
-using ResearchFi.PersonPublicApi;
+using ResearchFi.ProfilePublicApi;
 using Serilog;
 
 namespace CSC.PublicApi.Interface.Controllers;

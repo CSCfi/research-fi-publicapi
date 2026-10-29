@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSC.PublicApi.Interface.Services;
 using Microsoft.Extensions.Logging.Abstractions;
-using ResearchFi.PersonPublicApi;
+using ResearchFi.ProfilePublicApi;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests.Services;

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using ResearchFi.PersonPublicApi;
+using ResearchFi.ProfilePublicApi;
 using Serilog;
 using Xunit;
 

@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using ResearchFi.PersonPublicApi;
+using ResearchFi.ProfilePublicApi;
 
 namespace CSC.PublicApi.Interface.Services;
 

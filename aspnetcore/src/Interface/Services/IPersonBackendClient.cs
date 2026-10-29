@@ -1,5 +1,5 @@
 using System.Net;
-using ResearchFi.PersonPublicApi;
+using ResearchFi.ProfilePublicApi;
 
 namespace CSC.PublicApi.Interface.Services;
 
