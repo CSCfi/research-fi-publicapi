@@ -6,6 +6,7 @@ using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.Interface;
 using CSC.PublicApi.Interface.Configuration;
 using CSC.PublicApi.Interface.Middleware;
+using CSC.PublicApi.Interface.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -82,6 +83,14 @@ builder.Services.Scan(scan =>
         .AddClasses()
         .AsMatchingInterface()
         .WithScopedLifetime());
+
+// Typed HttpClient for calling the profile backend; registered after Scrutor so it takes precedence.
+builder.Services.AddHttpClient<IProfileBackendClient, ProfileBackendClient>((sp, client) =>
+{
+    var settings = sp.GetRequiredService<ProfileBackendSettings>();
+    client.BaseAddress = new Uri(settings.BaseUrl);
+    client.DefaultRequestHeaders.Add("publicapitoken", settings.PublicApiToken);
+});
 
 // Configure authentication and authorization.
 builder.Services.AddAuthentication(builder.Configuration);

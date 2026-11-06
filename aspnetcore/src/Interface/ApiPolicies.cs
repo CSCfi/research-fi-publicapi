@@ -39,6 +39,11 @@ public static class ApiPolicies
         public const string Write = "FunderWrite";
     };
 
+    public static class Profile
+    {
+        public const string Read = "ProfileRead";
+    };
+
     /// <summary>
     /// Maps policies with their required roles.
     /// </summary>
@@ -52,6 +57,7 @@ public static class ApiPolicies
         [ResearchDataset.Read] = "research-dataset-read",
         [Publication.Read] = "publication-read",
         [Funder.Read] = "funder-read",
-        [Funder.Write] = "funder-write"
+        [Funder.Write] = "funder-write",
+        [Profile.Read] = "profile-read"
     };
 }
