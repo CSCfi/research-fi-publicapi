@@ -58,6 +58,6 @@ public static class ApiPolicies
         [Publication.Read] = "publication-read",
         [Funder.Read] = "funder-read",
         [Funder.Write] = "funder-write",
-        [Profile.Read] = "person-read"
+        [Profile.Read] = "profile-read"
     };
 }

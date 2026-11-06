@@ -10,21 +10,21 @@ using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests.Services;
 
-public class PersonBackendClientTest
+public class ProfileBackendClientTest
 {
     [Fact]
-    public async Task SearchPersonsAsync_WhenBackendReturnsBadRequest_ReturnsErrorStatusCode()
+    public async Task SearchProfilesAsync_WhenBackendReturnsBadRequest_ReturnsErrorStatusCode()
     {
         using var httpClient = new HttpClient(new StubHttpMessageHandler(
             HttpStatusCode.BadRequest,
             "A request body is required.",
             "text/plain"))
         {
-            BaseAddress = new Uri("https://person-backend.example/")
+            BaseAddress = new Uri("https://profile-backend.example/")
         };
-        var client = new PersonBackendClient(httpClient, NullLogger<PersonBackendClient>.Instance);
+        var client = new ProfileBackendClient(httpClient, NullLogger<ProfileBackendClient>.Instance);
 
-        var (response, errorStatusCode, errorContent, errorContentType) = await client.SearchPersonsAsync(null!, null);
+        var (response, errorStatusCode, errorContent, errorContentType) = await client.SearchProfilesAsync(null!, null);
 
         Assert.Null(response);
         Assert.Equal(HttpStatusCode.BadRequest, errorStatusCode);

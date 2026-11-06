@@ -21,20 +21,20 @@ public class ProfileController : ControllerBase
     private const string ApiVersion = ApiConstants.ApiVersion1;
     private readonly ILogger<ProfileController> _logger;
     private readonly IDiagnosticContext _diagnosticContext;
-    private readonly IPersonBackendClient _personBackendClient;
+    private readonly IProfileBackendClient _profileBackendClient;
 
-    public ProfileController(ILogger<ProfileController> logger, IDiagnosticContext diagnosticContext, IPersonBackendClient personBackendClient)
+    public ProfileController(ILogger<ProfileController> logger, IDiagnosticContext diagnosticContext, IProfileBackendClient profileBackendClient)
     {
         _logger = logger;
         _diagnosticContext = diagnosticContext;
-        _personBackendClient = personBackendClient;
+        _profileBackendClient = profileBackendClient;
         _diagnosticContext.Set(ApiConstants.LogResourceType_PropertyName, ApiConstants.LogResourceType_Profile);
     }
 
     /// <summary>
-    /// Search profiles via the person backend. Response contract is not yet defined.
+    /// Access Research.fi profiles.
     /// </summary>
-    /// <param name="request">Request forwarded to the person backend.</param>
+    /// <param name="request">Profile data request.</param>
     [HttpPost(Name = "PostProfile")]
     [Authorize(Policy = ApiPolicies.Profile.Read)]
     [Produces(ApiConstants.ContentTypeJson)]
@@ -44,7 +44,7 @@ public class ProfileController : ControllerBase
     public async Task<IActionResult> PostProfile([FromBody] ProfileDataRequest request)
     {
         var clientId = HttpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
-        var (response, errorStatusCode, errorContent, errorContentType) = await _personBackendClient.SearchPersonsAsync(request, clientId, HttpContext.RequestAborted);
+        var (response, errorStatusCode, errorContent, errorContentType) = await _profileBackendClient.SearchProfilesAsync(request, clientId, HttpContext.RequestAborted);
         if (errorStatusCode.HasValue)
         {
             return new ContentResult

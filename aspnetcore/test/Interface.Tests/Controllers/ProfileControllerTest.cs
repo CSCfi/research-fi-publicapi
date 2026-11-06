@@ -16,11 +16,11 @@ namespace CSC.PublicApi.Interface.Tests.Controllers;
 public class ProfileControllerTest
 {
     [Fact]
-    public async Task PostProfile_WhenPersonBackendReturnsBadRequest_ReturnsBadRequest()
+    public async Task PostProfile_WhenProfileBackendReturnsBadRequest_ReturnsBadRequest()
     {
-        var personBackendClient = new Mock<IPersonBackendClient>();
-        personBackendClient
-            .Setup(client => client.SearchPersonsAsync(
+        var profileBackendClient = new Mock<IProfileBackendClient>();
+        profileBackendClient
+            .Setup(client => client.SearchProfilesAsync(
                 It.IsAny<ProfileDataRequest>(),
                 It.IsAny<string?>(),
                 It.IsAny<CancellationToken>()))
@@ -33,7 +33,7 @@ public class ProfileControllerTest
         var controller = new ProfileController(
             NullLogger<ProfileController>.Instance,
             new Mock<IDiagnosticContext>().Object,
-            personBackendClient.Object);
+            profileBackendClient.Object);
         controller.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()

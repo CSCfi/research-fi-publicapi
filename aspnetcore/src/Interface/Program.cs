@@ -84,10 +84,10 @@ builder.Services.Scan(scan =>
         .AsMatchingInterface()
         .WithScopedLifetime());
 
-// Typed HttpClient for calling the person backend; registered after Scrutor so it takes precedence.
-builder.Services.AddHttpClient<IPersonBackendClient, PersonBackendClient>((sp, client) =>
+// Typed HttpClient for calling the profile backend; registered after Scrutor so it takes precedence.
+builder.Services.AddHttpClient<IProfileBackendClient, ProfileBackendClient>((sp, client) =>
 {
-    var settings = sp.GetRequiredService<PersonBackendSettings>();
+    var settings = sp.GetRequiredService<ProfileBackendSettings>();
     client.BaseAddress = new Uri(settings.BaseUrl);
     client.DefaultRequestHeaders.Add("publicapitoken", settings.PublicApiToken);
 });

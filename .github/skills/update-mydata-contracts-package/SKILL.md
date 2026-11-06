@@ -1,11 +1,11 @@
 ---
 name: update-mydata-contracts-package
-description: "Use when updating, bumping, or replacing the CSC.ResearchFi.Mydata.PublicApiContracts NuGet package (ProfileDataRequest/ProfileDataResponse, namespace ResearchFi.PersonPublicApi, used by PersonController), or when a new .nupkg from the Mydata API repo is handed over."
+description: "Use when updating, bumping, or replacing the CSC.ResearchFi.Mydata.PublicApiContracts NuGet package (ProfileDataRequest/ProfileDataResponse, namespace ResearchFi.ProfilePublicApi, used by ProfileController), or when a new .nupkg from the Mydata API repo is handed over."
 ---
 
 # Update CSC.ResearchFi.Mydata.PublicApiContracts
 
-The package provides `ProfileDataRequest`/`ProfileDataResponse` (namespace `ResearchFi.PersonPublicApi`) for `PersonController`. It is built from the `api.PublicApiContracts` project in the Mydata API repo. There is no package feed; the package is a local `.nupkg` in `packages/`, resolved through the `Local` source in `aspnetcore/nuget.config`.
+The package provides `ProfileDataRequest`/`ProfileDataResponse` (namespace `ResearchFi.ProfilePublicApi`) for `ProfileController`. It is built from the `api.PublicApiContracts` project in the Mydata API repo. There is no package feed; the package is a local `.nupkg` in `packages/`, resolved through the `Local` source in `aspnetcore/nuget.config`.
 
 ## Procedure
 
@@ -18,7 +18,7 @@ The package provides `ProfileDataRequest`/`ProfileDataResponse` (namespace `Rese
    dotnet build PublicApi.sln /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
    dotnet test
    ```
-5. Fix any compile errors in consumers (`PersonController`, `IPersonBackendClient` and its implementation, tests) caused by contract changes.
+5. Fix any compile errors in consumers (`ProfileController`, `IProfileBackendClient` and its implementation, tests) caused by contract changes.
 
 ## Reusing the same version number
 

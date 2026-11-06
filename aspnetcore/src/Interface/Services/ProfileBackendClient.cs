@@ -4,18 +4,18 @@ using ResearchFi.ProfilePublicApi;
 
 namespace CSC.PublicApi.Interface.Services;
 
-public class PersonBackendClient : IPersonBackendClient
+public class ProfileBackendClient : IProfileBackendClient
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<PersonBackendClient> _logger;
+    private readonly ILogger<ProfileBackendClient> _logger;
 
-    public PersonBackendClient(HttpClient httpClient, ILogger<PersonBackendClient> logger)
+    public ProfileBackendClient(HttpClient httpClient, ILogger<ProfileBackendClient> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
     }
 
-    public async Task<(ProfileDataResponse? Response, HttpStatusCode? ErrorStatusCode, string? ErrorContent, string? ErrorContentType)> SearchPersonsAsync(ProfileDataRequest request, string? clientId, CancellationToken cancellationToken = default)
+    public async Task<(ProfileDataResponse? Response, HttpStatusCode? ErrorStatusCode, string? ErrorContent, string? ErrorContentType)> SearchProfilesAsync(ProfileDataRequest request, string? clientId, CancellationToken cancellationToken = default)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "api/publicapi/profile")
         {
@@ -28,7 +28,7 @@ public class PersonBackendClient : IPersonBackendClient
         using var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogWarning("Person backend request failed with status code {StatusCode}", response.StatusCode);
+            _logger.LogWarning("Profile backend request failed with status code {StatusCode}", response.StatusCode);
             var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
             var errorContentType = response.Content.Headers.ContentType?.ToString();
             return (null, response.StatusCode, errorContent, errorContentType);
