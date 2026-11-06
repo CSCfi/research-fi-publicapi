@@ -41,6 +41,7 @@ public class ProfileController : ControllerBase
     [Consumes(ApiConstants.ContentTypeJson)]
     [ProducesResponseType(typeof(ProfileDataResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ApiExplorerSettings(IgnoreApi = true)] // Hidden
     public async Task<IActionResult> PostProfile([FromBody] ProfileDataRequest request)
     {
         var clientId = HttpContext.User?.Claims.FirstOrDefault(claim => claim.Type == "clientId")?.Value;
