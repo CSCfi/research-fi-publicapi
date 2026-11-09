@@ -120,12 +120,17 @@ Add these options to a filtered test command to collect coverage and test result
 ```
 
 CI runs the service-free lane and separate Elasticsearch/SQL Server jobs. Integration
-jobs upload TRX and coverage artifacts even on test failure. Their Linux CI execution
-and repeated-run stability must be verified before making them required branch checks.
-The maintainer will commit/push and run CI. Phase 3 implementation is complete with
-accepted exceptions, but CI acceptance remains open: retain evidence of at least ten
-consecutive clean Elasticsearch runs and parallel isolation, plus repeated clean SQL
-runs on Linux x86-64. See the [Phase 3 close-out](../../plans/test-coverage-improvement-plan.md#close-out-decisions-and-ci-handoff-2026-11-09).
+jobs upload TRX and coverage artifacts even on test failure. The agreed stability
+gate is three consecutive successful CI runs of both integration lanes, with
+separate parallel-isolation evidence, before making the checks required. This
+replaces the original ten-run proposal.
+
+On 2026-11-09, the maintainer reported three successful CI runs after pushing the
+changes and opening a PR. Together with the earlier local parallel-isolation tests,
+this completes Phase 3 with accepted exceptions. Sequential CI reruns do not
+themselves test parallel isolation. Continue monitoring subsequent PRs for
+intermittent failures; required branch-check settings are managed separately.
+See the [Phase 3 close-out](../../plans/test-coverage-improvement-plan.md#close-out-decisions-and-ci-handoff-2026-11-09).
 
 Do not run coverage collection concurrently with another test process using the
 same build output: Coverlet instruments those assemblies and can cause metadata

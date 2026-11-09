@@ -121,11 +121,17 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 
 ### Phase 3 - Recover inactive scenarios safely (P1, 3-5 days)
 
+**Status: Complete with accepted exceptions (2026-11-09).** The maintainer
+reported three successful CI runs after pushing the changes and opening a PR.
+The agreed stability gate is three runs, replacing the original conservative
+ten-run proposal. Parallel isolation was verified locally, not by sequential CI
+reruns. Monitor subsequent PRs for intermittent failures.
+
 **Dependencies:** phase 2; fixture/provisioning work can proceed independently for Elasticsearch and SQL Server.
 
 #### Elasticsearch search recovery
 
-- [ ] Run the Testcontainers-backed Elasticsearch 8.19.22 lane successfully at least ten consecutive times on a clean CI environment, including parallel-isolation checks, before making it required.
+- [x] Run the Testcontainers-backed Elasticsearch 8.19.22 lane successfully three consecutive times in CI, with separate local parallel-isolation evidence. Maintainer-reported CI results satisfy the revised gate; required-check configuration is a separate repository setting.
 - [x] Seed synthetic documents through the production `AutoMap` mapping, with unique test-owned index names and host configuration; explicitly refresh before searching.
 - [x] Replace the ten skipped GET theories with active tests on current routes/public response types; remove unnecessary `ApiDbContext` resolution.
 - [x] Preserve representative name/funder/business-ID/category/date/type-of-funding cases using current parameter names and query boundaries.
@@ -142,19 +148,22 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 - [x] Run funding-call relational queries against an isolated SQL Server database; supply required reference/sentinel rows and relationships explicitly. No production records or credentials are used.
 - [x] Extend the initial SQL schema and relational query coverage to funding decisions, including EU/PIC consortium eligibility.
 - [x] Record the maintainer-approved null-timestamp exception (P3-TIME below). Nullable database `created`/`modified` projected to non-nullable model timestamps produces SQL error 242; characterization tests preserve evidence without changing production behavior.
-- [ ] Verify the new SQL Server CI lane on Linux x86-64 and observe repeated clean CI runs before making it required.
+- [x] Verify the new SQL Server CI lane on Linux x86-64 with repeated clean runs: the maintainer reported three successful CI runs.
 - [x] Add synthetic publication relationship mapping coverage for parent/child IDs and organization/co-publication flags, plus post-processing coverage for duplicate contribution references.
 - [x] Complete publication post-processing coverage for missing relationships and remove the obsolete commented mapping examples.
 - [x] Replace commented V2 Swagger code with assertions of its intended non-published behavior; the V1 path matrix continues to assert intentionally hidden paths remain absent.
 - [x] Resolve funding-call POST: the maintainer confirmed only GET is supported. Remove the unsupported no-op POST and service method; replace the skipped persistence case with HTTP 405 checks for anonymous, authenticated, and role-bearing callers, and assert Swagger publishes only GET.
 
-**Progress (2026-11-09):** both service lanes use Testcontainers with dynamically assigned ports, independently owned containers, and synthetic data. Elasticsearch remains pinned to the maintainer-confirmed 8.19.22 image, with two organization searches deferred for separate production review. Its fixture now provisions all seven indices, including five synthetic publications and three services, and verifies exact seeded counts. The 32 new publication/service cases cover combined and nested filters, correlated author names, exact identifiers, publication visibility/detail and missing IDs, year boundaries, stable ordering, and pagination totals. The disabled infrastructure-service detail route remains unchanged. The SQL Server 2022 CU27 fixture applies versioned, minimal funding-call and funding-decision schemas derived from the approved scaffolded mappings; it does not use `EnsureCreated` or developer databases. Four funding-call cases cover eligibility, dates/sentinels, split-query relationships, language/type-specific links, and source-row chunk boundaries. Eight funding-decision cases cover EU/PIC eligibility (including funder-only/unrelated PIC and wrong PID-type counterexamples), domestic/null sources, multiple PICs and mixed consortium membership, self/parent contributors, programme ancestors, projection/enrichment, and paging. Two of those eight characterize existing failures for null `created`/`modified` timestamps using rolled-back transactions; timestamp production behavior is unchanged. Both integration CI lanes collect TRX/coverage. [Test documentation](../aspnetcore/test/README.md) records setup, cleanup, schema scope, and platform/tooling limitations. Publication relationship and API scenario recovery are complete. The close-out below records the accepted defect exceptions and resolved GET-only funding-call contract; Linux CI observation remains open.
+ both service lanes use Testcontainers with dynamically assigned ports, independently owned containers, and synthetic data. Elasticsearch remains pinned to the maintainer-confirmed 8.19.22 image, with two organization searches deferred for separate production review. Its fixture now provisions all seven indices, including five synthetic publications and three services, and verifies exact seeded counts. The 32 new publication/service cases cover combined and nested filters, correlated author names, exact identifiers, publication visibility/detail and missing IDs, year boundaries, stable ordering, and pagination totals. The disabled infrastructure-service detail route remains unchanged. The SQL Server 2022 CU27 fixture applies versioned, minimal funding-call and funding-decision schemas derived from the approved scaffolded mappings; it does not use `EnsureCreated` or developer databases. Four funding-call cases cover eligibility, dates/sentinels, split-query relationships, language/type-specific links, and source-row chunk boundaries. Eight funding-decision cases cover EU/PIC eligibility (including funder-only/unrelated PIC and wrong PID-type counterexamples), domestic/null sources, multiple PICs and mixed consortium membership, self/parent contributors, programme ancestors, projection/enrichment, and paging. Two of those eight characterize existing failures for null `created`/`modified` timestamps using rolled-back transactions; timestamp production behavior is unchanged. Both integration CI lanes collect TRX/coverage. [Test documentation](../aspnetcore/test/README.md) records setup, cleanup, schema scope, and platform/tooling limitations. Publication relationship and API scenario recovery are complete. The close-out below records the accepted defect exceptions and resolved GET-only funding-call contract; Linux CI observation remains open.
 
 **Validation (2026-11-09):** the service-free solution lane passed with 78 passed, 1 intentionally skipped POST, and 0 failed. The expanded Elasticsearch lane passed with 41 passed and 2 deferred organization skips, both with CI's coverage/TRX options and in two concurrent non-coverage processes using distinct containers; all test-owned Elasticsearch containers were removed. All 12 SQL Server integration cases previously passed with CI's coverage/TRX options and in two concurrent non-coverage processes, with cleanup verified. An initial SQL concurrency attempt overlapped Coverlet instrumentation of shared DLLs with another run and caused `BadImageFormatException` in that run; rerunning isolation without concurrent instrumentation passed. The local Docker host is ARM64 using x86-64 emulation, not an officially supported SQL Server platform, so Linux x86-64 CI validation remains outstanding. Workflow YAML previously parsed with Ruby's standard parser; the local Python interpreter is missing `libintl`. `git diff --check` passed.
 
+The progress and local-validation notes above describe the pre-CI state. The
+close-out below supersedes their outstanding-CI statements.
+
 #### Close-out decisions and CI handoff (2026-11-09)
 
-**Implementation is complete with accepted exceptions; CI acceptance remains pending.**
+**Phase 3 is complete with accepted exceptions and maintainer-reported CI acceptance.**
 The maintainer explicitly retained the organization and timestamp defects for separate
 production review and confirmed that funding calls support only GET. Removing the
 unsupported no-op POST is the only production behavior change in this close-out;
@@ -164,12 +173,13 @@ GET, export, and their authorization policies are unchanged.
 | --- | --- | --- |
 | P3-ORG | Accepted exception: the two organization integration cases stay skipped because query field names do not match the production mapping. This does not certify organization search as working. Fix and reactivate both cases in a separately reviewed production change. | Repository maintainers; revisit before Phase 4 acceptance. |
 | P3-TIME | Accepted exception: null funding-decision timestamps still cause SQL error 242. The two transaction-isolated characterization cases remain active; no fallback timestamp contract is invented. Agree the model/source contract before fixing it. | Repository maintainers; revisit before Phase 4 acceptance. |
-| P3-CI | Open validation gate: run both integration jobs on Linux x86-64, observe at least ten consecutive clean Elasticsearch CI runs, and retain parallel-isolation evidence. Observe repeated clean SQL CI runs before requiring either check. | Maintainer performing the commit/push; complete before enabling required branch checks. |
+| P3-CI | Closed under the revised three-run gate: the maintainer reported three successful CI runs. Both integration lanes passed in Linux CI; parallel-isolation evidence comes from the earlier local runs. Continue observing subsequent PRs. | Repository maintainers; monitor intermittent failures. Required-check settings have not been changed by this work. |
 
-No commit, push, workflow dispatch, or branch-protection change is performed here.
-The existing PR workflow runs the service-free and both isolated integration lanes
-after the maintainer commits/pushes these changes to a PR targeting `devel` or `main`.
-Local results are not a substitute for the outstanding Linux CI evidence.
+The maintainer committed/pushed the implementation and opened a PR, then reported
+three successful CI runs. These are maintainer-reported results, not independently
+retrieved run logs. The original ten-run proposal was reduced to three as a
+proportionate repeatability check, not a statistical guarantee of reliability.
+No branch-protection change is performed here.
 
 **Close-out validation:** 14 targeted tests passed, with no failures or skips,
 covering POST rejection, Swagger visibility, funding-call controller pagination,
@@ -177,7 +187,7 @@ and isolated host authentication/service registration. Earlier full-lane counts
 above predate the replacement of the skipped POST case and addition of the GET-only
 Swagger test; they are retained as historical measurements, not new suite totals.
 
-**Acceptance:** all remaining inactive scenarios have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). The Elasticsearch lane passes its enabled synthetic fixture scenarios; organization searches remain explicitly deferred under P3-ORG. Funding-call POST is retired and rejected with 405 rather than returning no-op success. Failed setup is not reported as a successful/empty integration run. Full CI acceptance is not claimed until P3-CI is satisfied.
+**Acceptance met with exceptions:** all remaining inactive scenarios have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). The Elasticsearch lane passes its enabled synthetic fixture scenarios; organization searches remain explicitly deferred under P3-ORG. Funding-call POST is retired and rejected with 405 rather than returning no-op success. Failed setup is not reported as a successful/empty integration run. P3-CI is satisfied by the maintainer-reported results under the revised gate; P3-ORG and P3-TIME remain accepted exceptions for review before Phase 4 acceptance.
 
 ### Phase 4 - Expand high-risk branch and contract coverage (P1/P2, 4-6 days)
 
@@ -206,7 +216,7 @@ Swagger test; they are retained as historical measurements, not new suite totals
 - [ ] Upload per-lane TRX, service logs on failure, and coverage reports even when tests fail. A final report job must not hide a failed prerequisite job.
 - [ ] Set the measured per-assembly line/branch baseline as the initial no-regression floor; review denominator changes explicitly. Include assembly-level output so a large mapping suite cannot mask untested index/search logic.
 - [ ] Proposed steady-state target: at least 80% line and 70% branch coverage on changed handwritten logic, with reviewed exceptions for tiny/uninstrumentable changes. Establish collection/merge/diff tooling and an observation period before enforcing these targets; do not invent an achievable repository-wide percentage before phase 1.
-- [ ] Run each new integration lane successfully at least ten consecutive times on a clean CI environment, including parallel-isolation checks, before making it required. During observation, keep failures visible and owned, never silently skipped.
+- [x] Observe three consecutive successful CI runs of each integration lane, with separate parallel-isolation evidence, before making it required (revised Phase 3 gate, satisfied by maintainer-reported CI results and local isolation tests). Continue monitoring subsequent PRs; keep failures visible and owned, never silently skipped.
 - [ ] Give every remaining quarantine/skip a reason, owner, tracking reference, and review date; disallow new unconditional skips or commented-out tests without that disposition.
 - [ ] Add test documentation under the existing test tree covering tier filters, coverage commands, fixture provisioning, supported service versions, cleanup, troubleshooting, and platform limitations.
 
