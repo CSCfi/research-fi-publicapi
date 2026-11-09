@@ -1,4 +1,4 @@
-Status: Draft
+Status: In progress
 2026-11-09
 
 # Test coverage improvement plan
@@ -7,19 +7,46 @@ Status: Draft
 
 Make existing tests trustworthy, recover useful disabled scenarios, and add risk-focused coverage across the SQL Server -> repositories -> indexer -> Elasticsearch -> HTTP API pipeline.
 
-This is a plan only: do not enable tests, change application behavior, or introduce infrastructure as part of this document. Preserve authorization policies, intentionally hidden endpoints, V2 documentation visibility, and current public contracts. Any newly exposed application defect needs a focused regression test and a separately reviewed behavior change.
+This workstream does not authorize production behavior changes or external-service provisioning without the separate review described below. Preserve authorization policies, intentionally hidden endpoints, V2 documentation visibility, and current public contracts. Any newly exposed application defect needs a focused regression test and a separately reviewed behavior change.
 
 ## 1. Findings from source inspection
 
-No tests or coverage collection were executed for this plan. Passing/discovered test counts, runtime, and line/branch percentages must be measured in phase 1; source attribute counts are not runtime test-case counts.
+### Phase 1 baseline (2026-11-09)
+
+The initial baseline was captured before changing test or application code. Existing .NET 10 test and Coverlet packages successfully discovered and ran all projects and produced Cobertura reports, so no package upgrade was needed.
+
+| Test project | Listed test entries | Runtime cases | Passed | Failed | Skipped | TRX run duration |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Interface.Tests | 47 | 47 | 32 | 0 | 15 | 14.24s |
+| Indexer.Tests | 25 | 25 | 25 | 0 | 0 | 12.91s |
+| Repository.Tests | 7 | 7 | 7 | 0 | 0 | 3.10s |
+| **Total** | **79** | **79** | **64** | **0** | **15** | **30.25s** |
+
+Listed entries and runtime cases are reported separately so theory data expansion is visible; these measurements happened to match. The 15 skipped runtime cases correspond to the skipped methods in the inventory below; three commented-out scenarios remain undiscovered.
+
+Merged line coverage is calculated by source-line identity from Cobertura, and branch coverage by individual branch outcome from OpenCover; neither metric averages project percentages. `DatabaseContext/**/*.cs` is excluded as generated code; other production assemblies, including handwritten repositories and query generators, remain in scope.
+
+| Production assembly | Covered lines | Covered branches |
+| --- | ---: | ---: |
+| **Overall** | **2471/6535 (37.81%)** | **273/1504 (18.15%)** |
+| ApiModels | 234/505 (46.34%) | 6/14 (42.86%) |
+| CSC.PublicApi.ElasticService | 154/1383 (11.14%) | 23/632 (3.64%) |
+| CSC.PublicApi.Exporter | n/a (no instrumented lines) | n/a |
+| CSC.PublicApi.Indexer | 10/314 (3.18%) | 2/62 (3.23%) |
+| CSC.PublicApi.Interface | 534/1670 (31.98%) | 47/168 (27.98%) |
+| CSC.PublicApi.Logging | 0/171 (0.00%) | 0/42 (0.00%) |
+| CSC.PublicApi.Repositories | 1061/1957 (54.22%) | 156/536 (29.10%) |
+| CSC.PublicApi.Service.Models | 478/535 (89.35%) | 39/50 (78.00%) |
+
+No baseline test failures occurred. The generated CI report includes the 100 least-covered of 721 methods with uncovered lines and the full per-project results at `aspnetcore/TestResults/coverage-summary.md`.
 
 ### Existing foundation
 
 - [PublicApi.sln](../aspnetcore/PublicApi.sln) includes all three test projects: [Interface.Tests](../aspnetcore/test/Interface.Tests/Interface.Tests.csproj), [Indexer.Tests](../aspnetcore/test/Indexer.Tests/Indexer.Tests.csproj), and [Repository.Tests](../aspnetcore/test/Repository.Tests/Repository.Tests.csproj).
 - Tests use xUnit and FluentAssertions; Moq, WebApplicationFactory, an EF InMemory package, and an in-memory Elasticsearch transport are already available in Interface.Tests.
 - Active tests cover several mapping profiles, repository in-memory transformations, URL generation, index-name configuration, middleware, Swagger V1, and three index-rotation success paths. Profile controller/client tests currently cover one backend-400 scenario each.
-- [CI](../.github/workflows/dotnet.yml) restores, builds, and tests on PRs to `devel`/`main`, but does not collect coverage or upload test/coverage artifacts.
-- All three test projects reference `coverlet.collector`, but use older, differing collector/Test SDK versions. First verify compatibility with .NET 10; do not make a blanket test-framework migration a prerequisite.
+- [CI](../.github/workflows/dotnet.yml) restores, builds, records test discovery, collects coverage, and uploads reports on PRs to `devel`/`main`.
+- All three test projects reference `coverlet.collector`; existing versions were verified with .NET 10, so no Test SDK or collector upgrade was necessary.
 
 ### Inactive test inventory and disposition
 
@@ -67,13 +94,13 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 
 **Dependencies:** none.
 
-- [ ] Discover tests from the solution and record executed/passed/failed/skipped counts per project, with expanded theory counts distinguished from method counts.
-- [ ] Capture current failures before changing tests. Separate environment/configuration failures from assertion failures and .NET 10 tooling compatibility failures.
-- [ ] Collect Cobertura coverage using the existing collector. If collection/discovery fails due to package compatibility, make the smallest verified Test SDK/collector upgrade and rerun all three projects.
-- [ ] Add a shared runsettings file and CI artifact upload for TRX and coverage, including results on failed runs. Add a repository-local report/merge step only if needed; no third-party code-upload service.
-- [ ] Merge coverage from all test projects by covered source lines/branches, not by averaging percentages; shared production assemblies are exercised by multiple projects.
-- [ ] Publish overall and per-production-assembly line/branch coverage. Exclude test assemblies, build outputs, and scaffolded DatabaseContext code. Keep handwritten repositories, query generators, middleware, and orchestration included. Document any other generated-code exclusions narrowly.
-- [ ] Produce the ranked uncovered-method list, suite durations, and an explicit inactive-test disposition checklist based on section 1.
+- [x] Discover tests from the solution and record executed/passed/failed/skipped counts per project, with listed entries and runtime cases reported separately.
+- [x] Capture current failures before changing tests. No failures occurred; the existing skips are recorded above.
+- [x] Collect Cobertura coverage using the existing collector. Existing .NET 10 package versions worked without changes.
+- [x] Add a shared runsettings file and CI artifact upload for TRX and coverage, including results on failed runs. Add a repository-local report/merge step only if needed; no third-party code-upload service.
+- [x] Merge coverage from all test projects by covered source lines/branches, not by averaging percentages; shared production assemblies are exercised by multiple projects.
+- [x] Publish overall and per-production-assembly line/branch coverage. Exclude test assemblies, build outputs, and scaffolded DatabaseContext code. Keep handwritten repositories, query generators, middleware, and orchestration included. Document any other generated-code exclusions narrowly.
+- [x] Produce the ranked uncovered-method list, suite durations, and an explicit inactive-test disposition checklist based on section 1.
 
 **Acceptance:** reproducible discovery and coverage reports for all three projects; no empty report accepted as success; runtime percentages and unresolved failures are recorded without claiming an unmeasured baseline.
 
@@ -150,15 +177,17 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 
 ## 4. Validation commands for implementation
 
-Run from `aspnetcore/`. The project currently uses xUnit/VSTest; verify platform selection before changing tooling. Build first; the `--no-build` examples intentionally use current binaries.
+Run from `aspnetcore/`. The project currently uses xUnit/VSTest; verify platform selection before changing tooling. Build first; the `--no-build` examples intentionally use current binaries. Run each project separately so TRX and coverage output cannot overwrite one another.
 
 ```text
 dotnet build PublicApi.sln --no-restore
-dotnet test PublicApi.sln --no-build --list-tests
-dotnet test PublicApi.sln --no-build --logger trx --collect:"XPlat Code Coverage" --results-directory TestResults
+dotnet test test/Interface.Tests/Interface.Tests.csproj --no-build --settings test/coverage.runsettings --collect:"XPlat Code Coverage" --logger "trx;LogFileName=Interface.Tests.trx" --results-directory TestResults/Interface.Tests
+dotnet test test/Indexer.Tests/Indexer.Tests.csproj --no-build --settings test/coverage.runsettings --collect:"XPlat Code Coverage" --logger "trx;LogFileName=Indexer.Tests.trx" --results-directory TestResults/Indexer.Tests
+dotnet test test/Repository.Tests/Repository.Tests.csproj --no-build --settings test/coverage.runsettings --collect:"XPlat Code Coverage" --logger "trx;LogFileName=Repository.Tests.trx" --results-directory TestResults/Repository.Tests
+python3 test/coverage_report.py TestResults --source-root src --output TestResults/coverage-summary.md
 ```
 
-The initial baseline includes existing skips. After traits and the shared settings exist:
+Save each project's `--list-tests` output as `discovery.txt` in that project's results directory before generating the report. Use `py -3` instead of `python3` on Windows. The initial baseline includes existing skips. After traits and the shared settings exist:
 
 ```text
 dotnet test PublicApi.sln --no-build --filter "Category!=ElasticsearchIntegration&Category!=SqlServerIntegration" --settings test/coverage.runsettings --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults/fast

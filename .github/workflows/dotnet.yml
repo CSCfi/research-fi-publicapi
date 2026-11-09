@@ -25,5 +25,36 @@ jobs:
       run: dotnet build --no-restore
       working-directory: aspnetcore/
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        status=0
+        for project in Interface.Tests Indexer.Tests Repository.Tests; do
+          mkdir -p "TestResults/$project"
+          if ! dotnet test "test/$project/$project.csproj" \
+            --no-build \
+            --list-tests > "TestResults/$project/discovery.txt" 2>&1; then
+            status=1
+          fi
+          if ! dotnet test "test/$project/$project.csproj" \
+            --no-build \
+            --settings test/coverage.runsettings \
+            --collect:"XPlat Code Coverage" \
+            --logger "trx;LogFileName=$project.trx" \
+            --results-directory "TestResults/$project" \
+            --verbosity normal; then
+            status=1
+          fi
+        done
+        exit "$status"
       working-directory: aspnetcore/
+    - name: Generate test and coverage summary
+      if: always()
+      run: python3 test/coverage_report.py TestResults --source-root src --output TestResults/coverage-summary.md
+      working-directory: aspnetcore/
+    - name: Upload test and coverage reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dotnet-test-and-coverage
+        path: aspnetcore/TestResults/
+        if-no-files-found: warn
+        retention-days: 14
