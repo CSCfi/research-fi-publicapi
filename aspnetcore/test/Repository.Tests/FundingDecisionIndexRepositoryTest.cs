@@ -9,19 +9,24 @@ namespace Repository.Tests;
 
 public class FundingDecisionIndexRepositoryTest
 {
-    private readonly FundingDecisionIndexRepository _fundingDecisionIndexRepository;
-    
     /// <summary>
     /// Unit test for verifying the behavior of the <see cref="FundingDecisionIndexRepository.PerformInMemoryOperations"/> method.
     /// </summary>
     [Fact]
-    public void PerformInMemoryOperations_FundingCall_IsHandledCorrectly()
+    public void PerformInMemoryOperations_FundingDecision_EnrichesFundingReceiversAndConsortium()
     {
         // Arrange
-        var fundingDecisions = new List<object>
+        var fundingDecisionModel = GetModel();
+        fundingDecisionModel.OrganizationConsortia = new List<OrganizationConsortium>
         {
-            GetModel()
+            new()
+            {
+                OrganizationId = 345,
+                RoleInConsortium = "consortium member",
+                ShareOfFundingInEur = 345.67m
+            }
         };
+        var fundingDecisions = new List<object> { fundingDecisionModel };
         var memoryCache = new MemoryCache(new MemoryCacheOptions());
         var organization1 = new Organization
         {
@@ -51,14 +56,21 @@ public class FundingDecisionIndexRepositoryTest
                 }
             }
         };
+        var consortiumOrganization = new Organization
+        {
+            Id = 345,
+            OrganizationId = "consortium-organization",
+            NameFi = "Consortium organization"
+        };
         memoryCache.Set(MemoryCacheKeys.OrganizationById(123), organization1);
         memoryCache.Set(MemoryCacheKeys.OrganizationById(234), organization2);
+        memoryCache.Set(MemoryCacheKeys.OrganizationById(345), consortiumOrganization);
 
         // Initialize repository with memory cache
-        var _fundingDecisionIndexRepository = new FundingDecisionIndexRepository(null, null, memoryCache);
+        var repository = new FundingDecisionIndexRepository(null, null, memoryCache);
 
         // Act
-        var resultFundingDecisions = _fundingDecisionIndexRepository.PerformInMemoryOperations(fundingDecisions);
+        var resultFundingDecisions = repository.PerformInMemoryOperations(fundingDecisions);
         
         // Assert
         resultFundingDecisions.Should().NotBeNullOrEmpty();
@@ -95,6 +107,10 @@ public class FundingDecisionIndexRepositoryTest
         fundingDecision.FundingReceivers[1].Person.OrcId.Should().Be("funding group person 2 orcid");
         fundingDecision.FundingReceivers[1].RoleInFundingGroup.Should().Be("funding group person 2 role");
         fundingDecision.FundingReceivers[1].ShareOfFundingInEur.Should().Be(234.56m);
+        fundingDecision.FundingReceivers.Should().HaveCount(3);
+        fundingDecision.FundingReceivers[2].Organization.NameFi.Should().Be("Consortium organization");
+        fundingDecision.FundingReceivers[2].RoleInFundingGroup.Should().Be("consortium member");
+        fundingDecision.FundingReceivers[2].ShareOfFundingInEur.Should().Be(345.67m);
     
         // Check that CallProgramme are set correctly in SetCallProgrammes
         fundingDecision.CallProgrammes.Should().NotBeNullOrEmpty();

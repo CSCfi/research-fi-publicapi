@@ -50,19 +50,19 @@ No baseline test failures occurred. The generated CI report includes the 100 lea
 
 ### Inactive test inventory and disposition
 
-There are **15 explicitly skipped test methods**: ten GET theories, one POST fact, and four repository debugging facts. Three additional facts are inside block comments and therefore absent from discovery. Theory data can expand into multiple runtime cases.
+At baseline there were **15 explicitly skipped methods**: ten GET theories, one POST fact, and four repository debugging facts. The GET theories are now replaced by active synthetic Elasticsearch integration tests; the four obsolete repository debugging facts have been retired. One skipped POST remains, along with two obsolete publication mapping examples still inside block comments. The old V2 Swagger expectation has been replaced by an active test of its intentional non-publication.
 
 | Location | Inactive methods | Problem / proposed disposition |
 | --- | ---: | --- |
-| [FundingCallSystemTest](../aspnetcore/test/Interface.Tests/FundingCallSystemTest.cs) | 2 GET theories, 1 POST fact | GETs assume pre-existing Elasticsearch data and use the old `v1/FundingCall` route. Rewrite against seeded data and `v1/funding-calls`. Do not simply enable POST: the service's persistence code is commented out. |
-| [FundingDecisionSystemTest](../aspnetcore/test/Interface.Tests/FundingDecisionSystemTest.cs) | 2 GET theories | Old route, hard-coded real records, and deserialization into an internal service model. Use `v1/funding-decisions`, public API response models, and synthetic expected IDs. |
-| [InfrastructureSystemTest](../aspnetcore/test/Interface.Tests/InfrastructureSystemTest.cs) | 2 GET theories | Old route and a name predicate that unconditionally returns `true`. Replace with meaningful positive/negative assertions against `v1/infrastructures`. |
-| [OrganizationSystemTest](../aspnetcore/test/Interface.Tests/OrganizationSystemTest.cs) | 2 GET theories | Old route and live-data assumptions. Use seeded `v1/organizations` tests; keep the endpoint hidden from Swagger. |
-| [ResearchDatasetSystemTest](../aspnetcore/test/Interface.Tests/ResearchDatasetSystemTest.cs) | 2 GET theories | Old route and live-data assumptions. Rewrite for `v1/research-datasets`; cover V2 separately without publishing V2 Swagger. |
-| [FundingCallRepositorySystemTest](../aspnetcore/test/Interface.Tests/FundingCallRepositorySystemTest.cs) | 1 debugging fact | Placeholder record name, API-model repository type, and API-host coupling. Replace useful intent with an isolated repository test using the registered service-model type. |
-| [FundingDecisionRepositorySystemTest](../aspnetcore/test/Interface.Tests/FundingDecisionRepositorySystemTest.cs) | 3 debugging facts | Real record names/acronyms and weak assertions; also imports TestHost's `Program`. Extract consortium/enrichment requirements into deterministic repository tests and remove obsolete debugging scaffolding. |
-| [Indexer publication mapping tests](../aspnetcore/test/Indexer.Tests/Maps/PublicationProfileTest.cs) | 2 commented facts | Old co-/organization-publication expectations. Reconcile with current projection DTOs and repository post-processing, then restore scenarios at the appropriate layer rather than uncommenting outdated code. |
-| [SwaggerSystemTest](../aspnetcore/test/Interface.Tests/SwaggerSystemTest.cs) | 1 commented V2 fact | [Swagger configuration](../aspnetcore/src/Interface/Configuration/SwaggerConfiguration.cs) deliberately does not register V2. Replace with a test that V2 remains undocumented; do not enable its old successful-document expectation. |
+| [FundingCallSearchSystemTest](../aspnetcore/test/Interface.Tests/ElasticsearchSearchSystemTest.cs) | 2 recovered cases; POST retained separately | Replaced live-data GET theories with combined synthetic name/foundation/business-ID/category/date matching and an exact-business-ID negative control at `v1/funding-calls`. POST remains skipped pending API-owner decision. |
+| [FundingDecisionSearchSystemTest](../aspnetcore/test/Interface.Tests/ElasticsearchSearchSystemTest.cs) | 2 recovered cases | Replaced hard-coded/live-data expectations with a synthetic combined name/funder/project/type match and a negative type-of-funding control using the public response model. |
+| [InfrastructureSearchSystemTest](../aspnetcore/test/Interface.Tests/ElasticsearchSearchSystemTest.cs) | 2 recovered cases | Replaced old route and always-true predicate with synthetic `infraName` positive and negative controls, asserting exact count and identifier/name fields. |
+| [OrganizationSearchSystemTest](../aspnetcore/test/Interface.Tests/ElasticsearchSearchSystemTest.cs) | 2 cases quarantined pending production review | Live Elasticsearch exposed that `OrganizationQueryGenerator` searches lowercase field names while the configured index maps PascalCase model properties. Both positive and negative integration cases are explicitly skipped until a separate production fix is reviewed; endpoint remains intentionally hidden from Swagger. |
+| [ResearchDatasetSearchSystemTest](../aspnetcore/test/Interface.Tests/ElasticsearchSearchSystemTest.cs) | 2 recovered V1 cases plus V2 contract | Uses seeded V1 responses and separately exercises the V2 HTTP response without publishing V2 Swagger. |
+| FundingCallRepositorySystemTest (retired) | 1 debugging fact | The placeholder name and API-host-coupled query only checked for a developer-specific live row. Retired; funding-call in-memory enrichment remains covered in Repository.Tests, while relational retrieval awaits an approved SQL fixture. |
+| FundingDecisionRepositorySystemTest (retired) | 3 debugging facts | Real record names/acronyms and weak/manual assertions were retired. Synthetic funding-decision and consortium enrichment assertions are in Repository.Tests; relational query coverage awaits an approved SQL fixture. |
+| [Indexer publication mapping tests](../aspnetcore/test/Indexer.Tests/Maps/PublicationProfileTest.cs) | 2 commented facts | Added active synthetic parent/child relationship mapping and contribution aggregation tests. The old commented fixtures remain to be reconciled/removed after full missing/duplicate relationship coverage is confirmed. |
+| [SwaggerSystemTest](../aspnetcore/test/Interface.Tests/SwaggerSystemTest.cs) | 1 commented V2 fact | Replaced with active assertions that V2 Swagger and intentionally hidden organization paths are absent; V2 HTTP behavior is tested separately. |
 
 ### Reliability problems to fix before growing test counts
 
@@ -125,24 +125,30 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 
 #### Elasticsearch search recovery
 
-- [ ] Provision the supported Elasticsearch version from deployment requirements; pin the test image, bound startup/readiness time, and surface service logs on failure.
-- [ ] Seed minimal synthetic documents through production index mappings. Use unique test-owned index/alias names and configure the API host to use them; explicitly refresh before searching.
-- [ ] Rewrite the ten skipped GET theories against the current routes/public response types. Remove unnecessary `ApiDbContext` resolution.
-- [ ] Preserve useful name/funder/business-ID/category/date/type-of-funding cases, but reconcile old parameter names and boundary semantics with current query generators first.
-- [ ] Include matching documents, near misses, and combined-filter counterexamples. Assert exact returned identifiers/counts plus public fields; `OnlyContain` alone must not miss silently omitted results.
-- [ ] Replace the always-true infrastructure predicate with field-level assertions. Add a negative control proving a nonmatching infrastructure is excluded.
-- [ ] Add publication search/detail and infrastructure-service scenarios missing from the inactive suite; cover V2 dataset behavior as an HTTP contract distinct from documentation visibility.
+- [ ] Run the Testcontainers-backed Elasticsearch 8.19.22 lane successfully at least ten consecutive times on a clean CI environment, including parallel-isolation checks, before making it required.
+- [x] Seed synthetic documents through the production `AutoMap` mapping, with unique test-owned index names and host configuration; explicitly refresh before searching.
+- [x] Replace the ten skipped GET theories with active tests on current routes/public response types; remove unnecessary `ApiDbContext` resolution.
+- [x] Preserve representative name/funder/business-ID/category/date/type-of-funding cases using current parameter names and query boundaries.
+- [x] Include matching documents, near misses, and combined-filter counterexamples. Assert exact counts and public fields rather than using `OnlyContain`.
+- [x] Replace the always-true infrastructure predicate with field-level assertions and a negative control.
+- [ ] Restore organization positive/negative Elasticsearch cases after separately reviewing and correcting the discovered field-name mismatch.
+- [x] Cover V2 dataset behavior as an HTTP contract distinct from documentation visibility. Publication search/detail and infrastructure-service scenarios remain a separate recovery gap.
 
 #### Repository and publication recovery
 
-- [ ] Replace the four debugging facts with synthetic tests in Repository.Tests: funding-call retrieval intent, funding-decision consortium enrichment, and relevant post-processing. Retire placeholder/debug-only cases explicitly rather than preserving meaningless assertions.
+- [x] Retire the four developer-only debugging facts; retain the synthetic funding-call enrichment test and add a funding-decision consortium-enrichment assertion in Repository.Tests. True relational retrieval remains dependent on the isolated SQL lane below.
 - [ ] Build only the SQL schema surface needed for initial repository scenarios using an approved, versioned schema source. Scaffolded entities are not migrations: do not assume `EnsureCreated` can reproduce the warehouse or hand-edit generated entities.
 - [ ] Run relational queries against an isolated SQL Server database; supply required reference/sentinel rows and relationships explicitly. Do not copy production records or credentials.
-- [ ] Restore both publication scenarios across mapping and post-processing as appropriate: parent/child IDs, organization/co-publication flags, and contribution aggregation with missing/duplicate relationships.
-- [ ] Replace commented V2 Swagger code with an assertion of the intended non-published behavior; retain exact V1 path checks and explicitly assert intentionally hidden paths remain absent.
+- [x] Add synthetic publication relationship mapping coverage for parent/child IDs and organization/co-publication flags, plus post-processing coverage for duplicate contribution references.
+- [ ] Complete publication post-processing coverage for missing relationships and remove the obsolete commented mapping examples.
+- [x] Replace commented V2 Swagger code with assertions of its intended non-published behavior; the V1 path matrix continues to assert intentionally hidden paths remain absent.
 - [ ] Decide whether funding-call POST is supported, disabled, or obsolete with the API owner. Until decided, keep its existing skip tracked as an explicit exception. If supported, plan persistence restoration separately and test writes only in a disposable database; never make no-op success the desired contract.
 
-**Acceptance:** all 18 inactive methods have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). Ten GET-theory scenarios execute in the Elasticsearch lane with synthetic fixtures. A decision and follow-up are recorded for POST; no unexplained permanent skips or commented-out tests remain. Failed setup is not reported as a successful/empty integration run.
+**Progress (2026-11-09):** the Elasticsearch suite uses a shared synthetic fixture with unique indices, production AutoMap mappings, a version guard, and explicit refresh. The API/indexer maintainer confirmed Elasticsearch 8.19.22. The fixture now starts and disposes its own Testcontainers Elasticsearch 8.19.22 instance, so local and CI runs do not depend on a pre-existing server or fixed host port; Docker is required. A local run against Elasticsearch 8.19.9 passed the funding-call, funding-decision, infrastructure, and dataset searches and exposed an organization field-name mismatch. Per user direction, the production change is deferred, and the two organization integration cases are explicitly skipped pending separate review. The SQL Server service is available locally, and the user identified the scaffolded DatabaseContext as the approved schema source; schema provisioning/relational tests still need implementation and Linux CI validation. Repository debugging facts were retired/replaced, V2 behavior and documentation visibility are tested, and publication relationship/duplicate-contribution cases are active. The funding-call POST decision and publication search/detail/infrastructure-service cases remain open.
+
+**Validation (2026-11-09):** the service-free solution lane passed with 71 passed, 1 intentionally skipped POST, and 0 failed. The Testcontainers-backed Elasticsearch lane passed locally using its dynamically mapped port and pinned 8.19.22 image, with 9 passed and 2 skipped due to the deferred organization field-name mismatch; the test-owned container was removed afterward. SQL Server relational integration has not been added or run. Workflow YAML parsed successfully; `git diff --check` must be rerun after this update.
+
+**Acceptance:** all remaining inactive scenarios have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). The Elasticsearch lane passes its enabled synthetic fixture scenarios; organization searches remain explicitly deferred for production review. A decision and follow-up are recorded for POST; no unexplained permanent skips or commented-out tests remain. Failed setup is not reported as a successful/empty integration run.
 
 ### Phase 4 - Expand high-risk branch and contract coverage (P1/P2, 4-6 days)
 
@@ -199,6 +205,8 @@ dotnet test PublicApi.sln --no-build --filter "Category=SqlServerIntegration" --
 
 These are planned commands, not evidence of a passing suite. Start with affected classes/projects when implementing; run the whole applicable lane before merging. Provision services before their selected command and verify readiness explicitly. Validate exact identities, payloads, headers, document counts, and boundaries, not only HTTP success or aggregate percentages.
 
+The Elasticsearch lane requires Docker and uses Testcontainers to start Elasticsearch 8.19.22 on an automatically assigned host port. Its fixture verifies the server version, creates uniquely named indices with production AutoMap configuration, refreshes them before searching, deletes only those indices, and disposes the container. CI runs this lane separately from the service-free fast lane.
+
 ## 5. Delivery, risks, and decisions
 
 **Suggested sequence:** PR 1 baseline/reporting -> PR 2 async/auth/host repairs -> PRs 3a/3b Elasticsearch and SQL fixture/recovery work -> focused P1 coverage PRs -> CI enforcement. Unit/API coverage expansion can run alongside service provisioning after host repair.
@@ -222,7 +230,7 @@ There is no production deployment in this workstream: changes should be tests, t
 ## 6. Completion checklist
 
 - [ ] Baseline and final test/coverage reports are persisted as CI artifacts, with per-assembly line/branch deltas and suite durations.
-- [ ] All 15 skipped and three commented methods have explicit final dispositions; POST is decided or remains a visibly owned exception.
+- [ ] All remaining skipped and commented methods have explicit final dispositions; POST is decided or remains a visibly owned exception.
 - [ ] Async tests observe completion; no always-true predicates or task-only success assertions remain in repaired tests.
 - [ ] Fast tests are isolated; real Elasticsearch/SQL lanes use synthetic data, fail loudly on missing infrastructure, and clean up only their own resources.
 - [ ] All P1 scenarios in section 3 are covered, with no unauthorized endpoint exposure or accidental contract changes.

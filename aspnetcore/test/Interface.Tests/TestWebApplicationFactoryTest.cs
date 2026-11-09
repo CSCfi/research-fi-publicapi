@@ -47,6 +47,40 @@ public class TestWebApplicationFactoryTest
     }
 
     [Fact]
+    public async Task ResearchDatasetV2Endpoint_RemainsAvailableButRequiresItsReadRole()
+    {
+        using var anonymousFactory = new TestWebApplicationFactory<Program>();
+        using var anonymousClient = anonymousFactory.CreateClient();
+        using var authenticatedFactory = new TestWebApplicationFactory<Program>
+        {
+            AuthenticationMode = TestAuthenticationMode.AuthenticatedWithoutRoles
+        };
+        using var authenticatedClient = authenticatedFactory.CreateClient();
+        using var authorizedFactory = new TestWebApplicationFactory<Program>
+        {
+            AuthenticationMode = TestAuthenticationMode.AuthenticatedWithRoles,
+            Roles = new[] { ApiPolicies.PolicyRoleMap[ApiPolicies.ResearchDataset.Read] }
+        };
+        using var authorizedClient = authorizedFactory.CreateClient();
+
+        var responses = await Task.WhenAll(
+            anonymousClient.GetAsync("/v2/research-datasets"),
+            authenticatedClient.GetAsync("/v2/research-datasets"),
+            authorizedClient.GetAsync("/v2/research-datasets"));
+
+        using (responses[0])
+        using (responses[1])
+        using (responses[2])
+        {
+            responses[0].StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            responses[1].StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            responses[2].StatusCode.Should().Be(HttpStatusCode.OK);
+            (await responses[2].Content.ReadAsStringAsync()).Should().Be("[]");
+            responses[2].Headers.GetValues("x-current-page").Should().ContainSingle().Which.Should().Be("1");
+        }
+    }
+
+    [Fact]
     public async Task TestHost_ResolvesScrutorServicesAndUsesIsolatedTypedProfileClient()
     {
         using var factory = new TestWebApplicationFactory<Program>();

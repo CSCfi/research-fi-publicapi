@@ -26,6 +26,45 @@ public class PublicationProfileTest
     }
 
     [Fact]
+    public void ProjectTo_DimPublication_ShouldMapCopublicationAndOrganizationPublicationRelationships()
+    {
+        var coPublication = GetEntity();
+        coPublication.Id = 123;
+        coPublication.PublicationId = "co-publication-id";
+
+        var organizationPublication = GetEntity();
+        organizationPublication.Id = 234;
+        organizationPublication.PublicationId = "organization-publication-id";
+        organizationPublication.OriginalPublicationId = "original-organization-publication-id";
+        organizationPublication.PublicationOrgId = "organization-id";
+        organizationPublication.DimPublicationId = coPublication.Id;
+        organizationPublication.DimPublicationNavigation = coPublication;
+        coPublication.InverseDimPublicationNavigation.Add(organizationPublication);
+
+        var mappedCoPublication = Act_Map(coPublication);
+        var mappedOrganizationPublication = Act_Map(organizationPublication);
+
+        mappedCoPublication.IsCoPublication.Should().BeTrue();
+        mappedCoPublication.IsOrgPublication.Should().BeFalse();
+        mappedCoPublication.OrgPublicationIDs.Should().ContainSingle()
+            .Which.Should().Be("organization-publication-id");
+        mappedCoPublication.OrganizationPartsOfCoPublication.Should().ContainSingle().Which
+            .Should().BeEquivalentTo(new OrganizationPartOfCoPublication
+            {
+                Id = "organization-publication-id",
+                OriginalPublicationId = "original-organization-publication-id",
+                Organization = new OrganizationPartOfPublication_Organization
+                {
+                    Id = "organization-id"
+                }
+            });
+
+        mappedOrganizationPublication.IsOrgPublication.Should().BeTrue();
+        mappedOrganizationPublication.IsCoPublication.Should().BeFalse();
+        mappedOrganizationPublication.CoPublicationID.Should().Be("co-publication-id");
+    }
+
+    [Fact]
     public void ProjectTo_DimPublication_ShouldBeMappedToPublication()
     {
         // Arrange

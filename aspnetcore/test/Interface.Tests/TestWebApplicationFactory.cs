@@ -33,11 +33,22 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
 
     public IReadOnlyList<ProfileBackendRequest> ProfileBackendRequests => _profileBackendRequests;
 
+    public bool UseRealElasticsearch { get; set; }
+
+    public string? ElasticsearchUrl { get; set; }
+
+    public IReadOnlyDictionary<string, string> IndexNames { get; set; } = new Dictionary<string, string>();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        var elasticsearchUrl = UseRealElasticsearch
+            ? ElasticsearchUrl ?? throw new InvalidOperationException(
+                "An Elasticsearch URL is required when using the real Elasticsearch client.")
+            : "http://127.0.0.1:1";
+
         builder.UseContentRoot(".");
         builder.UseEnvironment("Test");
-        builder.UseSetting("ElasticSearch:Url", "http://127.0.0.1:1");
+        builder.UseSetting("ElasticSearch:Url", elasticsearchUrl);
         builder.UseSetting("Keycloak:audience", "test-audience");
         builder.UseSetting("Keycloak:authority", "http://keycloak.test/realms/test-realm");
         builder.UseSetting(
@@ -46,11 +57,16 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
         builder.UseSetting("Keycloak:requirehttpsmetadata", "false");
         builder.UseSetting("ProfileBackend:BaseUrl", "https://profile-backend.test/");
         builder.UseSetting("ProfileBackend:PublicApiToken", "test-only-public-api-token");
+        foreach (var (modelType, indexName) in IndexNames)
+        {
+            builder.UseSetting($"IndexNames:{modelType}", indexName);
+        }
+
         builder.ConfigureAppConfiguration((_, configuration) =>
         {
-            configuration.AddInMemoryCollection(new Dictionary<string, string?>
+            var settings = new Dictionary<string, string?>
             {
-                ["ElasticSearch:Url"] = "http://127.0.0.1:1",
+                ["ElasticSearch:Url"] = elasticsearchUrl,
                 ["Keycloak:audience"] = "test-audience",
                 ["Keycloak:authority"] = "http://keycloak.test/realms/test-realm",
                 ["Keycloak:metadataaddress"] =
@@ -64,7 +80,13 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
                 ["Serilog:MinimumLevel:Default"] = "Warning",
                 ["Serilog:WriteTo:0:Name"] = "Console",
                 ["Serilog:WriteTo:0:Args:outputTemplate"] = "{Message}{NewLine}{Exception}"
-            });
+            };
+            foreach (var (modelType, indexName) in IndexNames)
+            {
+                settings[$"IndexNames:{modelType}"] = indexName;
+            }
+
+            configuration.AddInMemoryCollection(settings);
         });
 
         builder.ConfigureTestServices(services =>
@@ -77,10 +99,13 @@ public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
                     options.Claims = new Dictionary<string, string>(Claims);
                 });
 
-            services.RemoveAll(typeof(ISearchService<,>));
-            services.AddScoped(typeof(ISearchService<,>), typeof(EmptySearchService<,>));
-            services.RemoveAll<IElasticClient>();
-            services.AddSingleton<IElasticClient>(_ => ElasticTestClient.Create(_ => { }));
+            if (!UseRealElasticsearch)
+            {
+                services.RemoveAll(typeof(ISearchService<,>));
+                services.AddScoped(typeof(ISearchService<,>), typeof(EmptySearchService<,>));
+                services.RemoveAll<IElasticClient>();
+                services.AddSingleton<IElasticClient>(_ => ElasticTestClient.Create(_ => { }));
+            }
 
             services.AddHttpClient<IProfileBackendClient, ProfileBackendClient>()
                 .ConfigurePrimaryHttpMessageHandler(

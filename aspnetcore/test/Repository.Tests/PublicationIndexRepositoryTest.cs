@@ -120,7 +120,65 @@ public class PublicationIndexRepositoryTest
         publication.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/publication/abc234");
         publication.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/publication/abc234");
     }
-    
+
+    [Fact]
+    public void PerformInMemoryOperation_Publication_AggregatesDistinctCopublicationContributions()
+    {
+        var sharedName = new Name { NameId = 2, FirstNames = "Shared" };
+        var additionalName = new Name { NameId = 3, FirstNames = "Additional" };
+        var localContribution = new FactContribution
+        {
+            Name = new Name { NameId = 1, FirstNames = "Local" },
+            ContributionType = "other"
+        };
+        var sharedContribution = new FactContribution
+        {
+            Name = sharedName,
+            ContributionType = "other"
+        };
+        var duplicateContribution = new FactContribution
+        {
+            Name = sharedName,
+            ContributionType = "other"
+        };
+        var additionalContribution = new FactContribution
+        {
+            Name = additionalName,
+            ContributionType = "other"
+        };
+        var publication = new Publication
+        {
+            Id = "copublication-id",
+            DatabaseContributions = new List<FactContribution> { localContribution },
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>
+            {
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        sharedContribution,
+                        duplicateContribution,
+                        additionalContribution
+                    }
+                },
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution> { additionalContribution }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.DatabaseContributions.Should().HaveCount(3);
+        publication.DatabaseContributions.Select(contribution => contribution.Name!.NameId)
+            .Should().Equal(1, 2, 3);
+    }
+
     
     private static Publication GetModel()
     {
