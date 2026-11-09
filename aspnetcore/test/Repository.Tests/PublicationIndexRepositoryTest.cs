@@ -179,7 +179,87 @@ public class PublicationIndexRepositoryTest
             .Should().Equal(1, 2, 3);
     }
 
-    
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void PerformInMemoryOperation_MissingOrganizationsOrUnitParent_PreservesAuthorsWithoutOrganizations(
+        bool cacheOrphanedUnit)
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        if (cacheOrphanedUnit)
+        {
+            cache.Set(MemoryCacheKeys.OrganizationById(345), new Organization
+            {
+                Id = 345,
+                ParentId = 999,
+                LocalOrganizationUnitId = "orphaned-unit"
+            });
+        }
+
+        var publication = GetModel();
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.Authors.Should().HaveCount(2);
+        publication.Authors!.Select(author => author.FirstNames)
+            .Should().Equal("Author 1 first name", "Author 2 first name");
+        publication.Authors.Should().OnlyContain(author => author.Organizations!.Count == 0);
+        publication.Organizations.Should().BeEmpty();
+        publication.ResearchfiUrl!.En.Should().Be("https://research.fi/en/results/publication/abc234");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void PerformInMemoryOperation_NoContributionsOrRelatedParts_PreservesMissingRelationships(
+        bool useNullContributions)
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var publication = new Publication
+        {
+            Id = "standalone",
+            DatabaseContributions = useNullContributions ? null : new List<FactContribution>(),
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>()
+        };
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        var result = repository.PerformInMemoryOperation(publication);
+
+        result.Should().BeSameAs(publication);
+        if (useNullContributions)
+        {
+            publication.Authors.Should().BeNull();
+            publication.Organizations.Should().BeNull();
+        }
+        else
+        {
+            publication.Authors.Should().BeEmpty();
+            publication.Organizations.Should().BeEmpty();
+        }
+        publication.ParentPublication!.Name.Should().BeNull();
+        publication.ParentPublication.Type.Should().BeNull();
+        publication.ParentPublication.Publisher.Should().BeNull();
+        publication.PeerReviewed.Should().BeNull();
+        publication.ResearchfiUrl!.En.Should().Be("https://research.fi/en/results/publication/standalone");
+    }
+
+    [Fact]
+    public void PerformInMemoryOperation_OrganizationPart_DoesNotGetItsOwnResearchfiUrl()
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var publication = new Publication
+        {
+            Id = "organization-part",
+            IsOrgPublication = true
+        };
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.ResearchfiUrl.Should().BeNull();
+    }
+
     private static Publication GetModel()
     {
         return new Publication

@@ -11,5 +11,4 @@ public interface IFundingCallService
 {
     Task<(IEnumerable<FundingCall>, SearchResult)> GetFundingCalls(GetFundingCallQueryParameters fundingCallQueryParameters, PaginationQueryParameters paginationQueryParameters);
     Task<(IEnumerable<FundingCall>, SearchAfterResult)> GetFundingCallsSearchAfter(GetFundingCallQueryParameters fundingCallQueryParameters, SearchAfterQueryParameters searchAfterQueryParameters);
-    Task PostFundCall(FundingCall fundingCall);
 }

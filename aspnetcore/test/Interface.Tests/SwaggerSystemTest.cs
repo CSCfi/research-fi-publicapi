@@ -91,6 +91,22 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
     }
 
     [Fact]
+    public async Task SwaggerJson_FundingCallsPublishesOnlyGet()
+    {
+        using var response = await _client.GetAsync("swagger/v1/swagger.json");
+        response.EnsureSuccessStatusCode();
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+
+        var operations = document.RootElement.GetProperty("paths")
+            .GetProperty("/v1/funding-calls")
+            .EnumerateObject()
+            .Select(operation => operation.Name)
+            .ToArray();
+
+        Assert.Equal(new[] { "get" }, operations);
+    }
+
+    [Fact]
     public async Task SwaggerJson_DoesNotPublishV2OrHiddenOrganizationEndpoints()
     {
         using var v2Response = await _client.GetAsync("swagger/v2/swagger.json");

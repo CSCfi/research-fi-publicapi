@@ -41,18 +41,4 @@ public class FundingCallService : IFundingCallService
 
         return (_mapper.Map<IEnumerable<FundingCall>>(result), searchAfterResult);
     }
-
-    public async Task PostFundCall(FundingCall fundingCall)
-    {
-        // TODO: only NameFi mapped to entity. Not using final models yet.
-        /*await _unitOfWork
-            .FundingCalls
-            .AddAsync(new DimCallProgramme
-            {
-                NameFi = fundingCall.NameFi,
-                SourceId = "api",
-                DimRegisteredDataSourceId = -1
-            });
-        await _unitOfWork.CompleteAsync();*/
-    }
 }

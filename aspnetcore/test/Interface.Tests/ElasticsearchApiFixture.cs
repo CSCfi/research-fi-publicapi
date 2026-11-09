@@ -16,7 +16,9 @@ using FundingCallModel = CSC.PublicApi.Service.Models.FundingCall.FundingCall;
 using FundingDecisionModel = CSC.PublicApi.Service.Models.FundingDecision.FundingDecision;
 using InfrastructureModel = CSC.PublicApi.Service.Models.Infrastructure.Infrastructure;
 using OrganizationModel = CSC.PublicApi.Service.Models.Organization.Organization;
+using PublicationModel = CSC.PublicApi.Service.Models.Publication.Publication;
 using ResearchDatasetModel = CSC.PublicApi.Service.Models.ResearchDataset.ResearchDataset;
+using InfrastructureServiceModel = CSC.PublicApi.Service.Models.Infrastructure.Service;
 
 namespace CSC.PublicApi.Interface.Tests;
 
@@ -30,6 +32,7 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
 {
     private readonly Dictionary<Type, string> _indices = new();
     private readonly List<string> _createdIndices = new();
+    private readonly Dictionary<string, int> _expectedDocumentCounts = new();
     private readonly IContainer _elasticsearchContainer = new ContainerBuilder(
             "docker.elastic.co/elasticsearch/elasticsearch:8.19.22")
         .WithPortBinding(9200, true)
@@ -54,6 +57,10 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
 
     public string ResearchDatasetIndex => _indices[typeof(ResearchDatasetModel)];
 
+    public string PublicationIndex => _indices[typeof(PublicationModel)];
+
+    public string InfrastructureServiceIndex => _indices[typeof(InfrastructureServiceModel)];
+
     public async Task InitializeAsync()
     {
         await _elasticsearchContainer.StartAsync();
@@ -68,6 +75,8 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
         AddIndex<InfrastructureModel>($"researchfi-test-{runId}-infrastructure");
         AddIndex<OrganizationModel>($"researchfi-test-{runId}-organization");
         AddIndex<ResearchDatasetModel>($"researchfi-test-{runId}-research-dataset");
+        AddIndex<PublicationModel>($"researchfi-test-{runId}-publication");
+        AddIndex<InfrastructureServiceModel>($"researchfi-test-{runId}-infrastructure-service");
 
         Factory = new TestWebApplicationFactory<Program>
         {
@@ -79,7 +88,9 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
                 [typeof(FundingDecisionModel).FullName!] = FundingDecisionIndex,
                 [typeof(InfrastructureModel).FullName!] = InfrastructureIndex,
                 [typeof(OrganizationModel).FullName!] = OrganizationIndex,
-                [typeof(ResearchDatasetModel).FullName!] = ResearchDatasetIndex
+                [typeof(ResearchDatasetModel).FullName!] = ResearchDatasetIndex,
+                [typeof(PublicationModel).FullName!] = PublicationIndex,
+                [typeof(InfrastructureServiceModel).FullName!] = InfrastructureServiceIndex
             },
             AuthenticationMode = TestAuthenticationMode.AuthenticatedWithRoles,
             Roles = ApiPolicies.PolicyRoleMap.Values.Distinct().ToArray()
@@ -159,6 +170,8 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
             NameEn = "Phase Three Synthetic Research Dataset",
             IsLatestVersion = true
         });
+        await SeedPublicationsAsync();
+        await SeedInfrastructureServicesAsync();
 
         foreach (var indexName in _createdIndices)
         {
@@ -229,10 +242,11 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
         {
             var response = await ElasticClient.CountAsync<object>(descriptor => descriptor.Index(indexName));
             EnsureValid(response, $"Counting documents in test index '{indexName}'");
-            if (response.Count != 1)
+            var expectedCount = _expectedDocumentCounts[indexName];
+            if (response.Count != expectedCount)
             {
                 throw new InvalidOperationException(
-                    $"Expected one synthetic document in test index '{indexName}', but found {response.Count}.");
+                    $"Expected {expectedCount} synthetic documents in test index '{indexName}', but found {response.Count}.");
             }
         }
     }
@@ -240,6 +254,7 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
     private void AddIndex<T>(string indexName)
     {
         _indices.Add(typeof(T), indexName);
+        _expectedDocumentCounts.Add(indexName, 0);
     }
 
     private async Task IndexAsync<T>(string indexName, string documentId, T document) where T : class
@@ -248,6 +263,103 @@ public sealed class ElasticsearchApiFixture : IAsyncLifetime
             document,
             descriptor => descriptor.Index(indexName).Id(documentId));
         EnsureValid(response, $"Indexing document '{documentId}' in '{indexName}'");
+        _expectedDocumentCounts[indexName]++;
+    }
+
+    private async Task SeedPublicationsAsync()
+    {
+        var publication = CreatePublication("publication-main", 10, 2025);
+        publication.Doi = "10.9999/synthetic-publication";
+        await IndexAsync(PublicationIndex, "publication-document-7001", publication);
+
+        var organizationPart = CreatePublication("publication-part", 20, 2025);
+        organizationPart.IsOrgPublication = true;
+        organizationPart.CoPublicationID = "publication-co";
+        await IndexAsync(PublicationIndex, organizationPart.Id!, organizationPart);
+
+        var splitAuthors = CreatePublication("publication-split-authors", 30, 2025);
+        splitAuthors.Authors = new()
+        {
+            new() { FirstNames = "Synthetic", LastName = "Other" },
+            new() { FirstNames = "Other", LastName = "Researcher" }
+        };
+        await IndexAsync(PublicationIndex, splitAuthors.Id!, splitAuthors);
+
+        var copublication = CreatePublication("publication-co", 40, 2024);
+        copublication.IsCoPublication = true;
+        copublication.OrgPublicationIDs = new() { "publication-part" };
+        copublication.OrganizationPartsOfCoPublication = new()
+        {
+            new()
+            {
+                Id = "publication-part",
+                OriginalPublicationId = "original-publication-part",
+                Organization = new() { Id = "synthetic-organization" }
+            }
+        };
+        await IndexAsync(PublicationIndex, copublication.Id!, copublication);
+
+        var olderPublication = CreatePublication("publication-older", 50, 2023);
+        await IndexAsync(PublicationIndex, olderPublication.Id!, olderPublication);
+    }
+
+    private static PublicationModel CreatePublication(string id, long sortId, int year)
+    {
+        return new PublicationModel
+        {
+            Id = id,
+            ExportSortId = sortId,
+            OriginalPublicationId = $"original-{id}",
+            Name = "Phase Three Synthetic Publication",
+            PublicationYear = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            Type = new() { Code = "A1" },
+            Authors = new()
+            {
+                new() { FirstNames = "Synthetic", LastName = "Researcher", Orcid = "synthetic-orcid" }
+            }
+        };
+    }
+
+    private async Task SeedInfrastructureServicesAsync()
+    {
+        foreach (var id in new[] { 6001, 6002, 6003 })
+        {
+            await IndexAsync(InfrastructureServiceIndex, $"service-{id}", new InfrastructureServiceModel
+            {
+                ExportSortId = id,
+                ServiceIdentifier = new Identifier
+                {
+                    LocalIdentifier = $"service-{id}",
+                    KeyIdentifierURN = $"urn:synthetic:service:{id}",
+                    OtherPid = new() { new() { PidType = "synthetic", PidContent = $"service-pid-{id}" } }
+                },
+                ServiceName = new() { new() { TextContent = "Phase Three Synthetic Imaging", TextLanguage = "en" } },
+                ServiceDescription = new()
+                {
+                    new()
+                    {
+                        TextContent = id == 6002 ? "Chemical analysis" : "Precision imaging",
+                        TextLanguage = "en"
+                    }
+                },
+                ServiceStartsOn = new InfraDate(2020, 1, 1),
+                ServiceEndsOn = new InfraDate(id == 6003 ? 2031 : 2030, 12, 31),
+                IsPartOfInfrastructure = new ServiceInfrastructure
+                {
+                    InfraIdentifier = new Identifier
+                    {
+                        KeyIdentifierURN = id == 6003 ? "urn:synthetic:infra:other" : "urn:synthetic:infra:main"
+                    },
+                    InfraResponsibleOrganization = new ResearchOrganization
+                    {
+                        OrganizationIdentifier = new()
+                        {
+                            new() { PidType = "businessid", PidContent = "1234567-8" }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     private static void EnsureValid(IResponse response, string operation)

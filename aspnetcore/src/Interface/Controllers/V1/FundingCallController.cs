@@ -55,18 +55,4 @@ public class FundingCallController : ControllerBase
 
         return fundingCalls;
     }
-
-    /// <summary>
-    /// Lisää uusi rahoitushaku
-    /// </summary>
-    /// <param name="fundingCall"></param>
-    /// <returns></returns>
-    [HttpPost(Name = "PostFundingCall")]
-    [MapToApiVersion(ApiVersion)]
-    [Authorize(Policy = ApiPolicies.FundingCall.Write)]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task Post(FundingCall fundingCall)
-    {
-        await _service.PostFundCall(fundingCall);
-    }
 }
