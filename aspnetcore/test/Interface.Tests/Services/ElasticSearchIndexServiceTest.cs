@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSC.PublicApi.ElasticService;
@@ -49,6 +49,7 @@ public class ElasticSearchIndexServiceTest
         var expectedAliasName = indexName;
         _elasticApiCalls.AssertCreateIndexCalled(expectedIndexName);
         _elasticApiCalls.AssertBulkAliasCalled(expectedAliasName, expectedIndexName, "*");
+        _elasticApiCalls.AssertIndexingRequestsSucceeded();
     }
 
     [Fact]
@@ -67,6 +68,7 @@ public class ElasticSearchIndexServiceTest
         var expectedAliasName = indexName;
         _elasticApiCalls.AssertCreateIndexCalled(expectedIndexName);
         _elasticApiCalls.AssertBulkAliasCalled(expectedAliasName, expectedIndexName, "*");
+        _elasticApiCalls.AssertIndexingRequestsSucceeded();
     }
 
     [Fact]
@@ -85,6 +87,7 @@ public class ElasticSearchIndexServiceTest
         var expectedAliasName = indexName;
         _elasticApiCalls.AssertCreateIndexCalled(expectedIndexName);
         _elasticApiCalls.AssertBulkAliasCalled(expectedAliasName, expectedIndexName, "*");
+        _elasticApiCalls.AssertIndexingRequestsSucceeded();
     }
 
     private static List<object> GetEntities()

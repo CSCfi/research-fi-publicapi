@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using CSC.PublicApi.DatabaseContext;
 using CSC.PublicApi.DatabaseContext.Entities;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
@@ -14,18 +15,15 @@ using FundingCall = ResearchFi.FundingCall.FundingCall;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Program>>, IDisposable
 {
     private readonly TestWebApplicationFactory<Program> _factory;
-    private readonly ApiDbContext _dbContext;
     private readonly HttpClient _client;
     private readonly string _apiBaseUrl = "v1/FundingCall";
 
     public FundingCallSystemTest(TestWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
         _client = _factory.CreateClient();
     }
 
@@ -34,13 +32,13 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingCallResultTestCases))]
-    public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
+    public async Task GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingCall, bool>> assertPredicate)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
@@ -56,13 +54,13 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingCallNoResultsTestCases))]
-    public async void GET_ShouldReturnEmpty(string urlParams)
+    public async Task GET_ShouldReturnEmpty(string urlParams)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var fundingCalls = await response.GetResponseObject<IEnumerable<FundingCall>>();
@@ -76,7 +74,7 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
     /// Test for running funding call query against a real db and elasticsearch instance.
     /// </summary>
     [Fact(Skip = "Run manually when needed.")]
-    public async void POST_ShouldAddFundingCallToDb()
+    public async Task POST_ShouldAddFundingCallToDb()
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}";
@@ -84,19 +82,26 @@ public class FundingCallSystemTest : IClassFixture<TestWebApplicationFactory<Pro
         {
             NameFi = $"test funding call {Guid.NewGuid()}"
         };
-        var content = JsonContent.Create(fundingCallToAdd);
+        using var content = JsonContent.Create(fundingCallToAdd);
 
         // Act
-        var response = await _client.PostAsync(apiUrl, content);
+        using var response = await _client.PostAsync(apiUrl, content);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var addedFundingCall = _dbContext
+        using var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+        var addedFundingCall = dbContext
             .Set<DimCallProgramme>()
             .SingleOrDefault(x => x.NameFi == fundingCallToAdd.NameFi);
 
         addedFundingCall.Should().NotBeNull();
 
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 
     /// <summary>

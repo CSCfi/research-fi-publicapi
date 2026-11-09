@@ -1,49 +1,136 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+using CSC.PublicApi.ElasticService;
+using CSC.PublicApi.Interface.Services;
+using CSC.PublicApi.Interface.Tests.TestHelpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Nest;
+using ResearchFi.ProfilePublicApi;
 
 namespace CSC.PublicApi.Interface.Tests;
 
 public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {
-    public TestWebApplicationFactory()
-    {
-        // Provide required config values that are mandatory at startup
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
-        Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Test");
+    private readonly List<ProfileBackendRequest> _profileBackendRequests = new();
 
-        // Serilog
-        Environment.SetEnvironmentVariable("Serilog__WriteTo__HttpSink__Name", null);
-        Environment.SetEnvironmentVariable("Serilog__WriteTo__HttpSink__Args__httpClient", null);
-        Environment.SetEnvironmentVariable("Serilog__WriteTo__HttpSink__Args__textFormatter", null);
+    public TestAuthenticationMode AuthenticationMode { get; set; } = TestAuthenticationMode.Anonymous;
 
-        // ElasticSearch
-        Environment.SetEnvironmentVariable("ElasticSearch__Url", "http://localhost:9200");
+    public IReadOnlyCollection<string> Roles { get; set; } = Array.Empty<string>();
 
-        // Keycloak
-        Environment.SetEnvironmentVariable("Keycloak__audience", "test-audience");
-        Environment.SetEnvironmentVariable("Keycloak__authority", "http://localhost:8080/realms/test-realm");
-        Environment.SetEnvironmentVariable("Keycloak__metadataaddress", "http://localhost:8080/realms/test-realm/.well-known/openid-configuration");
-    }
+    public IReadOnlyDictionary<string, string> Claims { get; set; } = new Dictionary<string, string>();
+
+    public IReadOnlyList<ProfileBackendRequest> ProfileBackendRequests => _profileBackendRequests;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseContentRoot(".");
-        
+        builder.UseEnvironment("Test");
+        builder.UseSetting("ElasticSearch:Url", "http://127.0.0.1:1");
+        builder.UseSetting("Keycloak:audience", "test-audience");
+        builder.UseSetting("Keycloak:authority", "http://keycloak.test/realms/test-realm");
+        builder.UseSetting(
+            "Keycloak:metadataaddress",
+            "http://keycloak.test/realms/test-realm/.well-known/openid-configuration");
+        builder.UseSetting("Keycloak:requirehttpsmetadata", "false");
+        builder.UseSetting("ProfileBackend:BaseUrl", "https://profile-backend.test/");
+        builder.UseSetting("ProfileBackend:PublicApiToken", "test-only-public-api-token");
+        builder.ConfigureAppConfiguration((_, configuration) =>
+        {
+            configuration.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["ElasticSearch:Url"] = "http://127.0.0.1:1",
+                ["Keycloak:audience"] = "test-audience",
+                ["Keycloak:authority"] = "http://keycloak.test/realms/test-realm",
+                ["Keycloak:metadataaddress"] =
+                    "http://keycloak.test/realms/test-realm/.well-known/openid-configuration",
+                ["Keycloak:requirehttpsmetadata"] = "false",
+                ["ProfileBackend:BaseUrl"] = "https://profile-backend.test/",
+                ["ProfileBackend:PublicApiToken"] = "test-only-public-api-token",
+                ["OpenApiSettings:Title"] = "Public API tests",
+                ["OpenApiSettings:Description"] = "Synthetic test configuration.",
+                ["Serilog:Using:0"] = "Serilog.Sinks.Console",
+                ["Serilog:MinimumLevel:Default"] = "Warning",
+                ["Serilog:WriteTo:0:Name"] = "Console",
+                ["Serilog:WriteTo:0:Args:outputTemplate"] = "{Message}{NewLine}{Exception}"
+            });
+        });
 
-        // Mock authentication.
         builder.ConfigureTestServices(services =>
         {
             services.AddAuthentication("Test")
-                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
-        });
+                .AddScheme<TestAuthHandlerOptions, TestAuthHandler>("Test", options =>
+                {
+                    options.Mode = AuthenticationMode;
+                    options.Roles = Roles.ToArray();
+                    options.Claims = new Dictionary<string, string>(Claims);
+                });
 
-        base.ConfigureWebHost(builder);
+            services.RemoveAll(typeof(ISearchService<,>));
+            services.AddScoped(typeof(ISearchService<,>), typeof(EmptySearchService<,>));
+            services.RemoveAll<IElasticClient>();
+            services.AddSingleton<IElasticClient>(_ => ElasticTestClient.Create(_ => { }));
+
+            services.AddHttpClient<IProfileBackendClient, ProfileBackendClient>()
+                .ConfigurePrimaryHttpMessageHandler(
+                    () => new RecordingProfileBackendHandler(_profileBackendRequests));
+        });
+    }
+
+    private sealed class RecordingProfileBackendHandler(
+        ICollection<ProfileBackendRequest> requests) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var token = request.Headers.TryGetValues("publicapitoken", out var values)
+                ? values.SingleOrDefault()
+                : null;
+            requests.Add(new ProfileBackendRequest(request.RequestUri, token));
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+            {
+                Content = new StringContent(
+                    "Profile backend access is disabled in tests.",
+                    Encoding.UTF8,
+                    "text/plain")
+            });
+        }
+    }
+}
+
+public sealed record ProfileBackendRequest(Uri? RequestUri, string? PublicApiToken);
+
+internal sealed class EmptySearchService<TIn, TOut> : ISearchService<TIn, TOut>
+    where TOut : class
+{
+    public Task<(IEnumerable<TOut>, SearchResult)> Search(TIn searchParameters, int pageNumber, int pageSize)
+    {
+        return Task.FromResult(((IEnumerable<TOut>)Array.Empty<TOut>(), new SearchResult(pageNumber, pageSize, 0)));
+    }
+
+    public Task<(IEnumerable<TOut>, SearchAfterResult)> SearchAfter(
+        TIn searchParameters,
+        int pageSize,
+        long? searchAfter)
+    {
+        throw new InvalidOperationException("Search-after is not configured in the test host.");
+    }
+
+    public Task<TOut?> GetSingle(string id)
+    {
+        throw new InvalidOperationException("Single-document search is not configured in the test host.");
     }
 }

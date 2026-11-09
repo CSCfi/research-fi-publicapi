@@ -2,28 +2,22 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
-using CSC.PublicApi.DatabaseContext;
+using System.Threading.Tasks;
 using ResearchFi.ResearchDataset.V1;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class ResearchDatasetSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+public class ResearchDatasetSystemTest : IClassFixture<TestWebApplicationFactory<Program>>, IDisposable
 {
-    private readonly TestWebApplicationFactory<Program> _factory;
-    private readonly ApiDbContext _dbContext;
     private readonly HttpClient _client;
     private readonly string _apiBaseUrl = "v1/ResearchDataset";
 
     public ResearchDatasetSystemTest(TestWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     /// <summary>
@@ -31,13 +25,13 @@ public class ResearchDatasetSystemTest : IClassFixture<TestWebApplicationFactory
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(ResearchDatasetResultTestCases))]
-    public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<ResearchDataset, bool>> assertPredicate)
+    public async Task GET_ShouldReturnExpected(string urlParams, Expression<Func<ResearchDataset, bool>> assertPredicate)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var researchDatasets = await response.GetResponseObject<IEnumerable<ResearchDataset>>();
@@ -53,13 +47,13 @@ public class ResearchDatasetSystemTest : IClassFixture<TestWebApplicationFactory
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(ResearchDatasetNoResultsTestCases))]
-    public async void GET_ShouldReturnEmpty(string urlParams)
+    public async Task GET_ShouldReturnEmpty(string urlParams)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var researchDatasets = await response.GetResponseObject<IEnumerable<ResearchDataset>>();
@@ -106,6 +100,11 @@ public class ResearchDatasetSystemTest : IClassFixture<TestWebApplicationFactory
     private static string Name(string name)
     {
         return $"name={name}";
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 
     private static bool NamesShouldMatch(ResearchDataset researchDataset, string text)

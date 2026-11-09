@@ -3,29 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
-using CSC.PublicApi.DatabaseContext;
+using System.Threading.Tasks;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
 using CSC.PublicApi.Service.Models.FundingDecision;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory<Program>>, IDisposable
 {
-    private readonly TestWebApplicationFactory<Program> _factory;
-    private readonly ApiDbContext _dbContext;
     private readonly HttpClient _client;
     private readonly string _apiBaseUrl = "v1/FundingDecision";
 
     public FundingDecisionSystemTest(TestWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     /// <summary>
@@ -33,13 +27,13 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingDecisionResultTestCases))]
-    public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingDecision, bool>> assertPredicate)
+    public async Task GET_ShouldReturnExpected(string urlParams, Expression<Func<FundingDecision, bool>> assertPredicate)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var fundingDecisions = await response.GetResponseObject<IEnumerable<FundingDecision>>();
@@ -60,13 +54,13 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(FundingDecisionNoResultsTestCases))]
-    public async void GET_ShouldReturnEmpty(string urlParams)
+    public async Task GET_ShouldReturnEmpty(string urlParams)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var fundingDecisions = await response.GetResponseObject<IEnumerable<FundingDecision>>();
@@ -231,4 +225,8 @@ public class FundingDecisionSystemTest : IClassFixture<TestWebApplicationFactory
         return fd.TypeOfFunding != null && fd.TypeOfFunding.Code == text;
     }
 
+    public void Dispose()
+    {
+        _client.Dispose();
+    }
 }

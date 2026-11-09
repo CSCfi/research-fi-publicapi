@@ -108,14 +108,16 @@ Mocks prove outgoing request shape and application control flow, not Elasticsear
 
 **Dependencies:** phase 1 baseline.
 
-- [ ] Rewrite the four funding-call pagination tests as `async Task`; configure meaningful search results, assign an HTTP context, await completion, and assert returned values and headers as well as arguments.
-- [ ] Convert touched `async void` tests to `async Task`; dispose clients/scopes/responses appropriately.
-- [ ] Replace process-wide test configuration mutation with host-local configuration. Explicitly replace search/profile clients and any database services used by a test. Keep test secrets synthetic and prevent real Elasticsearch, Keycloak, SQL Server, profile-backend, and logging-sink calls in the fast lane.
-- [ ] Make test authentication selectable: anonymous, authenticated without required role, and authenticated with exactly the required role. Include client identity claims where relevant.
-- [ ] Extend the existing NEST test transport with realistic, scenario-specific search/bulk/health responses. Fail explicitly on unexpected requests in new tests; preserve and then strengthen existing index-rotation assertions.
-- [ ] Check Scrutor and typed HttpClient registration through the test host, not only manually constructed controllers.
+- [x] Rewrite the four funding-call pagination tests as `async Task`; configure meaningful search results, assign an HTTP context, await completion, and assert returned values and headers as well as arguments.
+- [x] Convert touched `async void` tests to `async Task`; dispose clients/scopes/responses appropriately.
+- [x] Replace process-wide test configuration mutation with host-local configuration. Explicitly replace search/profile clients and any database services used by a test. Keep test secrets synthetic and prevent real Elasticsearch, Keycloak, SQL Server, profile-backend, and logging-sink calls in the fast lane.
+- [x] Make test authentication selectable: anonymous, authenticated without required role, and authenticated with exactly the required role. Include client identity claims where relevant.
+- [x] Extend the existing NEST test transport with realistic, scenario-specific search/bulk/health responses. Fail explicitly on unexpected requests in new tests; preserve and then strengthen existing index-rotation assertions.
+- [x] Check Scrutor and typed HttpClient registration through the test host, not only manually constructed controllers.
 
 **Acceptance:** fast tests pass without running external services or using developer secrets; a deliberately faulted async dependency fails its test; parallel test hosts do not leak configuration/auth state. All four pagination cases assert completed results.
+
+**Validation (2026-11-09):** the full solution suite passed with 67 passed, 15 intentionally skipped, and 0 failed. The test-host isolation tests passed with anonymous, authenticated, and role-bearing hosts issuing requests concurrently (2 tests passed); `git diff --check` passed. The skipped funding-call POST remains an explicit phase 3/API-owner decision.
 
 ### Phase 3 - Recover inactive scenarios safely (P1, 3-5 days)
 

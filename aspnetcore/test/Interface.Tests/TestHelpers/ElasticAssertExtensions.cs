@@ -36,6 +36,23 @@ public static class ElasticAssertExtensions
             .And.Contain(action => action.remove != null && action.remove.index == deletedIndex && action.remove.alias == aliasName);
     }
 
+    public static void AssertIndexingRequestsSucceeded(this List<IApiCallDetails> apiCalls)
+    {
+        apiCalls.Should().Contain(call =>
+            call.HttpMethod == HttpMethod.POST &&
+            call.Uri.AbsolutePath.EndsWith("/_bulk") &&
+            call.HttpStatusCode == 200);
+        apiCalls.Should().Contain(call =>
+            call.HttpMethod == HttpMethod.GET &&
+            call.Uri.AbsolutePath.StartsWith("/_cluster/health/") &&
+            call.HttpStatusCode == 200);
+        apiCalls.Should().Contain(call =>
+            call.HttpMethod == HttpMethod.POST &&
+            call.Uri.AbsolutePath == "/_aliases" &&
+            call.HttpStatusCode == 200);
+        apiCalls.Should().NotContain(call => call.OriginalException != null);
+    }
+
     private static BulkAliasRequestMock ConvertBytes(byte[] bytes)
     {
         var jsonString = Encoding.UTF8.GetString(bytes);

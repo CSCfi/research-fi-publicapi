@@ -2,28 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
-using CSC.PublicApi.DatabaseContext;
+using System.Threading.Tasks;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Infrastructure = ResearchFi.Infrastructure.Infrastructure;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<Program>>, IDisposable
 {
-    private readonly TestWebApplicationFactory<Program> _factory;
-    private readonly ApiDbContext _dbContext;
     private readonly HttpClient _client;
     private readonly string _apiBaseUrl = "v1/Infrastructure";
 
     public InfrastructureSystemTest(TestWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     /// <summary>
@@ -31,13 +25,13 @@ public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(InfrastructureResultTestCases))]
-    public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<Infrastructure, bool>> assertPredicate)
+    public async Task GET_ShouldReturnExpected(string urlParams, Expression<Func<Infrastructure, bool>> assertPredicate)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var infrastructures = await response.GetResponseObject<IEnumerable<Infrastructure>>();
@@ -53,13 +47,13 @@ public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(InfrastructureNoResultsTestCases))]
-    public async void GET_ShouldReturnEmpty(string urlParams)
+    public async Task GET_ShouldReturnEmpty(string urlParams)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var infrastructures = await response.GetResponseObject<IEnumerable<Infrastructure>>();
@@ -117,5 +111,10 @@ public class InfrastructureSystemTest : IClassFixture<TestWebApplicationFactory<
                 infrastructure.NameSv != null && infrastructure.NameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase) ||
                 infrastructure.NameEn != null && infrastructure.NameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase));
         */
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 }

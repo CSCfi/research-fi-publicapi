@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -9,37 +10,51 @@ using Microsoft.Extensions.Options;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-/// <summary>
-/// Mocked authentication for integration tests.
-/// https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-6.0
-/// </summary>
-public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+public enum TestAuthenticationMode
 {
-    public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
-        ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
-        : base(options, logger, encoder, clock)
+    Anonymous,
+    AuthenticatedWithoutRoles,
+    AuthenticatedWithRoles
+}
+
+public sealed class TestAuthHandlerOptions : AuthenticationSchemeOptions
+{
+    public TestAuthenticationMode Mode { get; set; }
+
+    public IReadOnlyCollection<string> Roles { get; set; } = Array.Empty<string>();
+
+    public IReadOnlyDictionary<string, string> Claims { get; set; } =
+        new Dictionary<string, string>();
+}
+
+public class TestAuthHandler : AuthenticationHandler<TestAuthHandlerOptions>
+{
+    public TestAuthHandler(
+        IOptionsMonitor<TestAuthHandlerOptions> options,
+        ILoggerFactory logger,
+        UrlEncoder encoder)
+        : base(options, logger, encoder)
     {
     }
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        // Add claims for the test user here.
+        if (Options.Mode == TestAuthenticationMode.Anonymous)
+        {
+            return Task.FromResult(AuthenticateResult.NoResult());
+        }
+
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, "Test user"),
+            new(ClaimTypes.Name, "Test user")
         };
+        claims.AddRange(Options.Claims.Select(claim => new Claim(claim.Key, claim.Value)));
+        claims.AddRange(Options.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        // Add every policy for the test user.
-        var everyPolicyRoleName = ApiPolicies.PolicyRoleMap.Select(x => x.Value);
-        var roleClaims = everyPolicyRoleName.Select(roleName => new Claim(ClaimTypes.Role, roleName));
-        claims.AddRange(roleClaims);
-
-        var identity = new ClaimsIdentity(claims, "Test");
+        var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, "Test");
+        var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-        var result = AuthenticateResult.Success(ticket);
-
-        return Task.FromResult(result);
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 }

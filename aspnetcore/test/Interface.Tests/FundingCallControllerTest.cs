@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using CSC.PublicApi.ElasticService;
 using CSC.PublicApi.ElasticService.SearchParameters;
@@ -7,105 +9,105 @@ using CSC.PublicApi.Interface.Maps.V1;
 using CSC.PublicApi.Interface.Services.V1;
 using CSC.PublicApi.Service.Models.FundingCall;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using ResearchFi.Query;
-using Xunit;
 using Serilog;
+using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class FundingCallControllerTest : IDisposable
+public class FundingCallControllerTest
 {
+    private readonly Mock<ISearchService<FundingCallSearchParameters, FundingCall>> _mockSearchService = new();
     private readonly FundingCallController _controller;
-    private readonly Mock<ISearchService<FundingCallSearchParameters, FundingCall>> _mockSearchService;
-    private readonly IFundingCallService _service;
-    private readonly IDiagnosticContext _diagnosticContext;
+    private readonly DefaultHttpContext _httpContext = new();
 
     public FundingCallControllerTest()
     {
-        var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        var controllerLogger = loggerFactory.CreateLogger<FundingCallController>();
-        var serviceLogger = loggerFactory.CreateLogger<FundingCallService>();
-
-        _mockSearchService = new Mock<ISearchService<FundingCallSearchParameters, FundingCall>>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<FundingCallProfile>()).CreateMapper();
-        _service = new FundingCallService(serviceLogger, mapper, _mockSearchService.Object);
-        _diagnosticContext = new Mock<IDiagnosticContext>().Object;;
+        var service = new FundingCallService(
+            NullLogger<FundingCallService>.Instance,
+            mapper,
+            _mockSearchService.Object);
+        _controller = new FundingCallController(
+            NullLogger<FundingCallController>.Instance,
+            service,
+            new Mock<IDiagnosticContext>().Object)
+        {
+            ControllerContext = new ControllerContext { HttpContext = _httpContext }
+        };
+        _httpContext.Request.Scheme = "https";
+        _httpContext.Request.Host = new HostString("api.test");
+        _httpContext.Request.Path = "/v1/funding-calls";
+        _httpContext.Request.QueryString = new QueryString("?source=test");
+    }
 
-        _controller = new FundingCallController(controllerLogger, _service, _diagnosticContext);
+    [Theory]
+    [InlineData(7, 50, 7, 50)]
+    [InlineData(-1, -5, 1, 1)]
+    [InlineData(1, 20, 1, 20)]
+    [InlineData(7, 150, 7, 100)]
+    public async Task Get_Pagination_UsesNormalizedParametersAndReturnsResultsAndHeaders(
+        int requestedPageNumber,
+        int requestedPageSize,
+        int expectedPageNumber,
+        int expectedPageSize)
+    {
+        var expectedFundingCall = new FundingCall
+        {
+            NameFi = "Synthetic funding call"
+        };
+        var expectedSearchResult = new SearchResult(expectedPageNumber, expectedPageSize, 123);
+        _mockSearchService
+            .Setup(service => service.Search(
+                It.IsAny<FundingCallSearchParameters>(),
+                expectedPageNumber,
+                expectedPageSize))
+            .ReturnsAsync((new[] { expectedFundingCall }, expectedSearchResult));
+
+        var result = await _controller.Get(
+            new GetFundingCallQueryParameters(),
+            new PaginationQueryParameters
+            {
+                PageNumber = requestedPageNumber,
+                PageSize = requestedPageSize
+            });
+
+        var fundingCalls = result.Should().ContainSingle().Subject;
+        fundingCalls.NameFi.Should().Be(expectedFundingCall.NameFi);
+        _httpContext.Response.Headers["x-current-page"].ToString().Should().Be(expectedPageNumber.ToString());
+        _httpContext.Response.Headers["x-page-count"].ToString()
+            .Should().Be(expectedSearchResult.TotalPages.ToString());
+        _httpContext.Response.Headers["x-page-size"].ToString().Should().Be(expectedPageSize.ToString());
+        _httpContext.Response.Headers["x-total"].ToString().Should().Be("123");
+        _httpContext.Response.Headers["link"].ToString().Should().Contain("rel=\"last\"");
+        _mockSearchService.Verify(
+            service => service.Search(
+                It.IsAny<FundingCallSearchParameters>(),
+                expectedPageNumber,
+                expectedPageSize),
+            Times.Once);
     }
 
     [Fact]
-    public void Get_PaginationWithSpecifiedParameters_IsSuccessful()
+    public async Task Get_WhenSearchFails_PropagatesTheDependencyFailure()
     {
-        // Arrange
-        const int pageNumber = 7;
-        const int pageSize = 50;
-        var queryParameters = new GetFundingCallQueryParameters {};
-        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
+        var exception = new InvalidOperationException("Synthetic search failure.");
+        _mockSearchService
+            .Setup(service => service.Search(
+                It.IsAny<FundingCallSearchParameters>(),
+                It.IsAny<int>(),
+                It.IsAny<int>()))
+            .Returns(Task.FromException<(IEnumerable<FundingCall>, SearchResult)>(exception));
 
-        // Act
-        var result = _controller.Get(queryParameters, paginationQueryParameters);
-
-        // Assert
-        result.Should().NotBeNull();
-        _mockSearchService.Verify(m => m.Search(It.IsAny<FundingCallSearchParameters>(), pageNumber, pageSize));
-    }
-
-    [Fact]
-    public void Get_PaginationWithNegativeValues_UseOneInstead()
-    {
-        // Arrange
-        const int pageNumber = -1;
-        const int pageSize = -5;
-        var queryParameters = new GetFundingCallQueryParameters {};
-        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
-
-        // Act
-        var result = _controller.Get(queryParameters, paginationQueryParameters);
-
-        // Assert
-        result.Should().NotBeNull();
-        _mockSearchService.Verify(m => m.Search(It.IsAny<FundingCallSearchParameters>(), 1, 1));
-    }
-
-    [Fact]
-    public void Get_PaginationWithNoSpecifiedParameters_UsesDefaultValues()
-    {
-        // Arrange
-        const int defaultPageNumber = 1;
-        const int defaultSize = 20;
-
-        // Act
-        var result = _controller.Get(
+        var action = () => _controller.Get(
             new GetFundingCallQueryParameters(),
             new PaginationQueryParameters());
 
-        // Assert
-        result.Should().NotBeNull();
-        _mockSearchService.Verify(m => m.Search(It.IsAny<FundingCallSearchParameters>(), defaultPageNumber, defaultSize));
-    }
-
-    [Fact]
-    public void Get_PaginationWithTooLargePageSize_SetsPageSizeToMaximum()
-    {
-        // Arrange
-        const int maximumPageSize = 100;
-        const int pageNumber = 7;
-        const int pageSize = 150;
-        var queryParameters = new GetFundingCallQueryParameters {};
-        var paginationQueryParameters = new PaginationQueryParameters { PageSize = pageSize, PageNumber = pageNumber };
-
-        // Act
-        var result = _controller.Get(queryParameters, paginationQueryParameters);
-
-        // Assert
-        result.Should().NotBeNull();
-        _mockSearchService.Verify(m => m.Search(It.IsAny<FundingCallSearchParameters>(), pageNumber, maximumPageSize));
-    }
-
-    public void Dispose()
-    {
+        await action.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Synthetic search failure.");
     }
 }

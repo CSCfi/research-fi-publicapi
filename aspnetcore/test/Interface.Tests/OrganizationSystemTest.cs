@@ -2,28 +2,22 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.Http;
-using CSC.PublicApi.DatabaseContext;
+using System.Threading.Tasks;
 using ResearchFi.Organization;
 using CSC.PublicApi.Interface.Tests.TestHelpers;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace CSC.PublicApi.Interface.Tests;
 
-public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Program>>
+public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Program>>, IDisposable
 {
-    private readonly TestWebApplicationFactory<Program> _factory;
-    private readonly ApiDbContext _dbContext;
     private readonly HttpClient _client;
     private readonly string _apiBaseUrl = "v1/Organization";
 
     public OrganizationSystemTest(TestWebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     /// <summary>
@@ -31,13 +25,13 @@ public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Pr
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(OrganizationResultTestCases))]
-    public async void GET_ShouldReturnExpected(string urlParams, Expression<Func<Organization, bool>> assertPredicate)
+    public async Task GET_ShouldReturnExpected(string urlParams, Expression<Func<Organization, bool>> assertPredicate)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var organizations = await response.GetResponseObject<IEnumerable<Organization>>();
@@ -53,13 +47,13 @@ public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Pr
     /// </summary>
     [Theory(Skip = "Integration test")]
     [MemberData(nameof(OrganizationNoResultsTestCases))]
-    public async void GET_ShouldReturnEmpty(string urlParams)
+    public async Task GET_ShouldReturnEmpty(string urlParams)
     {
         // Arrange
         var apiUrl = $"{_apiBaseUrl}?{urlParams}";
 
         // Act
-        var response = await _client.GetAsync(apiUrl);
+        using var response = await _client.GetAsync(apiUrl);
 
         // Assert
         var organizations = await response.GetResponseObject<IEnumerable<Organization>>();
@@ -114,5 +108,10 @@ public class OrganizationSystemTest : IClassFixture<TestWebApplicationFactory<Pr
                (organization.NameFi != null && organization.NameFi.Contains(text, StringComparison.InvariantCultureIgnoreCase) ||
                 organization.NameSv != null && organization.NameSv.Contains(text, StringComparison.InvariantCultureIgnoreCase) ||
                 organization.NameEn != null && organization.NameEn.Contains(text, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 }
