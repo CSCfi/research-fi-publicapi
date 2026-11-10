@@ -33,9 +33,11 @@ validate them in a dedicated follow-up change.
 | P4-PROFILE | Retain null-success characterization; agree the response contract for an empty backend result. | Repository maintainers | 2026-12-10 |
 | P4-LINK | Retain empty-pagination link characterization; agree whether page-zero links are valid. | Repository maintainers | 2026-12-10 |
 
-Phase 4 acceptance still requires the latest changes to pass both integration
-lanes on supported Linux x86-64 CI. The earlier CI results documented elsewhere
-predate the latest coverage additions and do not satisfy that final validation.
+Phase 4 was accepted on 2026-11-10 with the exceptions and review deadline above.
+The user reports that GitHub CI passed for the current changes, including both
+integration lanes on supported Linux x86-64; the exact workflow run was not
+independently retrieved in this session. The findings remain follow-up items;
+this acceptance does not authorize or imply their production fixes.
 
 ## Findings
 

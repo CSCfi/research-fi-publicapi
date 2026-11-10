@@ -1,7 +1,25 @@
-Status: Phase 4 acceptance pending final CI validation; Phase 5 not started
-2026-11-09
+Status: Phase 4 complete with accepted exceptions; Phase 5 not started
+Status updated: 2026-11-10
 
 # Test coverage improvement plan
+
+## Current status (2026-11-10)
+
+| Phase | Status | Summary |
+| --- | --- | --- |
+| 1. Observable baseline | Complete | Discovery, coverage reports, and inactive-test inventory recorded. |
+| 2. Reliability and host isolation | Complete | Async tests and host-local configuration/authentication isolation repaired; service-free validation passed. |
+| 3. Recover inactive scenarios | Complete with accepted exceptions | Elasticsearch and SQL Server recovery completed; P3-ORG and P3-TIME remain documented exceptions. |
+| 4. High-risk branch and contract coverage | Complete with accepted exceptions | Service-free suite: 494 passed, 0 failed, 0 skipped. Representative populated API contracts accepted. GitHub CI, including Elasticsearch and SQL Server lanes, was reported passed by the user; run details were not independently retrieved. Eight findings remain in the follow-up plan for review by 2026-12-10. |
+| 5. Sustainable coverage and CI gates | Not started | Separate follow-on phase; not required for Phase 4 acceptance. |
+
+**Next action:** start Phase 5 when authorized. Track the eight accepted findings
+in the [defect follow-up plan](test-coverage-defect-follow-up-plan.md); their
+review deadline does not block Phase 4 completion.
+
+The detailed progress notes below are chronological. Any older statement that a
+phase remains in progress records the status at that point, not the current
+status summarized here.
 
 ## Goal and scope
 
@@ -497,10 +515,11 @@ time-bounded coverage exceptions, owned by Repository maintainers and due for
 review by 2026-12-10. They remain documented in the
 [defect follow-up plan](test-coverage-defect-follow-up-plan.md); fixes are not
 authorized by this acceptance. The latest service-free suite passes (494, 0
-failed, 0 skipped). **Phase 4 is not marked complete until the current changes
-pass the Elasticsearch and SQL Server lanes on supported Linux x86-64 CI.**
-These lanes must run against the exact final commit; prior maintainer-reported
-CI results predate the latest coverage additions.
+failed, 0 skipped). **Phase 4 complete (2026-11-10):** the user reports that
+GitHub CI passed for the current changes, including the Elasticsearch and SQL
+Server integration lanes on supported Linux x86-64. The exact workflow run was
+not independently retrieved in this session. Phase 5 CI coverage gates remain
+unstarted and are not part of this acceptance.
 
 | Priority | Production surface | Required scenarios |
 | --- | --- | --- |
