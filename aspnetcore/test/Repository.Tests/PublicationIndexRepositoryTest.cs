@@ -120,8 +120,297 @@ public class PublicationIndexRepositoryTest
         publication.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/publication/abc234");
         publication.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/publication/abc234");
     }
-    
-    
+
+    [Fact]
+    public void PerformInMemoryOperation_Publication_AggregatesDistinctCopublicationContributions()
+    {
+        var sharedName = new Name { NameId = 2, FirstNames = "Shared" };
+        var additionalName = new Name { NameId = 3, FirstNames = "Additional" };
+        var localContribution = new FactContribution
+        {
+            Name = new Name { NameId = 1, FirstNames = "Local" },
+            ContributionType = "other"
+        };
+        var sharedContribution = new FactContribution
+        {
+            Name = sharedName,
+            ContributionType = "other"
+        };
+        var duplicateContribution = new FactContribution
+        {
+            Name = sharedName,
+            ContributionType = "other"
+        };
+        var additionalContribution = new FactContribution
+        {
+            Name = additionalName,
+            ContributionType = "other"
+        };
+        var publication = new Publication
+        {
+            Id = "copublication-id",
+            DatabaseContributions = new List<FactContribution> { localContribution },
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>
+            {
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        sharedContribution,
+                        duplicateContribution,
+                        additionalContribution
+                    }
+                },
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution> { additionalContribution }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.DatabaseContributions.Should().HaveCount(3);
+        publication.DatabaseContributions.Select(contribution => contribution.Name!.NameId)
+            .Should().Equal(1, 2, 3);
+    }
+
+    [Fact]
+    public void PerformInMemoryOperation_Publication_CharacterizesContributionsWithEquivalentNameIds()
+    {
+        var publication = new Publication
+        {
+            Id = "copublication-equivalent-name-ids",
+            DatabaseContributions = new List<FactContribution>(),
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>
+            {
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        new()
+                        {
+                            Name = new Name { NameId = 42, FirstNames = "Same person" },
+                            ContributionType = "other"
+                        }
+                    }
+                },
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        new()
+                        {
+                            Name = new Name { NameId = 42, FirstNames = "Same person" },
+                            ContributionType = "other"
+                        }
+                    }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.DatabaseContributions.Should().HaveCount(2,
+            "current distinctness uses Name object equality, not the database NameId");
+        publication.DatabaseContributions.Select(contribution => contribution.Name!.NameId)
+            .Should().Equal(42, 42);
+    }
+
+    [Fact]
+    public void PerformInMemoryOperation_Publication_AggregatesDistinctRelatedKeywordsAndClassifications()
+    {
+        var publication = new Publication
+        {
+            Id = "copublication-with-related-data",
+            DatabaseContributions = new List<FactContribution>(),
+            Keywords = new List<Keyword> { new() { Value = "local-keyword" } },
+            ArtPublicationTypeCategory = new List<ReferenceData> { new() { Code = "local-category" } },
+            FieldsOfScience = new List<ReferenceData> { new() { Code = "local-science" } },
+            FieldsOfArt = new List<ReferenceData> { new() { Code = "local-art" } },
+            OrgPublicationKeywordDTOs = new List<OrgPublicationKeywordDTO>
+            {
+                new()
+                {
+                    Keywords = new List<Keyword>
+                    {
+                        new() { Value = "shared-keyword", Language = "en" },
+                        new() { Value = "first-keyword" }
+                    }
+                },
+                new()
+                {
+                    Keywords = new List<Keyword>
+                    {
+                        new() { Value = "shared-keyword", Language = "fi" },
+                        new() { Value = "second-keyword" }
+                    }
+                }
+            },
+            OrgPublicationArtPublicatonTypeCategoryDTOs = new List<OrgPublicationArtPublicatonTypeCategoryDTO>
+            {
+                new()
+                {
+                    ArtPublicationTypeCategories = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-category", NameEn = "Shared" },
+                        new() { Code = "first-category" }
+                    }
+                },
+                new()
+                {
+                    ArtPublicationTypeCategories = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-category", NameEn = "Duplicate" },
+                        new() { Code = "second-category" }
+                    }
+                }
+            },
+            OrgPublicationFieldsOfScienceDTOs = new List<OrgPublicationFieldsOfScienceDTO>
+            {
+                new()
+                {
+                    FieldsOfScience = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-science" },
+                        new() { Code = "first-science" }
+                    }
+                },
+                new()
+                {
+                    FieldsOfScience = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-science" },
+                        new() { Code = "second-science" }
+                    }
+                }
+            },
+            OrgPublicationFieldsOfArtDTOs = new List<OrgPublicationFieldsOfArtDTO>
+            {
+                new()
+                {
+                    FieldsOfArt = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-art" },
+                        new() { Code = "first-art" }
+                    }
+                },
+                new()
+                {
+                    FieldsOfArt = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-art" },
+                        new() { Code = "second-art" }
+                    }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.Keywords!.Select(keyword => keyword.Value)
+            .Should().Equal("local-keyword", "shared-keyword", "first-keyword", "second-keyword");
+        publication.ArtPublicationTypeCategory!.Select(category => category.Code)
+            .Should().Equal("local-category", "shared-category", "first-category", "second-category");
+        publication.FieldsOfScience!.Select(field => field.Code)
+            .Should().Equal("local-science", "shared-science", "first-science", "second-science");
+        publication.FieldsOfArt!.Select(field => field.Code)
+            .Should().Equal("local-art", "shared-art", "first-art", "second-art");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void PerformInMemoryOperation_MissingOrganizationsOrUnitParent_PreservesAuthorsWithoutOrganizations(
+        bool cacheOrphanedUnit)
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        if (cacheOrphanedUnit)
+        {
+            cache.Set(MemoryCacheKeys.OrganizationById(345), new Organization
+            {
+                Id = 345,
+                ParentId = 999,
+                LocalOrganizationUnitId = "orphaned-unit"
+            });
+        }
+
+        var publication = GetModel();
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.Authors.Should().HaveCount(2);
+        publication.Authors!.Select(author => author.FirstNames)
+            .Should().Equal("Author 1 first name", "Author 2 first name");
+        publication.Authors.Should().OnlyContain(author => author.Organizations!.Count == 0);
+        publication.Organizations.Should().BeEmpty();
+        publication.ResearchfiUrl!.En.Should().Be("https://research.fi/en/results/publication/abc234");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void PerformInMemoryOperation_NoContributionsOrRelatedParts_PreservesMissingRelationships(
+        bool useNullContributions)
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var publication = new Publication
+        {
+            Id = "standalone",
+            DatabaseContributions = useNullContributions ? null : new List<FactContribution>(),
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>()
+        };
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        var result = repository.PerformInMemoryOperation(publication);
+
+        result.Should().BeSameAs(publication);
+        if (useNullContributions)
+        {
+            publication.Authors.Should().BeNull();
+            publication.Organizations.Should().BeNull();
+        }
+        else
+        {
+            publication.Authors.Should().BeEmpty();
+            publication.Organizations.Should().BeEmpty();
+        }
+        publication.ParentPublication!.Name.Should().BeNull();
+        publication.ParentPublication.Type.Should().BeNull();
+        publication.ParentPublication.Publisher.Should().BeNull();
+        publication.PeerReviewed.Should().BeNull();
+        publication.ResearchfiUrl!.En.Should().Be("https://research.fi/en/results/publication/standalone");
+    }
+
+    [Fact]
+    public void PerformInMemoryOperation_OrganizationPart_DoesNotGetItsOwnResearchfiUrl()
+    {
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var publication = new Publication
+        {
+            Id = "organization-part",
+            IsOrgPublication = true
+        };
+        var repository = new PublicationIndexRepository(null, null, cache);
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.ResearchfiUrl.Should().BeNull();
+    }
+
     private static Publication GetModel()
     {
         return new Publication

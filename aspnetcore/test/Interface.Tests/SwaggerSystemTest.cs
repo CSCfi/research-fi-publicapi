@@ -90,61 +90,39 @@ public class SwaggerSystemTest : IClassFixture<TestWebApplicationFactory<Program
         }
     }
 
-    /*
     [Fact]
-    public async Task SwaggerJson_V2_ShouldLoadAndContainCorrectData()
+    public async Task SwaggerJson_FundingCallsPublishesOnlyGet()
     {
-        var expectedPaths_V2 = new[]
-        {
-            "/v2/research-datasets",
-            "/VirtaJulkaisutietopalvelu/Latausraportit/duplikaatit",  // TODO: Add /v2/ prefix to Virtajulkaisutietopalvelu endpoints
-            "/VirtaJulkaisutietopalvelu/Latausraportit/tilanne",
-            "/VirtaJulkaisutietopalvelu/Latausraportit/virheet",
-            "/VirtaJulkaisutietopalvelu/Yhteisjulkaisut/ristiriitaiset"
-        };
-
-        // Arrange
-        var apiUrl = $"swagger/v2/swagger.json";
-
-        // Act
-        var response = await _client.GetAsync(apiUrl);
-
-        // Assert
+        using var response = await _client.GetAsync("swagger/v1/swagger.json");
         response.EnsureSuccessStatusCode();
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
 
-        // Check that the response contains valid JSON
-        var content = await response.Content.ReadAsStringAsync();
-        var jsonDocument = JsonDocument.Parse(content);
-        Assert.NotNull(jsonDocument);
+        var operations = document.RootElement.GetProperty("paths")
+            .GetProperty("/v1/funding-calls")
+            .EnumerateObject()
+            .Select(operation => operation.Name)
+            .ToArray();
 
-        // Check that the JSON contains expected properties
-        Assert.True(jsonDocument.RootElement.TryGetProperty("openapi", out _));
-        Assert.True(jsonDocument.RootElement.TryGetProperty("info", out _));
-
-        // Check that the version in the info section is correct
-        var infoElement = jsonDocument.RootElement.GetProperty("info");
-        Assert.True(infoElement.TryGetProperty("version", out var versionElement));
-        Assert.Equal("2.0", versionElement.GetString());
-
-        // Check that the paths property exists
-        Assert.True(jsonDocument.RootElement.TryGetProperty("paths", out var pathsElement));
-
-        // Check that all expected endpoints exist in paths.
-        var actualPaths = pathsElement.EnumerateObject().Select(p => p.Name).ToHashSet(StringComparer.Ordinal);
-        foreach (var expectedPath in expectedPaths_V2)
-        {
-            Assert.True(
-                actualPaths.Contains(expectedPath),
-                $"Swagger is missing expected path '{expectedPath}'. If it is removed on purpose, please update the test to remove it from the expected paths list.");
-        }
-
-        // Check that there are no unexpected paths, to prevent accidentally exposing a new endpoint.
-        foreach (var actualPath in actualPaths)
-        {
-            Assert.True(
-                expectedPaths_V2.Contains(actualPath, StringComparer.Ordinal),
-                $"Swagger contains unexpected path '{actualPath}'. If this endpoint is added on purpose, please update the test to add it to the expected paths list.");
-        }
+        Assert.Equal(new[] { "get" }, operations);
     }
-    */
+
+    [Fact]
+    public async Task SwaggerJson_DoesNotPublishV2OrHiddenOrganizationEndpoints()
+    {
+        using var v2Response = await _client.GetAsync("swagger/v2/swagger.json");
+        using var v1Response = await _client.GetAsync("swagger/v1/swagger.json");
+
+        Assert.Equal(System.Net.HttpStatusCode.NotFound, v2Response.StatusCode);
+
+        var content = await v1Response.Content.ReadAsStringAsync();
+        using var jsonDocument = JsonDocument.Parse(content);
+        var actualPaths = jsonDocument.RootElement.GetProperty("paths")
+            .EnumerateObject()
+            .Select(path => path.Name)
+            .ToHashSet(StringComparer.Ordinal);
+
+        Assert.DoesNotContain("/v2/research-datasets", actualPaths);
+        Assert.DoesNotContain("/v1/organizations", actualPaths);
+        Assert.DoesNotContain("/v1/organizations-export", actualPaths);
+    }
 }

@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.5.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+        <PackageReference Include="Testcontainers.MsSql" Version="4.16.0" />
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,7 +24,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Indexer\Indexer.csproj" />
       <ProjectReference Include="..\..\src\Repositories\Repositories.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="SqlServer/PreflightAndInfrastructureSchema.sql" />
+        <EmbeddedResource Include="SqlServer/FundingCallSchema.sql" />
+        <EmbeddedResource Include="SqlServer/FundingDecisionSchema.sql" />
     </ItemGroup>
 
 </Project>

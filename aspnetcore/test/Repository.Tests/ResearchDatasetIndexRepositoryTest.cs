@@ -67,12 +67,15 @@ public class ResearchDatasetIndexRepositoryTest
         resultResearchDataset.IsLatestVersion.Should().Be(true, "IsLatestVersion should be true");
     }
     
-    [Fact]
-    public void PerformInMemoryOperations_ResearchDatasetWithLatestVersion_IsLatestVersion()
+    [Theory]
+    [InlineData(1, false)]
+    [InlineData(2, true)]
+    [InlineData(3, true)]
+    public void PerformInMemoryOperations_ResearchDataset_ComparesVersionInfoWithLatestVersion(
+        int versionInfo, bool expectedIsLatestVersion)
     {
-        // Arrange
         var researchDataset = GetModel();
-        researchDataset.VersionInfo = 3; // Set to higher value than any in VersionSet
+        researchDataset.VersionInfo = versionInfo;
         researchDataset.VersionSet = new List<Version>()
         {
             new Version
@@ -86,29 +89,127 @@ public class ResearchDatasetIndexRepositoryTest
                 VersionNumber = 2
             }
         };
-        var researchDatasets = new List<object>
-        {
-            researchDataset
-        };
-        
-        // Act
-        var resultDatasets = _researchDatasetIndexRepository.PerformInMemoryOperations(researchDatasets);
-        
-        // Assert
-        resultDatasets.Should().NotBeNullOrEmpty();
-        var researchDatasetObject = researchDatasets.FirstOrDefault();
-        researchDatasetObject.Should().NotBeNull().And.BeAssignableTo<ResearchDataset>();
-        var resultResearchDataset = (ResearchDataset)researchDatasetObject!;
 
-        resultResearchDataset.VersionSet.Should().NotBeNull();
-        resultResearchDataset.IsLatestVersion.Should().Be(true);
+        _researchDatasetIndexRepository.PerformInMemoryOperations(new List<object> { researchDataset });
 
-        // Check that ResearchfiUrl is set correctly in HandleResearchfiUrl
-        resultResearchDataset.ResearchfiUrl.Should().NotBeNull();
-        resultResearchDataset.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/dataset/localIdentifier-1");
-        resultResearchDataset.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/dataset/localIdentifier-1");
-        resultResearchDataset.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/dataset/localIdentifier-1");
+        researchDataset.VersionSet.Should().NotBeNull();
+        researchDataset.IsLatestVersion.Should().Be(expectedIsLatestVersion);
+
+        researchDataset.ResearchfiUrl.Should().NotBeNull();
+        researchDataset.ResearchfiUrl.Fi.Should().Be("https://tiedejatutkimus.fi/fi/results/dataset/localIdentifier-1");
+        researchDataset.ResearchfiUrl.Sv.Should().Be("https://forskning.fi/sv/results/dataset/localIdentifier-1");
+        researchDataset.ResearchfiUrl.En.Should().Be("https://research.fi/en/results/dataset/localIdentifier-1");
     }
+
+    [Fact]
+    public void PerformInMemoryOperations_ResearchDatasetWithEmptyVersionSet_IsLatestAndClearsVersionSet()
+    {
+        var researchDataset = GetModel();
+        researchDataset.VersionSet = new List<Version>();
+
+        _researchDatasetIndexRepository.PerformInMemoryOperations(new List<object> { researchDataset });
+
+        researchDataset.IsLatestVersion.Should().BeTrue();
+        researchDataset.VersionSet.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData("direct")]
+    [InlineData("identifierless-organization")]
+    [InlineData("identifierless-data")]
+    public void PerformInMemoryOperation_ResolvesContributorOrganizationByRelationshipPriority(string relationship)
+    {
+        var directOrganization = GetOrganization("direct");
+        var identifierlessOrganization = GetOrganization("identifierless");
+        var identifierlessDataOrganization = GetOrganization("data");
+        var helper = new ContributorHelper
+        {
+            FactContribution_DimOrganizationId = -1,
+            FactContribution_DimIdentifierlessDataId = -1,
+            FactContribution_DimIdentifierlessData_DimOrganizationId = -1,
+            Organization_From_FactContribution_DimOrganization = directOrganization,
+            Organization_From_FactContribution_DimIdentifierlessData_DimOrganization = identifierlessOrganization,
+            Organization_From_FactContribution_DimIdentifierlessData = identifierlessDataOrganization,
+            Person = new Person()
+        };
+
+        var expectedOrganization = relationship switch
+        {
+            "direct" => directOrganization,
+            "identifierless-organization" => identifierlessOrganization,
+            "identifierless-data" => identifierlessDataOrganization,
+            _ => throw new ArgumentOutOfRangeException(nameof(relationship))
+        };
+
+        if (relationship == "direct")
+        {
+            helper.FactContribution_DimOrganizationId = 1;
+        }
+        else
+        {
+            helper.FactContribution_DimIdentifierlessDataId = 2;
+            if (relationship == "identifierless-organization")
+                helper.FactContribution_DimIdentifierlessData_DimOrganizationId = 3;
+        }
+
+        var dataset = new ResearchDataset
+        {
+            Id = "with-contributor",
+            ContributorsHelper = new List<ContributorHelper> { helper },
+            VersionSet = null
+        };
+
+        var result = _researchDatasetIndexRepository.PerformInMemoryOperation(dataset);
+
+        result.Should().BeSameAs(dataset);
+        dataset.Contributors.Should().ContainSingle()
+            .Which.Organization.Should().BeSameAs(expectedOrganization);
+        dataset.ContributorsHelper.Should().BeNull();
+    }
+
+    [Fact]
+    public void PerformInMemoryOperations_RemovesContributorsWithoutPersonOrRealOrganization()
+    {
+        var helperWithoutRealOrganization = new ContributorHelper
+        {
+            FactContribution_DimOrganizationId = 1,
+            FactContribution_DimIdentifierlessDataId = -1,
+            FactContribution_DimIdentifierlessData_DimOrganizationId = -1,
+            Organization_From_FactContribution_DimOrganization = GetOrganization("-1")
+        };
+        var helperWithoutRelationships = new ContributorHelper
+        {
+            FactContribution_DimOrganizationId = -1,
+            FactContribution_DimIdentifierlessDataId = -1,
+            FactContribution_DimIdentifierlessData_DimOrganizationId = -1
+        };
+        var personOnlyHelper = new ContributorHelper
+        {
+            FactContribution_DimOrganizationId = 1,
+            FactContribution_DimIdentifierlessDataId = -1,
+            FactContribution_DimIdentifierlessData_DimOrganizationId = -1,
+            Person = new Person()
+        };
+        var dataset = new ResearchDataset
+        {
+            Id = "contributors",
+            ContributorsHelper = new List<ContributorHelper>
+            {
+                helperWithoutRealOrganization,
+                helperWithoutRelationships,
+                personOnlyHelper
+            }
+        };
+
+        _researchDatasetIndexRepository.PerformInMemoryOperations(new List<object> { dataset });
+
+        dataset.Contributors.Should().ContainSingle()
+            .Which.Person.Should().BeSameAs(personOnlyHelper.Person);
+        dataset.Contributors!.Single().Organization.Should().BeNull();
+        dataset.ContributorsHelper.Should().BeNull();
+    }
+
+    private static Organization GetOrganization(string id) => new() { Id = id };
     
     private static ResearchDataset GetModel()
     {

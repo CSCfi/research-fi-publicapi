@@ -3,6 +3,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using CSC.PublicApi.ElasticService.SearchParameters;
 using CSC.PublicApi.Service.Models.ResearchDataset;
@@ -93,6 +94,36 @@ public class ResearchDatasetProfileTest
 
         // Assert
         result.Should().BeEquivalentTo(elasticModel);
+    }
+
+    [Fact]
+    public void Map_ResearchDataset_MapsSharedFieldsAndResearchfiUrlToReducedV2Contract()
+    {
+        var result = _mapper.Map<ResearchFi.ResearchDataset.V2.ResearchDataset>(new ResearchDataset
+        {
+            Id = "synthetic-dataset",
+            NameFi = "Synthetic dataset",
+            NameSv = "Syntetisk datauppsättning",
+            NameEn = "Synthetic dataset",
+            IsLatestVersion = true,
+            ResearchfiUrl = new CSC.PublicApi.Service.Models.ResearchfiUrl(
+                "research-dataset",
+                "synthetic-dataset")
+        });
+
+        result.Id.Should().Be("synthetic-dataset");
+        result.NameFi.Should().Be("Synthetic dataset");
+        result.NameSv.Should().Be("Syntetisk datauppsättning");
+        result.NameEn.Should().Be("Synthetic dataset");
+        result.IsLatestVersion.Should().BeTrue();
+        result.ResearchfiUrl.Should().NotBeNull();
+        result.ResearchfiUrl!.En.Should().Be(
+            "https://research.fi/en/results/dataset/synthetic-dataset");
+        typeof(ResearchFi.ResearchDataset.V2.ResearchDataset)
+            .GetProperties()
+            .Select(property => property.Name)
+            .Should()
+            .BeEquivalentTo("Id", "NameFi", "NameSv", "NameEn", "IsLatestVersion", "ResearchfiUrl");
     }
     
     private static ResearchDataset GetServiceModel()

@@ -94,6 +94,32 @@ public class ResearchDatasetProfileTest
         // Assert
         result.Should().BeEquivalentTo(elasticModel);
     }
+
+    [Fact]
+    public void Map_ResearchDataset_GeneratesFairDataUrlAndPreservesAbsentCollections()
+    {
+        var result = _mapper.Map<ResearchFi.ResearchDataset.V1.ResearchDataset>(new ResearchDataset
+        {
+            Id = "synthetic-dataset",
+            Contributors = null,
+            FieldsOfScience = null,
+            Languages = null,
+            Keywords = null,
+            DatasetRelations = null,
+            PersistentIdentifiers = null,
+            VersionSet = null
+        });
+
+        result.Id.Should().Be("synthetic-dataset");
+        result.FairDataUrl.Should().Be("https://etsin.fairdata.fi/dataset/synthetic-dataset");
+        result.Contributors.Should().BeNull();
+        result.FieldsOfScience.Should().BeNull();
+        result.Languages.Should().BeNull();
+        result.Keywords.Should().BeNull();
+        result.DatasetRelations.Should().BeNull();
+        result.PersistentIdentifiers.Should().BeNull();
+        result.VersionSet.Should().BeNull();
+    }
     
     private static ResearchDataset GetServiceModel()
     {

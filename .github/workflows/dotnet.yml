@@ -25,5 +25,101 @@ jobs:
       run: dotnet build --no-restore
       working-directory: aspnetcore/
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        status=0
+        for project in Interface.Tests Indexer.Tests Repository.Tests; do
+          mkdir -p "TestResults/$project"
+          if ! dotnet test "test/$project/$project.csproj" \
+            --no-build \
+            --list-tests > "TestResults/$project/discovery.txt" 2>&1; then
+            status=1
+          fi
+          if ! dotnet test "test/$project/$project.csproj" \
+            --no-build \
+            --filter "Category!=ElasticsearchIntegration&Category!=SqlServerIntegration" \
+            --settings test/coverage.runsettings \
+            --collect:"XPlat Code Coverage" \
+            --logger "trx;LogFileName=$project.trx" \
+            --results-directory "TestResults/$project" \
+            --verbosity normal; then
+            status=1
+          fi
+        done
+        exit "$status"
       working-directory: aspnetcore/
+    - name: Generate test and coverage summary
+      if: always()
+      run: python3 test/coverage_report.py TestResults --source-root src --output TestResults/coverage-summary.md
+      working-directory: aspnetcore/
+    - name: Upload test and coverage reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dotnet-test-and-coverage
+        path: aspnetcore/TestResults/
+        if-no-files-found: warn
+        retention-days: 14
+
+  elasticsearch-integration:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 10.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: aspnetcore/
+    - name: Run Elasticsearch integration tests
+      run: |
+        mkdir -p TestResults/ElasticsearchIntegration
+        dotnet test test/Interface.Tests/Interface.Tests.csproj \
+          --filter "Category=ElasticsearchIntegration" \
+          --settings test/coverage.runsettings \
+          --collect:"XPlat Code Coverage" \
+          --logger "trx;LogFileName=ElasticsearchIntegration.trx" \
+          --results-directory TestResults/ElasticsearchIntegration \
+          --verbosity normal
+      working-directory: aspnetcore/
+    - name: Upload Elasticsearch integration results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: elasticsearch-integration-results
+        path: aspnetcore/TestResults/ElasticsearchIntegration/
+        if-no-files-found: warn
+        retention-days: 14
+
+  sqlserver-integration:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 10.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: aspnetcore/
+    - name: Run SQL Server integration tests
+      run: |
+        mkdir -p TestResults/SqlServerIntegration
+        dotnet test test/Repository.Tests/Repository.Tests.csproj \
+          --filter "Category=SqlServerIntegration" \
+          --settings test/coverage.runsettings \
+          --collect:"XPlat Code Coverage" \
+          --logger "trx;LogFileName=SqlServerIntegration.trx" \
+          --results-directory TestResults/SqlServerIntegration \
+          --verbosity normal
+      working-directory: aspnetcore/
+    - name: Upload SQL Server integration results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: sqlserver-integration-results
+        path: aspnetcore/TestResults/SqlServerIntegration/
+        if-no-files-found: warn
+        retention-days: 14

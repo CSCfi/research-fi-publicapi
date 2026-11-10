@@ -26,6 +26,45 @@ public class PublicationProfileTest
     }
 
     [Fact]
+    public void ProjectTo_DimPublication_ShouldMapCopublicationAndOrganizationPublicationRelationships()
+    {
+        var coPublication = GetEntity();
+        coPublication.Id = 123;
+        coPublication.PublicationId = "co-publication-id";
+
+        var organizationPublication = GetEntity();
+        organizationPublication.Id = 234;
+        organizationPublication.PublicationId = "organization-publication-id";
+        organizationPublication.OriginalPublicationId = "original-organization-publication-id";
+        organizationPublication.PublicationOrgId = "organization-id";
+        organizationPublication.DimPublicationId = coPublication.Id;
+        organizationPublication.DimPublicationNavigation = coPublication;
+        coPublication.InverseDimPublicationNavigation.Add(organizationPublication);
+
+        var mappedCoPublication = Act_Map(coPublication);
+        var mappedOrganizationPublication = Act_Map(organizationPublication);
+
+        mappedCoPublication.IsCoPublication.Should().BeTrue();
+        mappedCoPublication.IsOrgPublication.Should().BeFalse();
+        mappedCoPublication.OrgPublicationIDs.Should().ContainSingle()
+            .Which.Should().Be("organization-publication-id");
+        mappedCoPublication.OrganizationPartsOfCoPublication.Should().ContainSingle().Which
+            .Should().BeEquivalentTo(new OrganizationPartOfCoPublication
+            {
+                Id = "organization-publication-id",
+                OriginalPublicationId = "original-organization-publication-id",
+                Organization = new OrganizationPartOfPublication_Organization
+                {
+                    Id = "organization-id"
+                }
+            });
+
+        mappedOrganizationPublication.IsOrgPublication.Should().BeTrue();
+        mappedOrganizationPublication.IsCoPublication.Should().BeFalse();
+        mappedOrganizationPublication.CoPublicationID.Should().Be("co-publication-id");
+    }
+
+    [Fact]
     public void ProjectTo_DimPublication_ShouldBeMappedToPublication()
     {
         // Arrange
@@ -71,116 +110,60 @@ public class PublicationProfileTest
         result.Should().BeEquivalentTo(model, options => options);
     }
 
-/*
     [Fact]
-    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_IsOrgPublication_IsCoPublication()
+    public void ProjectTo_Copublication_ProjectsEveryOrganizationPartAndItsContributions()
     {
-        // Arrange
-        var entity_coPublication = GetEntity();
-        var entity_orgPublication = GetEntity();
-        // Entity - Yhteisjulkaisu
-        entity_coPublication.PublicationId = "co-publication id";
-        entity_coPublication.Id = 1;
-        entity_coPublication.InverseDimPublicationNavigation.Add(entity_orgPublication);
-        // Entity - Osajulkaisu
-        entity_orgPublication.PublicationId = "org publication id";
-        entity_orgPublication.DimPublicationNavigation = entity_coPublication;
-        entity_orgPublication.DimPublicationId = entity_coPublication.Id;
-        // Model - Yhteisjulkaisu
-        var model_coPublication = GetModel();
-        model_coPublication.Id = "co-publication id";
-        model_coPublication.IsCoPublication = true;
-        model_coPublication.IsOrgPublication = false;
-        model_coPublication.OrgPublicationIDs = new List<string> { "org publication id" };
-        model_coPublication.OrgPublicationDTOs = new List<OrgPublicationDTO> {
-            new OrgPublicationDTO {
-                Id = "org publication id",
-                DatabaseContributions = new () {
-                    new CSC.PublicApi.Service.Models.Publication.FactContribution() {
-                        ArtPublicationRole = new () {    
-                            Code = 
-                            "roleCode", 
-                            NameEn = 
-                            "roleNameEn", 
-                            NameFi = 
-                            "roleNameFi", 
-                            NameSv = 
-                            "roleNameSv"
-                        },
-                        ContributionType = "publication_author_organization",
-                        Name = new()
-                        {
-                            FirstNames = 
-                            "personFirstName", 
-                            LastName = 
-                            "personLastName", 
-                            NameId = 23, 
-                            Orcid = 
-                            "pidContent"
-                        },
-                        OrganizationId = 42
-                    },
-                    new CSC.PublicApi.Service.Models.Publication.FactContribution() {
-                        ArtPublicationRole = null, 
-                        ContributionType = 
-                        "publication_organization", 
-                        Name = null, 
-                        OrganizationId = 41
-                    },
-                }
-            }
-        };
-        // Model - Osajulkaisu
-        var model_orgPublication = GetModel();
-        model_orgPublication.Id = "org publication id";
-        model_orgPublication.IsCoPublication = false;
-        model_orgPublication.IsOrgPublication = true;
-        model_orgPublication.CoPublicationID = "co-publication id";
+        var coPublication = GetEntity();
+        coPublication.DimPublicationId = null;
+        var firstPart = GetEntity();
+        firstPart.Id = 234;
+        firstPart.PublicationId = "first-part";
+        firstPart.PublicationOrgId = "first-organization";
+        firstPart.DimPublicationId = coPublication.Id;
+        firstPart.DimPublicationNavigation = coPublication;
+        var secondPart = GetEntity();
+        secondPart.Id = 345;
+        secondPart.PublicationId = "second-part";
+        secondPart.PublicationOrgId = "second-organization";
+        secondPart.DimPublicationId = coPublication.Id;
+        secondPart.DimPublicationNavigation = coPublication;
+        secondPart.FactContributions.Clear();
+        coPublication.InverseDimPublicationNavigation.Add(firstPart);
+        coPublication.InverseDimPublicationNavigation.Add(secondPart);
 
-        // Act
-        var resultCoPublication = Act_Map(entity_coPublication);
-        var resultOrgPublication = Act_Map(entity_orgPublication);
+        var result = Act_Map(coPublication);
 
-        // Assert
-        resultCoPublication.Should().BeEquivalentTo(model_coPublication, options => options);
-        resultOrgPublication.Should().BeEquivalentTo(model_orgPublication, options => options);
+        result.IsCoPublication.Should().BeTrue();
+        result.IsOrgPublication.Should().BeFalse();
+        result.OrgPublicationIDs.Should().BeEquivalentTo(new[] { "first-part", "second-part" });
+        result.OrganizationPartsOfCoPublication!.Select(part => part.Organization!.Id)
+            .Should().BeEquivalentTo(new[] { "first-organization", "second-organization" });
+        result.OrgPublicationDatabaseContributionDTOs.Should().HaveCount(2);
+        var contributions = result.OrgPublicationDatabaseContributionDTOs![0].DatabaseContributions;
+        contributions.Should().HaveCount(2);
+        contributions.Select(contribution => contribution.ContributionType).Should().BeEquivalentTo(
+            new[] { "publication_author_organization", "publication_organization" });
+        contributions.Single(contribution => contribution.Name != null).Name!.NameId.Should().Be(23);
+        result.OrgPublicationDatabaseContributionDTOs[1].DatabaseContributions.Should().BeEmpty();
     }
-*/
-/*
+
     [Fact]
-    public void ProjectTo_DimPublication_ShouldBeMappedToPublication_MainPublication_Lists_CoPublications()
+    public void ProjectTo_PublicationWithoutOrganizationParts_ProducesNoCopublicationRelationships()
     {
-        // Arrange
-        // Yhteisjulkaisu
-        var entity_mainPublication = GetEntity();
-        entity_mainPublication.PublicationId = "yhteisjulkaisu";
-        entity_mainPublication.Id = 1;
-        // Osajulkaisu 1
-        var entity_coPublication1 = GetEntity();
-        entity_coPublication1.PublicationId = "osajulkaisu1";
-        entity_coPublication1.DimPublicationNavigation = entity_mainPublication;
-        entity_coPublication1.DimPublicationId = 1;
-        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication1);
-        // Osajulkaisu 2
-        var entity_coPublication2 = GetEntity();
-        entity_coPublication2.PublicationId = "osajulkaisu2";
-        entity_coPublication2.DimPublicationNavigation = entity_mainPublication;
-        entity_coPublication2.DimPublicationId = 1;
-        entity_mainPublication.InverseDimPublicationNavigation.Add(entity_coPublication2);
+        var entity = GetEntity();
+        entity.DimPublicationId = null;
+        entity.DimPublicationNavigation = null;
 
-        var model = GetModel();
-        model.Id = "yhteisjulkaisu";
-        model.IsMainPublication = true;
-        model.IsCoPublication = false;
-        model.OrgPublicationIDs = new List<string> { "osajulkaisu1", "osajulkaisu2" };
+        var result = Act_Map(entity);
 
-        // Act
-        var result = Act_Map(entity_mainPublication);
-
-        // Assert
-        result.Should().BeEquivalentTo(model, options => options);
+        result.IsCoPublication.Should().BeFalse();
+        result.IsOrgPublication.Should().BeFalse();
+        result.CoPublicationID.Should().BeNull();
+        result.OrgPublicationIDs.Should().BeEmpty();
+        result.OrganizationPartsOfCoPublication.Should().BeEmpty();
+        result.OrgPublicationDatabaseContributionDTOs.Should().BeEmpty();
     }
-*/
+
     private Publication Act_Map(DimPublication dbEntity)
     {
         var entityQueryable = new List<DimPublication>
