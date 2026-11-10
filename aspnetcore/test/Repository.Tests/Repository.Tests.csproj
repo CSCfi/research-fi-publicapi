@@ -24,10 +24,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Indexer\Indexer.csproj" />
       <ProjectReference Include="..\..\src\Repositories\Repositories.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="SqlServer/PreflightAndInfrastructureSchema.sql" />
         <EmbeddedResource Include="SqlServer/FundingCallSchema.sql" />
         <EmbeddedResource Include="SqlServer/FundingDecisionSchema.sql" />
     </ItemGroup>

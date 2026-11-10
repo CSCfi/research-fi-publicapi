@@ -1,5 +1,4 @@
 ﻿
-using FluentAssertions;
 using Xunit;
 
 namespace CSC.PublicApi.Indexer.Tests.Preflight;
@@ -10,37 +9,24 @@ public class DatabasePreflightCheckTest
     {
     }
 
-    [Fact]
-    public void FactContributionNumberOfDistinctReferencesToDimPublicationIsGood_01()
+    [Theory]
+    [InlineData(10, 7, false)]
+    [InlineData(10, 8, true)]
+    [InlineData(100, 79, false)]
+    [InlineData(100, 80, true)]
+    [InlineData(100, 81, true)]
+    [InlineData(0, 0, true)]
+    public void FactContributionNumberOfDistinctReferencesToDimPublicationIsGood_UsesEightyPercentThreshold(
+        int publicationCount,
+        int distinctReferenceCount,
+        bool expected)
     {
-        // Arrange
-        DatabasePreflightCheck databasePreflightCheck = new DatabasePreflightCheck();
-        int dimPublicationCount = 10;
-        int factContributionDistinctReferencesToDimPublicationCount = 7;
+        var preflight = new DatabasePreflightCheck();
 
-        // Act
-        bool actualResult = databasePreflightCheck.FactContributionNumberOfDistinctReferencesToDimPublicationIsGood(
-            dimPublicationCount,
-            factContributionDistinctReferencesToDimPublicationCount);
+        var actual = preflight.FactContributionNumberOfDistinctReferencesToDimPublicationIsGood(
+            publicationCount,
+            distinctReferenceCount);
 
-        // Assert
-        Assert.False(actualResult);
-    }
-
-    [Fact]
-    public void FactContributionNumberOfDistinctReferencesToDimPublicationIsGood_02()
-    {
-        // Arrange
-        DatabasePreflightCheck databasePreflightCheck = new DatabasePreflightCheck();
-        int dimPublicationCount = 10;
-        int factContributionDistinctReferencesToDimPublicationCount = 9;
-
-        // Act
-        bool actualResult = databasePreflightCheck.FactContributionNumberOfDistinctReferencesToDimPublicationIsGood(
-            dimPublicationCount,
-            factContributionDistinctReferencesToDimPublicationCount);
-
-        // Assert
-        Assert.True(actualResult);
+        Assert.Equal(expected, actual);
     }
 }

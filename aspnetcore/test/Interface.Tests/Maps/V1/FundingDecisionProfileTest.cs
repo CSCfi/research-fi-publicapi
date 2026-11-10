@@ -7,6 +7,7 @@ using AutoMapper;
 using CSC.PublicApi.Service.Models;
 using FluentAssertions;
 using ResearchFi.CodeList;
+using ResearchFi.Query;
 using Xunit;
 using FrameworkProgramme = ResearchFi.FundingDecision.FrameworkProgramme;
 using FundingDecision = ResearchFi.FundingDecision.FundingDecision;
@@ -46,6 +47,41 @@ public class FundingDecisionProfileTest
 
         // Assert   
         result.Should().BeEquivalentTo(apiModel);
+    }
+
+    [Theory]
+    [InlineData(2024, 2024, 1, 1)]
+    [InlineData(1, 1, 1, 1)]
+    public void Map_QueryParameters_ConvertsFundingStartYearToInclusiveDate(
+        int year,
+        int expectedYear,
+        int expectedMonth,
+        int expectedDay)
+    {
+        var result = _mapper.Map<CSC.PublicApi.ElasticService.SearchParameters.FundingDecisionSearchParameters>(
+            new GetFundingDecisionQueryParameters { FundingStartYearFrom = year });
+
+        result.FundingStartYearFrom.Should().Be(new DateTime(expectedYear, expectedMonth, expectedDay));
+    }
+
+    [Fact]
+    public void Map_FundingDecision_PreservesAbsentOptionalCollectionsAndRelationships()
+    {
+        var result = _mapper.Map<FundingDecision>(
+            new CSC.PublicApi.Service.Models.FundingDecision.FundingDecision
+            {
+                FundingReceivers = null,
+                FieldsOfScience = null,
+                Keywords = null,
+                IdentifiedTopics = null,
+                Funder = null
+            });
+
+        result.FundingReceivers.Should().BeNull();
+        result.FieldsOfScience.Should().BeNull();
+        result.Keywords.Should().BeNull();
+        result.IdentifiedTopics.Should().BeNull();
+        result.Funder.Should().BeNull();
     }
 
     private object GetApiModel()

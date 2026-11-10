@@ -15,6 +15,109 @@ for anonymous, authenticated, and role-bearing callers (including the legacy wri
 role), and Swagger lists only GET for `/v1/funding-calls`. The obsolete no-op POST
 and skipped persistence test have been retired.
 
+### Query-generator contracts
+
+```shell
+dotnet test test/Interface.Tests/Interface.Tests.csproj --filter "FullyQualifiedName~QueryGeneratorContractTest"
+```
+
+[QueryGeneratorContractTest](Interface.Tests/QueryGenerators/QueryGeneratorContractTest.cs)
+resolves all seven generators and the NEST serializer through production
+registration, but only serializes requests: it makes no Elasticsearch calls.
+It checks configured indices, pagination and sort order, optional long export
+cursors, search/count/export filter parity, individual and combined filter
+clauses, nested paths and author correlation, date/year boundaries, visibility,
+and implemented single-document lookups.
+
+Serialized DSL checks complement, rather than replace, the container lane's
+matching/nonmatching document assertions. Organization name-search semantics
+remain deferred under P3-ORG. Production defects found during coverage work are
+recorded in the [separate follow-up plan](../../plans/test-coverage-defect-follow-up-plan.md);
+they are not fixed as part of the coverage plan.
+
+### Search-service responses and failures
+
+```shell
+dotnet test test/Interface.Tests/Interface.Tests.csproj --filter "FullyQualifiedName~ElasticSearchServiceTest"
+```
+
+[ElasticSearchServiceTest](Interface.Tests/Services/ElasticSearchServiceTest.cs)
+uses real NEST serialization and response parsing through a strict scripted
+in-memory transport; no Docker or network access is needed. It verifies
+documents/totals, single lookups, full/partial/empty search-after pages, long
+cursors, counts above 10,000, query parity, and request order.
+
+HTTP 400/503 cases exercise both NEST's default non-throwing behavior and
+explicit throwing settings, with retries disabled for deterministic responses.
+Failure-characterization cases document P4-SEARCH and P4-COUNT in the
+[follow-up plan](../../plans/test-coverage-defect-follow-up-plan.md).
+They do not define successful empty results or silent count suppression as
+desired behavior, and do not change production error handling.
+
+### Index-service batching and lifecycle failures
+
+```shell
+dotnet test test/Interface.Tests/Interface.Tests.csproj --filter "FullyQualifiedName~ElasticSearchIndex"
+```
+
+[ElasticSearchIndexBoundaryTest](Interface.Tests/Services/ElasticSearchIndexBoundaryTest.cs)
+adds full/chunk indexing cases for 0/1/1499/1500/1501 documents. It checks actual
+NDJSON payloads, uniqueness/order, batch sizes, alias actions, readiness parameters,
+creation failure, bulk item/HTTP failures, logging, and stopping before activation.
+The in-memory transport returns one successful bulk item per submitted document
+and uses real NEST response parsing, without Docker or external calls.
+
+Lifecycle failure characterization is tracked as P4-ROTATE in the
+[follow-up plan](../../plans/test-coverage-defect-follow-up-plan.md).
+Those cases document existing unsafe continuation, not desired rotation behavior.
+No production changes are made; absent-index deletion remains an allowed control.
+
+### Profile contracts and authorization
+
+```shell
+dotnet test test/Interface.Tests/Interface.Tests.csproj --filter "FullyQualifiedName~ProfileBackendContractTest|FullyQualifiedName~ProfileEndpointContractTest|FullyQualifiedName~ProfileControllerTest"
+```
+
+These tests isolate outbound HTTP with message handlers, while exercising the
+real backend client and the API's typed-client registration. They cover request
+path/body, the synthetic configured token, optional client identity, success/error
+responses, cancellation and network errors, controller RequestAborted forwarding,
+role boundaries, and invalid request bodies. No real profile data or credentials
+are used. JSON-null success behavior is characterized under P4-PROFILE in the
+[follow-up plan](../../plans/test-coverage-defect-follow-up-plan.md), not fixed or
+declared the intended response contract.
+
+### API policy and pagination contracts
+
+```shell
+dotnet test test/Interface.Tests/Interface.Tests.csproj --filter "FullyQualifiedName~ApiRoutePolicyTest|FullyQualifiedName~FundingCallHttpContractTest|FullyQualifiedName~FundingDecisionHttpContractTest|FullyQualifiedName~ResponseHelperContractTest"
+```
+
+The route matrix covers search/export/detail, hidden organization/V2, Virta, and
+funder read/write policies with anonymous, no-role, wrong-role, and correct-role
+callers. Search services are isolated fakes; Virta and import databases are
+uniquely named EF InMemory stores. These cases do not verify SQL translation.
+The profile route has its own policy matrix described above.
+
+`VirtaHttpContractTest` seeds synthetic rows in an isolated EF InMemory store and
+checks populated JSON from all four Virta routes, including the
+`Julkaisutyyppi`-to-`RistiriitainenTieto` public-field mapping. This verifies
+controller mapping and response shape, not SQL translation.
+
+Funder route tests verify POST persistence, successful PUT/DELETE behavior,
+client isolation, and not-found cases using an isolated EF InMemory store.
+Authorization is checked independently for each read/write route.
+
+Funding-call HTTP cases verify query binding, invalid queries, public JSON,
+pagination normalization, and export-link traversal without duplicates/omissions.
+Helper cases assert exact link relations, preserved filters, and cursor headers.
+The page-zero link emitted for empty results is characterized as P4-LINK in the
+[follow-up plan](../../plans/test-coverage-defect-follow-up-plan.md).
+
+`FundingDecisionHttpContractTest` verifies all search filters and pagination bind
+to the service call, representative nested response JSON and pagination headers,
+and 400 responses for malformed year/page parameters before service invocation.
+
 ## Container integration tests
 
 Start Docker Desktop (or a compatible Docker engine), then run the relevant lane:
@@ -70,12 +173,15 @@ by these tests. Exhaustive query-filter and authorization matrices remain Phase 
 
 ### SQL schema scope
 
-[FundingCallSchema.sql](Repository.Tests/SqlServer/FundingCallSchema.sql) and
-[FundingDecisionSchema.sql](Repository.Tests/SqlServer/FundingDecisionSchema.sql) are
-versioned, test-only subsets of the approved scaffolded
+[FundingCallSchema.sql](Repository.Tests/SqlServer/FundingCallSchema.sql),
+[FundingDecisionSchema.sql](Repository.Tests/SqlServer/FundingDecisionSchema.sql), and
+[PreflightAndInfrastructureSchema.sql](Repository.Tests/SqlServer/PreflightAndInfrastructureSchema.sql)
+are versioned, test-only subsets of the approved scaffolded
 [ApiDbContext](../src/DatabaseContext/ApiDbContext.cs) mappings, applied in that order.
 They include the columns, keys, and relationships used by the funding-call and
-funding-decision repository queries, not the entire warehouse or all its constraints.
+funding-decision repository queries, preflight checks, and infrastructure and
+infrastructure-service repository queries, not the entire warehouse or all its
+constraints.
 Required sentinels, multilingual links, organizations, categories, funding-group
 contributors, consortium memberships, keywords, topics, and excluded counterexamples
 are synthetic.
@@ -89,6 +195,15 @@ domestic/unknown sources, duplicate PICs, mixed consortiums, self/parent contrib
 programme ancestors, dates, related collections, enrichment, and source-row paging.
 Publication relational coverage is not yet provided by this schema.
 
+`PreflightAndInfrastructureSchema.sql` adds the columns queried by preflight and
+infrastructure/infrastructure-service repository paths. Its sentinel and positive
+rows are synthetic.
+SQL-backed preflight tests execute the complete `IsGood` query and assert the 80%
+reference boundary, sentinel exclusion, empty-table handling, and error/status logging.
+Infrastructure-service enrichment tests use transaction-isolated infrastructure
+PIDs, participant facts, descriptive items, and ESFRI references. Both sets are in the
+SQL Server integration lane and require Docker.
+
 The timestamp characterization tests record an existing production behavior: null
 `created` or `modified` values in a funding decision cause SQL error 242 during the
 projection from nullable warehouse timestamps to non-nullable model timestamps.
@@ -96,6 +211,103 @@ This is not considered successful data retrieval. The maintainer accepted retain
 this behavior for Phase 3 (P3-TIME); repository maintainers must revisit it before
 Phase 4 acceptance and agree a timestamp contract before a separate production fix.
 Other scenarios seed explicit valid timestamps.
+
+### Repository post-processing
+
+```shell
+dotnet test test/Repository.Tests/Repository.Tests.csproj --filter "FullyQualifiedName~ResearchDatasetIndexRepositoryTest|FullyQualifiedName~InfrastructureIndexRepositoryTest|FullyQualifiedName~InfrastructureServiceIndexRepositoryTest"
+```
+
+These service-free cases exercise dataset contributor organization precedence,
+sentinel-organization cleanup, and infrastructure-service PID normalization and
+Research.fi link generation through both single-entity and bulk post-processing.
+Infrastructure post-processing also checks organization-cache hits/misses and
+identifier mapping. These service-free cases do not execute SQL projections or
+database-backed infrastructure-service relationship enrichment.
+
+`PublicationIndexRepositoryTest` covers publication post-processing and
+co-publication contribution/data aggregation. A characterization case shows that
+separate `Name` instances with the same `NameId` are retained as separate
+contributions; this key-selection question is tracked as P4-PUB-CONTRIB in the
+defect follow-up plan.
+
+SQL-backed infrastructure repository and enrichment paths are covered separately:
+
+```shell
+dotnet test test/Repository.Tests/Repository.Tests.csproj --filter "FullyQualifiedName~InfrastructureServiceSqlServerTest"
+dotnet test test/Repository.Tests/Repository.Tests.csproj --filter "FullyQualifiedName~InfrastructureSqlServerTest"
+```
+
+`InfrastructureServiceSqlServerTest` verifies infrastructure PIDs, responsible and
+participating organizations (including duplicate and unrelated contribution rows),
+infrastructure names, ESFRI values, and generated Research.fi links through
+`PerformInMemoryOperation`. It uses the minimal test-only infrastructure query schema
+and rolls back all per-test inserts.
+
+`InfrastructureSqlServerTest` executes the real `InfrastructureIndexRepository.GetAll`
+projection and post-processing. It verifies start/end dates, descriptive names,
+organization relationships and cache-enriched identifiers, URN handling, and
+exclusion of sentinel and `infra_old` rows. Both tests require Docker and use
+transaction-isolated synthetic data.
+
+### Indexer orchestration boundaries
+
+```shell
+dotnet test test/Indexer.Tests/Indexer.Tests.csproj --filter "FullyQualifiedName~IndexerTest"
+```
+
+These service-free tests exercise organization/funding-call cache population,
+missing-repository logging, small empty/nonempty indexing, publication chunking
+at 14,999/15,000/15,001 documents, final empty-chunk requests, exact document
+uniqueness/order, and indexing of both bulk and per-entity repository
+transformation results. A bulk transformation that filters out every document
+does not issue an index write or rotate an index.
+Repository and index-service failures verify logging and activation behavior.
+A failed chunk write prevents alias switching while later configured
+types are still processed. A failed index creation prevents chunk retrieval and
+activation, while later configured types still run. They use fake repositories
+and an index service; a failed non-chunked write is also logged without
+preventing subsequent index types from running. Failures while populating either
+prerequisite cache propagate before any index writes begin. Failed index-name
+resolution likewise prevents creation and chunk retrieval while later types
+continue. A non-chunked repository retrieval failure is logged and likewise does
+not prevent subsequent types from running. Retrieval failure after a successful
+chunk write verifies that the partial index is not activated and subsequent
+types still run. These tests do not exercise SQL query translation or
+Elasticsearch indexing.
+
+`DatabasePreflightCheckTest` verifies the 80% publication-reference threshold,
+including its exact boundary and zero-count helper result. The latter is only a
+characterization of the threshold helper; the SQL Server integration tests execute
+the full database preflight query and verify empty-table and logging behavior.
+Run those cases with
+`dotnet test test/Repository.Tests/Repository.Tests.csproj --filter "FullyQualifiedName~DatabasePreflightCheckSqlServerTest"`.
+
+### Middleware behavior
+
+The middleware tests run correlation-ID handling through an in-memory ASP.NET
+Core test server. They verify generated and caller-supplied response headers,
+downstream context propagation, sanitized JSON error responses, the unavailable-ID
+fallback, and matching correlation IDs across the combined correlation/error
+middleware pipeline. They use synthetic exceptions only and do not test production
+logging sinks.
+
+The V1 infrastructure mapping tests cover nested identifiers and names, and
+preserve the distinction between null and empty collections in the public model.
+They supplement the existing AutoMapper configuration check; they do not certify
+all infrastructure or infrastructure-service API fields.
+
+Funding-call mapping tests verify nested foundation/category values and preserve
+null-versus-empty collections. Funding-decision tests cover nullable nested
+values and the inclusive January 1 conversion for `FundingStartYearFrom`.
+Research-dataset tests cover V1's generated FairDataUrl and null collection
+behavior, alongside V2's intentionally smaller response contract. These are
+targeted mapping contracts, not exhaustive field-by-field snapshots.
+
+The shared Logging project formatter tests live in Indexer.Tests and verify JSON
+shape, exception serialization, and application-specific Wood metadata routing.
+No exporter test project or exporter reference is added; Exporter is excluded
+because it is planned for removal from the solution.
 
 ### Troubleshooting and diagnostics
 

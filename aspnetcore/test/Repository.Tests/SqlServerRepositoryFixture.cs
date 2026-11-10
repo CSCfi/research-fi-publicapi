@@ -34,7 +34,12 @@ public sealed class SqlServerRepositoryFixture : IAsyncLifetime
         await _container.StartAsync(timeout.Token);
 
         await using var context = CreateContext();
-        foreach (var script in new[] { "FundingCallSchema.sql", "FundingDecisionSchema.sql" })
+        foreach (var script in new[]
+                 {
+                     "FundingCallSchema.sql",
+                     "FundingDecisionSchema.sql",
+                     "PreflightAndInfrastructureSchema.sql"
+                 })
         {
             await using var schema = typeof(SqlServerRepositoryFixture).Assembly.GetManifestResourceStream(
                 $"Repository.Tests.SqlServer.{script}")

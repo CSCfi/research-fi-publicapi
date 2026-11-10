@@ -1,4 +1,4 @@
-Status: In progress
+Status: Phase 4 acceptance pending final CI validation; Phase 5 not started
 2026-11-09
 
 # Test coverage improvement plan
@@ -7,7 +7,27 @@ Status: In progress
 
 Make existing tests trustworthy, recover useful disabled scenarios, and add risk-focused coverage across the SQL Server -> repositories -> indexer -> Elasticsearch -> HTTP API pipeline.
 
-This workstream does not authorize production behavior changes or external-service provisioning without the separate review described below. Preserve authorization policies, intentionally hidden endpoints, V2 documentation visibility, and current public contracts. Any newly exposed application defect needs a focused regression test and a separately reviewed behavior change.
+Production code must not be changed during implementation of this plan, except
+to remove confirmed unused code. Do not fix defects, refactor production code for
+testability, or change production behavior to make tests pass. Preserve
+authorization policies, intentionally hidden endpoints, V2 documentation
+visibility, and current public contracts. Removing unused code is not permission
+to remove supported behavior.
+
+Record defects discovered by test improvements as findings in the separate
+[production defect follow-up plan](test-coverage-defect-follow-up-plan.md).
+Each finding needs evidence, impact, a reproducing test or test gap, and the
+decision/validation needed for a future fix. Fix implementation belongs to a
+separately approved workstream, not a later phase of this coverage plan.
+Characterization tests may document current failures but must not present them as
+the desired contract. If a desired-behavior test cannot pass without a production
+fix, link its tracked exception to the finding rather than weakening assertions
+or changing production code. External-service provisioning remains subject to
+the separate review described below.
+
+Exporter coverage is excluded because the Exporter project is planned for removal
+from the solution. Do not add exporter tests or test-project references; this
+exclusion does not apply to the separately maintained logging formatters.
 
 ## 1. Findings from source inspection
 
@@ -171,8 +191,8 @@ GET, export, and their authorization policies are unchanged.
 
 | Tracking ID | Disposition and impact | Owner and review checkpoint |
 | --- | --- | --- |
-| P3-ORG | Accepted exception: the two organization integration cases stay skipped because query field names do not match the production mapping. This does not certify organization search as working. Fix and reactivate both cases in a separately reviewed production change. | Repository maintainers; revisit before Phase 4 acceptance. |
-| P3-TIME | Accepted exception: null funding-decision timestamps still cause SQL error 242. The two transaction-isolated characterization cases remain active; no fallback timestamp contract is invented. Agree the model/source contract before fixing it. | Repository maintainers; revisit before Phase 4 acceptance. |
+| P3-ORG | Accepted Phase 4 coverage exception: the two organization integration cases stay skipped because query field names do not match the production mapping. This does not certify organization search as working. Tracked in the [follow-up plan](test-coverage-defect-follow-up-plan.md#p3-org---organization-search-field-name-mismatch); no production fix is in scope here. | Repository maintainers; review by 2026-12-10. |
+| P3-TIME | Accepted Phase 4 coverage exception: null funding-decision timestamps still cause SQL error 242. The two transaction-isolated characterization cases remain active; no fallback timestamp contract is invented. Tracked in the [follow-up plan](test-coverage-defect-follow-up-plan.md#p3-time---funding-decision-null-timestamp-projection); no production fix is in scope here. | Repository maintainers; review by 2026-12-10. |
 | P3-CI | Closed under the revised three-run gate: the maintainer reported three successful CI runs. Both integration lanes passed in Linux CI; parallel-isolation evidence comes from the earlier local runs. Continue observing subsequent PRs. | Repository maintainers; monitor intermittent failures. Required-check settings have not been changed by this work. |
 
 The maintainer committed/pushed the implementation and opened a PR, then reported
@@ -187,11 +207,300 @@ and isolated host authentication/service registration. Earlier full-lane counts
 above predate the replacement of the skipped POST case and addition of the GET-only
 Swagger test; they are retained as historical measurements, not new suite totals.
 
-**Acceptance met with exceptions:** all remaining inactive scenarios have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). The Elasticsearch lane passes its enabled synthetic fixture scenarios; organization searches remain explicitly deferred under P3-ORG. Funding-call POST is retired and rejected with 405 rather than returning no-op success. Failed setup is not reported as a successful/empty integration run. P3-CI is satisfied by the maintainer-reported results under the revised gate; P3-ORG and P3-TIME remain accepted exceptions for review before Phase 4 acceptance.
+**Acceptance met with exceptions:** all remaining inactive scenarios have a recorded disposition (active replacement, intentional retirement, or owned/time-bounded exception). The Elasticsearch lane passes its enabled synthetic fixture scenarios; organization searches remain explicitly deferred under P3-ORG. Funding-call POST is retired and rejected with 405 rather than returning no-op success. Failed setup is not reported as a successful/empty integration run. P3-CI is satisfied by the maintainer-reported results under the revised gate. P3-ORG and P3-TIME are accepted Phase 4 exceptions with a 2026-12-10 review date.
 
 ### Phase 4 - Expand high-risk branch and contract coverage (P1/P2, 4-6 days)
 
 **Dependencies:** phase 2 for unit/API work; phase 3 fixtures for real-service cases. Start the highest-risk items before waiting for every recovery task.
+
+**Progress (2026-11-10):** started with the serialized query-generator contract
+suite in [QueryGeneratorContractTest](../aspnetcore/test/Interface.Tests/QueryGenerators/QueryGeneratorContractTest.cs).
+It resolves all seven generators and the NEST client through production
+`AddElasticSearch` registration and serializes descriptors without network calls.
+The 153 new runtime cases cover configured indices, defaults, first/later pages,
+stable search/export sorting, absent/zero/large export cursors, count/export filter
+parity, individual filter clauses and nested paths, required combined filters,
+correlated author names, whitespace controls, inclusive dates/years, open-ended
+funding calls, missing funding-decision start dates, publication visibility,
+dataset latest-version selection, and the three implemented public-ID lookups.
+Organization name-search semantics remain excluded under P3-ORG; its shared
+paging/export/default behavior is covered without endorsing the defective query.
+
+**Validation (2026-11-10):** the new contracts and existing Elasticsearch
+integration lane passed together: 194 passed, 2 existing organization skips,
+0 failures. This includes all 153 new cases and 41 representative real-service
+cases from Phase 3. Test-owned containers were cleaned up. Production code was
+not changed, and no new confirmed defect was discovered in this tranche.
+This completes the initial serialized query-contract tranche, not Phase 4 as a
+whole or exhaustive Elasticsearch semantics for every filter.
+
+**Search-service progress (2026-11-10):** added 27 active runtime cases in
+[ElasticSearchServiceTest](../aspnetcore/test/Interface.Tests/Services/ElasticSearchServiceTest.cs).
+A strict scripted transport exercises the real NEST serializer/deserializer and
+production publication query generator without external services. Tests cover
+empty/single/multiple hits, result metadata and page counts, missing hit metadata,
+single lookup and absent documents, full/partial/empty export traversal without
+duplicate or omitted documents, zero/large long cursors, last-hit sort selection,
+counts above 10,000, exact search/count filter parity and request order, and HTTP
+400/503 failures with default and throwing client settings. Successful scripted
+responses must also have successful transport status; unexpected requests and
+unconsumed responses fail the tests.
+
+**Search-service validation (2026-11-10):** the Interface service-free suite
+passed with 221 passed, 0 skipped, 0 failed, including all 153 query contracts and
+27 new search-service cases. No production files were changed. Tests confirmed
+two findings, recorded separately as
+[P4-SEARCH](test-coverage-defect-follow-up-plan.md#p4-search---failed-elasticsearch-searches-look-like-empty-results)
+and [P4-COUNT](test-coverage-defect-follow-up-plan.md#p4-count---export-count-failures-return-misleading-or-suppressed-totals).
+Characterization cases preserve their evidence without endorsing silent failures;
+production fixes remain out of scope. Next: index-service boundaries and failure
+transitions, followed by the remaining matrix below. Phase 4 remains in progress.
+
+**Index-service progress and validation (2026-11-10):** added 29 runtime cases in
+[ElasticSearchIndexBoundaryTest](../aspnetcore/test/Interface.Tests/Services/ElasticSearchIndexBoundaryTest.cs),
+alongside the three existing rotation tests. Full indexing and chunk indexing
+cover 0/1/1499/1500/1501 documents, exact NDJSON document order and uniqueness,
+batch sizes, and request ordering. Tests verify alias targets and health wait
+parameters, missing index-name rejection before requests, failed/unacknowledged
+creation, first/second-batch item and HTTP failures, error logging, and prevention
+of further batches or activation after bulk failure. Chunk writes never activate
+an index. Empty full indexing currently still rotates; this is observed existing
+behavior, not a new policy decision.
+
+Lifecycle characterization covers failed or timed-out health checks,
+failed/unacknowledged alias changes, failed/allowed-404 old-index deletion,
+failed pre-deletion, and failed existence checks. These exposed
+[P4-ROTATE](test-coverage-defect-follow-up-plan.md#p4-rotate---unchecked-index-lifecycle-responses-permit-unsafe-transitions),
+recorded for separate follow-up without changing production code.
+The Interface service-free suite passed with 250 passed, 0 skipped, 0 failed.
+Retries are disabled only in the synthetic test transport; no Docker is needed.
+Next: API contract/authorization and profile-backend coverage, followed by the
+remaining repository/indexer matrix. Phase 4 remains in progress.
+
+**Profile progress and validation (2026-11-10):** added 30 runtime cases across
+[ProfileBackendContractTest](../aspnetcore/test/Interface.Tests/Services/ProfileBackendContractTest.cs),
+[ProfileEndpointContractTest](../aspnetcore/test/Interface.Tests/ProfileEndpointContractTest.cs),
+and [ProfileControllerTest](../aspnetcore/test/Interface.Tests/Controllers/ProfileControllerTest.cs).
+They exercise the actual POST path/body, success deserialization, configured
+synthetic token via typed-client DI, optional client-ID forwarding, exact controller
+request/RequestAborted forwarding, in-flight client cancellation, network errors,
+backend error status/body/content-type preservation, malformed/empty success JSON,
+HTTP 401/403/200 role boundaries, and rejection of empty/malformed/unsupported
+request bodies before backend calls. All outbound requests use test handlers.
+The existing controller-400 case plus new cases passed (31 targeted tests);
+the Interface service-free suite passed with 280 passed, 0 skipped, 0 failed.
+No production code was changed. JSON null backend success was characterized at
+both client and HTTP layers and recorded as
+[P4-PROFILE](test-coverage-defect-follow-up-plan.md#p4-profile---null-profile-backend-success-becomes-http-204).
+Broader API route/policy, pagination/export, and repository/indexer coverage remain
+open; this tranche does not complete Phase 4 or certify every profile data shape.
+
+**API route and pagination progress (2026-11-10):** added 111 runtime cases in
+[ApiRoutePolicyTest](../aspnetcore/test/Interface.Tests/ApiRoutePolicyTest.cs),
+[FundingCallHttpContractTest](../aspnetcore/test/Interface.Tests/FundingCallHttpContractTest.cs),
+and [ResponseHelperContractTest](../aspnetcore/test/Interface.Tests/ResponseHelperContractTest.cs).
+The matrix tests 24 route/method combinations in anonymous, authenticated/no-role,
+wrong-role, and correct-role modes. It includes all search/export resources,
+hidden organization/V2 routes, missing publication detail, all four Virta routes,
+and funder read/POST/PUT/DELETE policies. Search responses are isolated fakes;
+Virta/import contexts use uniquely named EF InMemory stores, not SQL servers.
+Funder POST verifies actual test-store persistence and that its write role alone
+cannot read the created Location. Missing funder detail/update/delete cases
+return 404 for the correct role. Successful funder PUT and DELETE cases now
+verify persisted changes and client isolation in the EF InMemory store.
+The two successful mutation cases passed as part of the 98-case focused
+ApiRoutePolicyTest suite.
+
+Funding-call HTTP contracts follow export links across full, partial, and empty
+pages with exact cursor/filter forwarding and no duplicate or omitted records,
+assert public JSON omits internal sort IDs, test query binding and oversized-page
+normalization, and reject malformed query values before dependency calls.
+Helper tests assert first/middle/last link relations, repeated/escaped filters,
+inclusive navigation targets, zero/large export cursors, final-page headers,
+and Virta pagination. Empty pagination exposed
+[P4-LINK](test-coverage-defect-follow-up-plan.md#p4-link---empty-pagination-links-to-page-zero),
+recorded without a production fix.
+
+**Validation:** Interface service-free suite: 391 passed, 0 skipped, 0 failed.
+Production code is unchanged. The broader route matrix supplements the separate
+profile matrix; it does not certify SQL translation, every resource's query/JSON
+shape, populated Virta output, or complete funder CRUD/client-isolation semantics.
+Those and repository/indexer coverage remain follow-on Phase 4 work.
+
+**Repository post-processing progress (2026-11-10):** added six cases across
+[ResearchDatasetIndexRepositoryTest](../aspnetcore/test/Repository.Tests/ResearchDatasetIndexRepositoryTest.cs)
+and [InfrastructureServiceIndexRepositoryTest](../aspnetcore/test/Repository.Tests/InfrastructureServiceIndexRepositoryTest.cs).
+They cover all three dataset contributor-organization relationship paths, removal
+of contributors without a person or real organization, infrastructure-service
+URN/other-PID normalization, Research.fi link generation, and empty PID handling.
+The identifier/link behavior is asserted through both single-entity and bulk
+post-processing. The targeted repository tests passed (10 total); the complete
+service-free Repository.Tests lane passed (20 passed, 0 skipped, 0 failed).
+No production code changed and this tranche exposed no new defect. These unit
+cases do not cover SQL projection or populated database-backed
+infrastructure-service relationships; Phase 4 remains in progress.
+
+**Indexer orchestration progress (2026-11-10):** added eight cases in
+[IndexerTest](../aspnetcore/test/Indexer.Tests/IndexerTest.cs). They cover small
+empty/nonempty full-index inputs, publication chunking at 14,999/15,000/15,001
+documents, exact document uniqueness/order, final empty-chunk requests, and
+repository retrieval failure. A recording logger verifies the error is surfaced;
+the failed index is not activated, and processing continues to the next configured
+type. Additional tests verify organization and funding-call cache population
+before processing, source-ID and grouped programme entries, sentinel handling,
+and logging/continuation when a configured repository is missing. Targeted
+indexer tests passed (8). Repository tests now also cover organization-cache
+hits/misses in infrastructure post-processing, through both single and bulk
+paths; the focused repository suite passed (13). SQL-backed
+infrastructure-service enrichment and the infrastructure repository projection
+are now covered by relational integration cases. The full SQL lane passed; Phase 4
+remains in progress pending remaining P1 acceptance gaps.
+Phase 4 is not complete.
+
+**Preflight threshold progress (2026-11-10):** expanded
+[DatabasePreflightCheckTest](../aspnetcore/test/Indexer.Tests/Preflight/DatabasePreflightCheckTest.cs)
+to cover below, exactly at, and above the 80% threshold, including a zero-count
+helper characterization. The test documents the helper result only; it does not
+assert that an empty publication table is acceptable, since `IsGood` has a
+separate empty-table check. Added SQL Server integration cases in
+[DatabasePreflightCheckSqlServerTest](../aspnetcore/test/Repository.Tests/DatabasePreflightCheckSqlServerTest.cs)
+for the full `IsGood` query, exact 80% result, sentinel filtering, empty required
+tables, and failure/status logging, backed by a minimal preflight query-surface
+schema in the shared test fixture. The targeted preflight integration tests passed
+(3), and all SQL Server integration tests passed (16) with Docker running. The
+Repository.Tests service-free lane also passes (23).
+
+**Infrastructure-service SQL enrichment progress (2026-11-10):** added
+[InfrastructureServiceSqlServerTest](../aspnetcore/test/Repository.Tests/InfrastructureServiceSqlServerTest.cs)
+and a minimal test-only query schema. The test exercises the repository's real
+SQL lookups for infrastructure PIDs, participant facts, responsible-organization
+IDs, names, and ESFRI references, then asserts cache-backed organization details
+and generated links. Duplicate participants are collapsed and unrelated
+contribution types excluded; inserts are transaction-isolated. The test passed,
+and the full SQL Server integration lane passed (16).
+
+**Infrastructure SQL projection progress (2026-11-10):** added
+[InfrastructureSqlServerTest](../aspnetcore/test/Repository.Tests/InfrastructureSqlServerTest.cs)
+for the real `InfrastructureIndexRepository.GetAll` projection and subsequent
+post-processing. It verifies date and descriptive-name projection, responsible
+and participating organization mapping, cached identifier enrichment, URN/link
+generation, and filtering of sentinel/`infra_old` rows. The minimal test-only
+schema covers the selected query surface, not the warehouse schema. The focused
+case passed; the complete SQL Server integration lane passed (17), and the
+service-free solution lane passed (471). No defect was exposed. Phase 4 remains
+in progress pending remaining P1 acceptance gaps.
+
+**Middleware progress (2026-11-10):** expanded the correlation-ID and global
+error-handler tests to cover actual response headers for generated and supplied
+IDs, context propagation, sanitized JSON payloads, the missing-ID fallback, and
+the combined middleware pipeline's matching response header/body correlation ID.
+All eight targeted middleware cases passed. Tests use an in-memory ASP.NET Core
+server and synthetic exceptions; no production code changed. Logging sink
+formatters and the remaining mapping edge cases are not covered by this tranche.
+
+**Mapping progress (2026-11-10):** added two value-level V1 infrastructure
+mapping cases for nested identifiers/names and preserving null versus empty
+collections. The infrastructure profile test class passed (3 tests including
+configuration validity). This supplements rather than replaces other resource
+mapping contracts; additional mapping cases are recorded below.
+
+**Remaining mapping and logging progress (2026-11-10):** added funding-call
+nested foundation/category and null-versus-empty assertions; funding-decision
+null relationship/collection preservation and year-to-date conversion; and
+dataset V1 FairDataUrl/null collection versus the smaller V2 response contract.
+Added three Logging formatter tests for Interface/Indexer message shape,
+Wood-metadata routing, and exception JSON. All focused profile/formatter tests
+passed. Logging tests are in Indexer.Tests, which already references the shared
+Logging project. Exporter coverage remains explicitly excluded.
+
+**Service-free validation before FundingDecision HTTP coverage (2026-11-10):**
+after the mapping, Virta, dataset-version, and Indexer failure-path additions,
+the solution lane passed with Repository.Tests 28, Interface.Tests 406, and
+Indexer.Tests 51: 485 passed, 0 failed, 0 skipped. No production-source changes
+were made.
+
+**Additional API and mapping coverage:** the V2 ResearchDataset mapping test now
+checks all mapped names, the generated `ResearchfiUrl`, and the exact six-property
+V2 shape. A populated Virta HTTP contract test seeds synthetic rows in an isolated
+EF InMemory database and verifies selected serialized fields from all four routes,
+including the `Julkaisutyyppi` to `RistiriitainenTieto` mapping. The focused V2
+mapping tests passed (4), and the populated Virta test passed (1). These additions
+do not verify Virta SQL translation or complete response contracts for every API
+resource; Phase 4 remains in progress.
+
+The research-dataset repository test now covers below/equal/above maximum version
+boundaries and an empty version set (including normalization to null). Its focused
+suite passed (10 tests), followed by a newer service-free solution run (482 passed).
+
+**FundingDecision HTTP contract progress (2026-11-10):** added
+[FundingDecisionHttpContractTest](../aspnetcore/test/Interface.Tests/FundingDecisionHttpContractTest.cs)
+for all search filters, pagination binding/headers, representative nested response
+JSON, and malformed year/page parameters rejected before service invocation. The
+focused contract tests passed (4). The subsequent service-free solution run passed
+with Repository.Tests 28, Indexer.Tests 51, and Interface.Tests 410: 489 passed,
+0 failed, 0 skipped. Phase 4 remains in progress.
+
+Publication aggregation coverage now verifies co-publication keyword, publication
+type category, field-of-science, and field-of-art merges, with duplicate related
+values/codes retained only once. A characterization case additionally shows that
+two distinct `Name` instances with the same `NameId` both survive contribution
+aggregation; this key-selection issue is tracked as P4-PUB-CONTRIB rather than
+fixed without a domain decision. The focused PublicationIndexRepositoryTest suite
+passed (9 tests), and the service-free solution suite passed with 483 tests.
+
+Indexer orchestration now also covers a chunk-write failure: the error is logged,
+the partially built index is not activated, and processing continues to the next
+configured type. The focused suite also verifies index-creation failure prevents
+chunk retrieval or activation while processing continues. A full (non-chunked)
+index-write failure is now also verified to be logged without blocking a later
+configured type. Organization and funding-call cache retrieval failures are
+verified to propagate before target indexing begins. The focused Indexer suite
+also verifies index-name resolution failure prevents index creation and chunk
+retrieval while a later configured type continues. The focused suite passed (14
+tests), followed by the service-free solution suite (481 passed).
+
+Additional Indexer coverage verifies that full and chunked indexing submit the
+repository's bulk and per-entity in-memory transformation results rather than
+the raw source objects. The focused Indexer suite passed (16 tests); the latest
+service-free solution run passed with 485 tests.
+
+Non-chunked repository retrieval failure is now also characterized: the exception
+is logged and the next configured type is processed. This is test-only coverage
+of current behavior, not an endorsement of swallowing the failed type's error.
+The focused Indexer suite passed (17 tests). The service-free solution suite then
+passed with Repository.Tests 28, Indexer.Tests 52, and Interface.Tests 410:
+490 passed, 0 failed, 0 skipped.
+
+After adding successful funder update/delete persistence coverage, the focused
+ApiRoutePolicyTest suite passed (98), and the service-free solution suite passed
+with Repository.Tests 28, Indexer.Tests 52, and Interface.Tests 412: 492 passed,
+0 failed, 0 skipped.
+
+Indexer coverage also verifies that a non-chunked bulk transformation returning
+no documents causes no write or index rotation. The focused Indexer suite passed
+(18 tests); the service-free solution suite passed with Repository.Tests 28,
+Indexer.Tests 53, and Interface.Tests 412: 493 passed, 0 failed, 0 skipped.
+
+Chunk retrieval failure after a successfully written 15,000-document first batch
+is now covered. The test verifies all first-batch documents are submitted once,
+the partially built index is not switched, the error is logged, and later
+configured types continue. The focused Indexer suite passed (19 tests). The
+service-free solution suite passed with Repository.Tests 28, Indexer.Tests 54,
+and Interface.Tests 412: 494 passed, 0 failed, 0 skipped.
+
+**Phase 4 acceptance decision (2026-11-10):** the user accepted representative
+populated HTTP response contracts as sufficient for this phase; additional
+resource-specific populated JSON contracts beyond funding-call, funding-decision,
+and Virta remain deferred. The findings P3-ORG, P3-TIME, P4-PUB-CONTRIB,
+P4-SEARCH, P4-COUNT, P4-ROTATE, P4-PROFILE, and P4-LINK are accepted as
+time-bounded coverage exceptions, owned by Repository maintainers and due for
+review by 2026-12-10. They remain documented in the
+[defect follow-up plan](test-coverage-defect-follow-up-plan.md); fixes are not
+authorized by this acceptance. The latest service-free suite passes (494, 0
+failed, 0 skipped). **Phase 4 is not marked complete until the current changes
+pass the Elasticsearch and SQL Server lanes on supported Linux x86-64 CI.**
+These lanes must run against the exact final commit; prior maintainer-reported
+CI results predate the latest coverage additions.
 
 | Priority | Production surface | Required scenarios |
 | --- | --- | --- |
@@ -204,9 +513,14 @@ Swagger test; they are retained as historical measurements, not new suite totals
 | P1 | [Indexer](../aspnetcore/src/Indexer/Indexer.cs) | Cache population, missing repository logging, small/full/chunked inputs, 14999/15000/15001-row boundaries, final empty chunk, failure before activation, and no lost/duplicated documents. Verify observable logging/continuation behavior; raise behavior changes separately. |
 | P2 | [DatabasePreflightCheck](../aspnetcore/src/Indexer/DatabasePreflightCheck.cs) | Exact 80% threshold and below/above it, zero/empty tables, sentinel-row filtering, and failure logging. Agree invalid/impossible-count expectations rather than inventing input behavior. |
 | P2 | [Interface mappings](../aspnetcore/src/Interface/Maps) and [middleware](../aspnetcore/src/Interface/Middleware) | Supplement configuration-validity tests with actual null/collection/sentinel mapping examples, V1/V2 contract differences, correlation-ID generation/propagation, exception response sanitization, and logging. |
-| P2 | [Exporter](../aspnetcore/src/Exporter/Exporter.cs) and [Logging](../aspnetcore/src/Logging) | Use the baseline to size follow-up coverage: exporter empty/multipage input, file counts/content/names, missing directory setting and I/O/search failure; formatter output shape and exception fields. Use test-owned temporary directories with targeted cleanup. Add a project reference/new test project only when these tests require it. |
+| P2 | [Logging](../aspnetcore/src/Logging) | Cover formatter output shape and exception fields if warranted by the baseline. Exporter coverage is excluded because the project is planned for removal from the solution. |
 
-**Acceptance:** each P1 row has positive, negative, and relevant boundary tests, not merely configuration/constructor execution. Every discovered defect has a regression test and an explicit fix/decision; existing public behavior is not accidentally changed to make tests pass.
+**Acceptance:** each P1 row has positive, negative, and relevant boundary tests,
+not merely configuration/constructor execution, or a finding-linked exception
+where a production defect prevents the desired assertion. Every discovered
+defect is recorded in the [follow-up plan](test-coverage-defect-follow-up-plan.md)
+with reproducing evidence and an explicit test disposition. Production fixes and
+testability refactors are out of scope; only confirmed unused code may be removed.
 
 ### Phase 5 - Make coverage sustainable (P1, 1-2 days)
 
@@ -252,7 +566,7 @@ The SQL Server lane also uses Testcontainers and an assigned port. It creates a 
 
 **Suggested sequence:** PR 1 baseline/reporting -> PR 2 async/auth/host repairs -> PRs 3a/3b Elasticsearch and SQL fixture/recovery work -> focused P1 coverage PRs -> CI enforcement. Unit/API coverage expansion can run alongside service provisioning after host repair.
 
-**Effort:** approximately 10-16 developer-days for phases 1-4 plus 1-2 days for CI policy/documentation; SQL schema provisioning is the largest uncertainty. Re-estimate after phase 1. The ten-run observation period is elapsed CI time, not included developer effort. P2 exporter/formatter work should be sized separately from the baseline.
+**Effort:** approximately 10-16 developer-days for phases 1-4 plus 1-2 days for CI policy/documentation; SQL schema provisioning is the largest uncertainty. Re-estimate after phase 1. The ten-run observation period is elapsed CI time, not included developer effort. Exporter coverage is excluded; any P2 logging-formatter coverage should be sized separately from the baseline.
 
 | Risk / open decision | Mitigation / owner role |
 | --- | --- |

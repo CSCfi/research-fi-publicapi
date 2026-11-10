@@ -179,6 +179,157 @@ public class PublicationIndexRepositoryTest
             .Should().Equal(1, 2, 3);
     }
 
+    [Fact]
+    public void PerformInMemoryOperation_Publication_CharacterizesContributionsWithEquivalentNameIds()
+    {
+        var publication = new Publication
+        {
+            Id = "copublication-equivalent-name-ids",
+            DatabaseContributions = new List<FactContribution>(),
+            OrgPublicationDatabaseContributionDTOs = new List<OrgPublicationDatabaseContributionDTO>
+            {
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        new()
+                        {
+                            Name = new Name { NameId = 42, FirstNames = "Same person" },
+                            ContributionType = "other"
+                        }
+                    }
+                },
+                new()
+                {
+                    DatabaseContributions = new List<FactContribution>
+                    {
+                        new()
+                        {
+                            Name = new Name { NameId = 42, FirstNames = "Same person" },
+                            ContributionType = "other"
+                        }
+                    }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.DatabaseContributions.Should().HaveCount(2,
+            "current distinctness uses Name object equality, not the database NameId");
+        publication.DatabaseContributions.Select(contribution => contribution.Name!.NameId)
+            .Should().Equal(42, 42);
+    }
+
+    [Fact]
+    public void PerformInMemoryOperation_Publication_AggregatesDistinctRelatedKeywordsAndClassifications()
+    {
+        var publication = new Publication
+        {
+            Id = "copublication-with-related-data",
+            DatabaseContributions = new List<FactContribution>(),
+            Keywords = new List<Keyword> { new() { Value = "local-keyword" } },
+            ArtPublicationTypeCategory = new List<ReferenceData> { new() { Code = "local-category" } },
+            FieldsOfScience = new List<ReferenceData> { new() { Code = "local-science" } },
+            FieldsOfArt = new List<ReferenceData> { new() { Code = "local-art" } },
+            OrgPublicationKeywordDTOs = new List<OrgPublicationKeywordDTO>
+            {
+                new()
+                {
+                    Keywords = new List<Keyword>
+                    {
+                        new() { Value = "shared-keyword", Language = "en" },
+                        new() { Value = "first-keyword" }
+                    }
+                },
+                new()
+                {
+                    Keywords = new List<Keyword>
+                    {
+                        new() { Value = "shared-keyword", Language = "fi" },
+                        new() { Value = "second-keyword" }
+                    }
+                }
+            },
+            OrgPublicationArtPublicatonTypeCategoryDTOs = new List<OrgPublicationArtPublicatonTypeCategoryDTO>
+            {
+                new()
+                {
+                    ArtPublicationTypeCategories = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-category", NameEn = "Shared" },
+                        new() { Code = "first-category" }
+                    }
+                },
+                new()
+                {
+                    ArtPublicationTypeCategories = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-category", NameEn = "Duplicate" },
+                        new() { Code = "second-category" }
+                    }
+                }
+            },
+            OrgPublicationFieldsOfScienceDTOs = new List<OrgPublicationFieldsOfScienceDTO>
+            {
+                new()
+                {
+                    FieldsOfScience = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-science" },
+                        new() { Code = "first-science" }
+                    }
+                },
+                new()
+                {
+                    FieldsOfScience = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-science" },
+                        new() { Code = "second-science" }
+                    }
+                }
+            },
+            OrgPublicationFieldsOfArtDTOs = new List<OrgPublicationFieldsOfArtDTO>
+            {
+                new()
+                {
+                    FieldsOfArt = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-art" },
+                        new() { Code = "first-art" }
+                    }
+                },
+                new()
+                {
+                    FieldsOfArt = new List<ReferenceData>
+                    {
+                        new() { Code = "shared-art" },
+                        new() { Code = "second-art" }
+                    }
+                }
+            }
+        };
+        var repository = new PublicationIndexRepository(
+            null,
+            null,
+            new MemoryCache(new MemoryCacheOptions()));
+
+        repository.PerformInMemoryOperation(publication);
+
+        publication.Keywords!.Select(keyword => keyword.Value)
+            .Should().Equal("local-keyword", "shared-keyword", "first-keyword", "second-keyword");
+        publication.ArtPublicationTypeCategory!.Select(category => category.Code)
+            .Should().Equal("local-category", "shared-category", "first-category", "second-category");
+        publication.FieldsOfScience!.Select(field => field.Code)
+            .Should().Equal("local-science", "shared-science", "first-science", "second-science");
+        publication.FieldsOfArt!.Select(field => field.Code)
+            .Should().Equal("local-art", "shared-art", "first-art", "second-art");
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
